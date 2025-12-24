@@ -1,0 +1,57 @@
+2025-12-24 16:22:17 | INFO     | setup_logging:58 | ================================================================================
+2025-12-24 16:22:17 | INFO     | setup_logging:59 | JUDGE SWAP ANALYSIS - RUN STARTED
+2025-12-24 16:22:17 | INFO     | setup_logging:60 | ================================================================================
+2025-12-24 16:22:17 | INFO     | setup_logging:61 | User: droytbur
+2025-12-24 16:22:17 | INFO     | setup_logging:62 | Hostname: babel-p5-28
+2025-12-24 16:22:17 | INFO     | setup_logging:63 | Timestamp: 20251224_162217
+2025-12-24 16:22:17 | INFO     | setup_logging:64 | Log file: judge_swap_null_dbg_results/truthfulness/analysis/file_logs/analyze_judge_swap_20251224_162217.log
+2025-12-24 16:22:17 | INFO     | setup_logging:65 | ================================================================================
+2025-12-24 16:22:17 | INFO     | main:460 | Results directory: judge_swap_null_dbg_results/truthfulness
+2025-12-24 16:22:17 | INFO     | main:461 | Output directory: judge_swap_null_dbg_results/truthfulness/analysis
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Qwen2.5-7B-Instruct/Llama-3.1-8B vs Qwen2.5-7B: J_vs_R_g1=225, J_vs_R_g2=225, K_vs_R_g1=124, K_vs_R_g2=124
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Qwen2.5-7B-Instruct/Qwen2.5-72B vs Qwen2.5-7B: J_vs_R_g1=225, J_vs_R_g2=225, K_vs_R_g1=179, K_vs_R_g2=0
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Qwen2.5-7B-Instruct/Qwen2.5-72B vs Qwen2.5-72B-Instruct: J_vs_R_g1=179, J_vs_R_g2=179, K_vs_R_g1=131, K_vs_R_g2=131
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Qwen2.5-7B-Instruct/Llama-3.1-70B-Instruct vs Qwen2.5-72B-Instruct: J_vs_R_g1=179, J_vs_R_g2=179, K_vs_R_g1=110, K_vs_R_g2=110
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Qwen2.5-7B-Instruct/Llama-3.1-8B vs Llama-3.1-8B-Instruct: J_vs_R_g1=276, J_vs_R_g2=276, K_vs_R_g1=167, K_vs_R_g2=167
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Qwen2.5-7B-Instruct/gemma-2-9b-it vs Llama-3.1-8B-Instruct: J_vs_R_g1=276, J_vs_R_g2=276, K_vs_R_g1=190, K_vs_R_g2=190
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Qwen2.5-7B-Instruct/Llama-3.1-70B-Instruct vs Llama-3.1-8B-Instruct: J_vs_R_g1=276, J_vs_R_g2=276, K_vs_R_g1=147, K_vs_R_g2=147
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Llama-3.1-8B-Instruct/Llama-3.1-70B vs Llama-3.1-70B-Instruct: J_vs_R_g1=186, J_vs_R_g2=186, K_vs_R_g1=148, K_vs_R_g2=148
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Llama-3.1-8B-Instruct/Qwen2.5-72B-Instruct vs Llama-3.1-70B-Instruct: J_vs_R_g1=186, J_vs_R_g2=186, K_vs_R_g1=126, K_vs_R_g2=126
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Llama-3.1-8B-Instruct/gemma-2-9b vs Llama-3.1-8B: J_vs_R_g1=282, J_vs_R_g2=282, K_vs_R_g1=176, K_vs_R_g2=176
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Llama-3.1-8B-Instruct/Qwen2.5-7B vs Llama-3.1-8B: J_vs_R_g1=282, J_vs_R_g2=282, K_vs_R_g1=175, K_vs_R_g2=175
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Llama-3.1-8B-Instruct/Llama-3.1-70B vs Llama-3.1-8B: J_vs_R_g1=282, J_vs_R_g2=282, K_vs_R_g1=221, K_vs_R_g2=221
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Llama-3.1-8B-Instruct/gemma-2-9b vs gemma-2-9b-it: J_vs_R_g1=176, J_vs_R_g2=176, K_vs_R_g1=176, K_vs_R_g2=176
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Llama-3.1-8B-Instruct/Qwen2.5-7B vs Qwen2.5-7B-Instruct: J_vs_R_g1=208, J_vs_R_g2=208, K_vs_R_g1=152, K_vs_R_g2=152
+2025-12-24 16:22:17 | DEBUG    | load_cached_preferences:151 | Loaded Llama-3.1-8B-Instruct/Qwen2.5-72B-Instruct vs Qwen2.5-7B-Instruct: J_vs_R_g1=208, J_vs_R_g2=208, K_vs_R_g1=118, K_vs_R_g2=118
+2025-12-24 16:22:17 | INFO     | load_cached_preferences:155 | Loaded preferences for 15 (judge, proxy, reference) triplets
+2025-12-24 16:22:17 | INFO     | main:479 | ================================================================================
+2025-12-24 16:22:17 | INFO     | main:480 | Analyzing: Judge=Qwen2.5-7B-Instruct, Proxy=Llama-3.1-8B, Reference=Qwen2.5-7B
+2025-12-24 16:22:17 | INFO     | main:481 | ================================================================================
+2025-12-24 16:22:17 | INFO     | main:497 |   J(J vs R): 225 examples
+2025-12-24 16:22:17 | INFO     | main:498 |   J(K vs R): 124 examples
+2025-12-24 16:22:17 | WARNING  | main:506 |   Example ID mismatch: J has 225, K has 124, Common: 124
+2025-12-24 16:22:17 | INFO     | main:534 |   J(J vs R) - LSP: 82, ILSP: 42
+2025-12-24 16:22:17 | INFO     | main:535 |   J(K vs R) - LSP: 82, ILSP: 42
+2025-12-24 16:22:17 | INFO     | create_comparison_plot:266 | Creating comparison plot for Judge=Qwen2.5-7B-Instruct, Proxy=Llama-3.1-8B, Ref=Qwen2.5-7B
+2025-12-24 16:22:19 | INFO     | create_comparison_plot:368 | Saved plot to judge_swap_null_dbg_results/truthfulness/analysis/plots/Qwen2.5-7B-Instruct_Llama-3.1-8B_vs_Qwen2.5-7B.png
+2025-12-24 16:22:19 | INFO     | main:544 |   Computing hypothesis tests on ILSP examples only...
+2025-12-24 16:22:19 | INFO     | compute_hypothesis_tests:423 | Hypothesis Test Results:
+2025-12-24 16:22:19 | INFO     | compute_hypothesis_tests:424 |   Mean(J vs R): 0.4560 ± 0.2071
+2025-12-24 16:22:19 | INFO     | compute_hypothesis_tests:425 |   Mean(K vs R): 0.2688 ± 0.2507
+2025-12-24 16:22:19 | INFO     | compute_hypothesis_tests:426 |   Mean difference: 0.1872
+2025-12-24 16:22:19 | INFO     | compute_hypothesis_tests:427 |   Two-sided t-test: t=4.711, p=0.000028
+2025-12-24 16:22:19 | INFO     | compute_hypothesis_tests:428 |   One-sided t-test: t=4.711, p=0.000014
+2025-12-24 16:22:19 | INFO     | compute_hypothesis_tests:429 |   KS test: D=0.476, p=0.000112
+2025-12-24 16:22:19 | INFO     | compute_hypothesis_tests:430 |   Correlation: r=0.395, p=0.009650
+2025-12-24 16:22:19 | INFO     | compute_hypothesis_tests:431 |   Cohen's d: 0.814
+2025-12-24 16:22:19 | INFO     | main:565 |   Saved statistics to judge_swap_null_dbg_results/truthfulness/analysis/stats/Qwen2.5-7B-Instruct_Llama-3.1-8B_vs_Qwen2.5-7B.json
+2025-12-24 16:22:19 | INFO     | main:479 | ================================================================================
+2025-12-24 16:22:19 | INFO     | main:480 | Analyzing: Judge=Qwen2.5-7B-Instruct, Proxy=Qwen2.5-72B, Reference=Qwen2.5-7B
+2025-12-24 16:22:19 | INFO     | main:481 | ================================================================================
+2025-12-24 16:22:19 | WARNING  | compute_averaged_probabilities:182 | ID mismatch: Game1 has 179, Game2 has 0, Common: 0
+2025-12-24 16:22:19 | INFO     | main:497 |   J(J vs R): 225 examples
+2025-12-24 16:22:19 | INFO     | main:498 |   J(K vs R): 0 examples
+2025-12-24 16:22:19 | WARNING  | main:506 |   Example ID mismatch: J has 225, K has 0, Common: 0
+2025-12-24 16:22:19 | INFO     | main:534 |   J(J vs R) - LSP: 0, ILSP: 0
+2025-12-24 16:22:19 | INFO     | main:535 |   J(K vs R) - LSP: 0, ILSP: 0
+2025-12-24 16:22:19 | INFO     | create_comparison_plot:266 | Creating comparison plot for Judge=Qwen2.5-7B-Instruct, Proxy=Qwen2.5-72B, Ref=Qwen2.5-7B

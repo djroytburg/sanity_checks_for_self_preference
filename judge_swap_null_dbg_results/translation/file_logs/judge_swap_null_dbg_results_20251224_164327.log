@@ -1,0 +1,338 @@
+2025-12-24 16:43:27 | INFO     | setup_logging:273 | ================================================================================
+2025-12-24 16:43:27 | INFO     | setup_logging:274 | JUDGE SWAP NULL HYPOTHESIS TEST - RUN STARTED
+2025-12-24 16:43:27 | INFO     | setup_logging:275 | ================================================================================
+2025-12-24 16:43:27 | INFO     | setup_logging:276 | User: droytbur
+2025-12-24 16:43:27 | INFO     | setup_logging:277 | Hostname: babel-t9-28
+2025-12-24 16:43:27 | INFO     | setup_logging:278 | Timestamp: 20251224_164327
+2025-12-24 16:43:28 | INFO     | setup_logging:279 | CUDA available: True
+2025-12-24 16:43:28 | INFO     | setup_logging:281 | CUDA devices: 8
+2025-12-24 16:43:28 | INFO     | setup_logging:283 |   Device 0: NVIDIA RTX A6000
+2025-12-24 16:43:28 | INFO     | setup_logging:283 |   Device 1: NVIDIA RTX A6000
+2025-12-24 16:43:28 | INFO     | setup_logging:283 |   Device 2: NVIDIA RTX A6000
+2025-12-24 16:43:28 | INFO     | setup_logging:283 |   Device 3: NVIDIA RTX A6000
+2025-12-24 16:43:28 | INFO     | setup_logging:283 |   Device 4: NVIDIA RTX A6000
+2025-12-24 16:43:28 | INFO     | setup_logging:283 |   Device 5: NVIDIA RTX A6000
+2025-12-24 16:43:28 | INFO     | setup_logging:283 |   Device 6: NVIDIA RTX A6000
+2025-12-24 16:43:28 | INFO     | setup_logging:283 |   Device 7: NVIDIA RTX A6000
+2025-12-24 16:43:28 | INFO     | setup_logging:284 | Log file: judge_swap_null_dbg_results/translation/file_logs/judge_swap_null_dbg_results_20251224_164327.log
+2025-12-24 16:43:28 | INFO     | setup_logging:285 | ================================================================================
+2025-12-24 16:43:28 | INFO     | main:600 | Configuration:
+2025-12-24 16:43:28 | INFO     | main:601 |   Proxy data dir: dbg-score-paper/proxy_preference_data
+2025-12-24 16:43:28 | INFO     | main:602 |   Dataset: translation
+2025-12-24 16:43:28 | INFO     | main:603 |   Output dir: judge_swap_null_dbg_results/translation
+2025-12-24 16:43:28 | INFO     | main:604 |   Batch size: 1
+2025-12-24 16:43:28 | INFO     | main:605 |   Max examples: unlimited
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Qwen2.5-72B (base models cannot judge)
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Llama-3.1-8B-Instruct vs gemma-2-9b vs gemma-2-9b-it: 13 LSP, 175 ILSP
+2025-12-24 16:43:28 | INFO     | load_proxy_data:344 | Skipping large model: Qwen2.5-72B-Instruct
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Qwen2.5-7B-Instruct vs Llama-3.1-8B vs Llama-3.1-8B-Instruct: 53 LSP, 85 ILSP
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Qwen2.5-7B-Instruct vs gemma-2-9b-it vs Llama-3.1-8B-Instruct: 157 LSP, 35 ILSP
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Qwen2.5-7B-Instruct vs Llama-3.1-70B-Instruct vs Llama-3.1-8B-Instruct: 159 LSP, 27 ILSP
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Qwen2.5-7B-Instruct vs Qwen2.5-72B vs Qwen2.5-72B-Instruct: 5 LSP, 176 ILSP
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Qwen2.5-7B-Instruct vs Llama-3.1-70B-Instruct vs Qwen2.5-72B-Instruct: 24 LSP, 142 ILSP
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: gemma-2-9b (base models cannot judge)
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Llama-3.1-8B (base models cannot judge)
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Llama-3.1-70B (base models cannot judge)
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Llama-3.1-8B (base models cannot judge)
+2025-12-24 16:43:28 | INFO     | load_proxy_data:344 | Skipping large model: Llama-3.1-70B-Instruct
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Qwen2.5-72B (base models cannot judge)
+2025-12-24 16:43:28 | INFO     | load_proxy_data:344 | Skipping large model: Qwen2.5-72B-Instruct
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded gemma-2-9b-it vs Llama-3.1-8B vs Llama-3.1-8B-Instruct: 68 LSP, 47 ILSP
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded gemma-2-9b-it vs Qwen2.5-7B-Instruct vs Llama-3.1-8B-Instruct: 157 LSP, 35 ILSP
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded gemma-2-9b-it vs Llama-3.1-70B-Instruct vs Llama-3.1-8B-Instruct: 207 LSP, 23 ILSP
+2025-12-24 16:43:28 | INFO     | load_proxy_data:344 | Skipping large model: Qwen2.5-72B-Instruct
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Llama-3.1-8B-Instruct vs Qwen2.5-7B vs Qwen2.5-7B-Instruct: 44 LSP, 163 ILSP
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Llama-3.1-8B-Instruct vs Qwen2.5-72B-Instruct vs Qwen2.5-7B-Instruct: 101 LSP, 49 ILSP
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Qwen2.5-7B (base models cannot judge)
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Llama-3.1-8B (base models cannot judge)
+2025-12-24 16:43:28 | INFO     | load_proxy_data:344 | Skipping large model: Llama-3.1-70B-Instruct
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Qwen2.5-7B-Instruct vs Llama-3.1-8B vs Qwen2.5-7B: 86 LSP, 54 ILSP
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Qwen2.5-7B-Instruct vs Qwen2.5-72B vs Qwen2.5-7B: 194 LSP, 24 ILSP
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Qwen2.5-72B (base models cannot judge)
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Qwen2.5-7B (base models cannot judge)
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded gemma-2-9b-it vs Llama-3.1-8B vs gemma-2-9b: 61 LSP, 42 ILSP
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Llama-3.1-70B (base models cannot judge)
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Llama-3.1-8B-Instruct vs Llama-3.1-70B vs Llama-3.1-70B-Instruct: 19 LSP, 157 ILSP
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Llama-3.1-8B-Instruct vs Qwen2.5-72B-Instruct vs Llama-3.1-70B-Instruct: 44 LSP, 71 ILSP
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: gemma-2-9b (base models cannot judge)
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Qwen2.5-7B (base models cannot judge)
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Llama-3.1-8B-Instruct vs Qwen2.5-7B vs Llama-3.1-8B: 119 LSP, 38 ILSP
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Llama-3.1-8B-Instruct vs Llama-3.1-70B vs Llama-3.1-8B: 162 LSP, 19 ILSP
+2025-12-24 16:43:28 | DEBUG    | load_proxy_data:361 | Loaded Llama-3.1-8B-Instruct vs gemma-2-9b vs Llama-3.1-8B: 156 LSP, 18 ILSP
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Llama-3.1-70B (base models cannot judge)
+2025-12-24 16:43:28 | INFO     | load_proxy_data:344 | Skipping large model: Llama-3.1-70B-Instruct
+2025-12-24 16:43:28 | INFO     | load_proxy_data:339 | Skipping base model judge: Llama-3.1-8B (base models cannot judge)
+2025-12-24 16:43:28 | INFO     | load_proxy_data:369 | Loaded 19 (judge, proxy, reference) triplets
+2025-12-24 16:43:28 | INFO     | main:620 | Processing 3 unique judges
+2025-12-24 16:43:28 | INFO     | main:625 | ================================================================================
+2025-12-24 16:43:28 | INFO     | main:626 | Processing Judge: Llama-3.1-8B-Instruct
+2025-12-24 16:43:28 | INFO     | main:627 |   8 proxy-reference pairs
+2025-12-24 16:43:28 | INFO     | main:628 | ================================================================================
+2025-12-24 16:43:28 | INFO     | __init__:100 | Loading model: meta-llama/Llama-3.1-8B-Instruct
+2025-12-24 16:43:28 | INFO     | __init__:101 | Model type: instruct
+2025-12-24 16:43:39 | INFO     | __init__:123 | Model loaded successfully on cuda:0
+2025-12-24 16:43:39 | INFO     | main:640 | 
+Processing: Llama-3.1-8B-Instruct | Proxy=gemma-2-9b | Ref=gemma-2-9b-it
+2025-12-24 16:43:39 | INFO     | main:651 |   Total examples: 188 (LSP: 13, ILSP: 175)
+2025-12-24 16:43:39 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 16:43:39 | INFO     | generate_preferences_for_comparison:493 | Generating 188 uncached examples for J_vs_R_game1
+2025-12-24 16:44:22 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 188
+2025-12-24 16:44:22 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 16:44:22 | INFO     | generate_preferences_for_comparison:493 | Generating 188 uncached examples for J_vs_R_game2
+2025-12-24 16:45:04 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 188
+2025-12-24 16:45:04 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 16:45:04 | INFO     | generate_preferences_for_comparison:493 | Generating 188 uncached examples for K_vs_R_game1
+2025-12-24 16:45:47 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 188
+2025-12-24 16:45:47 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 16:45:47 | INFO     | generate_preferences_for_comparison:493 | Generating 188 uncached examples for K_vs_R_game2
+2025-12-24 16:46:29 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 188
+2025-12-24 16:46:29 | INFO     | main:734 |   ✓ Completed: gemma-2-9b vs gemma-2-9b-it
+2025-12-24 16:46:29 | INFO     | main:640 | 
+Processing: Llama-3.1-8B-Instruct | Proxy=Qwen2.5-7B | Ref=Qwen2.5-7B-Instruct
+2025-12-24 16:46:29 | INFO     | main:651 |   Total examples: 207 (LSP: 44, ILSP: 163)
+2025-12-24 16:46:29 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 16:46:29 | INFO     | generate_preferences_for_comparison:493 | Generating 207 uncached examples for J_vs_R_game1
+2025-12-24 16:47:15 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 207
+2025-12-24 16:47:15 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 16:47:15 | INFO     | generate_preferences_for_comparison:493 | Generating 207 uncached examples for J_vs_R_game2
+2025-12-24 16:48:01 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 207
+2025-12-24 16:48:01 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 16:48:01 | INFO     | generate_preferences_for_comparison:493 | Generating 207 uncached examples for K_vs_R_game1
+2025-12-24 16:48:47 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 207
+2025-12-24 16:48:47 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 16:48:47 | INFO     | generate_preferences_for_comparison:493 | Generating 207 uncached examples for K_vs_R_game2
+2025-12-24 16:49:33 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 207
+2025-12-24 16:49:33 | INFO     | main:734 |   ✓ Completed: Qwen2.5-7B vs Qwen2.5-7B-Instruct
+2025-12-24 16:49:33 | INFO     | main:640 | 
+Processing: Llama-3.1-8B-Instruct | Proxy=Qwen2.5-72B-Instruct | Ref=Qwen2.5-7B-Instruct
+2025-12-24 16:49:33 | INFO     | main:651 |   Total examples: 150 (LSP: 101, ILSP: 49)
+2025-12-24 16:49:33 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 16:49:33 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Qwen2.5-7B-Instruct/J_vs_R_game1.jsonl
+2025-12-24 16:49:33 | INFO     | generate_preferences_for_comparison:478 | Loaded 207 cached results
+2025-12-24 16:49:33 | INFO     | generate_preferences_for_comparison:493 | Generating 65 uncached examples for J_vs_R_game1
+2025-12-24 16:49:48 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 272
+2025-12-24 16:49:48 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 16:49:48 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Qwen2.5-7B-Instruct/J_vs_R_game2.jsonl
+2025-12-24 16:49:48 | INFO     | generate_preferences_for_comparison:478 | Loaded 207 cached results
+2025-12-24 16:49:48 | INFO     | generate_preferences_for_comparison:493 | Generating 65 uncached examples for J_vs_R_game2
+2025-12-24 16:50:03 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 272
+2025-12-24 16:50:03 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 16:50:03 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Qwen2.5-7B-Instruct/K_vs_R_game1.jsonl
+2025-12-24 16:50:03 | INFO     | generate_preferences_for_comparison:478 | Loaded 207 cached results
+2025-12-24 16:50:03 | INFO     | generate_preferences_for_comparison:493 | Generating 150 uncached examples for K_vs_R_game1
+2025-12-24 16:50:36 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 357
+2025-12-24 16:50:36 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 16:50:36 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Qwen2.5-7B-Instruct/K_vs_R_game2.jsonl
+2025-12-24 16:50:36 | INFO     | generate_preferences_for_comparison:478 | Loaded 207 cached results
+2025-12-24 16:50:36 | INFO     | generate_preferences_for_comparison:493 | Generating 150 uncached examples for K_vs_R_game2
+2025-12-24 16:51:09 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 357
+2025-12-24 16:51:09 | INFO     | main:734 |   ✓ Completed: Qwen2.5-72B-Instruct vs Qwen2.5-7B-Instruct
+2025-12-24 16:51:09 | INFO     | main:640 | 
+Processing: Llama-3.1-8B-Instruct | Proxy=Llama-3.1-70B | Ref=Llama-3.1-70B-Instruct
+2025-12-24 16:51:09 | INFO     | main:651 |   Total examples: 176 (LSP: 19, ILSP: 157)
+2025-12-24 16:51:09 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 16:51:09 | INFO     | generate_preferences_for_comparison:493 | Generating 176 uncached examples for J_vs_R_game1
+2025-12-24 16:51:49 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 176
+2025-12-24 16:51:49 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 16:51:49 | INFO     | generate_preferences_for_comparison:493 | Generating 176 uncached examples for J_vs_R_game2
+2025-12-24 16:52:28 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 176
+2025-12-24 16:52:28 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 16:52:28 | INFO     | generate_preferences_for_comparison:493 | Generating 176 uncached examples for K_vs_R_game1
+2025-12-24 16:53:08 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 176
+2025-12-24 16:53:08 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 16:53:08 | INFO     | generate_preferences_for_comparison:493 | Generating 176 uncached examples for K_vs_R_game2
+2025-12-24 16:53:47 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 176
+2025-12-24 16:53:47 | INFO     | main:734 |   ✓ Completed: Llama-3.1-70B vs Llama-3.1-70B-Instruct
+2025-12-24 16:53:47 | INFO     | main:640 | 
+Processing: Llama-3.1-8B-Instruct | Proxy=Qwen2.5-72B-Instruct | Ref=Llama-3.1-70B-Instruct
+2025-12-24 16:53:47 | INFO     | main:651 |   Total examples: 115 (LSP: 44, ILSP: 71)
+2025-12-24 16:53:47 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 16:53:47 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Llama-3.1-70B-Instruct/J_vs_R_game1.jsonl
+2025-12-24 16:53:47 | INFO     | generate_preferences_for_comparison:478 | Loaded 176 cached results
+2025-12-24 16:53:47 | INFO     | generate_preferences_for_comparison:493 | Generating 51 uncached examples for J_vs_R_game1
+2025-12-24 16:53:59 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 227
+2025-12-24 16:53:59 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 16:53:59 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Llama-3.1-70B-Instruct/J_vs_R_game2.jsonl
+2025-12-24 16:53:59 | INFO     | generate_preferences_for_comparison:478 | Loaded 176 cached results
+2025-12-24 16:53:59 | INFO     | generate_preferences_for_comparison:493 | Generating 51 uncached examples for J_vs_R_game2
+2025-12-24 16:54:10 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 227
+2025-12-24 16:54:10 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 16:54:10 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Llama-3.1-70B-Instruct/K_vs_R_game1.jsonl
+2025-12-24 16:54:10 | INFO     | generate_preferences_for_comparison:478 | Loaded 176 cached results
+2025-12-24 16:54:10 | INFO     | generate_preferences_for_comparison:493 | Generating 115 uncached examples for K_vs_R_game1
+2025-12-24 16:54:36 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 291
+2025-12-24 16:54:36 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 16:54:36 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Llama-3.1-70B-Instruct/K_vs_R_game2.jsonl
+2025-12-24 16:54:36 | INFO     | generate_preferences_for_comparison:478 | Loaded 176 cached results
+2025-12-24 16:54:36 | INFO     | generate_preferences_for_comparison:493 | Generating 115 uncached examples for K_vs_R_game2
+2025-12-24 16:55:01 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 291
+2025-12-24 16:55:01 | INFO     | main:734 |   ✓ Completed: Qwen2.5-72B-Instruct vs Llama-3.1-70B-Instruct
+2025-12-24 16:55:01 | INFO     | main:640 | 
+Processing: Llama-3.1-8B-Instruct | Proxy=Qwen2.5-7B | Ref=Llama-3.1-8B
+2025-12-24 16:55:01 | INFO     | main:651 |   Total examples: 157 (LSP: 119, ILSP: 38)
+2025-12-24 16:55:01 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 16:55:01 | INFO     | generate_preferences_for_comparison:493 | Generating 157 uncached examples for J_vs_R_game1
+2025-12-24 16:55:37 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 157
+2025-12-24 16:55:37 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 16:55:37 | INFO     | generate_preferences_for_comparison:493 | Generating 157 uncached examples for J_vs_R_game2
+2025-12-24 16:56:12 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 157
+2025-12-24 16:56:12 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 16:56:12 | INFO     | generate_preferences_for_comparison:493 | Generating 157 uncached examples for K_vs_R_game1
+2025-12-24 16:56:47 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 157
+2025-12-24 16:56:47 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 16:56:47 | INFO     | generate_preferences_for_comparison:493 | Generating 157 uncached examples for K_vs_R_game2
+2025-12-24 16:57:22 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 157
+2025-12-24 16:57:22 | INFO     | main:734 |   ✓ Completed: Qwen2.5-7B vs Llama-3.1-8B
+2025-12-24 16:57:22 | INFO     | main:640 | 
+Processing: Llama-3.1-8B-Instruct | Proxy=Llama-3.1-70B | Ref=Llama-3.1-8B
+2025-12-24 16:57:22 | INFO     | main:651 |   Total examples: 181 (LSP: 162, ILSP: 19)
+2025-12-24 16:57:22 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 16:57:22 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Llama-3.1-8B/J_vs_R_game1.jsonl
+2025-12-24 16:57:22 | INFO     | generate_preferences_for_comparison:478 | Loaded 157 cached results
+2025-12-24 16:57:22 | INFO     | generate_preferences_for_comparison:493 | Generating 72 uncached examples for J_vs_R_game1
+2025-12-24 16:57:38 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 229
+2025-12-24 16:57:38 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 16:57:38 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Llama-3.1-8B/J_vs_R_game2.jsonl
+2025-12-24 16:57:38 | INFO     | generate_preferences_for_comparison:478 | Loaded 157 cached results
+2025-12-24 16:57:38 | INFO     | generate_preferences_for_comparison:493 | Generating 72 uncached examples for J_vs_R_game2
+2025-12-24 16:57:54 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 229
+2025-12-24 16:57:54 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 16:57:54 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Llama-3.1-8B/K_vs_R_game1.jsonl
+2025-12-24 16:57:54 | INFO     | generate_preferences_for_comparison:478 | Loaded 157 cached results
+2025-12-24 16:57:54 | INFO     | generate_preferences_for_comparison:493 | Generating 181 uncached examples for K_vs_R_game1
+2025-12-24 16:58:35 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 338
+2025-12-24 16:58:35 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 16:58:35 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Llama-3.1-8B/K_vs_R_game2.jsonl
+2025-12-24 16:58:35 | INFO     | generate_preferences_for_comparison:478 | Loaded 157 cached results
+2025-12-24 16:58:35 | INFO     | generate_preferences_for_comparison:493 | Generating 181 uncached examples for K_vs_R_game2
+2025-12-24 16:59:16 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 338
+2025-12-24 16:59:16 | INFO     | main:734 |   ✓ Completed: Llama-3.1-70B vs Llama-3.1-8B
+2025-12-24 16:59:16 | INFO     | main:640 | 
+Processing: Llama-3.1-8B-Instruct | Proxy=gemma-2-9b | Ref=Llama-3.1-8B
+2025-12-24 16:59:16 | INFO     | main:651 |   Total examples: 174 (LSP: 156, ILSP: 18)
+2025-12-24 16:59:16 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 16:59:16 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Llama-3.1-8B/J_vs_R_game1.jsonl
+2025-12-24 16:59:16 | INFO     | generate_preferences_for_comparison:478 | Loaded 229 cached results
+2025-12-24 16:59:16 | INFO     | generate_preferences_for_comparison:493 | Generating 19 uncached examples for J_vs_R_game1
+2025-12-24 16:59:20 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 248
+2025-12-24 16:59:20 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 16:59:20 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Llama-3.1-8B/J_vs_R_game2.jsonl
+2025-12-24 16:59:20 | INFO     | generate_preferences_for_comparison:478 | Loaded 229 cached results
+2025-12-24 16:59:20 | INFO     | generate_preferences_for_comparison:493 | Generating 19 uncached examples for J_vs_R_game2
+2025-12-24 16:59:24 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 248
+2025-12-24 16:59:24 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 16:59:24 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Llama-3.1-8B/K_vs_R_game1.jsonl
+2025-12-24 16:59:24 | INFO     | generate_preferences_for_comparison:478 | Loaded 338 cached results
+2025-12-24 16:59:24 | INFO     | generate_preferences_for_comparison:493 | Generating 174 uncached examples for K_vs_R_game1
+2025-12-24 17:00:03 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 512
+2025-12-24 17:00:03 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 17:00:03 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Llama-3.1-8B-Instruct/Llama-3.1-8B/K_vs_R_game2.jsonl
+2025-12-24 17:00:03 | INFO     | generate_preferences_for_comparison:478 | Loaded 338 cached results
+2025-12-24 17:00:03 | INFO     | generate_preferences_for_comparison:493 | Generating 174 uncached examples for K_vs_R_game2
+2025-12-24 17:00:43 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 512
+2025-12-24 17:00:43 | INFO     | main:734 |   ✓ Completed: gemma-2-9b vs Llama-3.1-8B
+2025-12-24 17:00:43 | INFO     | main:739 | ✓ Completed all comparisons for judge: Llama-3.1-8B-Instruct
+2025-12-24 17:00:43 | INFO     | main:625 | ================================================================================
+2025-12-24 17:00:43 | INFO     | main:626 | Processing Judge: Qwen2.5-7B-Instruct
+2025-12-24 17:00:43 | INFO     | main:627 |   7 proxy-reference pairs
+2025-12-24 17:00:43 | INFO     | main:628 | ================================================================================
+2025-12-24 17:00:43 | INFO     | __init__:100 | Loading model: Qwen/Qwen2.5-7B-Instruct
+2025-12-24 17:00:43 | INFO     | __init__:101 | Model type: instruct
+2025-12-24 17:00:51 | INFO     | __init__:123 | Model loaded successfully on cuda:0
+2025-12-24 17:00:51 | INFO     | main:640 | 
+Processing: Qwen2.5-7B-Instruct | Proxy=Llama-3.1-8B | Ref=Llama-3.1-8B-Instruct
+2025-12-24 17:00:51 | INFO     | main:651 |   Total examples: 138 (LSP: 53, ILSP: 85)
+2025-12-24 17:00:51 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 17:00:51 | INFO     | generate_preferences_for_comparison:493 | Generating 138 uncached examples for J_vs_R_game1
+2025-12-24 17:01:20 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 138
+2025-12-24 17:01:20 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 17:01:20 | INFO     | generate_preferences_for_comparison:493 | Generating 138 uncached examples for J_vs_R_game2
+2025-12-24 17:01:48 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 138
+2025-12-24 17:01:48 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 17:01:48 | INFO     | generate_preferences_for_comparison:493 | Generating 138 uncached examples for K_vs_R_game1
+2025-12-24 17:02:17 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 138
+2025-12-24 17:02:17 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 17:02:17 | INFO     | generate_preferences_for_comparison:493 | Generating 138 uncached examples for K_vs_R_game2
+2025-12-24 17:02:45 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 138
+2025-12-24 17:02:45 | INFO     | main:734 |   ✓ Completed: Llama-3.1-8B vs Llama-3.1-8B-Instruct
+2025-12-24 17:02:45 | INFO     | main:640 | 
+Processing: Qwen2.5-7B-Instruct | Proxy=gemma-2-9b-it | Ref=Llama-3.1-8B-Instruct
+2025-12-24 17:02:45 | INFO     | main:651 |   Total examples: 192 (LSP: 157, ILSP: 35)
+2025-12-24 17:02:45 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 17:02:45 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Qwen2.5-7B-Instruct/Llama-3.1-8B-Instruct/J_vs_R_game1.jsonl
+2025-12-24 17:02:45 | INFO     | generate_preferences_for_comparison:478 | Loaded 138 cached results
+2025-12-24 17:02:45 | INFO     | generate_preferences_for_comparison:493 | Generating 115 uncached examples for J_vs_R_game1
+2025-12-24 17:03:09 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 253
+2025-12-24 17:03:09 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 17:03:09 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Qwen2.5-7B-Instruct/Llama-3.1-8B-Instruct/J_vs_R_game2.jsonl
+2025-12-24 17:03:09 | INFO     | generate_preferences_for_comparison:478 | Loaded 138 cached results
+2025-12-24 17:03:09 | INFO     | generate_preferences_for_comparison:493 | Generating 115 uncached examples for J_vs_R_game2
+2025-12-24 17:03:32 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 253
+2025-12-24 17:03:32 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 17:03:32 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Qwen2.5-7B-Instruct/Llama-3.1-8B-Instruct/K_vs_R_game1.jsonl
+2025-12-24 17:03:32 | INFO     | generate_preferences_for_comparison:478 | Loaded 138 cached results
+2025-12-24 17:03:32 | INFO     | generate_preferences_for_comparison:493 | Generating 192 uncached examples for K_vs_R_game1
+2025-12-24 17:04:12 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 330
+2025-12-24 17:04:12 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 17:04:12 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Qwen2.5-7B-Instruct/Llama-3.1-8B-Instruct/K_vs_R_game2.jsonl
+2025-12-24 17:04:12 | INFO     | generate_preferences_for_comparison:478 | Loaded 138 cached results
+2025-12-24 17:04:12 | INFO     | generate_preferences_for_comparison:493 | Generating 192 uncached examples for K_vs_R_game2
+2025-12-24 17:04:52 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 330
+2025-12-24 17:04:52 | INFO     | main:734 |   ✓ Completed: gemma-2-9b-it vs Llama-3.1-8B-Instruct
+2025-12-24 17:04:52 | INFO     | main:640 | 
+Processing: Qwen2.5-7B-Instruct | Proxy=Llama-3.1-70B-Instruct | Ref=Llama-3.1-8B-Instruct
+2025-12-24 17:04:52 | INFO     | main:651 |   Total examples: 186 (LSP: 159, ILSP: 27)
+2025-12-24 17:04:52 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 17:04:52 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Qwen2.5-7B-Instruct/Llama-3.1-8B-Instruct/J_vs_R_game1.jsonl
+2025-12-24 17:04:52 | INFO     | generate_preferences_for_comparison:478 | Loaded 253 cached results
+2025-12-24 17:04:52 | INFO     | generate_preferences_for_comparison:493 | Generating 27 uncached examples for J_vs_R_game1
+2025-12-24 17:04:57 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 280
+2025-12-24 17:04:57 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 17:04:57 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Qwen2.5-7B-Instruct/Llama-3.1-8B-Instruct/J_vs_R_game2.jsonl
+2025-12-24 17:04:57 | INFO     | generate_preferences_for_comparison:478 | Loaded 253 cached results
+2025-12-24 17:04:57 | INFO     | generate_preferences_for_comparison:493 | Generating 27 uncached examples for J_vs_R_game2
+2025-12-24 17:05:03 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 280
+2025-12-24 17:05:03 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 17:05:03 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Qwen2.5-7B-Instruct/Llama-3.1-8B-Instruct/K_vs_R_game1.jsonl
+2025-12-24 17:05:03 | INFO     | generate_preferences_for_comparison:478 | Loaded 330 cached results
+2025-12-24 17:05:03 | INFO     | generate_preferences_for_comparison:493 | Generating 186 uncached examples for K_vs_R_game1
+2025-12-24 17:05:42 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 516
+2025-12-24 17:05:42 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 17:05:42 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Qwen2.5-7B-Instruct/Llama-3.1-8B-Instruct/K_vs_R_game2.jsonl
+2025-12-24 17:05:42 | INFO     | generate_preferences_for_comparison:478 | Loaded 330 cached results
+2025-12-24 17:05:42 | INFO     | generate_preferences_for_comparison:493 | Generating 186 uncached examples for K_vs_R_game2
+2025-12-24 17:06:20 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 516
+2025-12-24 17:06:20 | INFO     | main:734 |   ✓ Completed: Llama-3.1-70B-Instruct vs Llama-3.1-8B-Instruct
+2025-12-24 17:06:20 | INFO     | main:640 | 
+Processing: Qwen2.5-7B-Instruct | Proxy=Qwen2.5-72B | Ref=Qwen2.5-72B-Instruct
+2025-12-24 17:06:20 | INFO     | main:651 |   Total examples: 181 (LSP: 5, ILSP: 176)
+2025-12-24 17:06:20 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 17:06:20 | INFO     | generate_preferences_for_comparison:493 | Generating 181 uncached examples for J_vs_R_game1
+2025-12-24 17:06:58 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 181
+2025-12-24 17:06:58 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 17:06:58 | INFO     | generate_preferences_for_comparison:493 | Generating 181 uncached examples for J_vs_R_game2
+2025-12-24 17:07:35 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 181
+2025-12-24 17:07:35 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 17:07:35 | INFO     | generate_preferences_for_comparison:493 | Generating 181 uncached examples for K_vs_R_game1
+2025-12-24 17:08:12 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 181
+2025-12-24 17:08:12 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 17:08:12 | INFO     | generate_preferences_for_comparison:493 | Generating 181 uncached examples for K_vs_R_game2
+2025-12-24 17:08:49 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 181
+2025-12-24 17:08:49 | INFO     | main:734 |   ✓ Completed: Qwen2.5-72B vs Qwen2.5-72B-Instruct
+2025-12-24 17:08:49 | INFO     | main:640 | 
+Processing: Qwen2.5-7B-Instruct | Proxy=Llama-3.1-70B-Instruct | Ref=Qwen2.5-72B-Instruct
+2025-12-24 17:08:49 | INFO     | main:651 |   Total examples: 166 (LSP: 24, ILSP: 142)
+2025-12-24 17:08:49 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 17:08:49 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Qwen2.5-7B-Instruct/Qwen2.5-72B-Instruct/J_vs_R_game1.jsonl
+2025-12-24 17:08:49 | INFO     | generate_preferences_for_comparison:478 | Loaded 181 cached results
+2025-12-24 17:08:49 | INFO     | generate_preferences_for_comparison:493 | Generating 59 uncached examples for J_vs_R_game1
+2025-12-24 17:09:01 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 240
+2025-12-24 17:09:01 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 17:09:01 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Qwen2.5-7B-Instruct/Qwen2.5-72B-Instruct/J_vs_R_game2.jsonl
+2025-12-24 17:09:01 | INFO     | generate_preferences_for_comparison:478 | Loaded 181 cached results
+2025-12-24 17:09:01 | INFO     | generate_preferences_for_comparison:493 | Generating 59 uncached examples for J_vs_R_game2
+2025-12-24 17:09:13 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 240
+2025-12-24 17:09:13 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 17:09:13 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/Qwen2.5-7B-Instruct/Qwen2.5-72B-Instruct/K_vs_R_game1.jsonl
+2025-12-24 17:09:13 | INFO     | generate_preferences_for_comparison:478 | Loaded 181 cached results
+2025-12-24 17:09:13 | INFO     | generate_preferences_for_comparison:493 | Generating 166 uncached examples for K_vs_R_game1

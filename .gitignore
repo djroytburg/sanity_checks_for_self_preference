@@ -1,0 +1,11 @@
+.env
+
+logs/*
+file_logs/*
+project_docs/*
+_archive/*
+*__pycache__*
+*.pyc
+.github/*
+
+CHANGELOG.md
