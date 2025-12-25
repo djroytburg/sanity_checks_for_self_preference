@@ -1,0 +1,103 @@
+{
+  "total_examples": 100,
+  "per_game_accuracy": {
+    "game1_accuracy": 0.13,
+    "game2_accuracy": 0.37,
+    "overall_accuracy": 0.25,
+    "game1_correct": 13,
+    "game2_correct": 37,
+    "total": 100
+  },
+  "transition_matrices": {
+    "game1_matrix": {
+      "A": {
+        "A": 8,
+        "B": 16,
+        "T": 32
+      },
+      "B": {
+        "A": 11,
+        "B": 5,
+        "T": 28
+      },
+      "T": {
+        "A": 0,
+        "B": 0,
+        "T": 0
+      }
+    },
+    "game2_matrix": {
+      "A": {
+        "A": 35,
+        "B": 3,
+        "T": 33
+      },
+      "B": {
+        "A": 6,
+        "B": 2,
+        "T": 21
+      },
+      "T": {
+        "A": 0,
+        "B": 0,
+        "T": 0
+      }
+    }
+  },
+  "per_verdict_errors": {
+    "A": {
+      "error_rate": 0.6614173228346457,
+      "errors": 84,
+      "total": 127
+    },
+    "B": {
+      "error_rate": 0.9041095890410958,
+      "errors": 66,
+      "total": 73
+    }
+  },
+  "probability_distributions": {
+    "game1_kl_mean": 1.553872658718577,
+    "game1_kl_std": 1.0639139099677768,
+    "game1_js_mean": 0.5395530983275499,
+    "game1_js_std": 0.15617270228715907,
+    "game2_kl_mean": 1.4936141985256912,
+    "game2_kl_std": 1.3627709247538518,
+    "game2_js_mean": 0.4921870437625025,
+    "game2_js_std": 0.20423691884396608
+  },
+  "probability_correlations": {
+    "game1_corr_a": -0.054678514955963854,
+    "game1_corr_b": -0.2756266301245126,
+    "game1_corr_t": -0.026757780220240418,
+    "game2_corr_a": 0.21904568935223087,
+    "game2_corr_b": -0.1201498108681172,
+    "game2_corr_t": -0.011076562564508915
+  },
+  "systematic_biases": {
+    "ref_g1_dist": {
+      "A": 0.56,
+      "B": 0.44,
+      "T": 0.0
+    },
+    "gen_g1_dist": {
+      "A": 0.19,
+      "B": 0.21,
+      "T": 0.6
+    },
+    "ref_g2_dist": {
+      "A": 0.71,
+      "B": 0.29,
+      "T": 0.0
+    },
+    "gen_g2_dist": {
+      "A": 0.41,
+      "B": 0.05,
+      "T": 0.54
+    },
+    "chi2_g1": Infinity,
+    "p_g1": 0.0,
+    "chi2_g2": Infinity,
+    "p_g2": 0.0
+  }
+}
