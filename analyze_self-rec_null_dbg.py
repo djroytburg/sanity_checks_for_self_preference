@@ -99,9 +99,10 @@ def load_preference_data(
                 try:
                     item = json.loads(line)
                     example_id = item['example_id']
+                    # Preference cache uses prob_response1/prob_response2 instead of prob_first/prob_second
                     preference_data[example_id]['game1'] = {
-                        'prob_first': item['prob_first'],
-                        'prob_second': item['prob_second']
+                        'prob_first': item['prob_response1'],
+                        'prob_second': item['prob_response2']
                     }
                 except (json.JSONDecodeError, KeyError) as e:
                     logger.warning(f"Error parsing game1 line: {e}")
@@ -115,9 +116,10 @@ def load_preference_data(
                 try:
                     item = json.loads(line)
                     example_id = item['example_id']
+                    # Preference cache uses prob_response1/prob_response2 instead of prob_first/prob_second
                     preference_data[example_id]['game2'] = {
-                        'prob_first': item['prob_first'],
-                        'prob_second': item['prob_second']
+                        'prob_first': item['prob_response1'],
+                        'prob_second': item['prob_response2']
                     }
                 except (json.JSONDecodeError, KeyError) as e:
                     logger.warning(f"Error parsing game2 line: {e}")
@@ -310,9 +312,13 @@ def compute_correlations(
     results = {
         'n_examples': len(matched_data),
         'mean_preference': float(np.mean(pref_scores)),
-        'std_preference': float(np.std(pref_scores)),
+        'std_preference': float(np.std(pref_scores, ddof=1)),  # Use sample std
         'mean_recognition': float(np.mean(rec_scores)),
-        'std_recognition': float(np.std(rec_scores))
+        'std_recognition': float(np.std(rec_scores, ddof=1)),  # Use sample std
+        'min_preference': float(np.min(pref_scores)),
+        'max_preference': float(np.max(pref_scores)),
+        'min_recognition': float(np.min(rec_scores)),
+        'max_recognition': float(np.max(rec_scores))
     }
     
     # Pearson correlation
@@ -383,11 +389,11 @@ def compare_lsp_vs_ilsp(
     
     if lsp_rec:
         results['lsp_mean_recognition'] = float(np.mean(lsp_rec))
-        results['lsp_std_recognition'] = float(np.std(lsp_rec))
+        results['lsp_std_recognition'] = float(np.std(lsp_rec, ddof=1))  # Use sample std
     
     if ilsp_rec:
         results['ilsp_mean_recognition'] = float(np.mean(ilsp_rec))
-        results['ilsp_std_recognition'] = float(np.std(ilsp_rec))
+        results['ilsp_std_recognition'] = float(np.std(ilsp_rec, ddof=1))  # Use sample std
     
     # t-test
     if lsp_rec and ilsp_rec:
@@ -396,8 +402,11 @@ def compare_lsp_vs_ilsp(
             results['ttest_t'] = float(t_stat)
             results['ttest_p'] = float(t_p)
             
-            # Cohen's d
-            pooled_std = np.sqrt((np.var(lsp_rec) + np.var(ilsp_rec)) / 2)
+            # Cohen's d - CORRECTED to weight by sample size
+            n1, n2 = len(lsp_rec), len(ilsp_rec)
+            var1, var2 = np.var(lsp_rec, ddof=1), np.var(ilsp_rec, ddof=1)  # Use sample variance (ddof=1)
+            pooled_var = ((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2)
+            pooled_std = np.sqrt(pooled_var)
             if pooled_std > 0:
                 d = (np.mean(lsp_rec) - np.mean(ilsp_rec)) / pooled_std
                 results['cohens_d'] = float(d)
@@ -422,8 +431,15 @@ def create_scatter_plot(
     """
     Create scatter plot of recognition vs preference with LSP/ILSP coloring.
     """
-    plt.style.use('dark_background')
-    sns.set_style("darkgrid", {"axes.facecolor": ".15", "figure.facecolor": ".1"})
+    # Use clean white background style
+    plt.style.use('default')
+    sns.set_style("whitegrid", {
+        "axes.facecolor": "white",
+        "figure.facecolor": "white",
+        "grid.color": "#e0e0e0",
+        "axes.edgecolor": "black",
+        "axes.linewidth": 1.5
+    })
     
     fig, ax = plt.subplots(figsize=(12, 10))
     
@@ -432,53 +448,53 @@ def create_scatter_plot(
     ilsp_data = [d for d in matched_data if d['category'] == 'ILSP']
     unknown_data = [d for d in matched_data if d['category'] == 'unknown']
     
-    # Plot
+    # Plot with distinct colors (circles for LSP, squares for ILSP)
     if lsp_data:
         lsp_pref = [d['preference_for_self'] for d in lsp_data]
         lsp_rec = [d['correct_recognition'] for d in lsp_data]
-        ax.scatter(lsp_rec, lsp_pref, alpha=0.6, s=50, label=f'LSP (n={len(lsp_data)})', color='cyan')
+        ax.scatter(lsp_rec, lsp_pref, alpha=0.6, s=60, label=f'Legitimate Self-Preference (n={len(lsp_data)})', 
+                  color='#2ca02c', marker='o', edgecolors='darkgreen', linewidths=0.5)
     
     if ilsp_data:
         ilsp_pref = [d['preference_for_self'] for d in ilsp_data]
         ilsp_rec = [d['correct_recognition'] for d in ilsp_data]
-        ax.scatter(ilsp_rec, ilsp_pref, alpha=0.6, s=50, label=f'ILSP (n={len(ilsp_data)})', color='orange')
+        ax.scatter(ilsp_rec, ilsp_pref, alpha=0.6, s=60, label=f'Illegitimate Self-Preference (n={len(ilsp_data)})', 
+                  color='#d62728', marker='s', edgecolors='darkred', linewidths=0.5)
     
     if unknown_data:
         unk_pref = [d['preference_for_self'] for d in unknown_data]
         unk_rec = [d['correct_recognition'] for d in unknown_data]
-        ax.scatter(unk_rec, unk_pref, alpha=0.4, s=30, label=f'Unknown (n={len(unknown_data)})', color='gray')
+        ax.scatter(unk_rec, unk_pref, alpha=0.3, s=40, label=f'Unknown (n={len(unknown_data)})', 
+                  color='gray', marker='x')
     
-    # Add regression line
-    all_rec = np.array([d['correct_recognition'] for d in matched_data])
-    all_pref = np.array([d['preference_for_self'] for d in matched_data])
-    
-    if len(all_rec) > 1:
-        z = np.polyfit(all_rec, all_pref, 1)
-        p = np.poly1d(z)
-        x_line = np.linspace(all_rec.min(), all_rec.max(), 100)
-        ax.plot(x_line, p(x_line), "r--", alpha=0.8, linewidth=2, label='Linear fit')
-    
-    # Reference lines
-    ax.axhline(y=0.5, color='white', linestyle=':', alpha=0.5, label='Chance (preference)')
-    ax.axvline(x=0.5, color='white', linestyle=':', alpha=0.5, label='Chance (recognition)')
+    # Reference lines (chance level = 0.5)
+    ax.axhline(y=0.5, color='black', linestyle='--', alpha=0.5, linewidth=1.5, zorder=1)
+    ax.axvline(x=0.5, color='black', linestyle='--', alpha=0.5, linewidth=1.5, zorder=1)
     
     # Labels and title
-    ax.set_xlabel('Self-Recognition Probability', fontsize=14, color='white')
-    ax.set_ylabel('Self-Preference Probability', fontsize=14, color='white')
+    ax.set_xlabel('Self-Recognition Probability', fontsize=14, fontweight='bold', color='black')
+    ax.set_ylabel('Self-Preference Probability (Prefers Own)', fontsize=14, fontweight='bold', color='black')
     
-    title = f'Self-Recognition vs Self-Preference\n{judge_name} vs {reference_name}'
+    title = f'Self-Recognition vs Self-Preference Strength\n{judge_name}-{reference_name}'
     if 'pearson_r' in overall_corr:
         title += f'\nPearson r = {overall_corr["pearson_r"]:.3f} (p = {overall_corr["pearson_p"]:.4f})'
-    ax.set_title(title, fontsize=16, color='white', pad=20)
+    ax.set_title(title, fontsize=16, fontweight='bold', color='black', pad=20)
     
-    ax.legend(loc='best', fontsize=10)
-    ax.grid(True, alpha=0.3)
+    ax.legend(loc='best', fontsize=10, framealpha=0.95, edgecolor='black', title='Category')
+    ax.grid(True, alpha=0.3, linewidth=0.8)
+    
+    # Set axis limits with some padding
+    ax.set_xlim(-0.05, 1.05)
+    ax.set_ylim(-0.05, 1.05)
+    
+    # Make tick labels bold
+    ax.tick_params(labelsize=11, colors='black')
     
     plt.tight_layout()
     
-    # Save
+    # Save with white background
     plot_file = output_dir / f"scatter_{judge_name}_vs_{reference_name}.png"
-    plt.savefig(plot_file, dpi=300, facecolor='#0a0a0a')
+    plt.savefig(plot_file, dpi=300, facecolor='white', edgecolor='none', bbox_inches='tight')
     plt.close()
     
     logger.info(f"Saved scatter plot: {plot_file}")
@@ -494,38 +510,51 @@ def create_histogram(
     """
     Create histograms of recognition and preference distributions.
     """
-    plt.style.use('dark_background')
+    # Use clean white background style
+    plt.style.use('default')
+    sns.set_style("whitegrid", {
+        "axes.facecolor": "white",
+        "figure.facecolor": "white",
+        "grid.color": "#e0e0e0",
+        "axes.edgecolor": "black",
+        "axes.linewidth": 1.5
+    })
     
     fig, axes = plt.subplots(1, 2, figsize=(16, 6))
     
     # Recognition histogram
     rec_scores = [d['correct_recognition'] for d in matched_data]
-    axes[0].hist(rec_scores, bins=20, alpha=0.7, color='cyan', edgecolor='white')
-    axes[0].axvline(x=0.5, color='red', linestyle='--', linewidth=2, label='Chance')
-    axes[0].axvline(x=np.mean(rec_scores), color='yellow', linestyle='-', linewidth=2, label=f'Mean = {np.mean(rec_scores):.3f}')
-    axes[0].set_xlabel('Self-Recognition Probability', fontsize=12, color='white')
-    axes[0].set_ylabel('Count', fontsize=12, color='white')
-    axes[0].set_title('Distribution of Self-Recognition', fontsize=14, color='white')
-    axes[0].legend()
-    axes[0].grid(True, alpha=0.3)
+    axes[0].hist(rec_scores, bins=20, alpha=0.7, color='#1f77b4', edgecolor='black', linewidth=1.2)
+    axes[0].axvline(x=0.5, color='red', linestyle='--', linewidth=2, label='Chance (0.5)')
+    axes[0].axvline(x=np.mean(rec_scores), color='darkgreen', linestyle='-', linewidth=2.5, 
+                   label=f'Mean = {np.mean(rec_scores):.3f}')
+    axes[0].set_xlabel('Self-Recognition Probability', fontsize=13, fontweight='bold', color='black')
+    axes[0].set_ylabel('Count', fontsize=13, fontweight='bold', color='black')
+    axes[0].set_title('Distribution of Self-Recognition', fontsize=14, fontweight='bold', color='black')
+    axes[0].legend(fontsize=11, framealpha=0.95, edgecolor='black')
+    axes[0].grid(True, alpha=0.3, linewidth=0.8)
+    axes[0].tick_params(labelsize=11, colors='black')
     
     # Preference histogram
     pref_scores = [d['preference_for_self'] for d in matched_data]
-    axes[1].hist(pref_scores, bins=20, alpha=0.7, color='orange', edgecolor='white')
-    axes[1].axvline(x=0.5, color='red', linestyle='--', linewidth=2, label='Chance')
-    axes[1].axvline(x=np.mean(pref_scores), color='yellow', linestyle='-', linewidth=2, label=f'Mean = {np.mean(pref_scores):.3f}')
-    axes[1].set_xlabel('Self-Preference Probability', fontsize=12, color='white')
-    axes[1].set_ylabel('Count', fontsize=12, color='white')
-    axes[1].set_title('Distribution of Self-Preference', fontsize=14, color='white')
-    axes[1].legend()
-    axes[1].grid(True, alpha=0.3)
+    axes[1].hist(pref_scores, bins=20, alpha=0.7, color='#ff7f0e', edgecolor='black', linewidth=1.2)
+    axes[1].axvline(x=0.5, color='red', linestyle='--', linewidth=2, label='Chance (0.5)')
+    axes[1].axvline(x=np.mean(pref_scores), color='darkgreen', linestyle='-', linewidth=2.5, 
+                   label=f'Mean = {np.mean(pref_scores):.3f}')
+    axes[1].set_xlabel('Self-Preference Probability', fontsize=13, fontweight='bold', color='black')
+    axes[1].set_ylabel('Count', fontsize=13, fontweight='bold', color='black')
+    axes[1].set_title('Distribution of Self-Preference', fontsize=14, fontweight='bold', color='black')
+    axes[1].legend(fontsize=11, framealpha=0.95, edgecolor='black')
+    axes[1].grid(True, alpha=0.3, linewidth=0.8)
+    axes[1].tick_params(labelsize=11, colors='black')
     
-    fig.suptitle(f'{judge_name} vs {reference_name}', fontsize=16, color='white', y=1.02)
+    fig.suptitle(f'{judge_name} vs {reference_name}', fontsize=16, fontweight='bold', 
+                color='black', y=1.02)
     plt.tight_layout()
     
-    # Save
+    # Save with white background
     plot_file = output_dir / f"histograms_{judge_name}_vs_{reference_name}.png"
-    plt.savefig(plot_file, dpi=300, facecolor='#0a0a0a')
+    plt.savefig(plot_file, dpi=300, facecolor='white', edgecolor='none', bbox_inches='tight')
     plt.close()
     
     logger.info(f"Saved histograms: {plot_file}")
