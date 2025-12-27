@@ -40,7 +40,6 @@ async def query_model(client: AsyncOpenAI, model: str, system_prompt: str, user_
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
         ],
-        temperature=1.0,
     )
 
     # Extract the answer
@@ -58,8 +57,9 @@ async def process_article(client: AsyncOpenAI, model: str, system_prompt: str,
     async with semaphore:
         # Create prompts for both orderings
         prompt_original = create_prompt(article, summary1, summary2)
+        
         prompt_flipped = create_prompt(article, summary2, summary1)
-
+        
         # Query model with both orders concurrently
         result_original, result_flipped = await asyncio.gather(
             query_model(client, model, system_prompt, prompt_original),
@@ -94,15 +94,15 @@ async def main_async(args):
     summaries2 = load_json(args.summaries2)
     articles = load_json(args.articles)
 
-    # Determine the minimum length to avoid index errors
-    len_summaries1 = len(summaries1) if isinstance(summaries1, list) else len(summaries1)
-    len_summaries2 = len(summaries2) if isinstance(summaries2, list) else len(summaries2)
-    len_articles = len(articles) if isinstance(articles, list) else len(articles)
-
-    min_length = min(len_summaries1, len_summaries2, len_articles)
-
-    print(f"Dataset sizes - Summaries1: {len_summaries1}, Summaries2: {len_summaries2}, Articles: {len_articles}")
-    print(f"Processing {min_length} examples (minimum of all datasets)\n")
+    # Get common keys across all datasets
+    if isinstance(articles, dict) and isinstance(summaries1, dict) and isinstance(summaries2, dict):
+        # All are dictionaries - find common keys
+        common_keys = set(articles.keys()) & set(summaries1.keys()) & set(summaries2.keys())
+        common_keys = list(common_keys)  # Limit to 10 examples for testing
+        print(f"Dataset sizes - Articles: {len(articles)}, Summaries1: {len(summaries1)}, Summaries2: {len(summaries2)}")
+        print(f"Processing {len(common_keys)} examples with matching keys\n")
+    else:
+        raise ValueError("Expected all input files to be dictionaries with matching keys")
 
     # System prompt
     system_prompt = "You are a helpful assistant and expert in news-article summaries. You help compare summaries to help me with my records. You respond with only \"1\" or \"2\" and no other text."
@@ -112,17 +112,17 @@ async def main_async(args):
     semaphore = asyncio.Semaphore(max_concurrent_articles)
 
     # Create progress bar
-    pbar = tqdm(total=min_length, desc="Evaluating articles", unit="article")
+    pbar = tqdm(total=len(common_keys), desc="Evaluating articles", unit="article")
 
-    # Create tasks for all articles (up to min_length)
+    # Create tasks for all articles
     tasks = []
-    for idx in range(min_length):
-        # Get corresponding summaries and article
-        article = articles[idx] if isinstance(articles, list) else articles.get(str(idx), "")
-        summary1 = summaries1[idx] if isinstance(summaries1, list) else summaries1.get(str(idx), "")
-        summary2 = summaries2[idx] if isinstance(summaries2, list) else summaries2.get(str(idx), "")
+    for key in common_keys:
+        # Get corresponding summaries and article using the key
+        article = articles[key]
+        summary1 = summaries1[key]
+        summary2 = summaries2[key]
 
-        task = process_article(client, args.model, system_prompt, idx, article, summary1, summary2, semaphore, pbar)
+        task = process_article(client, args.model, system_prompt, key, article, summary1, summary2, semaphore, pbar)
         tasks.append(task)
 
     # Process all articles concurrently

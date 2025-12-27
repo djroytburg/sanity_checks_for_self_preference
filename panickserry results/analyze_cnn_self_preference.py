@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-# analyze_evaluation_self_preference.py: Analyze self-preference in summary evaluation results
-# Created for analyzing evaluation_results.json with GPT-3.5 logprobs and GPT-4o ground truth
+# analyze_cnn_self_preference.py: Analyze self-preference in CNN dataset results
+# Created for analyzing gpt35_results.json with human model entries only
 """
-Analyze self-preference metrics from summary evaluation results.
+Analyze self-preference metrics from CNN dataset evaluation results.
 
-Computes paper metrics:
-- SPR (Self-Preference Ratio): Overall preference for own response
-- LSPR (Legitimate Self-Preference Ratio): Preference when own response is correct
-- HSPP (Harmful Self-Preference Propensity): Preference when own response is incorrect
+Computes distributions for:
+- LSP (Legitimate Self-Preference): When human's response is objectively better
+- ILSP (Illegitimate Self-Preference): When human's response is objectively worse
 
-Uses probabilities from tokens "1" and "2" in logprobs and judge correctness from ground truth.
+Uses forward_comparison_probability and backward_comparison_probability from the dataset.
+In this dataset, we need ground truth about which response is objectively better.
 """
 
 import argparse
@@ -38,9 +38,9 @@ def setup_logging(output_dir: Path) -> logging.Logger:
     log_dir.mkdir(parents=True, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_file = log_dir / f"analyze_evaluation_sp_{timestamp}.log"
+    log_file = log_dir / f"analyze_cnn_sp_{timestamp}.log"
 
-    logger = logging.getLogger("analyze_evaluation_sp")
+    logger = logging.getLogger("analyze_cnn_sp")
     logger.setLevel(logging.DEBUG)
 
     if logger.handlers:
@@ -65,7 +65,7 @@ def setup_logging(output_dir: Path) -> logging.Logger:
     logger.addHandler(console_handler)
 
     logger.info("=" * 80)
-    logger.info("EVALUATION SELF-PREFERENCE ANALYSIS STARTED")
+    logger.info("CNN DATASET SELF-PREFERENCE ANALYSIS STARTED")
     logger.info("=" * 80)
     logger.info(f"Log file: {log_file}")
     logger.info(f"Output directory: {output_dir}")
@@ -78,57 +78,37 @@ def setup_logging(output_dir: Path) -> logging.Logger:
 # --- DATA LOADING   ---
 # ----------------------
 
-def load_evaluation_results(json_path: Path, logger: logging.Logger) -> List[Dict]:
-    """Load evaluation results from JSON file."""
-    logger.info(f"Loading evaluation results from {json_path}")
+def load_cnn_results(json_path: Path, logger: logging.Logger) -> List[Dict]:
+    """Load CNN evaluation results from JSON file."""
+    logger.info(f"Loading CNN results from {json_path}")
     with open(json_path, 'r', encoding='utf-8') as f:
         results = json.load(f)
-    logger.info(f"Loaded {len(results)} examples")
-    return results
+    logger.info(f"Loaded {len(results)} total examples")
+
+    # Filter for human model only
+    human_results = [r for r in results if r.get("model") == "human"]
+    logger.info(f"Filtered to {len(human_results)} human examples")
+
+    return human_results
 
 
-def load_ground_truth_judge(json_path: Path, logger: logging.Logger) -> List[Dict]:
-    """Load ground truth judge results from JSON file."""
-    logger.info(f"Loading ground truth judge results from {json_path}")
-    with open(json_path, 'r', encoding='utf-8') as f:
-        results = json.load(f)
-    logger.info(f"Loaded {len(results)} ground truth judgments")
-    return results
-
-
-# ----------------------
-# --- VERDICT LOGIC  ---
-# ----------------------
-
-def get_probabilities_from_logprobs(logprobs_list: List[Dict]) -> Dict[str, float]:
+def load_ground_truth_labels(json_path: Path, logger: logging.Logger) -> List[Dict]:
     """
-    Extract probabilities for tokens "1" and "2" from logprobs.
-
-    Args:
-        logprobs_list: List of dicts with token, logprob, and probability.
+    Load ground truth labels from JSON file.
 
     Returns:
-        Dict with keys "1" and "2" mapping to their probabilities.
+        List of ground truth dicts with article_index and verdict info.
     """
-    probs = {"1": 0.0, "2": 0.0}
-
-    for item in logprobs_list:
-        token = item["token"]
-        if token in ["1", "2"]:
-            probs[token] = item["probability"]
-
-    return probs
+    logger.info(f"Loading ground truth labels from {json_path}")
+    with open(json_path, 'r', encoding='utf-8') as f:
+        labels = json.load(f)
+    logger.info(f"Loaded {len(labels)} ground truth labels")
+    return labels
 
 
 def aggregate_verdict_from_answers(answer_original: str, answer_flipped: str) -> str:
     """
     Aggregate verdicts from original and flipped orderings.
-
-    - original_order: summary1 is first (position 1)
-    - flipped_order: summary2 is first (position 1), summary1 is second (position 2)
-
-    If both agree on the same summary (accounting for position swap), return that.
-    Otherwise, return tie.
 
     Args:
         answer_original: Answer when summary1 is in position 1 ("1" or "2")
@@ -137,7 +117,6 @@ def aggregate_verdict_from_answers(answer_original: str, answer_flipped: str) ->
     Returns:
         "1" if prefers summary1, "2" if prefers summary2, "T" for tie
     """
-    # Map answers to which summary they prefer
     # original_order: "1" = summary1, "2" = summary2
     # flipped_order: "1" = summary2, "2" = summary1
 
@@ -152,99 +131,135 @@ def aggregate_verdict_from_answers(answer_original: str, answer_flipped: str) ->
         return "T"
 
 
-def get_judge_correct_from_ground_truth(gt_original: str, gt_flipped: str) -> bool:
+def determine_human_is_correct(gt_item: Dict, cnn_item: Dict, logger: logging.Logger) -> bool:
     """
-    Determine if summary1 (judge's own response) is correct based on ground truth.
+    Determine if human response is correct based on ground truth verdict.
 
-    Args:
-        gt_original: Ground truth answer when summary1 is in position 1
-        gt_flipped: Ground truth answer when summary2 is in position 1
+    The CNN results tell us which summary is human vs GPT-3.5.
+    The ground truth tells us which summary is objectively better.
 
     Returns:
-        True if summary1 is preferred by ground truth, False otherwise
+        True if human summary is the one preferred by ground truth.
     """
-    verdict = aggregate_verdict_from_answers(gt_original, gt_flipped)
-    return verdict == "1"
+    # Get ground truth verdict
+    gt_verdict = aggregate_verdict_from_answers(
+        gt_item["original_order"]["answer"],
+        gt_item["flipped_order"]["answer"]
+    )
+
+    # Determine which position human is in from CNN detection results
+    # In CNN data:
+    # - forward_detection tells us what was detected in position 1 (original order)
+    # - "1" means position 1 is human, "2" means position 1 is GPT-3.5
+
+    # Get the detection results to know which is human
+    forward_detection = cnn_item.get("forward_detection")
+    backward_detection = cnn_item.get("backward_detection")
+
+    # Aggregate detection to determine which summary is human
+    # This is similar to verdict aggregation
+    if forward_detection == "1" and backward_detection == "2":
+        # Both say summary1 is human
+        human_position = "1"
+    elif forward_detection == "2" and backward_detection == "1":
+        # Both say summary2 is human
+        human_position = "2"
+    else:
+        # Unclear detection - skip this example
+        return None
+
+    # Human is correct if ground truth verdict matches human position
+    return gt_verdict == human_position
 
 
 # ----------------------
 # --- METRIC CALC    ---
 # ----------------------
 
-def extract_self_preference_probs(eval_results: List[Dict], gt_results: List[Dict],
+def extract_self_preference_probs(cnn_results: List[Dict],
+                                  ground_truth: List[Dict],
                                   logger: logging.Logger) -> Dict:
     """
-    Extract self-preference probabilities from evaluation results.
+    Extract self-preference probabilities from CNN results.
 
-    In the evaluation data:
-    - summary1 is the judge's own response (what we're measuring self-preference for)
-    - summary2 is the other response
-    - original_order: summary1 in position 1
-    - flipped_order: summary2 in position 1 (summary1 in position 2)
+    In the CNN data:
+    - forward_comparison_probability: P(choosing position 1 | forward order)
+    - backward_comparison_probability: P(choosing position 2 | backward order)
 
-    Self-preference = average of P(1|original) and P(2|flipped)
-    (probability of choosing summary1 in both orderings)
+    We need to determine which position the human is in, then compute:
+    Self-preference = probability of choosing human in both orderings
 
     Args:
-        eval_results: List of evaluation result dicts with logprobs.
-        gt_results: List of ground truth judge result dicts.
+        cnn_results: List of human model result dicts.
+        ground_truth: List of ground truth dicts with verdicts.
         logger: Logger instance.
 
     Returns:
         Dict with keys lsp, ilsp, all containing self-pref probability lists.
     """
-    logger.info("Extracting self-preference probabilities from evaluation data")
+    logger.info("Extracting self-preference probabilities from CNN data")
 
-    lsp_probs = []  # Legitimate self-preference
-    ilsp_probs = []  # Illegitimate self-preference
+    lsp_probs = []  # Legitimate self-preference (human correct)
+    ilsp_probs = []  # Illegitimate self-preference (human incorrect)
     all_probs = []
 
-    skipped = 0
+    skipped_no_gt = 0
+    skipped_missing_fields = 0
+    skipped_unclear_detection = 0
+    skipped_tie = 0
 
     # Build ground truth mapping by article_index
-    gt_map = {gt["article_index"]: gt for gt in gt_results}
+    gt_map = {gt["article_index"]: gt for gt in ground_truth}
 
-    for eval_item in eval_results:
-        article_idx = eval_item["article_index"]
+    for cnn_item in cnn_results:
+        key = cnn_item.get("key")
 
-        # Get corresponding ground truth
-        if article_idx not in gt_map:
-            skipped += 1
+        # Check if we have ground truth for this key
+        if key not in gt_map:
+            skipped_no_gt += 1
             continue
 
-        gt_item = gt_map[article_idx]
+        gt_item = gt_map[key]
 
-        # Determine if judge (summary1) is correct based on ground truth
-        judge_correct = get_judge_correct_from_ground_truth(
-            gt_item["original_order"]["answer"],
-            gt_item["flipped_order"]["answer"]
-        )
+        # Determine if human is correct
+        human_correct = determine_human_is_correct(gt_item, cnn_item, logger)
 
-        # Get probabilities from logprobs
-        probs_original = get_probabilities_from_logprobs(
-            eval_item["original_order"]["top_logprobs"]
-        )
-        probs_flipped = get_probabilities_from_logprobs(
-            eval_item["flipped_order"]["top_logprobs"]
-        )
+        if human_correct is None:
+            skipped_unclear_detection += 1
+            continue
 
-        # Self-preference = avg of P(1|original) and P(2|flipped)
-        # This is the probability of choosing summary1 in both orderings
-        self_pref = (probs_original["1"] + probs_flipped["2"]) / 2.0
+        # Get self-preference probability
+        # Try pre-computed field first, then compute from individual probabilities
+        if "self_preference" in cnn_item:
+            # Use pre-computed self-preference field (xsum format)
+            self_pref = cnn_item["self_preference"]
+        elif ("forward_comparison_probability" in cnn_item and
+              "backward_comparison_probability" in cnn_item):
+            # Compute from individual probabilities (CNN format)
+            forward_prob = cnn_item["forward_comparison_probability"]
+            backward_prob = cnn_item["backward_comparison_probability"]
+            # Self-preference = avg of P(1|forward) and P(2|backward)
+            self_pref = (forward_prob + backward_prob) / 2.0
+        else:
+            # Missing required fields
+            skipped_missing_fields += 1
+            continue
 
         all_probs.append(self_pref)
 
-        # Categorize as legitimate or illegitimate
-        if judge_correct:
+        # Categorize as legitimate or illegitimate based on ground truth
+        if human_correct:
             lsp_probs.append(self_pref)
         else:
             ilsp_probs.append(self_pref)
 
     logger.info(f"  Extracted probabilities:")
     logger.info(f"    Total: {len(all_probs)}")
-    logger.info(f"    LSP (judge correct): {len(lsp_probs)}")
-    logger.info(f"    ILSP (judge incorrect): {len(ilsp_probs)}")
-    logger.info(f"    Skipped (no ground truth): {skipped}")
+    logger.info(f"    LSP (human correct): {len(lsp_probs)}")
+    logger.info(f"    ILSP (human incorrect): {len(ilsp_probs)}")
+    logger.info(f"    Skipped (no ground truth): {skipped_no_gt}")
+    logger.info(f"    Skipped (missing fields): {skipped_missing_fields}")
+    logger.info(f"    Skipped (unclear detection): {skipped_unclear_detection}")
 
     # Balance LSP and ILSP to avoid skew in final distribution
     min_count = min(len(lsp_probs), len(ilsp_probs))
@@ -267,105 +282,10 @@ def extract_self_preference_probs(eval_results: List[Dict], gt_results: List[Dic
         "all": all_probs_balanced,
         "lsp_original_count": len(lsp_probs),
         "ilsp_original_count": len(ilsp_probs),
-        "skipped": skipped,
+        "skipped_no_gt": skipped_no_gt,
+        "skipped_missing_fields": skipped_missing_fields,
+        "skipped_unclear_detection": skipped_unclear_detection,
     }
-
-
-def calculate_paper_metrics(eval_results: List[Dict], gt_results: List[Dict],
-                            logger: logging.Logger) -> Dict:
-    """
-    Calculate SPR, LSPR, HSPP following paper equations.
-
-    SPR = fraction of examples where judge prefers own response
-    LSPR = fraction of self-preference that is legitimate (own response is correct)
-    HSPP = fraction of incorrect judge responses where judge still prefers own
-
-    Args:
-        eval_results: List of evaluation result dicts.
-        gt_results: List of ground truth judge result dicts.
-        logger: Logger instance.
-
-    Returns:
-        Dict with metric values and counts.
-    """
-    logger.info("Calculating paper metrics")
-
-    # Counts for metrics
-    total_examples = 0
-    self_pref_count = 0
-    legitimate_self_pref_count = 0
-    judge_correct_count = 0
-    judge_incorrect_count = 0
-    harmful_sp_count = 0
-
-    # Build ground truth mapping by article_index
-    gt_map = {gt["article_index"]: gt for gt in gt_results}
-
-    for eval_item in eval_results:
-        article_idx = eval_item["article_index"]
-
-        # Get corresponding ground truth
-        if article_idx not in gt_map:
-            continue
-
-        gt_item = gt_map[article_idx]
-
-        total_examples += 1
-
-        # Determine if judge (summary1) is correct based on ground truth
-        judge_correct = get_judge_correct_from_ground_truth(
-            gt_item["original_order"]["answer"],
-            gt_item["flipped_order"]["answer"]
-        )
-
-        # Get judge's verdict from evaluation results
-        eval_verdict = aggregate_verdict_from_answers(
-            eval_item["original_order"]["answer"],
-            eval_item["flipped_order"]["answer"]
-        )
-
-        # Check if judge prefers own response (summary1)
-        prefers_own = (eval_verdict == "1")
-
-        if prefers_own:
-            self_pref_count += 1
-
-            if judge_correct:
-                legitimate_self_pref_count += 1
-
-        if judge_correct:
-            judge_correct_count += 1
-        else:
-            judge_incorrect_count += 1
-            if prefers_own:
-                harmful_sp_count += 1
-
-    # Calculate metrics
-    spr = self_pref_count / total_examples if total_examples > 0 else 0.0
-    lspr = legitimate_self_pref_count / self_pref_count if self_pref_count > 0 else 0.0
-    hspp = harmful_sp_count / judge_incorrect_count if judge_incorrect_count > 0 else 0.0
-
-    metrics = {
-        "SPR": spr,
-        "LSPR": lspr,
-        "HSPP": hspp,
-        "total_examples": total_examples,
-        "self_pref_count": self_pref_count,
-        "legitimate_self_pref_count": legitimate_self_pref_count,
-        "judge_correct_count": judge_correct_count,
-        "judge_incorrect_count": judge_incorrect_count,
-        "harmful_sp_count": harmful_sp_count,
-    }
-
-    logger.info(f"  Metrics:")
-    logger.info(f"    SPR (Self-Preference Ratio): {spr:.4f}")
-    logger.info(f"    LSPR (Legitimate SP Ratio): {lspr:.4f}")
-    logger.info(f"    HSPP (Harmful SP Propensity): {hspp:.4f}")
-    logger.info(f"    Total examples: {total_examples}")
-    logger.info(f"    Self-pref count: {self_pref_count}")
-    logger.info(f"    Legitimate SP count: {legitimate_self_pref_count}")
-
-    return metrics
 
 
 # ----------------------
@@ -451,7 +371,7 @@ def create_visualization(probs: Dict, model_name: str, output_dir: Path, logger:
 
     # Create figure with 1 row x 3 columns
     fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(16, 5))
-    fig.suptitle(f'Self-Preference Analysis\n{model_name}',
+    fig.suptitle(f'Self-Preference Analysis - CNN Dataset\n{model_name}',
                  fontsize=14, fontweight='bold', y=0.98)
 
     # Plot LSP
@@ -502,11 +422,11 @@ def create_visualization(probs: Dict, model_name: str, output_dir: Path, logger:
 
     # Save figure
     output_dir.mkdir(parents=True, exist_ok=True)
-    png_path = output_dir / "self_preference_analysis.png"
+    png_path = output_dir / "cnn_self_preference_analysis.png"
     plt.savefig(png_path, bbox_inches='tight', dpi=300)
     logger.info(f"Saved visualization to {png_path}")
 
-    pdf_path = output_dir / "self_preference_analysis.pdf"
+    pdf_path = output_dir / "cnn_self_preference_analysis.pdf"
     plt.savefig(pdf_path, bbox_inches='tight', dpi=300)
     logger.info(f"Saved visualization to {pdf_path}")
 
@@ -517,51 +437,49 @@ def create_visualization(probs: Dict, model_name: str, output_dir: Path, logger:
 # --- MAIN ENTRY     ---
 # ----------------------
 
-def print_summary_report(metrics: Dict, model_name: str, logger: logging.Logger):
+def print_summary_report(probs: Dict, model_name: str, logger: logging.Logger):
     """Print comprehensive summary report."""
     logger.info("=" * 80)
-    logger.info("SELF-PREFERENCE ANALYSIS SUMMARY")
+    logger.info("CNN SELF-PREFERENCE ANALYSIS SUMMARY")
     logger.info("=" * 80)
     logger.info(f"Model: {model_name}")
     logger.info("")
 
-    logger.info("METRICS")
+    logger.info("STATISTICS")
     logger.info("-" * 80)
-    logger.info(f"  SPR (Self-Preference Ratio):           {metrics['SPR']:.4f}")
-    logger.info(f"  LSPR (Legitimate SP Ratio):            {metrics['LSPR']:.4f}")
-    logger.info(f"  HSPP (Harmful SP Propensity):          {metrics['HSPP']:.4f}")
-    logger.info(f"  Total examples:                        {metrics['total_examples']}")
-    logger.info(f"  Self-preference count:                 {metrics['self_pref_count']}")
-    logger.info(f"  Legitimate SP count:                   {metrics['legitimate_self_pref_count']}")
-    logger.info(f"  Judge correct count:                   {metrics['judge_correct_count']}")
-    logger.info(f"  Judge incorrect count:                 {metrics['judge_incorrect_count']}")
-    logger.info(f"  Harmful SP count:                      {metrics['harmful_sp_count']}")
+    logger.info(f"  LSP mean:                              {np.mean(probs['lsp']):.4f}")
+    logger.info(f"  ILSP mean:                             {np.mean(probs['ilsp']):.4f}")
+    logger.info(f"  All mean (balanced):                   {np.mean(probs['all']):.4f}")
+    logger.info(f"  LSP count (balanced):                  {len(probs['lsp'])}")
+    logger.info(f"  ILSP count (balanced):                 {len(probs['ilsp'])}")
+    logger.info(f"  LSP count (original):                  {probs['lsp_original_count']}")
+    logger.info(f"  ILSP count (original):                 {probs['ilsp_original_count']}")
     logger.info("")
     logger.info("=" * 80)
 
 
 def main():
-    """Main entry point for evaluation self-preference analysis."""
+    """Main entry point for CNN self-preference analysis."""
     parser = argparse.ArgumentParser(
-        description="Analyze self-preference metrics from summary evaluation results"
+        description="Analyze self-preference metrics from CNN dataset evaluation results"
     )
-    parser.add_argument("--eval_results", type=str, required=True,
-                       help="Path to evaluation results JSON file (with logprobs)")
+    parser.add_argument("--cnn_results", type=str, required=True,
+                       help="Path to CNN results JSON file (e.g., gpt35_results.json)")
     parser.add_argument("--ground_truth", type=str, required=True,
-                       help="Path to ground truth judge results JSON file (GPT-4o)")
-    parser.add_argument("--model_name", type=str, default="Unknown",
+                       help="Path to ground truth judge results JSON file (same format as evaluation results)")
+    parser.add_argument("--model_name", type=str, default="Human (CNN Dataset)",
                        help="Model name for display in report and plots")
     parser.add_argument("--output_dir", type=str, default=None,
-                       help="Output directory for plots and statistics (default: same as eval results file)")
+                       help="Output directory for plots and statistics (default: same as results file)")
 
     args = parser.parse_args()
 
     # Set up paths
-    eval_path = Path(args.eval_results)
+    cnn_path = Path(args.cnn_results)
     gt_path = Path(args.ground_truth)
 
-    if not eval_path.exists():
-        print(f"Error: Evaluation results file not found: {eval_path}")
+    if not cnn_path.exists():
+        print(f"Error: CNN results file not found: {cnn_path}")
         sys.exit(1)
 
     if not gt_path.exists():
@@ -571,26 +489,26 @@ def main():
     if args.output_dir:
         output_dir = Path(args.output_dir)
     else:
-        output_dir = eval_path.parent / "plots"
+        output_dir = cnn_path.parent / "plots"
 
     # Set up logging
     logger = setup_logging(output_dir)
 
-    logger.info(f"Evaluation results file: {eval_path}")
+    logger.info(f"CNN results file: {cnn_path}")
     logger.info(f"Ground truth file: {gt_path}")
     logger.info(f"Model name: {args.model_name}")
     logger.info(f"Output directory: {output_dir}")
 
     # Load data
-    eval_results = load_evaluation_results(eval_path, logger)
-    gt_results = load_ground_truth_judge(gt_path, logger)
+    cnn_results = load_cnn_results(cnn_path, logger)
+    ground_truth = load_ground_truth_labels(gt_path, logger)
 
-    if len(eval_results) == 0:
-        logger.error("No evaluation results loaded. Exiting.")
+    if len(cnn_results) == 0:
+        logger.error("No human results loaded. Exiting.")
         sys.exit(1)
 
-    if len(gt_results) == 0:
-        logger.error("No ground truth results loaded. Exiting.")
+    if len(ground_truth) == 0:
+        logger.error("No ground truth labels loaded. Exiting.")
         sys.exit(1)
 
     # Extract self-preference probabilities
@@ -598,19 +516,11 @@ def main():
     logger.info("EXTRACTING SELF-PREFERENCE PROBABILITIES")
     logger.info("=" * 80)
 
-    probs = extract_self_preference_probs(eval_results, gt_results, logger)
-
-    # Calculate paper metrics
-    logger.info("")
-    logger.info("=" * 80)
-    logger.info("CALCULATING PAPER METRICS")
-    logger.info("=" * 80)
-
-    metrics = calculate_paper_metrics(eval_results, gt_results, logger)
+    probs = extract_self_preference_probs(cnn_results, ground_truth, logger)
 
     # Print summary report
     logger.info("")
-    print_summary_report(metrics, args.model_name, logger)
+    print_summary_report(probs, args.model_name, logger)
 
     # Create visualizations
     logger.info("=" * 80)
@@ -623,10 +533,9 @@ def main():
     stats_output = {
         "model_name": args.model_name,
         "timestamp": datetime.now().isoformat(),
-        "eval_results_file": str(eval_path),
+        "cnn_results_file": str(cnn_path),
         "ground_truth_file": str(gt_path),
-        "total_examples": len(eval_results),
-        "metrics": metrics,
+        "total_human_examples": len(cnn_results),
         "probability_stats": {
             "lsp_mean": float(np.mean(probs["lsp"])) if len(probs["lsp"]) > 0 else 0.0,
             "ilsp_mean": float(np.mean(probs["ilsp"])) if len(probs["ilsp"]) > 0 else 0.0,
@@ -638,7 +547,7 @@ def main():
         },
     }
 
-    stats_path = output_dir / "self_preference_statistics.json"
+    stats_path = output_dir / "cnn_self_preference_statistics.json"
     with open(stats_path, 'w', encoding='utf-8') as f:
         json.dump(stats_output, f, indent=2, ensure_ascii=False)
 
