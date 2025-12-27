@@ -424,3 +424,55 @@ Processing: gemma-2-9b-it | Proxy=Qwen2.5-7B-Instruct | Ref=Llama-3.1-8B-Instruc
 2025-12-24 17:20:11 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/gemma-2-9b-it/Llama-3.1-8B-Instruct/K_vs_R_game1.jsonl
 2025-12-24 17:20:11 | INFO     | generate_preferences_for_comparison:478 | Loaded 115 cached results
 2025-12-24 17:20:11 | INFO     | generate_preferences_for_comparison:493 | Generating 192 uncached examples for K_vs_R_game1
+2025-12-24 17:21:43 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 307
+2025-12-24 17:21:43 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 17:21:43 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/gemma-2-9b-it/Llama-3.1-8B-Instruct/K_vs_R_game2.jsonl
+2025-12-24 17:21:43 | INFO     | generate_preferences_for_comparison:478 | Loaded 115 cached results
+2025-12-24 17:21:43 | INFO     | generate_preferences_for_comparison:493 | Generating 192 uncached examples for K_vs_R_game2
+2025-12-24 17:23:14 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 307
+2025-12-24 17:23:14 | INFO     | main:734 |   ✓ Completed: Qwen2.5-7B-Instruct vs Llama-3.1-8B-Instruct
+2025-12-24 17:23:14 | INFO     | main:640 | 
+Processing: gemma-2-9b-it | Proxy=Llama-3.1-70B-Instruct | Ref=Llama-3.1-8B-Instruct
+2025-12-24 17:23:14 | INFO     | main:651 |   Total examples: 230 (LSP: 207, ILSP: 23)
+2025-12-24 17:23:14 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 17:23:14 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/gemma-2-9b-it/Llama-3.1-8B-Instruct/J_vs_R_game1.jsonl
+2025-12-24 17:23:14 | INFO     | generate_preferences_for_comparison:478 | Loaded 230 cached results
+2025-12-24 17:23:14 | INFO     | generate_preferences_for_comparison:493 | Generating 61 uncached examples for J_vs_R_game1
+2025-12-24 17:23:44 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 291
+2025-12-24 17:23:44 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 17:23:44 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/gemma-2-9b-it/Llama-3.1-8B-Instruct/J_vs_R_game2.jsonl
+2025-12-24 17:23:44 | INFO     | generate_preferences_for_comparison:478 | Loaded 230 cached results
+2025-12-24 17:23:44 | INFO     | generate_preferences_for_comparison:493 | Generating 61 uncached examples for J_vs_R_game2
+2025-12-24 17:24:13 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 291
+2025-12-24 17:24:13 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 17:24:13 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/gemma-2-9b-it/Llama-3.1-8B-Instruct/K_vs_R_game1.jsonl
+2025-12-24 17:24:13 | INFO     | generate_preferences_for_comparison:478 | Loaded 307 cached results
+2025-12-24 17:24:13 | INFO     | generate_preferences_for_comparison:493 | Generating 230 uncached examples for K_vs_R_game1
+2025-12-24 17:26:03 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 537
+2025-12-24 17:26:03 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 17:26:03 | INFO     | generate_preferences_for_comparison:468 | Loading cache from judge_swap_null_dbg_results/translation/cache/gemma-2-9b-it/Llama-3.1-8B-Instruct/K_vs_R_game2.jsonl
+2025-12-24 17:26:03 | INFO     | generate_preferences_for_comparison:478 | Loaded 307 cached results
+2025-12-24 17:26:03 | INFO     | generate_preferences_for_comparison:493 | Generating 230 uncached examples for K_vs_R_game2
+2025-12-24 17:27:53 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 537
+2025-12-24 17:27:53 | INFO     | main:734 |   ✓ Completed: Llama-3.1-70B-Instruct vs Llama-3.1-8B-Instruct
+2025-12-24 17:27:53 | INFO     | main:640 | 
+Processing: gemma-2-9b-it | Proxy=Llama-3.1-8B | Ref=gemma-2-9b
+2025-12-24 17:27:53 | INFO     | main:651 |   Total examples: 103 (LSP: 61, ILSP: 42)
+2025-12-24 17:27:53 | INFO     | main:663 |   Generating J(J vs R) - Game 1 (J=A, R=B)...
+2025-12-24 17:27:53 | INFO     | generate_preferences_for_comparison:493 | Generating 103 uncached examples for J_vs_R_game1
+2025-12-24 17:28:42 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game1: 103
+2025-12-24 17:28:42 | INFO     | main:681 |   Generating J(J vs R) - Game 2 (R=A, J=B)...
+2025-12-24 17:28:42 | INFO     | generate_preferences_for_comparison:493 | Generating 103 uncached examples for J_vs_R_game2
+2025-12-24 17:29:32 | INFO     | generate_preferences_for_comparison:565 | Total results for J_vs_R_game2: 103
+2025-12-24 17:29:32 | INFO     | main:699 |   Generating J(K vs R) - Game 1 (K=A, R=B)...
+2025-12-24 17:29:32 | INFO     | generate_preferences_for_comparison:493 | Generating 103 uncached examples for K_vs_R_game1
+2025-12-24 17:30:22 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game1: 103
+2025-12-24 17:30:22 | INFO     | main:717 |   Generating J(K vs R) - Game 2 (R=A, K=B)...
+2025-12-24 17:30:22 | INFO     | generate_preferences_for_comparison:493 | Generating 103 uncached examples for K_vs_R_game2
+2025-12-24 17:31:11 | INFO     | generate_preferences_for_comparison:565 | Total results for K_vs_R_game2: 103
+2025-12-24 17:31:11 | INFO     | main:734 |   ✓ Completed: Llama-3.1-8B vs gemma-2-9b
+2025-12-24 17:31:11 | INFO     | main:739 | ✓ Completed all comparisons for judge: gemma-2-9b-it
+2025-12-24 17:31:11 | INFO     | main:741 | ================================================================================
+2025-12-24 17:31:11 | INFO     | main:742 | JUDGE SWAP NULL HYPOTHESIS TEST COMPLETED
+2025-12-24 17:31:11 | INFO     | main:743 | Results saved to: judge_swap_null_dbg_results/translation
+2025-12-24 17:31:11 | INFO     | main:744 | ================================================================================

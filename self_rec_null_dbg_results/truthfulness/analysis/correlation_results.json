@@ -1,0 +1,506 @@
+{
+  "Llama-3.1-8B-Instruct_vs_Llama-3.1-70B-Instruct": {
+    "judge": "Llama-3.1-8B-Instruct",
+    "reference": "Llama-3.1-70B-Instruct",
+    "overall": {
+      "n_examples": 186,
+      "mean_preference": 0.43351489242585917,
+      "std_preference": 0.24513247901069232,
+      "mean_recognition": 0.45186731519128426,
+      "std_recognition": 0.16658405431550477,
+      "pearson_r": 0.8021497261408894,
+      "pearson_p": 4.561771650357746e-43,
+      "spearman_rho": 0.7646699266586782,
+      "spearman_p": 5.904569852569436e-37,
+      "pointbiserial_r": 0.6755978399841938,
+      "pointbiserial_p": 3.80048904005745e-26
+    },
+    "stratified": {
+      "LSP": {
+        "n_examples": 41,
+        "mean_preference": 0.7609275502311793,
+        "std_preference": 0.17945270134793048,
+        "mean_recognition": 0.6313436831207114,
+        "std_recognition": 0.15703130652275368,
+        "pearson_r": 0.6821599726182093,
+        "pearson_p": 9.031633871879505e-07,
+        "spearman_rho": 0.6904481909071192,
+        "spearman_p": 5.873024828892373e-07,
+        "pointbiserial_r": 0.31614268540052026,
+        "pointbiserial_p": 0.04404380000316787
+      },
+      "ILSP": {
+        "n_examples": 145,
+        "mean_preference": 0.3409361409084927,
+        "std_preference": 0.17056624967821465,
+        "mean_recognition": 0.4011188249491705,
+        "std_recognition": 0.1301568580076137,
+        "pearson_r": 0.6877596157780808,
+        "pearson_p": 1.234457168812849e-21,
+        "spearman_rho": 0.6191241499895316,
+        "spearman_p": 1.038933760662989e-16,
+        "pointbiserial_r": 0.41579783942343385,
+        "pointbiserial_p": 1.9822935816525874e-07
+      }
+    },
+    "lsp_vs_ilsp": {
+      "n_lsp": 41,
+      "n_ilsp": 145,
+      "lsp_mean_recognition": 0.6313436831207114,
+      "lsp_std_recognition": 0.15703130652275368,
+      "ilsp_mean_recognition": 0.4011188249491705,
+      "ilsp_std_recognition": 0.1301568580076137,
+      "ttest_t": 9.481494167140276,
+      "ttest_p": 1.2916994711248803e-17,
+      "cohens_d": 1.5963291030783506
+    }
+  },
+  "Llama-3.1-8B-Instruct_vs_Llama-3.1-8B": {
+    "judge": "Llama-3.1-8B-Instruct",
+    "reference": "Llama-3.1-8B",
+    "overall": {
+      "n_examples": 282,
+      "mean_preference": 0.7060960224915002,
+      "std_preference": 0.22541585609408524,
+      "mean_recognition": 0.6509371937080936,
+      "std_recognition": 0.16170901912420035,
+      "pearson_r": 0.7904693862392946,
+      "pearson_p": 1.4763260774137405e-61,
+      "spearman_rho": 0.7809657460847489,
+      "spearman_p": 3.5304200772894155e-59,
+      "pointbiserial_r": 0.5677992283812984,
+      "pointbiserial_p": 1.8081613570787157e-25
+    },
+    "stratified": {
+      "LSP": {
+        "n_examples": 243,
+        "mean_preference": 0.7573545146455689,
+        "std_preference": 0.1793359774112696,
+        "mean_recognition": 0.6811233817645947,
+        "std_recognition": 0.13730335301930258,
+        "pearson_r": 0.7203024679133103,
+        "pearson_p": 3.69559509772439e-40,
+        "spearman_rho": 0.7377353788411846,
+        "spearman_p": 5.215072584594497e-43,
+        "pointbiserial_r": 0.4441148450031297,
+        "pointbiserial_p": 3.619943463247931e-13
+      },
+      "ILSP": {
+        "n_examples": 39,
+        "mean_preference": 0.38671618676230285,
+        "std_preference": 0.22056166849253583,
+        "mean_recognition": 0.4628540219714323,
+        "std_recognition": 0.17483320828718255,
+        "pearson_r": 0.7293736940507544,
+        "pearson_p": 1.388102711344327e-07,
+        "spearman_rho": 0.5777699050777904,
+        "spearman_p": 0.00011738272037703706,
+        "pointbiserial_r": 0.4015438193628925,
+        "pointbiserial_p": 0.011286778017725527
+      }
+    },
+    "lsp_vs_ilsp": {
+      "n_lsp": 243,
+      "n_ilsp": 39,
+      "lsp_mean_recognition": 0.6811233817645947,
+      "lsp_std_recognition": 0.13730335301930258,
+      "ilsp_mean_recognition": 0.4628540219714323,
+      "ilsp_std_recognition": 0.17483320828718255,
+      "ttest_t": 8.812007930716671,
+      "ttest_p": 1.3242232664046338e-16,
+      "cohens_d": 1.3885496220493398
+    }
+  },
+  "Llama-3.1-8B-Instruct_vs_Qwen2.5-7B-Instruct": {
+    "judge": "Llama-3.1-8B-Instruct",
+    "reference": "Qwen2.5-7B-Instruct",
+    "overall": {
+      "n_examples": 208,
+      "mean_preference": 0.5522723549766428,
+      "std_preference": 0.2733933822378322,
+      "mean_recognition": 0.5415694284796148,
+      "std_recognition": 0.19010883289097816,
+      "pearson_r": 0.8350038364409642,
+      "pearson_p": 2.3785025753699446e-55,
+      "spearman_rho": 0.8425523573130623,
+      "spearman_p": 2.892686450376689e-57,
+      "pointbiserial_r": 0.749242051018729,
+      "pointbiserial_p": 1.0116174432401013e-38
+    },
+    "stratified": {
+      "LSP": {
+        "n_examples": 92,
+        "mean_preference": 0.773255573840865,
+        "std_preference": 0.16418921333143727,
+        "mean_recognition": 0.6733572526988094,
+        "std_recognition": 0.14230852207188105,
+        "pearson_r": 0.6685686979463576,
+        "pearson_p": 3.2809447196236224e-13,
+        "spearman_rho": 0.6365633079961098,
+        "spearman_p": 9.106760872425468e-12,
+        "pointbiserial_r": 0.3960045485981708,
+        "pointbiserial_p": 9.329070543019437e-05
+      },
+      "ILSP": {
+        "n_examples": 116,
+        "mean_preference": 0.3770098020843288,
+        "std_preference": 0.20783650622458405,
+        "mean_recognition": 0.4370480506505984,
+        "std_recognition": 0.1550617407663737,
+        "pearson_r": 0.7451135089500183,
+        "pearson_p": 8.771641540843653e-22,
+        "spearman_rho": 0.6996718709082095,
+        "spearman_p": 2.385623941905299e-18,
+        "pointbiserial_r": 0.6183167281019296,
+        "pointbiserial_p": 1.4098350364721178e-13
+      }
+    },
+    "lsp_vs_ilsp": {
+      "n_lsp": 92,
+      "n_ilsp": 116,
+      "lsp_mean_recognition": 0.6733572526988094,
+      "lsp_std_recognition": 0.14230852207188105,
+      "ilsp_mean_recognition": 0.4370480506505984,
+      "ilsp_std_recognition": 0.1550617407663737,
+      "ttest_t": 11.263481081525695,
+      "ttest_p": 3.056223201700688e-23,
+      "cohens_d": 1.5878667986198902
+    }
+  },
+  "Llama-3.1-8B-Instruct_vs_gemma-2-9b-it": {
+    "judge": "Llama-3.1-8B-Instruct",
+    "reference": "gemma-2-9b-it",
+    "overall": {
+      "n_examples": 176,
+      "mean_preference": 0.5577095890930895,
+      "std_preference": 0.2812991804535415,
+      "mean_recognition": 0.5085114878549093,
+      "std_recognition": 0.19426354920381064,
+      "pearson_r": 0.7989786348241037,
+      "pearson_p": 2.7954697209628214e-40,
+      "spearman_rho": 0.8203848393164331,
+      "spearman_p": 4.244950080887254e-44,
+      "pointbiserial_r": 0.6960047446153845,
+      "pointbiserial_p": 8.042805893506686e-27
+    },
+    "stratified": {
+      "LSP": {
+        "n_examples": 48,
+        "mean_preference": 0.8813893666738064,
+        "std_preference": 0.12244768468792626,
+        "mean_recognition": 0.6928791164796319,
+        "std_recognition": 0.11892683284340753,
+        "pearson_r": 0.43746964574403086,
+        "pearson_p": 0.0018752204437694096,
+        "spearman_rho": 0.5446057827796033,
+        "spearman_p": 6.287361610793262e-05,
+        "pointbiserial_r": 0.35044933039501613,
+        "pointbiserial_p": 0.014606998914779656
+      },
+      "ILSP": {
+        "n_examples": 128,
+        "mean_preference": 0.43632967250032073,
+        "std_preference": 0.2217179354622745,
+        "mean_recognition": 0.4393736271206384,
+        "std_recognition": 0.1704685453324092,
+        "pearson_r": 0.7110450519995475,
+        "pearson_p": 5.2906328999237435e-21,
+        "spearman_rho": 0.7160648195357072,
+        "spearman_p": 2.0951043757610976e-21,
+        "pointbiserial_r": 0.5117237423541611,
+        "pointbiserial_p": 6.690514629143166e-10
+      }
+    },
+    "lsp_vs_ilsp": {
+      "n_lsp": 48,
+      "n_ilsp": 128,
+      "lsp_mean_recognition": 0.6928791164796319,
+      "lsp_std_recognition": 0.11892683284340753,
+      "ilsp_mean_recognition": 0.4393736271206384,
+      "ilsp_std_recognition": 0.1704685453324092,
+      "ttest_t": 9.420596255945755,
+      "ttest_p": 2.7537758997165196e-17,
+      "cohens_d": 1.724824162885734
+    }
+  },
+  "Qwen2.5-7B-Instruct_vs_Llama-3.1-8B-Instruct": {
+    "judge": "Qwen2.5-7B-Instruct",
+    "reference": "Llama-3.1-8B-Instruct",
+    "overall": {
+      "n_examples": 276,
+      "mean_preference": 0.5644482395255787,
+      "std_preference": 0.301485544398396,
+      "mean_recognition": 0.5456476467154681,
+      "std_recognition": 0.335087037456176,
+      "pearson_r": 0.7498944848200529,
+      "pearson_p": 4.3849547522806626e-51,
+      "spearman_rho": 0.8206303845975478,
+      "spearman_p": 1.5196447119451454e-68,
+      "pointbiserial_r": 0.5996971057853743,
+      "pointbiserial_p": 2.412166268262262e-28
+    },
+    "stratified": {
+      "LSP": {
+        "n_examples": 141,
+        "mean_preference": 0.7427335605026626,
+        "std_preference": 0.23998653282864518,
+        "mean_recognition": 0.7527018520494332,
+        "std_recognition": 0.24505593990589464,
+        "pearson_r": 0.6347659604231448,
+        "pearson_p": 2.860559492987186e-17,
+        "spearman_rho": 0.7664355603374563,
+        "spearman_p": 1.6618915624511821e-28,
+        "pointbiserial_r": 0.3738046501436418,
+        "pointbiserial_p": 4.975849971218607e-06
+      },
+      "ILSP": {
+        "n_examples": 135,
+        "mean_preference": 0.37823912650506886,
+        "std_preference": 0.2404191041877383,
+        "mean_recognition": 0.329391032255549,
+        "std_recognition": 0.2743935870953866,
+        "pearson_r": 0.5618869448993176,
+        "pearson_p": 1.3366335908549002e-12,
+        "spearman_rho": 0.6344817662815154,
+        "spearman_p": 1.4300593772244388e-16,
+        "pointbiserial_r": 0.3943354210229587,
+        "pointbiserial_p": 2.219149421828153e-06
+      }
+    },
+    "lsp_vs_ilsp": {
+      "n_lsp": 141,
+      "n_ilsp": 135,
+      "lsp_mean_recognition": 0.7527018520494332,
+      "lsp_std_recognition": 0.24505593990589464,
+      "ilsp_mean_recognition": 0.329391032255549,
+      "ilsp_std_recognition": 0.2743935870953866,
+      "ttest_t": 13.481222409010131,
+      "ttest_p": 4.046671184925087e-32,
+      "cohens_d": 1.6272506554231845
+    }
+  },
+  "Qwen2.5-7B-Instruct_vs_Qwen2.5-72B-Instruct": {
+    "judge": "Qwen2.5-7B-Instruct",
+    "reference": "Qwen2.5-72B-Instruct",
+    "overall": {
+      "n_examples": 179,
+      "mean_preference": 0.5014323773886002,
+      "std_preference": 0.2796230185706713,
+      "mean_recognition": 0.4750433580492568,
+      "std_recognition": 0.30392966819927164,
+      "pearson_r": 0.7116288313976388,
+      "pearson_p": 6.098728659182449e-29,
+      "spearman_rho": 0.7658034568417439,
+      "spearman_p": 8.990829303203603e-36,
+      "pointbiserial_r": 0.558335413120462,
+      "pointbiserial_p": 4.639045466030744e-16
+    },
+    "stratified": {
+      "LSP": {
+        "n_examples": 65,
+        "mean_preference": 0.6790630745024893,
+        "std_preference": 0.2133522968630302,
+        "mean_recognition": 0.6843624383687784,
+        "std_recognition": 0.22938842430170947,
+        "pearson_r": 0.6428296565355837,
+        "pearson_p": 7.765297846937114e-09,
+        "spearman_rho": 0.6717879246031732,
+        "spearman_p": 9.007506082730684e-10,
+        "pointbiserial_r": 0.3995476636538803,
+        "pointbiserial_p": 0.0009764009052364125
+      },
+      "ILSP": {
+        "n_examples": 114,
+        "mean_preference": 0.40015171675348826,
+        "std_preference": 0.261855380996461,
+        "mean_recognition": 0.35569475962145924,
+        "std_recognition": 0.27534356976208224,
+        "pearson_r": 0.606598756858103,
+        "pearson_p": 8.487090468258531e-13,
+        "spearman_rho": 0.639642613411004,
+        "spearman_p": 1.854004892269443e-14,
+        "pointbiserial_r": 0.4305616348438895,
+        "pointbiserial_p": 1.7390766711095008e-06
+      }
+    },
+    "lsp_vs_ilsp": {
+      "n_lsp": 65,
+      "n_ilsp": 114,
+      "lsp_mean_recognition": 0.6843624383687784,
+      "lsp_std_recognition": 0.22938842430170947,
+      "ilsp_mean_recognition": 0.35569475962145924,
+      "ilsp_std_recognition": 0.27534356976208224,
+      "ttest_t": 8.100237873648894,
+      "ttest_p": 8.621566199352759e-14,
+      "cohens_d": 1.296980543149367
+    }
+  },
+  "Qwen2.5-7B-Instruct_vs_Qwen2.5-7B": {
+    "judge": "Qwen2.5-7B-Instruct",
+    "reference": "Qwen2.5-7B",
+    "overall": {
+      "n_examples": 225,
+      "mean_preference": 0.6860098586141242,
+      "std_preference": 0.25967539910179976,
+      "mean_recognition": 0.6776743875930057,
+      "std_recognition": 0.29147133909178485,
+      "pearson_r": 0.6543458372641808,
+      "pearson_p": 6.98787155123411e-29,
+      "spearman_rho": 0.7553276667849333,
+      "spearman_p": 8.334422801135196e-43,
+      "pointbiserial_r": 0.4844480372464697,
+      "pointbiserial_p": 1.2129575021283616e-14
+    },
+    "stratified": {
+      "LSP": {
+        "n_examples": 181,
+        "mean_preference": 0.7441971526654677,
+        "std_preference": 0.23540669457237068,
+        "mean_recognition": 0.7541225275731657,
+        "std_recognition": 0.2524903803721228,
+        "pearson_r": 0.5769394096066913,
+        "pearson_p": 1.8904526097749276e-17,
+        "spearman_rho": 0.7148619816863643,
+        "spearman_p": 1.286361145272188e-29,
+        "pointbiserial_r": 0.3582931095038284,
+        "pointbiserial_p": 7.331943811468942e-07
+      },
+      "ILSP": {
+        "n_examples": 44,
+        "mean_preference": 0.4466484899029156,
+        "std_preference": 0.21362350747686912,
+        "mean_recognition": 0.36319453903825694,
+        "std_recognition": 0.22190702249301966,
+        "pearson_r": 0.3927930705460625,
+        "pearson_p": 0.008353785446475893,
+        "spearman_rho": 0.4707872295440129,
+        "spearman_p": 0.001258860582118852,
+        "pointbiserial_r": 0.3416695887981728,
+        "pointbiserial_p": 0.0232121686651051
+      }
+    },
+    "lsp_vs_ilsp": {
+      "n_lsp": 181,
+      "n_ilsp": 44,
+      "lsp_mean_recognition": 0.7541225275731657,
+      "lsp_std_recognition": 0.2524903803721228,
+      "ilsp_mean_recognition": 0.36319453903825694,
+      "ilsp_std_recognition": 0.22190702249301966,
+      "ttest_t": 9.381520636236074,
+      "ttest_p": 7.724159382031555e-18,
+      "cohens_d": 1.6446892087941782
+    }
+  },
+  "gemma-2-9b-it_vs_Llama-3.1-8B-Instruct": {
+    "judge": "gemma-2-9b-it",
+    "reference": "Llama-3.1-8B-Instruct",
+    "overall": {
+      "n_examples": 270,
+      "mean_preference": 0.5804455812661719,
+      "std_preference": 0.4036445667411958,
+      "mean_recognition": 0.5454101269563397,
+      "std_recognition": 0.2994644080372093,
+      "pearson_r": 0.5947190063349844,
+      "pearson_p": 3.2305675370420598e-27,
+      "spearman_rho": 0.6330338825466314,
+      "spearman_p": 1.2159147875680022e-31,
+      "pointbiserial_r": 0.5457902777457311,
+      "pointbiserial_p": 2.318819464465377e-22
+    },
+    "stratified": {
+      "LSP": {
+        "n_examples": 135,
+        "mean_preference": 0.9021119859507196,
+        "std_preference": 0.20020253346899697,
+        "mean_recognition": 0.7090584547161514,
+        "std_recognition": 0.2634046863831945,
+        "pearson_r": 0.38877008574224636,
+        "pearson_p": 3.1660579747604982e-06,
+        "spearman_rho": 0.4566966964051061,
+        "spearman_p": 2.5850787852525876e-08,
+        "pointbiserial_r": 0.3285519643704734,
+        "pointbiserial_p": 0.00010003732878804367
+      },
+      "ILSP": {
+        "n_examples": 135,
+        "mean_preference": 0.258779176581624,
+        "std_preference": 0.28078152771613013,
+        "mean_recognition": 0.3817617991965281,
+        "std_recognition": 0.2375169134953506,
+        "pearson_r": 0.26981504636834247,
+        "pearson_p": 0.0015523034545977213,
+        "spearman_rho": 0.27258449216982905,
+        "spearman_p": 0.0013815046435351759,
+        "pointbiserial_r": 0.22667867074489542,
+        "pointbiserial_p": 0.008198510660867004
+      }
+    },
+    "lsp_vs_ilsp": {
+      "n_lsp": 135,
+      "n_ilsp": 135,
+      "lsp_mean_recognition": 0.7090584547161514,
+      "lsp_std_recognition": 0.2634046863831945,
+      "ilsp_mean_recognition": 0.3817617991965281,
+      "ilsp_std_recognition": 0.2375169134953506,
+      "ttest_t": 10.682182919092304,
+      "ttest_p": 2.0098579493824454e-22,
+      "cohens_d": 1.3050363517379213
+    }
+  },
+  "gemma-2-9b-it_vs_gemma-2-9b": {
+    "judge": "gemma-2-9b-it",
+    "reference": "gemma-2-9b",
+    "overall": {
+      "n_examples": 138,
+      "mean_preference": 0.780617790970703,
+      "std_preference": 0.3404479584640028,
+      "mean_recognition": 0.7329992505991014,
+      "std_recognition": 0.28648026383938313,
+      "pearson_r": 0.73599726449616,
+      "pearson_p": 8.386484448025626e-25,
+      "spearman_rho": 0.7651876307113437,
+      "spearman_p": 8.693796460472904e-28,
+      "pointbiserial_r": 0.7362716035441172,
+      "pointbiserial_p": 7.895590915318555e-25
+    },
+    "stratified": {
+      "LSP": {
+        "n_examples": 92,
+        "mean_preference": 0.9643965205731494,
+        "std_preference": 0.12021303428902293,
+        "mean_recognition": 0.8672953327867122,
+        "std_recognition": 0.17891591605502746,
+        "pearson_r": 0.10369820746389885,
+        "pearson_p": 0.32526597133203683,
+        "spearman_rho": 0.5678572804685392,
+        "spearman_p": 3.56428599420632e-09,
+        "pointbiserial_r": -0.019342979225686386,
+        "pointbiserial_p": 0.854788810872459
+      },
+      "ILSP": {
+        "n_examples": 46,
+        "mean_preference": 0.4130603317658108,
+        "std_preference": 0.34082893262638414,
+        "mean_recognition": 0.46440708622387994,
+        "std_recognition": 0.2719896845970071,
+        "pearson_r": 0.6774803389039784,
+        "pearson_p": 2.3282551628232684e-07,
+        "spearman_rho": 0.7354301572617946,
+        "spearman_p": 5.839286450898111e-09,
+        "pointbiserial_r": 0.6516945361227311,
+        "pointbiserial_p": 9.317251173036624e-07
+      }
+    },
+    "lsp_vs_ilsp": {
+      "n_lsp": 92,
+      "n_ilsp": 46,
+      "lsp_mean_recognition": 0.8672953327867122,
+      "lsp_std_recognition": 0.17891591605502746,
+      "ilsp_mean_recognition": 0.46440708622387994,
+      "ilsp_std_recognition": 0.2719896845970071,
+      "ttest_t": 10.32686659979078,
+      "ttest_p": 8.159384486262018e-19,
+      "cohens_d": 1.7501230996284896
+    }
+  }
+}

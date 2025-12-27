@@ -1,0 +1,222 @@
+2025-12-25 18:43:48 | INFO     | setup_logging:278 | ================================================================================
+2025-12-25 18:43:48 | INFO     | setup_logging:279 | SELF-RECOGNITION NULL HYPOTHESIS TEST - RUN STARTED
+2025-12-25 18:43:48 | INFO     | setup_logging:280 | ================================================================================
+2025-12-25 18:43:48 | INFO     | setup_logging:281 | User: droytbur
+2025-12-25 18:43:48 | INFO     | setup_logging:282 | Hostname: babel-x9-24
+2025-12-25 18:43:48 | INFO     | setup_logging:283 | Timestamp: 20251225_184348
+2025-12-25 18:43:48 | INFO     | setup_logging:284 | CUDA available: True
+2025-12-25 18:43:48 | INFO     | setup_logging:286 | CUDA devices: 8
+2025-12-25 18:43:49 | INFO     | setup_logging:288 |   Device 0: NVIDIA RTX 6000 Ada Generation
+2025-12-25 18:43:49 | INFO     | setup_logging:288 |   Device 1: NVIDIA RTX 6000 Ada Generation
+2025-12-25 18:43:49 | INFO     | setup_logging:288 |   Device 2: NVIDIA RTX 6000 Ada Generation
+2025-12-25 18:43:49 | INFO     | setup_logging:288 |   Device 3: NVIDIA RTX 6000 Ada Generation
+2025-12-25 18:43:49 | INFO     | setup_logging:288 |   Device 4: NVIDIA RTX 6000 Ada Generation
+2025-12-25 18:43:49 | INFO     | setup_logging:288 |   Device 5: NVIDIA RTX 6000 Ada Generation
+2025-12-25 18:43:49 | INFO     | setup_logging:288 |   Device 6: NVIDIA RTX 6000 Ada Generation
+2025-12-25 18:43:49 | INFO     | setup_logging:288 |   Device 7: NVIDIA RTX 6000 Ada Generation
+2025-12-25 18:43:49 | INFO     | setup_logging:289 | Log file: self_rec_null_dbg_results/truthfulness/file_logs/self_rec_null_dbg_20251225_184348.log
+2025-12-25 18:43:49 | INFO     | setup_logging:290 | ================================================================================
+2025-12-25 18:43:49 | INFO     | main:597 | Configuration:
+2025-12-25 18:43:49 | INFO     | main:598 |   Proxy data dir: dbg-score-paper/proxy_preference_data
+2025-12-25 18:43:49 | INFO     | main:599 |   Dataset: truthfulness
+2025-12-25 18:43:49 | INFO     | main:600 |   Output dir: self_rec_null_dbg_results/truthfulness
+2025-12-25 18:43:49 | INFO     | main:601 |   Batch size: 1
+2025-12-25 18:43:49 | INFO     | main:602 |   Max examples: unlimited
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Llama-3.1-70B
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Llama-3.1-8B
+2025-12-25 18:43:49 | DEBUG    | load_proxy_data:372 | Loaded gemma-2-9b-it vs gemma-2-9b: 92 LSP, 46 ILSP
+2025-12-25 18:43:49 | DEBUG    | load_proxy_data:372 | Loaded Llama-3.1-8B-Instruct vs Llama-3.1-70B-Instruct: 41 LSP, 145 ILSP
+2025-12-25 18:43:49 | INFO     | load_proxy_data:343 | Skipping large model: Llama-3.1-70B-Instruct
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: gemma-2-9b
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Llama-3.1-8B
+2025-12-25 18:43:49 | DEBUG    | load_proxy_data:372 | Loaded Qwen2.5-7B-Instruct vs Llama-3.1-8B-Instruct: 141 LSP, 135 ILSP
+2025-12-25 18:43:49 | DEBUG    | load_proxy_data:372 | Loaded gemma-2-9b-it vs Llama-3.1-8B-Instruct: 135 LSP, 135 ILSP
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Llama-3.1-8B
+2025-12-25 18:43:49 | DEBUG    | load_proxy_data:372 | Loaded Qwen2.5-7B-Instruct vs Qwen2.5-72B-Instruct: 65 LSP, 114 ILSP
+2025-12-25 18:43:49 | DEBUG    | load_proxy_data:372 | Loaded Llama-3.1-8B-Instruct vs gemma-2-9b-it: 48 LSP, 128 ILSP
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: gemma-2-9b
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Qwen2.5-7B
+2025-12-25 18:43:49 | INFO     | load_proxy_data:343 | Skipping large model: Qwen2.5-72B-Instruct
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Qwen2.5-72B
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Llama-3.1-70B
+2025-12-25 18:43:49 | DEBUG    | load_proxy_data:372 | Loaded Qwen2.5-7B-Instruct vs Qwen2.5-7B: 181 LSP, 44 ILSP
+2025-12-25 18:43:49 | INFO     | load_proxy_data:343 | Skipping large model: Qwen2.5-72B-Instruct
+2025-12-25 18:43:49 | INFO     | load_proxy_data:343 | Skipping large model: Llama-3.1-70B-Instruct
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Qwen2.5-72B
+2025-12-25 18:43:49 | DEBUG    | load_proxy_data:372 | Loaded Llama-3.1-8B-Instruct vs Qwen2.5-7B-Instruct: 92 LSP, 116 ILSP
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Qwen2.5-7B
+2025-12-25 18:43:49 | INFO     | load_proxy_data:343 | Skipping large model: Llama-3.1-70B-Instruct
+2025-12-25 18:43:49 | DEBUG    | load_proxy_data:372 | Loaded Llama-3.1-8B-Instruct vs Llama-3.1-8B: 243 LSP, 39 ILSP
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Llama-3.1-8B
+2025-12-25 18:43:49 | INFO     | load_proxy_data:343 | Skipping large model: Qwen2.5-72B-Instruct
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Qwen2.5-7B
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Qwen2.5-72B
+2025-12-25 18:43:49 | INFO     | load_proxy_data:338 | Skipping base model judge: Llama-3.1-70B
+2025-12-25 18:43:49 | INFO     | load_proxy_data:378 | Loaded 9 (judge, reference) pairs
+2025-12-25 18:43:49 | INFO     | main:617 | Processing 3 unique judges
+2025-12-25 18:43:49 | INFO     | main:621 | ================================================================================
+2025-12-25 18:43:49 | INFO     | main:622 | PROCESSING JUDGE: Llama-3.1-8B-Instruct
+2025-12-25 18:43:49 | INFO     | main:623 | ================================================================================
+2025-12-25 18:43:49 | INFO     | __init__:100 | Loading model: meta-llama/Llama-3.1-8B-Instruct
+2025-12-25 18:43:49 | INFO     | __init__:101 | Model type: instruct
+2025-12-25 18:43:53 | INFO     | __init__:129 | Model loaded successfully on cuda:0
+2025-12-25 18:43:53 | INFO     | main:635 | 
+--- Judge: Llama-3.1-8B-Instruct vs Reference: Llama-3.1-70B-Instruct ---
+2025-12-25 18:43:53 | INFO     | main:643 | Total examples: 186 (41 LSP, 145 ILSP)
+2025-12-25 18:43:53 | INFO     | main:651 | 
+>>> Generating Game 1: Judge response in position A
+2025-12-25 18:43:53 | INFO     | generate_recognition_for_comparison:495 | Generating 186 uncached examples for J_rec_game1
+2025-12-25 18:44:29 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game1: 186
+2025-12-25 18:44:29 | INFO     | main:669 | 
+>>> Generating Game 2: Judge response in position B
+2025-12-25 18:44:29 | INFO     | generate_recognition_for_comparison:495 | Generating 186 uncached examples for J_rec_game2
+2025-12-25 18:45:05 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game2: 186
+2025-12-25 18:45:05 | INFO     | main:685 | 
+✓ Completed Llama-3.1-8B-Instruct vs Llama-3.1-70B-Instruct
+2025-12-25 18:45:05 | INFO     | main:686 |   Game 1: 186 results
+2025-12-25 18:45:05 | INFO     | main:687 |   Game 2: 186 results
+2025-12-25 18:45:05 | INFO     | main:635 | 
+--- Judge: Llama-3.1-8B-Instruct vs Reference: Llama-3.1-8B ---
+2025-12-25 18:45:05 | INFO     | main:643 | Total examples: 282 (243 LSP, 39 ILSP)
+2025-12-25 18:45:05 | INFO     | main:651 | 
+>>> Generating Game 1: Judge response in position A
+2025-12-25 18:45:05 | INFO     | generate_recognition_for_comparison:495 | Generating 282 uncached examples for J_rec_game1
+2025-12-25 18:46:02 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game1: 282
+2025-12-25 18:46:02 | INFO     | main:669 | 
+>>> Generating Game 2: Judge response in position B
+2025-12-25 18:46:02 | INFO     | generate_recognition_for_comparison:495 | Generating 282 uncached examples for J_rec_game2
+2025-12-25 18:46:59 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game2: 282
+2025-12-25 18:46:59 | INFO     | main:685 | 
+✓ Completed Llama-3.1-8B-Instruct vs Llama-3.1-8B
+2025-12-25 18:46:59 | INFO     | main:686 |   Game 1: 282 results
+2025-12-25 18:46:59 | INFO     | main:687 |   Game 2: 282 results
+2025-12-25 18:46:59 | INFO     | main:635 | 
+--- Judge: Llama-3.1-8B-Instruct vs Reference: Qwen2.5-7B-Instruct ---
+2025-12-25 18:46:59 | INFO     | main:643 | Total examples: 208 (92 LSP, 116 ILSP)
+2025-12-25 18:46:59 | INFO     | main:651 | 
+>>> Generating Game 1: Judge response in position A
+2025-12-25 18:46:59 | INFO     | generate_recognition_for_comparison:495 | Generating 208 uncached examples for J_rec_game1
+2025-12-25 18:47:36 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game1: 208
+2025-12-25 18:47:36 | INFO     | main:669 | 
+>>> Generating Game 2: Judge response in position B
+2025-12-25 18:47:36 | INFO     | generate_recognition_for_comparison:495 | Generating 208 uncached examples for J_rec_game2
+2025-12-25 18:48:14 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game2: 208
+2025-12-25 18:48:14 | INFO     | main:685 | 
+✓ Completed Llama-3.1-8B-Instruct vs Qwen2.5-7B-Instruct
+2025-12-25 18:48:14 | INFO     | main:686 |   Game 1: 208 results
+2025-12-25 18:48:14 | INFO     | main:687 |   Game 2: 208 results
+2025-12-25 18:48:14 | INFO     | main:635 | 
+--- Judge: Llama-3.1-8B-Instruct vs Reference: gemma-2-9b-it ---
+2025-12-25 18:48:14 | INFO     | main:643 | Total examples: 176 (48 LSP, 128 ILSP)
+2025-12-25 18:48:14 | INFO     | main:651 | 
+>>> Generating Game 1: Judge response in position A
+2025-12-25 18:48:14 | INFO     | generate_recognition_for_comparison:495 | Generating 176 uncached examples for J_rec_game1
+2025-12-25 18:48:44 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game1: 176
+2025-12-25 18:48:44 | INFO     | main:669 | 
+>>> Generating Game 2: Judge response in position B
+2025-12-25 18:48:44 | INFO     | generate_recognition_for_comparison:495 | Generating 176 uncached examples for J_rec_game2
+2025-12-25 18:49:14 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game2: 176
+2025-12-25 18:49:14 | INFO     | main:685 | 
+✓ Completed Llama-3.1-8B-Instruct vs gemma-2-9b-it
+2025-12-25 18:49:14 | INFO     | main:686 |   Game 1: 176 results
+2025-12-25 18:49:14 | INFO     | main:687 |   Game 2: 176 results
+2025-12-25 18:49:14 | INFO     | main:692 | 
+✓ Completed all references for judge Llama-3.1-8B-Instruct
+
+2025-12-25 18:49:14 | INFO     | main:621 | ================================================================================
+2025-12-25 18:49:14 | INFO     | main:622 | PROCESSING JUDGE: Qwen2.5-7B-Instruct
+2025-12-25 18:49:14 | INFO     | main:623 | ================================================================================
+2025-12-25 18:49:14 | INFO     | __init__:100 | Loading model: Qwen/Qwen2.5-7B-Instruct
+2025-12-25 18:49:14 | INFO     | __init__:101 | Model type: instruct
+2025-12-25 18:49:18 | INFO     | __init__:129 | Model loaded successfully on cuda:0
+2025-12-25 18:49:18 | INFO     | main:635 | 
+--- Judge: Qwen2.5-7B-Instruct vs Reference: Llama-3.1-8B-Instruct ---
+2025-12-25 18:49:18 | INFO     | main:643 | Total examples: 276 (141 LSP, 135 ILSP)
+2025-12-25 18:49:18 | INFO     | main:651 | 
+>>> Generating Game 1: Judge response in position A
+2025-12-25 18:49:18 | INFO     | generate_recognition_for_comparison:495 | Generating 276 uncached examples for J_rec_game1
+2025-12-25 18:50:06 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game1: 276
+2025-12-25 18:50:06 | INFO     | main:669 | 
+>>> Generating Game 2: Judge response in position B
+2025-12-25 18:50:06 | INFO     | generate_recognition_for_comparison:495 | Generating 276 uncached examples for J_rec_game2
+2025-12-25 18:50:53 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game2: 276
+2025-12-25 18:50:53 | INFO     | main:685 | 
+✓ Completed Qwen2.5-7B-Instruct vs Llama-3.1-8B-Instruct
+2025-12-25 18:50:53 | INFO     | main:686 |   Game 1: 276 results
+2025-12-25 18:50:53 | INFO     | main:687 |   Game 2: 276 results
+2025-12-25 18:50:53 | INFO     | main:635 | 
+--- Judge: Qwen2.5-7B-Instruct vs Reference: Qwen2.5-72B-Instruct ---
+2025-12-25 18:50:53 | INFO     | main:643 | Total examples: 179 (65 LSP, 114 ILSP)
+2025-12-25 18:50:53 | INFO     | main:651 | 
+>>> Generating Game 1: Judge response in position A
+2025-12-25 18:50:53 | INFO     | generate_recognition_for_comparison:495 | Generating 179 uncached examples for J_rec_game1
+2025-12-25 18:51:21 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game1: 179
+2025-12-25 18:51:21 | INFO     | main:669 | 
+>>> Generating Game 2: Judge response in position B
+2025-12-25 18:51:21 | INFO     | generate_recognition_for_comparison:495 | Generating 179 uncached examples for J_rec_game2
+2025-12-25 18:51:49 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game2: 179
+2025-12-25 18:51:49 | INFO     | main:685 | 
+✓ Completed Qwen2.5-7B-Instruct vs Qwen2.5-72B-Instruct
+2025-12-25 18:51:49 | INFO     | main:686 |   Game 1: 179 results
+2025-12-25 18:51:49 | INFO     | main:687 |   Game 2: 179 results
+2025-12-25 18:51:49 | INFO     | main:635 | 
+--- Judge: Qwen2.5-7B-Instruct vs Reference: Qwen2.5-7B ---
+2025-12-25 18:51:49 | INFO     | main:643 | Total examples: 225 (181 LSP, 44 ILSP)
+2025-12-25 18:51:49 | INFO     | main:651 | 
+>>> Generating Game 1: Judge response in position A
+2025-12-25 18:51:49 | INFO     | generate_recognition_for_comparison:495 | Generating 225 uncached examples for J_rec_game1
+2025-12-25 18:52:29 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game1: 225
+2025-12-25 18:52:29 | INFO     | main:669 | 
+>>> Generating Game 2: Judge response in position B
+2025-12-25 18:52:29 | INFO     | generate_recognition_for_comparison:495 | Generating 225 uncached examples for J_rec_game2
+2025-12-25 18:53:09 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game2: 225
+2025-12-25 18:53:09 | INFO     | main:685 | 
+✓ Completed Qwen2.5-7B-Instruct vs Qwen2.5-7B
+2025-12-25 18:53:09 | INFO     | main:686 |   Game 1: 225 results
+2025-12-25 18:53:09 | INFO     | main:687 |   Game 2: 225 results
+2025-12-25 18:53:10 | INFO     | main:692 | 
+✓ Completed all references for judge Qwen2.5-7B-Instruct
+
+2025-12-25 18:53:10 | INFO     | main:621 | ================================================================================
+2025-12-25 18:53:10 | INFO     | main:622 | PROCESSING JUDGE: gemma-2-9b-it
+2025-12-25 18:53:10 | INFO     | main:623 | ================================================================================
+2025-12-25 18:53:10 | INFO     | __init__:100 | Loading model: google/gemma-2-9b-it
+2025-12-25 18:53:10 | INFO     | __init__:101 | Model type: instruct
+2025-12-25 18:53:14 | INFO     | __init__:129 | Model loaded successfully on cuda:0
+2025-12-25 18:53:14 | INFO     | main:635 | 
+--- Judge: gemma-2-9b-it vs Reference: Llama-3.1-8B-Instruct ---
+2025-12-25 18:53:14 | INFO     | main:643 | Total examples: 270 (135 LSP, 135 ILSP)
+2025-12-25 18:53:14 | INFO     | main:651 | 
+>>> Generating Game 1: Judge response in position A
+2025-12-25 18:53:14 | INFO     | generate_recognition_for_comparison:495 | Generating 270 uncached examples for J_rec_game1
+2025-12-25 18:54:43 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game1: 270
+2025-12-25 18:54:43 | INFO     | main:669 | 
+>>> Generating Game 2: Judge response in position B
+2025-12-25 18:54:43 | INFO     | generate_recognition_for_comparison:495 | Generating 270 uncached examples for J_rec_game2
+2025-12-25 18:56:11 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game2: 270
+2025-12-25 18:56:11 | INFO     | main:685 | 
+✓ Completed gemma-2-9b-it vs Llama-3.1-8B-Instruct
+2025-12-25 18:56:11 | INFO     | main:686 |   Game 1: 270 results
+2025-12-25 18:56:11 | INFO     | main:687 |   Game 2: 270 results
+2025-12-25 18:56:11 | INFO     | main:635 | 
+--- Judge: gemma-2-9b-it vs Reference: gemma-2-9b ---
+2025-12-25 18:56:11 | INFO     | main:643 | Total examples: 138 (92 LSP, 46 ILSP)
+2025-12-25 18:56:11 | INFO     | main:651 | 
+>>> Generating Game 1: Judge response in position A
+2025-12-25 18:56:11 | INFO     | generate_recognition_for_comparison:495 | Generating 138 uncached examples for J_rec_game1
+2025-12-25 18:56:55 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game1: 138
+2025-12-25 18:56:55 | INFO     | main:669 | 
+>>> Generating Game 2: Judge response in position B
+2025-12-25 18:56:55 | INFO     | generate_recognition_for_comparison:495 | Generating 138 uncached examples for J_rec_game2
+2025-12-25 18:57:39 | INFO     | generate_recognition_for_comparison:562 | Total results for J_rec_game2: 138
+2025-12-25 18:57:39 | INFO     | main:685 | 
+✓ Completed gemma-2-9b-it vs gemma-2-9b
+2025-12-25 18:57:39 | INFO     | main:686 |   Game 1: 138 results
+2025-12-25 18:57:39 | INFO     | main:687 |   Game 2: 138 results
+2025-12-25 18:57:39 | INFO     | main:692 | 
+✓ Completed all references for judge gemma-2-9b-it
+
+2025-12-25 18:57:39 | INFO     | main:694 | ================================================================================
+2025-12-25 18:57:39 | INFO     | main:695 | SELF-RECOGNITION NULL HYPOTHESIS TEST COMPLETED
+2025-12-25 18:57:39 | INFO     | main:696 | Results saved to: self_rec_null_dbg_results/truthfulness
+2025-12-25 18:57:39 | INFO     | main:697 | ================================================================================

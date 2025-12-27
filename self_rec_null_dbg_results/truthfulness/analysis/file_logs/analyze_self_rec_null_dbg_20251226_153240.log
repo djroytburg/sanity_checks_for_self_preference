@@ -1,0 +1,365 @@
+2025-12-26 15:32:40 | INFO     | setup_logging:56 | ================================================================================
+2025-12-26 15:32:40 | INFO     | setup_logging:57 | SELF-RECOGNITION CORRELATION ANALYSIS
+2025-12-26 15:32:40 | INFO     | setup_logging:58 | ================================================================================
+2025-12-26 15:32:40 | INFO     | main:588 | Configuration:
+2025-12-26 15:32:40 | INFO     | main:589 |   Recognition results: self_rec_null_dbg_results/truthfulness
+2025-12-26 15:32:40 | INFO     | main:590 |   Preference results: judge_swap_null_dbg_results/truthfulness
+2025-12-26 15:32:40 | INFO     | main:591 |   Proxy data: dbg-score-paper/proxy_preference_data
+2025-12-26 15:32:40 | INFO     | main:592 |   Dataset: truthfulness
+2025-12-26 15:32:40 | INFO     | main:593 |   Output: self_rec_null_dbg_results/truthfulness/analysis
+2025-12-26 15:32:40 | INFO     | main:617 | ================================================================================
+2025-12-26 15:32:40 | INFO     | main:618 | Analyzing: Llama-3.1-8B-Instruct vs Llama-3.1-70B-Instruct
+2025-12-26 15:32:40 | INFO     | main:619 | ================================================================================
+2025-12-26 15:32:40 | INFO     | load_preference_data:143 | Loaded preference data for 186 examples
+2025-12-26 15:32:40 | INFO     | load_recognition_data:221 | Loaded recognition data for 186 examples
+2025-12-26 15:32:40 | INFO     | load_lsp_ilsp_labels:262 | Loaded labels for 186 examples
+2025-12-26 15:32:40 | INFO     | match_preference_recognition:285 | Found 186 examples with both preference and recognition data
+2025-12-26 15:32:40 | INFO     | main:638 | 
+--- Overall Correlations ---
+2025-12-26 15:32:40 | INFO     | main:641 | 
+--- Stratified Correlations ---
+2025-12-26 15:32:40 | INFO     | compute_stratified_correlations:361 | Computing LSP correlations (n=41)
+2025-12-26 15:32:40 | INFO     | compute_stratified_correlations:365 | Computing ILSP correlations (n=145)
+2025-12-26 15:32:40 | INFO     | main:644 | 
+--- LSP vs ILSP Comparison ---
+2025-12-26 15:32:40 | INFO     | main:660 | 
+--- Creating Visualizations ---
+2025-12-26 15:32:41 | INFO     | create_scatter_plot:493 | Saved scatter plot: self_rec_null_dbg_results/truthfulness/analysis/plots/Llama-3.1-8B-Instruct/scatter_Llama-3.1-8B-Instruct_vs_Llama-3.1-70B-Instruct.png
+2025-12-26 15:32:41 | INFO     | create_histogram:553 | Saved histograms: self_rec_null_dbg_results/truthfulness/analysis/plots/Llama-3.1-8B-Instruct/histograms_Llama-3.1-8B-Instruct_vs_Llama-3.1-70B-Instruct.png
+2025-12-26 15:32:41 | INFO     | main:665 | 
+================================================================================
+2025-12-26 15:32:41 | INFO     | main:666 | SUMMARY
+2025-12-26 15:32:41 | INFO     | main:667 | ================================================================================
+2025-12-26 15:32:41 | INFO     | main:668 | N examples: 186
+2025-12-26 15:32:41 | INFO     | main:669 | Mean preference: 0.4335 ± 0.2451
+2025-12-26 15:32:41 | INFO     | main:670 | Mean recognition: 0.4519 ± 0.1666
+2025-12-26 15:32:41 | INFO     | main:673 | 
+Pearson correlation: r = 0.8021, p = 4.5618e-43
+2025-12-26 15:32:41 | INFO     | main:675 |   ✓ SIGNIFICANT
+2025-12-26 15:32:41 | INFO     | main:678 | 
+Spearman correlation: ρ = 0.7647, p = 5.9046e-37
+2025-12-26 15:32:41 | INFO     | main:681 | 
+LSP vs ILSP recognition:
+2025-12-26 15:32:41 | INFO     | main:682 |   LSP: 0.6313 (n=41)
+2025-12-26 15:32:41 | INFO     | main:683 |   ILSP: 0.4011 (n=145)
+2025-12-26 15:32:41 | INFO     | main:684 |   t-test: t = 9.4815, p = 1.2917e-17
+2025-12-26 15:32:41 | INFO     | main:686 |   ✓ SIGNIFICANT
+2025-12-26 15:32:41 | INFO     | main:688 | ================================================================================
+
+2025-12-26 15:32:41 | INFO     | main:617 | ================================================================================
+2025-12-26 15:32:41 | INFO     | main:618 | Analyzing: Llama-3.1-8B-Instruct vs Llama-3.1-8B
+2025-12-26 15:32:41 | INFO     | main:619 | ================================================================================
+2025-12-26 15:32:41 | INFO     | load_preference_data:143 | Loaded preference data for 282 examples
+2025-12-26 15:32:41 | INFO     | load_recognition_data:221 | Loaded recognition data for 282 examples
+2025-12-26 15:32:41 | INFO     | load_lsp_ilsp_labels:262 | Loaded labels for 282 examples
+2025-12-26 15:32:41 | INFO     | match_preference_recognition:285 | Found 282 examples with both preference and recognition data
+2025-12-26 15:32:41 | INFO     | main:638 | 
+--- Overall Correlations ---
+2025-12-26 15:32:41 | INFO     | main:641 | 
+--- Stratified Correlations ---
+2025-12-26 15:32:41 | INFO     | compute_stratified_correlations:361 | Computing LSP correlations (n=243)
+2025-12-26 15:32:41 | INFO     | compute_stratified_correlations:365 | Computing ILSP correlations (n=39)
+2025-12-26 15:32:41 | INFO     | main:644 | 
+--- LSP vs ILSP Comparison ---
+2025-12-26 15:32:41 | INFO     | main:660 | 
+--- Creating Visualizations ---
+2025-12-26 15:32:42 | INFO     | create_scatter_plot:493 | Saved scatter plot: self_rec_null_dbg_results/truthfulness/analysis/plots/Llama-3.1-8B-Instruct/scatter_Llama-3.1-8B-Instruct_vs_Llama-3.1-8B.png
+2025-12-26 15:32:43 | INFO     | create_histogram:553 | Saved histograms: self_rec_null_dbg_results/truthfulness/analysis/plots/Llama-3.1-8B-Instruct/histograms_Llama-3.1-8B-Instruct_vs_Llama-3.1-8B.png
+2025-12-26 15:32:43 | INFO     | main:665 | 
+================================================================================
+2025-12-26 15:32:43 | INFO     | main:666 | SUMMARY
+2025-12-26 15:32:43 | INFO     | main:667 | ================================================================================
+2025-12-26 15:32:43 | INFO     | main:668 | N examples: 282
+2025-12-26 15:32:43 | INFO     | main:669 | Mean preference: 0.7061 ± 0.2254
+2025-12-26 15:32:43 | INFO     | main:670 | Mean recognition: 0.6509 ± 0.1617
+2025-12-26 15:32:43 | INFO     | main:673 | 
+Pearson correlation: r = 0.7905, p = 1.4763e-61
+2025-12-26 15:32:43 | INFO     | main:675 |   ✓ SIGNIFICANT
+2025-12-26 15:32:43 | INFO     | main:678 | 
+Spearman correlation: ρ = 0.7810, p = 3.5304e-59
+2025-12-26 15:32:43 | INFO     | main:681 | 
+LSP vs ILSP recognition:
+2025-12-26 15:32:43 | INFO     | main:682 |   LSP: 0.6811 (n=243)
+2025-12-26 15:32:43 | INFO     | main:683 |   ILSP: 0.4629 (n=39)
+2025-12-26 15:32:43 | INFO     | main:684 |   t-test: t = 8.8120, p = 1.3242e-16
+2025-12-26 15:32:43 | INFO     | main:686 |   ✓ SIGNIFICANT
+2025-12-26 15:32:43 | INFO     | main:688 | ================================================================================
+
+2025-12-26 15:32:43 | INFO     | main:617 | ================================================================================
+2025-12-26 15:32:43 | INFO     | main:618 | Analyzing: Llama-3.1-8B-Instruct vs Qwen2.5-7B-Instruct
+2025-12-26 15:32:43 | INFO     | main:619 | ================================================================================
+2025-12-26 15:32:43 | INFO     | load_preference_data:143 | Loaded preference data for 208 examples
+2025-12-26 15:32:43 | INFO     | load_recognition_data:221 | Loaded recognition data for 208 examples
+2025-12-26 15:32:43 | INFO     | load_lsp_ilsp_labels:262 | Loaded labels for 208 examples
+2025-12-26 15:32:43 | INFO     | match_preference_recognition:285 | Found 208 examples with both preference and recognition data
+2025-12-26 15:32:43 | INFO     | main:638 | 
+--- Overall Correlations ---
+2025-12-26 15:32:43 | INFO     | main:641 | 
+--- Stratified Correlations ---
+2025-12-26 15:32:43 | INFO     | compute_stratified_correlations:361 | Computing LSP correlations (n=92)
+2025-12-26 15:32:43 | INFO     | compute_stratified_correlations:365 | Computing ILSP correlations (n=116)
+2025-12-26 15:32:43 | INFO     | main:644 | 
+--- LSP vs ILSP Comparison ---
+2025-12-26 15:32:43 | INFO     | main:660 | 
+--- Creating Visualizations ---
+2025-12-26 15:32:44 | INFO     | create_scatter_plot:493 | Saved scatter plot: self_rec_null_dbg_results/truthfulness/analysis/plots/Llama-3.1-8B-Instruct/scatter_Llama-3.1-8B-Instruct_vs_Qwen2.5-7B-Instruct.png
+2025-12-26 15:32:44 | INFO     | create_histogram:553 | Saved histograms: self_rec_null_dbg_results/truthfulness/analysis/plots/Llama-3.1-8B-Instruct/histograms_Llama-3.1-8B-Instruct_vs_Qwen2.5-7B-Instruct.png
+2025-12-26 15:32:44 | INFO     | main:665 | 
+================================================================================
+2025-12-26 15:32:44 | INFO     | main:666 | SUMMARY
+2025-12-26 15:32:44 | INFO     | main:667 | ================================================================================
+2025-12-26 15:32:44 | INFO     | main:668 | N examples: 208
+2025-12-26 15:32:44 | INFO     | main:669 | Mean preference: 0.5523 ± 0.2734
+2025-12-26 15:32:44 | INFO     | main:670 | Mean recognition: 0.5416 ± 0.1901
+2025-12-26 15:32:44 | INFO     | main:673 | 
+Pearson correlation: r = 0.8350, p = 2.3785e-55
+2025-12-26 15:32:44 | INFO     | main:675 |   ✓ SIGNIFICANT
+2025-12-26 15:32:44 | INFO     | main:678 | 
+Spearman correlation: ρ = 0.8426, p = 2.8927e-57
+2025-12-26 15:32:44 | INFO     | main:681 | 
+LSP vs ILSP recognition:
+2025-12-26 15:32:44 | INFO     | main:682 |   LSP: 0.6734 (n=92)
+2025-12-26 15:32:44 | INFO     | main:683 |   ILSP: 0.4370 (n=116)
+2025-12-26 15:32:44 | INFO     | main:684 |   t-test: t = 11.2635, p = 3.0562e-23
+2025-12-26 15:32:44 | INFO     | main:686 |   ✓ SIGNIFICANT
+2025-12-26 15:32:44 | INFO     | main:688 | ================================================================================
+
+2025-12-26 15:32:44 | INFO     | main:617 | ================================================================================
+2025-12-26 15:32:44 | INFO     | main:618 | Analyzing: Llama-3.1-8B-Instruct vs gemma-2-9b-it
+2025-12-26 15:32:44 | INFO     | main:619 | ================================================================================
+2025-12-26 15:32:44 | INFO     | load_preference_data:143 | Loaded preference data for 176 examples
+2025-12-26 15:32:44 | INFO     | load_recognition_data:221 | Loaded recognition data for 176 examples
+2025-12-26 15:32:44 | INFO     | load_lsp_ilsp_labels:262 | Loaded labels for 176 examples
+2025-12-26 15:32:44 | INFO     | match_preference_recognition:285 | Found 176 examples with both preference and recognition data
+2025-12-26 15:32:44 | INFO     | main:638 | 
+--- Overall Correlations ---
+2025-12-26 15:32:44 | INFO     | main:641 | 
+--- Stratified Correlations ---
+2025-12-26 15:32:44 | INFO     | compute_stratified_correlations:361 | Computing LSP correlations (n=48)
+2025-12-26 15:32:44 | INFO     | compute_stratified_correlations:365 | Computing ILSP correlations (n=128)
+2025-12-26 15:32:44 | INFO     | main:644 | 
+--- LSP vs ILSP Comparison ---
+2025-12-26 15:32:44 | INFO     | main:660 | 
+--- Creating Visualizations ---
+2025-12-26 15:32:45 | INFO     | create_scatter_plot:493 | Saved scatter plot: self_rec_null_dbg_results/truthfulness/analysis/plots/Llama-3.1-8B-Instruct/scatter_Llama-3.1-8B-Instruct_vs_gemma-2-9b-it.png
+2025-12-26 15:32:46 | INFO     | create_histogram:553 | Saved histograms: self_rec_null_dbg_results/truthfulness/analysis/plots/Llama-3.1-8B-Instruct/histograms_Llama-3.1-8B-Instruct_vs_gemma-2-9b-it.png
+2025-12-26 15:32:46 | INFO     | main:665 | 
+================================================================================
+2025-12-26 15:32:46 | INFO     | main:666 | SUMMARY
+2025-12-26 15:32:46 | INFO     | main:667 | ================================================================================
+2025-12-26 15:32:46 | INFO     | main:668 | N examples: 176
+2025-12-26 15:32:46 | INFO     | main:669 | Mean preference: 0.5577 ± 0.2813
+2025-12-26 15:32:46 | INFO     | main:670 | Mean recognition: 0.5085 ± 0.1943
+2025-12-26 15:32:46 | INFO     | main:673 | 
+Pearson correlation: r = 0.7990, p = 2.7955e-40
+2025-12-26 15:32:46 | INFO     | main:675 |   ✓ SIGNIFICANT
+2025-12-26 15:32:46 | INFO     | main:678 | 
+Spearman correlation: ρ = 0.8204, p = 4.2450e-44
+2025-12-26 15:32:46 | INFO     | main:681 | 
+LSP vs ILSP recognition:
+2025-12-26 15:32:46 | INFO     | main:682 |   LSP: 0.6929 (n=48)
+2025-12-26 15:32:46 | INFO     | main:683 |   ILSP: 0.4394 (n=128)
+2025-12-26 15:32:46 | INFO     | main:684 |   t-test: t = 9.4206, p = 2.7538e-17
+2025-12-26 15:32:46 | INFO     | main:686 |   ✓ SIGNIFICANT
+2025-12-26 15:32:46 | INFO     | main:688 | ================================================================================
+
+2025-12-26 15:32:46 | INFO     | main:617 | ================================================================================
+2025-12-26 15:32:46 | INFO     | main:618 | Analyzing: Qwen2.5-7B-Instruct vs Llama-3.1-8B-Instruct
+2025-12-26 15:32:46 | INFO     | main:619 | ================================================================================
+2025-12-26 15:32:46 | INFO     | load_preference_data:143 | Loaded preference data for 276 examples
+2025-12-26 15:32:46 | INFO     | load_recognition_data:221 | Loaded recognition data for 276 examples
+2025-12-26 15:32:46 | INFO     | load_lsp_ilsp_labels:262 | Loaded labels for 276 examples
+2025-12-26 15:32:46 | INFO     | match_preference_recognition:285 | Found 276 examples with both preference and recognition data
+2025-12-26 15:32:46 | INFO     | main:638 | 
+--- Overall Correlations ---
+2025-12-26 15:32:46 | INFO     | main:641 | 
+--- Stratified Correlations ---
+2025-12-26 15:32:46 | INFO     | compute_stratified_correlations:361 | Computing LSP correlations (n=141)
+2025-12-26 15:32:46 | INFO     | compute_stratified_correlations:365 | Computing ILSP correlations (n=135)
+2025-12-26 15:32:46 | INFO     | main:644 | 
+--- LSP vs ILSP Comparison ---
+2025-12-26 15:32:46 | INFO     | main:660 | 
+--- Creating Visualizations ---
+2025-12-26 15:32:46 | INFO     | create_scatter_plot:493 | Saved scatter plot: self_rec_null_dbg_results/truthfulness/analysis/plots/Qwen2.5-7B-Instruct/scatter_Qwen2.5-7B-Instruct_vs_Llama-3.1-8B-Instruct.png
+2025-12-26 15:32:47 | INFO     | create_histogram:553 | Saved histograms: self_rec_null_dbg_results/truthfulness/analysis/plots/Qwen2.5-7B-Instruct/histograms_Qwen2.5-7B-Instruct_vs_Llama-3.1-8B-Instruct.png
+2025-12-26 15:32:47 | INFO     | main:665 | 
+================================================================================
+2025-12-26 15:32:47 | INFO     | main:666 | SUMMARY
+2025-12-26 15:32:47 | INFO     | main:667 | ================================================================================
+2025-12-26 15:32:47 | INFO     | main:668 | N examples: 276
+2025-12-26 15:32:47 | INFO     | main:669 | Mean preference: 0.5644 ± 0.3015
+2025-12-26 15:32:47 | INFO     | main:670 | Mean recognition: 0.5456 ± 0.3351
+2025-12-26 15:32:47 | INFO     | main:673 | 
+Pearson correlation: r = 0.7499, p = 4.3850e-51
+2025-12-26 15:32:47 | INFO     | main:675 |   ✓ SIGNIFICANT
+2025-12-26 15:32:47 | INFO     | main:678 | 
+Spearman correlation: ρ = 0.8206, p = 1.5196e-68
+2025-12-26 15:32:47 | INFO     | main:681 | 
+LSP vs ILSP recognition:
+2025-12-26 15:32:47 | INFO     | main:682 |   LSP: 0.7527 (n=141)
+2025-12-26 15:32:47 | INFO     | main:683 |   ILSP: 0.3294 (n=135)
+2025-12-26 15:32:47 | INFO     | main:684 |   t-test: t = 13.4812, p = 4.0467e-32
+2025-12-26 15:32:47 | INFO     | main:686 |   ✓ SIGNIFICANT
+2025-12-26 15:32:47 | INFO     | main:688 | ================================================================================
+
+2025-12-26 15:32:47 | INFO     | main:617 | ================================================================================
+2025-12-26 15:32:47 | INFO     | main:618 | Analyzing: Qwen2.5-7B-Instruct vs Qwen2.5-72B-Instruct
+2025-12-26 15:32:47 | INFO     | main:619 | ================================================================================
+2025-12-26 15:32:47 | INFO     | load_preference_data:143 | Loaded preference data for 179 examples
+2025-12-26 15:32:47 | INFO     | load_recognition_data:221 | Loaded recognition data for 179 examples
+2025-12-26 15:32:47 | INFO     | load_lsp_ilsp_labels:262 | Loaded labels for 179 examples
+2025-12-26 15:32:47 | INFO     | match_preference_recognition:285 | Found 179 examples with both preference and recognition data
+2025-12-26 15:32:47 | INFO     | main:638 | 
+--- Overall Correlations ---
+2025-12-26 15:32:47 | INFO     | main:641 | 
+--- Stratified Correlations ---
+2025-12-26 15:32:47 | INFO     | compute_stratified_correlations:361 | Computing LSP correlations (n=65)
+2025-12-26 15:32:47 | INFO     | compute_stratified_correlations:365 | Computing ILSP correlations (n=114)
+2025-12-26 15:32:47 | INFO     | main:644 | 
+--- LSP vs ILSP Comparison ---
+2025-12-26 15:32:47 | INFO     | main:660 | 
+--- Creating Visualizations ---
+2025-12-26 15:32:48 | INFO     | create_scatter_plot:493 | Saved scatter plot: self_rec_null_dbg_results/truthfulness/analysis/plots/Qwen2.5-7B-Instruct/scatter_Qwen2.5-7B-Instruct_vs_Qwen2.5-72B-Instruct.png
+2025-12-26 15:32:49 | INFO     | create_histogram:553 | Saved histograms: self_rec_null_dbg_results/truthfulness/analysis/plots/Qwen2.5-7B-Instruct/histograms_Qwen2.5-7B-Instruct_vs_Qwen2.5-72B-Instruct.png
+2025-12-26 15:32:49 | INFO     | main:665 | 
+================================================================================
+2025-12-26 15:32:49 | INFO     | main:666 | SUMMARY
+2025-12-26 15:32:49 | INFO     | main:667 | ================================================================================
+2025-12-26 15:32:49 | INFO     | main:668 | N examples: 179
+2025-12-26 15:32:49 | INFO     | main:669 | Mean preference: 0.5014 ± 0.2796
+2025-12-26 15:32:49 | INFO     | main:670 | Mean recognition: 0.4750 ± 0.3039
+2025-12-26 15:32:49 | INFO     | main:673 | 
+Pearson correlation: r = 0.7116, p = 6.0987e-29
+2025-12-26 15:32:49 | INFO     | main:675 |   ✓ SIGNIFICANT
+2025-12-26 15:32:49 | INFO     | main:678 | 
+Spearman correlation: ρ = 0.7658, p = 8.9908e-36
+2025-12-26 15:32:49 | INFO     | main:681 | 
+LSP vs ILSP recognition:
+2025-12-26 15:32:49 | INFO     | main:682 |   LSP: 0.6844 (n=65)
+2025-12-26 15:32:49 | INFO     | main:683 |   ILSP: 0.3557 (n=114)
+2025-12-26 15:32:49 | INFO     | main:684 |   t-test: t = 8.1002, p = 8.6216e-14
+2025-12-26 15:32:49 | INFO     | main:686 |   ✓ SIGNIFICANT
+2025-12-26 15:32:49 | INFO     | main:688 | ================================================================================
+
+2025-12-26 15:32:49 | INFO     | main:617 | ================================================================================
+2025-12-26 15:32:49 | INFO     | main:618 | Analyzing: Qwen2.5-7B-Instruct vs Qwen2.5-7B
+2025-12-26 15:32:49 | INFO     | main:619 | ================================================================================
+2025-12-26 15:32:49 | INFO     | load_preference_data:143 | Loaded preference data for 225 examples
+2025-12-26 15:32:49 | INFO     | load_recognition_data:221 | Loaded recognition data for 225 examples
+2025-12-26 15:32:49 | INFO     | load_lsp_ilsp_labels:262 | Loaded labels for 225 examples
+2025-12-26 15:32:49 | INFO     | match_preference_recognition:285 | Found 225 examples with both preference and recognition data
+2025-12-26 15:32:49 | INFO     | main:638 | 
+--- Overall Correlations ---
+2025-12-26 15:32:49 | INFO     | main:641 | 
+--- Stratified Correlations ---
+2025-12-26 15:32:49 | INFO     | compute_stratified_correlations:361 | Computing LSP correlations (n=181)
+2025-12-26 15:32:49 | INFO     | compute_stratified_correlations:365 | Computing ILSP correlations (n=44)
+2025-12-26 15:32:49 | INFO     | main:644 | 
+--- LSP vs ILSP Comparison ---
+2025-12-26 15:32:49 | INFO     | main:660 | 
+--- Creating Visualizations ---
+2025-12-26 15:32:49 | INFO     | create_scatter_plot:493 | Saved scatter plot: self_rec_null_dbg_results/truthfulness/analysis/plots/Qwen2.5-7B-Instruct/scatter_Qwen2.5-7B-Instruct_vs_Qwen2.5-7B.png
+2025-12-26 15:32:50 | INFO     | create_histogram:553 | Saved histograms: self_rec_null_dbg_results/truthfulness/analysis/plots/Qwen2.5-7B-Instruct/histograms_Qwen2.5-7B-Instruct_vs_Qwen2.5-7B.png
+2025-12-26 15:32:50 | INFO     | main:665 | 
+================================================================================
+2025-12-26 15:32:50 | INFO     | main:666 | SUMMARY
+2025-12-26 15:32:50 | INFO     | main:667 | ================================================================================
+2025-12-26 15:32:50 | INFO     | main:668 | N examples: 225
+2025-12-26 15:32:50 | INFO     | main:669 | Mean preference: 0.6860 ± 0.2597
+2025-12-26 15:32:50 | INFO     | main:670 | Mean recognition: 0.6777 ± 0.2915
+2025-12-26 15:32:50 | INFO     | main:673 | 
+Pearson correlation: r = 0.6543, p = 6.9879e-29
+2025-12-26 15:32:50 | INFO     | main:675 |   ✓ SIGNIFICANT
+2025-12-26 15:32:50 | INFO     | main:678 | 
+Spearman correlation: ρ = 0.7553, p = 8.3344e-43
+2025-12-26 15:32:50 | INFO     | main:681 | 
+LSP vs ILSP recognition:
+2025-12-26 15:32:50 | INFO     | main:682 |   LSP: 0.7541 (n=181)
+2025-12-26 15:32:50 | INFO     | main:683 |   ILSP: 0.3632 (n=44)
+2025-12-26 15:32:50 | INFO     | main:684 |   t-test: t = 9.3815, p = 7.7242e-18
+2025-12-26 15:32:50 | INFO     | main:686 |   ✓ SIGNIFICANT
+2025-12-26 15:32:50 | INFO     | main:688 | ================================================================================
+
+2025-12-26 15:32:50 | INFO     | main:617 | ================================================================================
+2025-12-26 15:32:50 | INFO     | main:618 | Analyzing: gemma-2-9b-it vs Llama-3.1-8B-Instruct
+2025-12-26 15:32:50 | INFO     | main:619 | ================================================================================
+2025-12-26 15:32:50 | INFO     | load_preference_data:143 | Loaded preference data for 270 examples
+2025-12-26 15:32:50 | INFO     | load_recognition_data:221 | Loaded recognition data for 270 examples
+2025-12-26 15:32:50 | INFO     | load_lsp_ilsp_labels:262 | Loaded labels for 270 examples
+2025-12-26 15:32:50 | INFO     | match_preference_recognition:285 | Found 270 examples with both preference and recognition data
+2025-12-26 15:32:50 | INFO     | main:638 | 
+--- Overall Correlations ---
+2025-12-26 15:32:50 | INFO     | main:641 | 
+--- Stratified Correlations ---
+2025-12-26 15:32:50 | INFO     | compute_stratified_correlations:361 | Computing LSP correlations (n=135)
+2025-12-26 15:32:50 | INFO     | compute_stratified_correlations:365 | Computing ILSP correlations (n=135)
+2025-12-26 15:32:50 | INFO     | main:644 | 
+--- LSP vs ILSP Comparison ---
+2025-12-26 15:32:50 | INFO     | main:660 | 
+--- Creating Visualizations ---
+2025-12-26 15:32:51 | INFO     | create_scatter_plot:493 | Saved scatter plot: self_rec_null_dbg_results/truthfulness/analysis/plots/gemma-2-9b-it/scatter_gemma-2-9b-it_vs_Llama-3.1-8B-Instruct.png
+2025-12-26 15:32:51 | INFO     | create_histogram:553 | Saved histograms: self_rec_null_dbg_results/truthfulness/analysis/plots/gemma-2-9b-it/histograms_gemma-2-9b-it_vs_Llama-3.1-8B-Instruct.png
+2025-12-26 15:32:51 | INFO     | main:665 | 
+================================================================================
+2025-12-26 15:32:51 | INFO     | main:666 | SUMMARY
+2025-12-26 15:32:51 | INFO     | main:667 | ================================================================================
+2025-12-26 15:32:51 | INFO     | main:668 | N examples: 270
+2025-12-26 15:32:51 | INFO     | main:669 | Mean preference: 0.5804 ± 0.4036
+2025-12-26 15:32:51 | INFO     | main:670 | Mean recognition: 0.5454 ± 0.2995
+2025-12-26 15:32:51 | INFO     | main:673 | 
+Pearson correlation: r = 0.5947, p = 3.2306e-27
+2025-12-26 15:32:51 | INFO     | main:675 |   ✓ SIGNIFICANT
+2025-12-26 15:32:51 | INFO     | main:678 | 
+Spearman correlation: ρ = 0.6330, p = 1.2159e-31
+2025-12-26 15:32:51 | INFO     | main:681 | 
+LSP vs ILSP recognition:
+2025-12-26 15:32:51 | INFO     | main:682 |   LSP: 0.7091 (n=135)
+2025-12-26 15:32:51 | INFO     | main:683 |   ILSP: 0.3818 (n=135)
+2025-12-26 15:32:51 | INFO     | main:684 |   t-test: t = 10.6822, p = 2.0099e-22
+2025-12-26 15:32:51 | INFO     | main:686 |   ✓ SIGNIFICANT
+2025-12-26 15:32:51 | INFO     | main:688 | ================================================================================
+
+2025-12-26 15:32:51 | INFO     | main:617 | ================================================================================
+2025-12-26 15:32:51 | INFO     | main:618 | Analyzing: gemma-2-9b-it vs gemma-2-9b
+2025-12-26 15:32:51 | INFO     | main:619 | ================================================================================
+2025-12-26 15:32:51 | INFO     | load_preference_data:143 | Loaded preference data for 138 examples
+2025-12-26 15:32:51 | INFO     | load_recognition_data:221 | Loaded recognition data for 138 examples
+2025-12-26 15:32:51 | INFO     | load_lsp_ilsp_labels:262 | Loaded labels for 138 examples
+2025-12-26 15:32:51 | INFO     | match_preference_recognition:285 | Found 138 examples with both preference and recognition data
+2025-12-26 15:32:51 | INFO     | main:638 | 
+--- Overall Correlations ---
+2025-12-26 15:32:51 | INFO     | main:641 | 
+--- Stratified Correlations ---
+2025-12-26 15:32:51 | INFO     | compute_stratified_correlations:361 | Computing LSP correlations (n=92)
+2025-12-26 15:32:51 | INFO     | compute_stratified_correlations:365 | Computing ILSP correlations (n=46)
+2025-12-26 15:32:51 | INFO     | main:644 | 
+--- LSP vs ILSP Comparison ---
+2025-12-26 15:32:51 | INFO     | main:660 | 
+--- Creating Visualizations ---
+2025-12-26 15:32:52 | INFO     | create_scatter_plot:493 | Saved scatter plot: self_rec_null_dbg_results/truthfulness/analysis/plots/gemma-2-9b-it/scatter_gemma-2-9b-it_vs_gemma-2-9b.png
+2025-12-26 15:32:53 | INFO     | create_histogram:553 | Saved histograms: self_rec_null_dbg_results/truthfulness/analysis/plots/gemma-2-9b-it/histograms_gemma-2-9b-it_vs_gemma-2-9b.png
+2025-12-26 15:32:53 | INFO     | main:665 | 
+================================================================================
+2025-12-26 15:32:53 | INFO     | main:666 | SUMMARY
+2025-12-26 15:32:53 | INFO     | main:667 | ================================================================================
+2025-12-26 15:32:53 | INFO     | main:668 | N examples: 138
+2025-12-26 15:32:53 | INFO     | main:669 | Mean preference: 0.7806 ± 0.3404
+2025-12-26 15:32:53 | INFO     | main:670 | Mean recognition: 0.7330 ± 0.2865
+2025-12-26 15:32:53 | INFO     | main:673 | 
+Pearson correlation: r = 0.7360, p = 8.3865e-25
+2025-12-26 15:32:53 | INFO     | main:675 |   ✓ SIGNIFICANT
+2025-12-26 15:32:53 | INFO     | main:678 | 
+Spearman correlation: ρ = 0.7652, p = 8.6938e-28
+2025-12-26 15:32:53 | INFO     | main:681 | 
+LSP vs ILSP recognition:
+2025-12-26 15:32:53 | INFO     | main:682 |   LSP: 0.8673 (n=92)
+2025-12-26 15:32:53 | INFO     | main:683 |   ILSP: 0.4644 (n=46)
+2025-12-26 15:32:53 | INFO     | main:684 |   t-test: t = 10.3269, p = 8.1594e-19
+2025-12-26 15:32:53 | INFO     | main:686 |   ✓ SIGNIFICANT
+2025-12-26 15:32:53 | INFO     | main:688 | ================================================================================
+
+2025-12-26 15:32:53 | INFO     | main:695 | 
+================================================================================
+2025-12-26 15:32:53 | INFO     | main:696 | Analysis complete! Results saved to: self_rec_null_dbg_results/truthfulness/analysis
+2025-12-26 15:32:53 | INFO     | main:697 | Summary JSON: self_rec_null_dbg_results/truthfulness/analysis/correlation_results.json
+2025-12-26 15:32:53 | INFO     | main:698 | ================================================================================

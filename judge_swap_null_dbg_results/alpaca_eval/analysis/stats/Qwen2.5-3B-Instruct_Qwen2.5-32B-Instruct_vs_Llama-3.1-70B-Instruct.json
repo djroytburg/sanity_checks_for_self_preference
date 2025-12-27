@@ -1,0 +1,23 @@
+{
+  "mean_j_vs_r": 0.41360676953602177,
+  "std_j_vs_r": 0.2376496903332112,
+  "mean_k_vs_r": 0.4953443588011103,
+  "std_k_vs_r": 0.177775527139039,
+  "mean_diff": -0.0817375892650885,
+  "ttest_two_sided_t": -2.8441459771099784,
+  "ttest_two_sided_p": 0.005475708335705179,
+  "ttest_one_sided_t": -2.8441459771099784,
+  "ttest_one_sided_p": 0.9972621458321475,
+  "ks_statistic": 0.2553191489361702,
+  "ks_pvalue": 0.004214159240005895,
+  "correlation": 0.13338545593481171,
+  "correlation_pvalue": 0.19996464249133694,
+  "cohens_d": -0.3894883200256497,
+  "judge": "Qwen2.5-3B-Instruct",
+  "proxy": "Qwen2.5-32B-Instruct",
+  "reference": "Llama-3.1-70B-Instruct",
+  "n_examples_total": 380,
+  "n_lsp": 71,
+  "n_ilsp": 94,
+  "n_examples_tested": 94
+}
