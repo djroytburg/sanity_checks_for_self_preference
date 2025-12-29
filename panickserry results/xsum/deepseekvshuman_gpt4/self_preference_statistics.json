@@ -1,0 +1,27 @@
+{
+  "model_name": "Unknown",
+  "timestamp": "2025-12-29T01:49:01.517052",
+  "eval_results_file": "deepseekvshuman_gpt4_xsum.json",
+  "ground_truth_file": "gpt5_deepseekv3_vshuman_xsum.json",
+  "total_examples": 350,
+  "metrics": {
+    "SPR": 0.9171428571428571,
+    "LSPR": 0.9221183800623053,
+    "HSPP": 0.5681818181818182,
+    "total_examples": 350,
+    "self_pref_count": 321,
+    "legitimate_self_pref_count": 296,
+    "judge_correct_count": 306,
+    "judge_incorrect_count": 44,
+    "harmful_sp_count": 25
+  },
+  "probability_stats": {
+    "lsp_mean": 0.960675058939491,
+    "ilsp_mean": 0.7195401486947776,
+    "all_mean": 0.8401076038171343,
+    "lsp_count_balanced": 44,
+    "ilsp_count_balanced": 44,
+    "lsp_count_original": 306,
+    "ilsp_count_original": 44
+  }
+}

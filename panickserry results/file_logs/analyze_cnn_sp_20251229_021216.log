@@ -1,0 +1,54 @@
+2025-12-29 02:12:16 | INFO     | setup_logging:67 | ================================================================================
+2025-12-29 02:12:16 | INFO     | setup_logging:68 | CNN DATASET SELF-PREFERENCE ANALYSIS STARTED
+2025-12-29 02:12:16 | INFO     | setup_logging:69 | ================================================================================
+2025-12-29 02:12:16 | INFO     | setup_logging:70 | Log file: file_logs/analyze_cnn_sp_20251229_021216.log
+2025-12-29 02:12:16 | INFO     | setup_logging:71 | Output directory: xsum/gpt4vshuman
+2025-12-29 02:12:16 | INFO     | setup_logging:72 | User: user
+2025-12-29 02:12:16 | INFO     | main:502 | CNN results file: xsum/gpt4_results.json
+2025-12-29 02:12:16 | INFO     | main:503 | Ground truth file: gpt5_gpt4_vshuman_xsum.json
+2025-12-29 02:12:16 | INFO     | main:504 | Model name: Human (CNN Dataset)
+2025-12-29 02:12:16 | INFO     | main:505 | Output directory: xsum/gpt4vshuman
+2025-12-29 02:12:16 | INFO     | load_cnn_results:83 | Loading CNN results from xsum/gpt4_results.json
+2025-12-29 02:12:16 | INFO     | load_cnn_results:86 | Loaded 4000 total examples
+2025-12-29 02:12:16 | INFO     | load_cnn_results:91 | Filtered to 1000 human examples
+2025-12-29 02:12:16 | INFO     | load_ground_truth_labels:107 | Loading ground truth labels from gpt5_gpt4_vshuman_xsum.json
+2025-12-29 02:12:16 | INFO     | load_ground_truth_labels:110 | Loaded 350 ground truth labels
+2025-12-29 02:12:16 | INFO     | main:520 | ================================================================================
+2025-12-29 02:12:16 | INFO     | main:521 | EXTRACTING SELF-PREFERENCE PROBABILITIES
+2025-12-29 02:12:16 | INFO     | main:522 | ================================================================================
+2025-12-29 02:12:16 | INFO     | extract_self_preference_probs:205 | Extracting self-preference probabilities from CNN data
+2025-12-29 02:12:16 | INFO     | extract_self_preference_probs:261 |   Extracted probabilities:
+2025-12-29 02:12:16 | INFO     | extract_self_preference_probs:262 |     Total: 313
+2025-12-29 02:12:16 | INFO     | extract_self_preference_probs:263 |     LSP (human correct): 284
+2025-12-29 02:12:16 | INFO     | extract_self_preference_probs:264 |     ILSP (human incorrect): 29
+2025-12-29 02:12:16 | INFO     | extract_self_preference_probs:265 |     Skipped (no ground truth): 650
+2025-12-29 02:12:16 | INFO     | extract_self_preference_probs:266 |     Skipped (missing fields): 0
+2025-12-29 02:12:16 | INFO     | extract_self_preference_probs:267 |     Skipped (unclear detection): 37
+2025-12-29 02:12:16 | INFO     | extract_self_preference_probs:272 |   Balancing LSP and ILSP to 29 examples each
+2025-12-29 02:12:16 | INFO     | main:527 | 
+2025-12-29 02:12:16 | INFO     | print_summary_report:447 | ================================================================================
+2025-12-29 02:12:16 | INFO     | print_summary_report:448 | CNN SELF-PREFERENCE ANALYSIS SUMMARY
+2025-12-29 02:12:16 | INFO     | print_summary_report:449 | ================================================================================
+2025-12-29 02:12:16 | INFO     | print_summary_report:450 | Model: Human (CNN Dataset)
+2025-12-29 02:12:16 | INFO     | print_summary_report:451 | 
+2025-12-29 02:12:16 | INFO     | print_summary_report:453 | STATISTICS
+2025-12-29 02:12:16 | INFO     | print_summary_report:454 | --------------------------------------------------------------------------------
+2025-12-29 02:12:16 | INFO     | print_summary_report:455 |   LSP mean:                              0.9671
+2025-12-29 02:12:16 | INFO     | print_summary_report:456 |   ILSP mean:                             0.9454
+2025-12-29 02:12:16 | INFO     | print_summary_report:457 |   All mean (balanced):                   0.9562
+2025-12-29 02:12:16 | INFO     | print_summary_report:458 |   LSP count (balanced):                  29
+2025-12-29 02:12:16 | INFO     | print_summary_report:459 |   ILSP count (balanced):                 29
+2025-12-29 02:12:16 | INFO     | print_summary_report:460 |   LSP count (original):                  284
+2025-12-29 02:12:16 | INFO     | print_summary_report:461 |   ILSP count (original):                 29
+2025-12-29 02:12:16 | INFO     | print_summary_report:462 | 
+2025-12-29 02:12:16 | INFO     | print_summary_report:463 | ================================================================================
+2025-12-29 02:12:16 | INFO     | main:531 | ================================================================================
+2025-12-29 02:12:16 | INFO     | main:532 | GENERATING VISUALIZATIONS
+2025-12-29 02:12:16 | INFO     | main:533 | ================================================================================
+2025-12-29 02:12:16 | INFO     | create_visualization:363 | Creating visualization...
+2025-12-29 02:12:17 | INFO     | create_visualization:432 | Saved visualization to xsum/gpt4vshuman/cnn_self_preference_analysis.png
+2025-12-29 02:12:17 | INFO     | create_visualization:436 | Saved visualization to xsum/gpt4vshuman/cnn_self_preference_analysis.pdf
+2025-12-29 02:12:17 | INFO     | main:559 | Saved statistics to xsum/gpt4vshuman/cnn_self_preference_statistics.json
+2025-12-29 02:12:17 | INFO     | main:561 | ================================================================================
+2025-12-29 02:12:17 | INFO     | main:562 | ANALYSIS COMPLETE
+2025-12-29 02:12:17 | INFO     | main:563 | ================================================================================

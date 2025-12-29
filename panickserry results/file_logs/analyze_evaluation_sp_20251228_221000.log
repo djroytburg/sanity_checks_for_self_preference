@@ -1,0 +1,18 @@
+2025-12-28 22:10:00 | INFO     | setup_logging:67 | ================================================================================
+2025-12-28 22:10:00 | INFO     | setup_logging:68 | EVALUATION SELF-PREFERENCE ANALYSIS STARTED
+2025-12-28 22:10:00 | INFO     | setup_logging:69 | ================================================================================
+2025-12-28 22:10:00 | INFO     | setup_logging:70 | Log file: file_logs/analyze_evaluation_sp_20251228_221000.log
+2025-12-28 22:10:00 | INFO     | setup_logging:71 | Output directory: cnn/gpt4vshuman
+2025-12-28 22:10:00 | INFO     | setup_logging:72 | User: user
+2025-12-28 22:10:00 | INFO     | main:579 | Evaluation results file: cnn/gpt4_results.json
+2025-12-28 22:10:00 | INFO     | main:580 | Ground truth file: gpt5_gpt4vshuman.json
+2025-12-28 22:10:00 | INFO     | main:581 | Model name: Unknown
+2025-12-28 22:10:00 | INFO     | main:582 | Output directory: cnn/gpt4vshuman
+2025-12-28 22:10:00 | INFO     | load_evaluation_results:83 | Loading evaluation results from cnn/gpt4_results.json
+2025-12-28 22:10:00 | INFO     | load_evaluation_results:86 | Loaded 4000 examples
+2025-12-28 22:10:00 | INFO     | load_ground_truth_judge:92 | Loading ground truth judge results from gpt5_gpt4vshuman.json
+2025-12-28 22:10:00 | INFO     | load_ground_truth_judge:95 | Loaded 350 ground truth judgments
+2025-12-28 22:10:00 | INFO     | main:597 | ================================================================================
+2025-12-28 22:10:00 | INFO     | main:598 | EXTRACTING SELF-PREFERENCE PROBABILITIES
+2025-12-28 22:10:00 | INFO     | main:599 | ================================================================================
+2025-12-28 22:10:00 | INFO     | extract_self_preference_probs:196 | Extracting self-preference probabilities from evaluation data

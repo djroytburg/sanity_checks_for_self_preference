@@ -1,0 +1,98 @@
+2025-12-28 22:18:37 | INFO     | setup_logging:58 | ================================================================================
+2025-12-28 22:18:37 | INFO     | setup_logging:59 | JUDGE SWAP ANALYSIS - CNN DATASET
+2025-12-28 22:18:37 | INFO     | setup_logging:60 | ================================================================================
+2025-12-28 22:18:37 | INFO     | setup_logging:61 | Log file: file_logs/judge_swap_cnn_20251228_221837.log
+2025-12-28 22:18:37 | INFO     | setup_logging:62 | Output directory: cnn/llama405bvshuman
+2025-12-28 22:18:37 | INFO     | main:797 | Loading J(J vs R) statistics from cnn/gpt4vshuman/cnn_self_preference_statistics.json
+2025-12-28 22:18:37 | INFO     | main:805 | Loading J(K vs R) statistics from cnn/llama405b_vs_human/self_preference_statistics.json
+2025-12-28 22:18:37 | INFO     | main:813 | 
+2025-12-28 22:18:37 | INFO     | main:820 | Loading raw probability data for J(J vs R)...
+2025-12-28 22:18:37 | INFO     | load_raw_probabilities:87 |   Loading raw data from cnn/gpt4_results.json
+2025-12-28 22:18:37 | INFO     | load_raw_probabilities:116 |     Limiting to first 350 examples from 4000 total
+2025-12-28 22:18:37 | INFO     | load_raw_probabilities:118 |     Detected new data format with 'key' and comparison fields
+2025-12-28 22:18:37 | INFO     | load_raw_probabilities:240 |     Loaded 100 LSP and 12 ILSP probabilities
+2025-12-28 22:18:37 | INFO     | main:828 | Loading raw probability data for J(K vs R)...
+2025-12-28 22:18:37 | INFO     | load_raw_probabilities:87 |   Loading raw data from llama3.1-405bvshuman_gpt4.json
+2025-12-28 22:18:37 | INFO     | load_raw_probabilities:175 |     Detected old data format with 'article_index' and logprobs
+2025-12-28 22:18:37 | INFO     | load_raw_probabilities:240 |     Loaded 277 LSP and 73 ILSP probabilities
+2025-12-28 22:18:37 | INFO     | main:835 | 
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:356 | 
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:357 | Computing additional tests with raw probability data...
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:358 | Balancing sample sizes between J and K conditions...
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:370 |   Balanced ILSP to 12 samples each
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:385 |   Balanced LSP to 12 samples each
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:497 | ================================================================================
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:498 | HYPOTHESIS TEST RESULTS
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:499 | ================================================================================
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:500 | 
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:501 | J(J vs R) - GPT-3.5 judging GPT-3.5 vs Human:
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:502 |   LSP mean:  0.9473 (n=12)
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:503 |   ILSP mean: 0.9132 (n=12)
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:504 |   All mean:  0.9303
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:505 | 
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:506 | J(K vs R) - GPT-3.5 judging Llama vs Human:
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:507 |   LSP mean:  0.9937 (n=12)
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:508 |   ILSP mean: 0.8994 (n=12)
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:509 |   All mean:  0.9465
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:510 | 
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:511 | Differences (J - K):
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:512 |   LSP:  -0.0464
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:513 |   ILSP: +0.0139 (KEY METRIC)
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:514 |   All:  -0.0162
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:515 | 
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:516 | Statistical Tests:
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:517 | 
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:518 | ILSP (Illegitimate Self-Preference):
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:519 |   Z-test (Proportions):
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:520 |     Z-statistic:         +0.1165
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:521 |     P-value (two-sided): 0.907241
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:522 |     P-value (one-sided): 0.453620
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:523 |     Cohen's h:           +0.0476
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:524 |     Significance (α=0.05): NOT SIGNIFICANT
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:528 |   T-test (Independent Samples):
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:529 |     T-statistic:         +0.2194
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:530 |     P-value (two-sided): 0.828323
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:531 |     P-value (one-sided): 0.414161
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:532 |     Significance (α=0.05): NOT SIGNIFICANT
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:536 |   KS test (Distributions):
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:537 |     KS-statistic:        +0.5833
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:538 |     P-value:             0.031436
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:539 |     Significance (α=0.05): SIGNIFICANT
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:541 | 
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:542 | LSP (Legitimate Self-Preference):
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:543 |   Z-test (Proportions):
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:544 |     Z-statistic:         -0.6711
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:545 |     P-value (two-sided): 0.502154
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:546 |     P-value (one-sided): 0.748923
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:547 |     Cohen's h:           -0.3040
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:548 |     Significance (α=0.05): NOT SIGNIFICANT
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:552 |   T-test (Independent Samples):
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:553 |     T-statistic:         -1.5392
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:554 |     P-value (two-sided): 0.138013
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:555 |     P-value (one-sided): 0.930993
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:556 |     Significance (α=0.05): NOT SIGNIFICANT
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:560 |   KS test (Distributions):
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:561 |     KS-statistic:        +0.5000
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:562 |     P-value:             0.099547
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:563 |     Significance (α=0.05): NOT SIGNIFICANT
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:565 | 
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:568 | INTERPRETATION:
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:579 |   No statistically significant self-preference bias detected (p >= 0.05)
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:580 |   GPT-3.5 does not show significant preference for its own responses
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:581 |   over Llama's responses when both are incorrect.
+2025-12-28 22:18:37 | INFO     | compute_hypothesis_tests:583 | ================================================================================
+2025-12-28 22:18:37 | INFO     | main:841 | 
+2025-12-28 22:18:37 | INFO     | main:842 | ================================================================================
+2025-12-28 22:18:37 | INFO     | main:843 | GENERATING VISUALIZATIONS
+2025-12-28 22:18:37 | INFO     | main:844 | ================================================================================
+2025-12-28 22:18:37 | INFO     | create_comparison_plot:628 | Creating comparison plot...
+2025-12-28 22:18:38 | INFO     | create_comparison_plot:703 | Saved plot to cnn/llama405bvshuman/judge_swap_comparison.png
+2025-12-28 22:18:39 | INFO     | create_comparison_plot:707 | Saved plot to cnn/llama405bvshuman/judge_swap_comparison.pdf
+2025-12-28 22:18:39 | INFO     | create_difference_plot:714 | Creating difference plot...
+2025-12-28 22:18:39 | INFO     | create_difference_plot:752 | Saved difference plot to cnn/llama405bvshuman/judge_swap_differences.png
+2025-12-28 22:18:39 | INFO     | create_difference_plot:756 | Saved difference plot to cnn/llama405bvshuman/judge_swap_differences.pdf
+2025-12-28 22:18:39 | INFO     | main:856 | Saved comparison statistics to cnn/llama405bvshuman/judge_swap_statistics.json
+2025-12-28 22:18:39 | INFO     | main:858 | 
+2025-12-28 22:18:39 | INFO     | main:859 | ================================================================================
+2025-12-28 22:18:39 | INFO     | main:860 | ANALYSIS COMPLETE
+2025-12-28 22:18:39 | INFO     | main:861 | ================================================================================

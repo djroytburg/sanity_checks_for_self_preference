@@ -72,8 +72,9 @@ def load_raw_probabilities(eval_file: Path, gt_file: Path, logger: logging.Logge
     """
     Load raw probability data from evaluation and ground truth files.
 
-    This function replicates the logic from analyze_evaluation_self_preference.py
-    to extract LSP and ILSP probabilities.
+    This function handles two data formats:
+    1. New format: Items with 'key', 'forward_comparison', 'backward_comparison', etc.
+    2. Old format: Items with 'article_index', 'original_order.top_logprobs', etc.
 
     Args:
         eval_file: Path to evaluation results JSON
@@ -109,70 +110,147 @@ def load_raw_probabilities(eval_file: Path, gt_file: Path, logger: logging.Logge
     lsp_probs = []
     ilsp_probs = []
 
-    for eval_item in eval_data:
-        key = eval_item.get('article_index')
-        if not key or key not in gt_map:
-            continue
+    # Check if this is the new format (has 'key' and 'forward_comparison')
+    if eval_data and 'key' in eval_data[0] and 'forward_comparison' in eval_data[0]:
+        # For new format, filter to:
+        # 1. Only include model='human' comparisons
+        # 2. Only include items that match GT keys
+        # 3. Deduplicate - keep only first instance of each key
+        original_count = len(eval_data)
+        seen_keys = set()
+        filtered_data = []
+        for item in eval_data:
+            key = item.get('key')
+            model = item.get('model')
+            if model == 'human' and key in gt_map and key not in seen_keys:
+                filtered_data.append(item)
+                seen_keys.add(key)
+        eval_data = filtered_data
+        logger.info(f"    Filtered to {len(eval_data)} unique 'human' examples (from {original_count}) matching GT keys")
+        logger.info(f"    Detected new data format with 'key' and comparison fields")
 
-        gt_item = gt_map[key]
+        for eval_item in eval_data:
+            key = eval_item.get('key')
+            if not key or key not in gt_map:
+                continue
 
-        # Determine judge correctness
-        eval_answer_orig = eval_item.get('original_order', {}).get('answer')
-        eval_answer_flip = eval_item.get('flipped_order', {}).get('answer')
+            gt_item = gt_map[key]
 
-        gt_answer_orig = gt_item.get('original_order', {}).get('answer')
-        gt_answer_flip = gt_item.get('flipped_order', {}).get('answer')
+            # Get evaluation verdicts from forward/backward comparisons
+            eval_forward = eval_item.get('forward_comparison')
+            eval_backward = eval_item.get('backward_comparison')
 
-        if not all([eval_answer_orig, eval_answer_flip, gt_answer_orig, gt_answer_flip]):
-            continue
+            # Get ground truth verdicts
+            gt_answer_orig = gt_item.get('original_order', {}).get('answer')
+            gt_answer_flip = gt_item.get('flipped_order', {}).get('answer')
 
-        # Aggregate verdicts
-        if eval_answer_orig == "1" and eval_answer_flip == "2":
-            eval_verdict = "1"
-        elif eval_answer_orig == "2" and eval_answer_flip == "1":
-            eval_verdict = "2"
-        else:
-            eval_verdict = "T"
+            if not all([eval_forward, eval_backward, gt_answer_orig, gt_answer_flip]):
+                continue
 
-        if gt_answer_orig == "1" and gt_answer_flip == "2":
-            gt_verdict = "1"
-        elif gt_answer_orig == "2" and gt_answer_flip == "1":
-            gt_verdict = "2"
-        else:
-            gt_verdict = "T"
+            # Aggregate eval verdicts
+            if eval_forward == "1" and eval_backward == "2":
+                eval_verdict = "1"
+            elif eval_forward == "2" and eval_backward == "1":
+                eval_verdict = "2"
+            else:
+                eval_verdict = "T"
 
-        if eval_verdict == "T" or gt_verdict == "T":
-            continue
+            # Aggregate GT verdicts
+            if gt_answer_orig == "1" and gt_answer_flip == "2":
+                gt_verdict = "1"
+            elif gt_answer_orig == "2" and gt_answer_flip == "1":
+                gt_verdict = "2"
+            else:
+                gt_verdict = "T"
 
-        judge_correct = (eval_verdict == gt_verdict)
+            # Don't filter out ties - include all cases
+            judge_correct = (eval_verdict == gt_verdict)
 
-        # Extract self-preference probability
-        orig_logprobs = eval_item.get('original_order', {}).get('top_logprobs', [])
-        flip_logprobs = eval_item.get('flipped_order', {}).get('top_logprobs', [])
+            # Get probabilities
+            # Try to get individual probabilities first
+            p1_orig = eval_item.get('forward_comparison_probability')
+            p2_flip = eval_item.get('backward_comparison_probability')
 
-        # Get P(1|original) and P(2|flipped)
-        p1_orig = None
-        p2_flip = None
+            if p1_orig is not None and p2_flip is not None:
+                # Use averaged probability from forward and backward
+                self_pref = (p1_orig + p2_flip) / 2.0
+            elif 'self_preference' in eval_item:
+                # Fall back to self_preference field if individual probs not available
+                self_pref = eval_item.get('self_preference')
+            else:
+                continue
 
-        for logprob_item in orig_logprobs:
-            if logprob_item.get('token') == '1':
-                p1_orig = logprob_item.get('probability')
-                break
+            if judge_correct:
+                lsp_probs.append(self_pref)
+            else:
+                ilsp_probs.append(self_pref)
 
-        for logprob_item in flip_logprobs:
-            if logprob_item.get('token') == '2':
-                p2_flip = logprob_item.get('probability')
-                break
+    else:
+        # Old format with article_index and top_logprobs
+        logger.info(f"    Detected old data format with 'article_index' and logprobs")
 
-        if p1_orig is None or p2_flip is None:
-            continue
+        for eval_item in eval_data:
+            key = eval_item.get('article_index')
+            if not key or key not in gt_map:
+                continue
 
-        self_pref = (p1_orig + p2_flip) / 2.0
+            gt_item = gt_map[key]
 
-        if judge_correct:
-            lsp_probs.append(self_pref)
-        else:
-            ilsp_probs.append(self_pref)
+            # Determine judge correctness
+            eval_answer_orig = eval_item.get('original_order', {}).get('answer')
+            eval_answer_flip = eval_item.get('flipped_order', {}).get('answer')
+
+            gt_answer_orig = gt_item.get('original_order', {}).get('answer')
+            gt_answer_flip = gt_item.get('flipped_order', {}).get('answer')
+
+            if not all([eval_answer_orig, eval_answer_flip, gt_answer_orig, gt_answer_flip]):
+                continue
+
+            # Aggregate verdicts
+            if eval_answer_orig == "1" and eval_answer_flip == "2":
+                eval_verdict = "1"
+            elif eval_answer_orig == "2" and eval_answer_flip == "1":
+                eval_verdict = "2"
+            else:
+                eval_verdict = "T"
+
+            if gt_answer_orig == "1" and gt_answer_flip == "2":
+                gt_verdict = "1"
+            elif gt_answer_orig == "2" and gt_answer_flip == "1":
+                gt_verdict = "2"
+            else:
+                gt_verdict = "T"
+
+            # Don't filter out ties - include all cases
+            judge_correct = (eval_verdict == gt_verdict)
+
+            # Extract self-preference probability
+            orig_logprobs = eval_item.get('original_order', {}).get('top_logprobs', [])
+            flip_logprobs = eval_item.get('flipped_order', {}).get('top_logprobs', [])
+
+            # Get P(1|original) and P(2|flipped)
+            p1_orig = None
+            p2_flip = None
+
+            for logprob_item in orig_logprobs:
+                if logprob_item.get('token') == '1':
+                    p1_orig = logprob_item.get('probability')
+                    break
+
+            for logprob_item in flip_logprobs:
+                if logprob_item.get('token') == '2':
+                    p2_flip = logprob_item.get('probability')
+                    break
+
+            if p1_orig is None or p2_flip is None:
+                continue
+
+            self_pref = (p1_orig + p2_flip) / 2.0
+
+            if judge_correct:
+                lsp_probs.append(self_pref)
+            else:
+                ilsp_probs.append(self_pref)
 
     logger.info(f"    Loaded {len(lsp_probs)} LSP and {len(ilsp_probs)} ILSP probabilities")
 
@@ -695,6 +773,155 @@ def create_difference_plot(comparison: Dict, output_file: Path, logger: logging.
     plt.close()
 
 
+def create_distribution_plot(probs_j: Dict, probs_k: Dict, output_file: Path, logger: logging.Logger):
+    """
+    Create distribution histograms comparing J(J vs R) and J(K vs R).
+
+    Layout: 2 rows x 3 columns
+    Row 1: J(J vs R) - ILSP, LSP, Combined
+    Row 2: J(K vs R) - ILSP, LSP, Combined
+    """
+    if probs_j is None and probs_k is None:
+        logger.warning("Raw probability data not available for either dataset, skipping distribution plot")
+        return
+
+    if probs_j is None:
+        logger.warning("J(J vs R) raw probability data not available - will show only J(K vs R) distributions")
+    if probs_k is None:
+        logger.warning("J(K vs R) raw probability data not available - will show only J(J vs R) distributions")
+
+    logger.info("Creating distribution plot...")
+
+    plt.rcParams.update({
+        "font.family": "sans-serif",
+        "font.size": 10,
+        "figure.dpi": 150,
+    })
+
+    fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(15, 8))
+
+    fig.suptitle('Judge Swap Distribution Analysis\n' +
+                 'J(J vs R) = Judge judging own responses vs Human, J(K vs R) = Judge judging proxy responses vs Human',
+                 fontsize=12, fontweight='bold', y=0.98)
+
+    # Row 1: J(J vs R)
+    # ILSP
+    if probs_j and len(probs_j['ilsp']) > 0:
+        axes[0, 0].hist(probs_j['ilsp'], bins=15, color='coral', alpha=0.7, edgecolor='black', linewidth=0.5)
+        mean_j_ilsp = np.mean(probs_j['ilsp'])
+        axes[0, 0].axvline(0.0, color='red', linestyle='--', linewidth=2, label='Objective', alpha=0.7)
+        axes[0, 0].axvline(mean_j_ilsp, color='black', linestyle='--', linewidth=2, label=f'μ', alpha=0.7)
+        axes[0, 0].set_title(f"J(J vs R) - ILSP\nμ: {mean_j_ilsp:.3f} | Obj: 0.000 | n={len(probs_j['ilsp'])}",
+                            fontweight='bold', fontsize=10)
+        axes[0, 0].set_xlabel("P(J)")
+        axes[0, 0].set_ylabel("Density")
+        axes[0, 0].set_xlim(0, 1)
+        axes[0, 0].grid(axis='y', linestyle='--', alpha=0.3)
+    else:
+        axes[0, 0].text(0.5, 0.5, 'No data available', ha='center', va='center', fontsize=12, color='gray')
+        axes[0, 0].set_title("J(J vs R) - ILSP\nNo data", fontweight='bold', fontsize=10)
+        axes[0, 0].set_xlim(0, 1)
+
+    # LSP
+    if probs_j and len(probs_j['lsp']) > 0:
+        axes[0, 1].hist(probs_j['lsp'], bins=15, color='lightgreen', alpha=0.7, edgecolor='black', linewidth=0.5)
+        mean_j_lsp = np.mean(probs_j['lsp'])
+        axes[0, 1].axvline(1.0, color='red', linestyle='--', linewidth=2, label='Objective', alpha=0.7)
+        axes[0, 1].axvline(mean_j_lsp, color='black', linestyle='--', linewidth=2, label=f'μ', alpha=0.7)
+        axes[0, 1].set_title(f"J(J vs R) - LSP\nμ: {mean_j_lsp:.3f} | Obj: 1.000 | n={len(probs_j['lsp'])}",
+                            fontweight='bold', fontsize=10)
+        axes[0, 1].set_xlabel("P(J)")
+        axes[0, 1].set_ylabel("Density")
+        axes[0, 1].set_xlim(0, 1)
+        axes[0, 1].grid(axis='y', linestyle='--', alpha=0.3)
+    else:
+        axes[0, 1].text(0.5, 0.5, 'No data available', ha='center', va='center', fontsize=12, color='gray')
+        axes[0, 1].set_title("J(J vs R) - LSP\nNo data", fontweight='bold', fontsize=10)
+        axes[0, 1].set_xlim(0, 1)
+
+    # Combined
+    if probs_j and len(probs_j['all']) > 0:
+        axes[0, 2].hist(probs_j['all'], bins=15, color='cornflowerblue', alpha=0.7, edgecolor='black', linewidth=0.5)
+        mean_j_all = np.mean(probs_j['all'])
+        axes[0, 2].axvline(0.5, color='red', linestyle='--', linewidth=2, label='Objective', alpha=0.7)
+        axes[0, 2].axvline(mean_j_all, color='black', linestyle='--', linewidth=2, label=f'μ', alpha=0.7)
+        axes[0, 2].set_title(f"J(J vs R) - Combined\nμ: {mean_j_all:.3f} | Obj: 0.500 | n={len(probs_j['all'])}",
+                            fontweight='bold', fontsize=10)
+        axes[0, 2].set_xlabel("P(J)")
+        axes[0, 2].set_ylabel("Density")
+        axes[0, 2].set_xlim(0, 1)
+        axes[0, 2].grid(axis='y', linestyle='--', alpha=0.3)
+    else:
+        axes[0, 2].text(0.5, 0.5, 'No data available', ha='center', va='center', fontsize=12, color='gray')
+        axes[0, 2].set_title("J(J vs R) - Combined\nNo data", fontweight='bold', fontsize=10)
+        axes[0, 2].set_xlim(0, 1)
+
+    # Row 2: J(K vs R)
+    # ILSP
+    if probs_k and len(probs_k['ilsp']) > 0:
+        axes[1, 0].hist(probs_k['ilsp'], bins=15, color='coral', alpha=0.7, edgecolor='black', linewidth=0.5)
+        mean_k_ilsp = np.mean(probs_k['ilsp'])
+        axes[1, 0].axvline(0.0, color='red', linestyle='--', linewidth=2, label='Objective', alpha=0.7)
+        axes[1, 0].axvline(mean_k_ilsp, color='black', linestyle='--', linewidth=2, label=f'μ', alpha=0.7)
+        axes[1, 0].set_title(f"J(K vs R) - ILSP\nμ: {mean_k_ilsp:.3f} | Obj: 0.000 | n={len(probs_k['ilsp'])}",
+                            fontweight='bold', fontsize=10)
+        axes[1, 0].set_xlabel("P(K)")
+        axes[1, 0].set_ylabel("Density")
+        axes[1, 0].set_xlim(0, 1)
+        axes[1, 0].grid(axis='y', linestyle='--', alpha=0.3)
+    else:
+        axes[1, 0].text(0.5, 0.5, 'No data available', ha='center', va='center', fontsize=12, color='gray')
+        axes[1, 0].set_title("J(K vs R) - ILSP\nNo data", fontweight='bold', fontsize=10)
+        axes[1, 0].set_xlim(0, 1)
+
+    # LSP
+    if probs_k and len(probs_k['lsp']) > 0:
+        axes[1, 1].hist(probs_k['lsp'], bins=15, color='lightgreen', alpha=0.7, edgecolor='black', linewidth=0.5)
+        mean_k_lsp = np.mean(probs_k['lsp'])
+        axes[1, 1].axvline(1.0, color='red', linestyle='--', linewidth=2, label='Objective', alpha=0.7)
+        axes[1, 1].axvline(mean_k_lsp, color='black', linestyle='--', linewidth=2, label=f'μ', alpha=0.7)
+        axes[1, 1].set_title(f"J(K vs R) - LSP\nμ: {mean_k_lsp:.3f} | Obj: 1.000 | n={len(probs_k['lsp'])}",
+                            fontweight='bold', fontsize=10)
+        axes[1, 1].set_xlabel("P(K)")
+        axes[1, 1].set_ylabel("Density")
+        axes[1, 1].set_xlim(0, 1)
+        axes[1, 1].grid(axis='y', linestyle='--', alpha=0.3)
+    else:
+        axes[1, 1].text(0.5, 0.5, 'No data available', ha='center', va='center', fontsize=12, color='gray')
+        axes[1, 1].set_title("J(K vs R) - LSP\nNo data", fontweight='bold', fontsize=10)
+        axes[1, 1].set_xlim(0, 1)
+
+    # Combined
+    if probs_k and len(probs_k['all']) > 0:
+        axes[1, 2].hist(probs_k['all'], bins=15, color='cornflowerblue', alpha=0.7, edgecolor='black', linewidth=0.5)
+        mean_k_all = np.mean(probs_k['all'])
+        axes[1, 2].axvline(0.5, color='red', linestyle='--', linewidth=2, label='Objective', alpha=0.7)
+        axes[1, 2].axvline(mean_k_all, color='black', linestyle='--', linewidth=2, label=f'μ', alpha=0.7)
+        axes[1, 2].set_title(f"J(K vs R) - Combined\nμ: {mean_k_all:.3f} | Obj: 0.500 | n={len(probs_k['all'])}",
+                            fontweight='bold', fontsize=10)
+        axes[1, 2].set_xlabel("P(K)")
+        axes[1, 2].set_ylabel("Density")
+        axes[1, 2].set_xlim(0, 1)
+        axes[1, 2].grid(axis='y', linestyle='--', alpha=0.3)
+    else:
+        axes[1, 2].text(0.5, 0.5, 'No data available', ha='center', va='center', fontsize=12, color='gray')
+        axes[1, 2].set_title("J(K vs R) - Combined\nNo data", fontweight='bold', fontsize=10)
+        axes[1, 2].set_xlim(0, 1)
+
+    plt.tight_layout(rect=[0, 0, 1, 0.96])
+
+    # Save
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    plt.savefig(output_file, bbox_inches='tight', dpi=300)
+    logger.info(f"Saved distribution plot to {output_file}")
+
+    pdf_file = output_file.with_suffix('.pdf')
+    plt.savefig(pdf_file, bbox_inches='tight', dpi=300)
+    logger.info(f"Saved distribution plot to {pdf_file}")
+
+    plt.close()
+
+
 # ----------------------
 # --- MAIN ENTRY     ---
 # ----------------------
@@ -785,6 +1012,11 @@ def main():
 
     difference_plot = output_dir / "judge_swap_differences.png"
     create_difference_plot(comparison, difference_plot, logger)
+
+    # Create distribution plot if raw data is available (for at least one dataset)
+    if probs_j is not None or probs_k is not None:
+        distribution_plot = output_dir / "judge_swap_distributions.png"
+        create_distribution_plot(probs_j, probs_k, distribution_plot, logger)
 
     # Save comparison statistics
     comparison_file = output_dir / "judge_swap_statistics.json"

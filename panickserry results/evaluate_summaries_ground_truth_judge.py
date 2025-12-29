@@ -98,7 +98,7 @@ async def main_async(args):
     if isinstance(articles, dict) and isinstance(summaries1, dict) and isinstance(summaries2, dict):
         # All are dictionaries - find common keys
         common_keys = set(articles.keys()) & set(summaries1.keys()) & set(summaries2.keys())
-        common_keys = list(common_keys)  # Limit to 10 examples for testing
+        common_keys = list(common_keys)[:350]  # Limit to 10 examples for testing
         print(f"Dataset sizes - Articles: {len(articles)}, Summaries1: {len(summaries1)}, Summaries2: {len(summaries2)}")
         print(f"Processing {len(common_keys)} examples with matching keys\n")
     else:
