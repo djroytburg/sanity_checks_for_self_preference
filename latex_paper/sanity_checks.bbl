@@ -1,0 +1,114 @@
+\begin{thebibliography}{17}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Ackerman \& Panickssery(2025)Ackerman and Panickssery]{ackermanInspectionControlSelfGeneratedText2024}
+Ackerman, C. and Panickssery, N.
+\newblock Inspection and {{Control}} of {{Self-Generated-Text Recognition Ability}} in {{Llama3-8b-Instruct}}.
+\newblock In \emph{The {{Thirteenth International Conference}} on {{Learning Representations}}}, July 2025.
+\newblock URL \url{https://openreview.net/forum?id=wWnsoLhHwt}.
+
+\bibitem[Chen et~al.(2024)Chen, Chen, Liu, Jiang, and Wang]{chenHumansLLMsJudge2024}
+Chen, G.~H., Chen, S., Liu, Z., Jiang, F., and Wang, B.
+\newblock Humans or {{LLMs}} as the {{Judge}}? {{A Study}} on {{Judgement Bias}}.
+\newblock In {Al-Onaizan}, Y., Bansal, M., and Chen, Y.-N. (eds.), \emph{Proceedings of the 2024 {{Conference}} on {{Empirical Methods}} in {{Natural Language Processing}}}, pp.\  8301--8327, Miami, Florida, USA, November 2024. Association for Computational Linguistics.
+\newblock \doi{10.18653/v1/2024.emnlp-main.474}.
+\newblock URL \url{https://aclanthology.org/2024.emnlp-main.474/}.
+
+\bibitem[Chen et~al.(2025{\natexlab{a}})Chen, Wei, Zhu, Feng, and Meng]{chenLLMEvaluatorsPrefer2025}
+Chen, W.-L., Wei, Z., Zhu, X., Feng, S., and Meng, Y.
+\newblock Do {{LLM Evaluators Prefer Themselves}} for a {{Reason}}?, December 2025{\natexlab{a}}.
+\newblock URL \url{http://arxiv.org/abs/2504.03846}.
+
+\bibitem[Chen et~al.(2025{\natexlab{b}})Chen, Wang, Zhang, Hu, and Lin]{chenSurfaceMeasuringSelfPreference2025}
+Chen, Z.-Y., Wang, H., Zhang, X., Hu, E., and Lin, Y.
+\newblock Beyond the {{Surface}}: {{Measuring Self-Preference}} in {{LLM Judgments}}.
+\newblock In Christodoulopoulos, C., Chakraborty, T., Rose, C., and Peng, V. (eds.), \emph{Proceedings of the 2025 {{Conference}} on {{Empirical Methods}} in {{Natural Language Processing}}}, pp.\  1653--1672, Suzhou, China, November 2025{\natexlab{b}}. Association for Computational Linguistics.
+\newblock ISBN 979-8-89176-332-6.
+\newblock \doi{10.18653/v1/2025.emnlp-main.86}.
+\newblock URL \url{https://aclanthology.org/2025.emnlp-main.86/}.
+
+\bibitem[Dietz et~al.(2025)Dietz, Zendel, Bailey, Clarke, Cotterill, Dalton, Hasibi, Sanderson, and Craswell]{dietzLLMEvaluationTropesPerspectives2025}
+Dietz, L., Zendel, O., Bailey, P., Clarke, C., Cotterill, E., Dalton, J., Hasibi, F., Sanderson, M., and Craswell, N.
+\newblock {{LLM-Evaluation Tropes}}: {{Perspectives}} on the {{Validity}} of {{LLM-Evaluations}}.
+\newblock In \emph{Proceedings of the 2025 {{International ACM SIGIR Conference}} on {{Innovative Concepts}} and {{Theories}} in {{Information Retrieval}} ({{ICTIR}})}, pp.\  218--229, July 2025.
+\newblock \doi{10.1145/3731120.3744588}.
+\newblock URL \url{http://arxiv.org/abs/2504.19076}.
+
+\bibitem[Gu et~al.(2025)Gu, Jiang, Shi, Tan, Zhai, Xu, Li, Shen, Ma, Liu, Wang, Zhang, Wang, Gao, Ni, and Guo]{guSurveyLLMasaJudge2025}
+Gu, J., Jiang, X., Shi, Z., Tan, H., Zhai, X., Xu, C., Li, W., Shen, Y., Ma, S., Liu, H., Wang, S., Zhang, K., Wang, Y., Gao, W., Ni, L., and Guo, J.
+\newblock A {{Survey}} on {{LLM-as-a-Judge}}, October 2025.
+\newblock URL \url{http://arxiv.org/abs/2411.15594}.
+
+\bibitem[Koo et~al.(2024)Koo, Lee, Raheja, Park, Kim, and Kang]{kooBenchmarkingCognitiveBiases2024}
+Koo, R., Lee, M., Raheja, V., Park, J.~I., Kim, Z.~M., and Kang, D.
+\newblock Benchmarking {{Cognitive Biases}} in {{Large Language Models}} as {{Evaluators}}.
+\newblock In Ku, L.-W., Martins, A., and Srikumar, V. (eds.), \emph{Findings of the {{Association}} for {{Computational Linguistics}}: {{ACL}} 2024}, pp.\  517--545, Bangkok, Thailand, August 2024. Association for Computational Linguistics.
+\newblock \doi{10.18653/v1/2024.findings-acl.29}.
+\newblock URL \url{https://aclanthology.org/2024.findings-acl.29/}.
+
+\bibitem[Laine et~al.(2023)Laine, Meinke, and Evans]{laineSituationalAwarenessBenchmark2023}
+Laine, R., Meinke, A., and Evans, O.
+\newblock Towards a {{Situational Awareness Benchmark}} for {{LLMs}}.
+\newblock In \emph{Socially {{Responsible Language Modelling Research}}}, November 2023.
+\newblock URL \url{https://openreview.net/forum?id=DRk4bWKr41}.
+
+\bibitem[Li et~al.(2025)Li, Jiang, Huang, Beigi, Zhao, Tan, Bhattacharjee, Jiang, Chen, Wu, Shu, Cheng, and Liu]{liGenerationJudgmentOpportunities2025}
+Li, D., Jiang, B., Huang, L., Beigi, A., Zhao, C., Tan, Z., Bhattacharjee, A., Jiang, Y., Chen, C., Wu, T., Shu, K., Cheng, L., and Liu, H.
+\newblock From {{Generation}} to {{Judgment}}: {{Opportunities}} and {{Challenges}} of {{LLM-as-a-judge}}.
+\newblock In Christodoulopoulos, C., Chakraborty, T., Rose, C., and Peng, V. (eds.), \emph{Proceedings of the 2025 {{Conference}} on {{Empirical Methods}} in {{Natural Language Processing}}}, pp.\  2757--2791, Suzhou, China, November 2025. Association for Computational Linguistics.
+\newblock ISBN 979-8-89176-332-6.
+\newblock \doi{10.18653/v1/2025.emnlp-main.138}.
+\newblock URL \url{https://aclanthology.org/2025.emnlp-main.138/}.
+
+\bibitem[Li et~al.(2024)Li, Dong, Chen, Su, Zhou, Ai, Ye, and Liu]{liLLMsasJudgesComprehensiveSurvey2024}
+Li, H., Dong, Q., Chen, J., Su, H., Zhou, Y., Ai, Q., Ye, Z., and Liu, Y.
+\newblock {{LLMs-as-Judges}}: {{A Comprehensive Survey}} on {{LLM-based Evaluation Methods}}, December 2024.
+\newblock URL \url{http://arxiv.org/abs/2412.05579}.
+
+\bibitem[Liu et~al.(2024)Liu, Moosavi, and Lin]{liuLLMsNarcissisticEvaluators2024}
+Liu, Y., Moosavi, N., and Lin, C.
+\newblock {{LLMs}} as {{Narcissistic Evaluators}}: {{When Ego Inflates Evaluation Scores}}.
+\newblock In Ku, L.-W., Martins, A., and Srikumar, V. (eds.), \emph{Findings of the {{Association}} for {{Computational Linguistics}}: {{ACL}} 2024}, pp.\  12688--12701, Bangkok, Thailand, August 2024. Association for Computational Linguistics.
+\newblock \doi{10.18653/v1/2024.findings-acl.753}.
+\newblock URL \url{https://aclanthology.org/2024.findings-acl.753/}.
+
+\bibitem[Panickssery et~al.(2024)Panickssery, Bowman, and Feng]{panicksseryLLMEvaluatorsRecognize2024}
+Panickssery, A., Bowman, S.~R., and Feng, S.
+\newblock {{LLM Evaluators Recognize}} and {{Favor Their Own Generations}}.
+\newblock In \emph{The {{Thirty-eighth Annual Conference}} on {{Neural Information Processing Systems}}}, November 2024.
+\newblock URL \url{https://openreview.net/forum?id=4NJBV6Wp0h}.
+
+\bibitem[Roytburg et~al.(2025)Roytburg, Nguyen, Bozoukov, Barzdukas, Fu, and Oozeer]{roytburgBreakingMirrorActivationBased2025}
+Roytburg, D., Nguyen, M., Bozoukov, M., Barzdukas, J., Fu, H., and Oozeer, N.~F.
+\newblock Breaking the {{Mirror}}: {{Activation-Based Mitigation}} of {{Self-Preference}} in {{LLM Evaluators}}.
+\newblock In \emph{Mechanistic {{Interpretability Workshop}} at {{NeurIPS}} 2025}, September 2025.
+\newblock URL \url{https://openreview.net/forum?id=HDxJwnzVom}.
+
+\bibitem[Shen et~al.(2023)Shen, Cheng, Nguyen, You, and Bing]{shenLargeLanguageModels2023}
+Shen, C., Cheng, L., Nguyen, X.-P., You, Y., and Bing, L.
+\newblock Large {{Language Models}} are {{Not Yet Human-Level Evaluators}} for {{Abstractive Summarization}}.
+\newblock In Bouamor, H., Pino, J., and Bali, K. (eds.), \emph{Findings of the {{Association}} for {{Computational Linguistics}}: {{EMNLP}} 2023}, pp.\  4215--4233, Singapore, December 2023. Association for Computational Linguistics.
+\newblock \doi{10.18653/v1/2023.findings-emnlp.278}.
+\newblock URL \url{https://aclanthology.org/2023.findings-emnlp.278/}.
+
+\bibitem[Wataoka et~al.(2025)Wataoka, Takahashi, and Ri]{wataokaSelfPreferenceBiasLLMasaJudge2025}
+Wataoka, K., Takahashi, T., and Ri, R.
+\newblock Self-{{Preference Bias}} in {{LLM-as-a-Judge}}, June 2025.
+\newblock URL \url{http://arxiv.org/abs/2410.21819}.
+
+\bibitem[Ye et~al.(2024)Ye, Wang, Huang, Chen, Zhang, Moniz, Gao, Geyer, Huang, Chen, Chawla, and Zhang]{yeJusticePrejudiceQuantifying2024}
+Ye, J., Wang, Y., Huang, Y., Chen, D., Zhang, Q., Moniz, N., Gao, T., Geyer, W., Huang, C., Chen, P.-Y., Chawla, N.~V., and Zhang, X.
+\newblock Justice or {{Prejudice}}? {{Quantifying Biases}} in {{LLM-as-a-Judge}}.
+\newblock In \emph{The {{Thirteenth International Conference}} on {{Learning Representations}}}, October 2024.
+\newblock URL \url{https://openreview.net/forum?id=3GTtZFiajM}.
+
+\bibitem[Zheng et~al.(2023)Zheng, Chiang, Sheng, Zhuang, Wu, Zhuang, Lin, Li, Li, Xing, Zhang, Gonzalez, and Stoica]{zhengJudgingLLMasaJudgeMTBench2023}
+Zheng, L., Chiang, W.-L., Sheng, Y., Zhuang, S., Wu, Z., Zhuang, Y., Lin, Z., Li, Z., Li, D., Xing, E.~P., Zhang, H., Gonzalez, J.~E., and Stoica, I.
+\newblock Judging {{LLM-as-a-Judge}} with {{MT-Bench}} and {{Chatbot Arena}}, December 2023.
+\newblock URL \url{http://arxiv.org/abs/2306.05685}.
+
+\end{thebibliography}
