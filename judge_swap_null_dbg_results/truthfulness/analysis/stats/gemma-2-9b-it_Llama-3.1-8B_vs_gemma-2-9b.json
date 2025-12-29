@@ -10,7 +10,7 @@
   "ttest_one_sided_p": 0.00032886286807955553,
   "ks_statistic": 0.30434782608695654,
   "ks_pvalue": 0.027658099571767854,
-  "correlation": 0.19497900894287085,
+  "correlation": 0.19497900894287093,
   "correlation_pvalue": 0.1941079070170605,
   "cohens_d": 0.7003073556039773,
   "judge": "gemma-2-9b-it",

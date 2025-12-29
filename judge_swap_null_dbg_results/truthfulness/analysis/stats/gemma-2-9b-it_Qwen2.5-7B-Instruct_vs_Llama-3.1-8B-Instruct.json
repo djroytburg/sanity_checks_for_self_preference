@@ -11,7 +11,7 @@
   "ks_statistic": 0.10465116279069768,
   "ks_pvalue": 0.7371585650178047,
   "correlation": 0.30255346180474985,
-  "correlation_pvalue": 0.004634620999148747,
+  "correlation_pvalue": 0.004634620999148767,
   "cohens_d": 0.09957239417185261,
   "judge": "gemma-2-9b-it",
   "proxy": "Qwen2.5-7B-Instruct",

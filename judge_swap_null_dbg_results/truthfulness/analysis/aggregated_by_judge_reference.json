@@ -17,8 +17,8 @@
     "ttest_one_sided_p": 3.869406783480732e-07,
     "ks_statistic": 0.20253164556962025,
     "ks_pvalue": 0.00011448849956112899,
-    "correlation": 0.2315397902255477,
-    "correlation_pvalue": 0.00032484716878460653,
+    "correlation": 0.23153979022554766,
+    "correlation_pvalue": 0.00032484716878460117,
     "cohens_d": 0.41125371305923575
   },
   {
@@ -61,8 +61,8 @@
     "ttest_one_sided_p": 8.19777072232015e-05,
     "ks_statistic": 0.42105263157894735,
     "ks_pvalue": 6.525574540897522e-05,
-    "correlation": 0.24461084414708203,
-    "correlation_pvalue": 0.06668002497436239,
+    "correlation": 0.2446108441470821,
+    "correlation_pvalue": 0.06668002497436247,
     "cohens_d": 0.6638551340242951
   },
   {
@@ -84,7 +84,7 @@
     "ks_statistic": 0.2108843537414966,
     "ks_pvalue": 0.002820295871795854,
     "correlation": 0.2927319813250056,
-    "correlation_pvalue": 0.00032063170677008765,
+    "correlation_pvalue": 0.0003206317067700861,
     "cohens_d": 0.4401881464113689
   },
   {
@@ -105,8 +105,8 @@
     "ttest_one_sided_p": 1.0955901850940114e-08,
     "ks_statistic": 0.2109704641350211,
     "ks_pvalue": 4.956026128026041e-05,
-    "correlation": 0.2451299849162917,
-    "correlation_pvalue": 0.00013779110244777046,
+    "correlation": 0.24512998491629168,
+    "correlation_pvalue": 0.00013779110244777204,
     "cohens_d": 0.463442157936699
   },
   {
@@ -128,7 +128,7 @@
     "ks_statistic": 0.22065727699530516,
     "ks_pvalue": 5.8958912764597826e-05,
     "correlation": 0.3366397668401766,
-    "correlation_pvalue": 4.858358744552735e-07,
+    "correlation_pvalue": 4.858358744552609e-07,
     "cohens_d": 0.40104715498001053
   },
   {
@@ -171,8 +171,8 @@
     "ttest_one_sided_p": 2.3385601360123985e-10,
     "ks_statistic": 0.328125,
     "ks_pvalue": 1.6914798897396358e-06,
-    "correlation": 0.39807402179418583,
-    "correlation_pvalue": 3.2664322219441682e-06,
+    "correlation": 0.3980740217941857,
+    "correlation_pvalue": 3.2664322219441894e-06,
     "cohens_d": 0.6576347759876264
   },
   {
@@ -193,8 +193,8 @@
     "ttest_one_sided_p": 0.0001518965257493379,
     "ks_statistic": 0.17333333333333334,
     "ks_pvalue": 0.021902713572760964,
-    "correlation": 0.2730036111642422,
-    "correlation_pvalue": 0.0007246746047152643,
+    "correlation": 0.27300361116424227,
+    "correlation_pvalue": 0.000724674604715267,
     "cohens_d": 0.36553653068065844
   }
 ]

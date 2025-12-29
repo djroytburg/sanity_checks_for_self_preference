@@ -11,7 +11,7 @@
   "ks_statistic": 0.4666666666666667,
   "ks_pvalue": 0.07546400948132746,
   "correlation": -0.09062633899980876,
-  "correlation_pvalue": 0.7480545267076654,
+  "correlation_pvalue": 0.7480545267076657,
   "cohens_d": 0.26318453431330596,
   "judge": "Qwen2.5-7B-Instruct",
   "proxy": "Qwen2.5-72B",
