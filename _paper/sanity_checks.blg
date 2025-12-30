@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2025)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: sanity_checks.aux
+The style file: icml2026.bst
+Database file #1: sanity.bib
+You've used 17 entries,
+            2773 wiz_defined-function locations,
+            725 strings with 11547 characters,
+and the built_in function-call counts, 12954 in all, are:
+= -- 1080
+> -- 1176
+< -- 8
++ -- 389
+- -- 371
+* -- 1215
+:= -- 2024
+add.period$ -- 78
+call.type$ -- 17
+change.case$ -- 168
+chr.to.int$ -- 16
+cite$ -- 34
+duplicate$ -- 442
+empty$ -- 760
+format.name$ -- 390
+if$ -- 2688
+int.to.chr$ -- 2
+int.to.str$ -- 1
+missing$ -- 12
+newline$ -- 114
+num.names$ -- 80
+pop$ -- 364
+preamble$ -- 1
+purify$ -- 151
+quote$ -- 0
+skip$ -- 406
+stack$ -- 0
+substring$ -- 306
+swap$ -- 117
+text.length$ -- 7
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 187
+warning$ -- 0
+while$ -- 78
+width$ -- 0
+write$ -- 272

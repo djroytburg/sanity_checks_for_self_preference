@@ -153,7 +153,7 @@ Together, these findings offer a more realistic view of prevailing theory-of-min
 Literature on LLM evaluation has rapidly expanded in recent years, with numerous surveys cataloging the diverse methodologies and challenges \cite{zhengJudgingLLMasaJudgeMTBench2023,shenLargeLanguageModels2023,chenHumansLLMsJudge2024,liLLMsasJudgesComprehensiveSurvey2024, liGenerationJudgmentOpportunities2025, guSurveyLLMasaJudge2025}. A significant subset of this work focuses on the reliability and biases of LLM evaluators, identifying various failure modes including inconsistency, susceptibility to manipulation, and context sensitivity \cite{kooBenchmarkingCognitiveBiases2024,yeJusticePrejudiceQuantifying2024, dietzLLMEvaluationTropesPerspectives2025}.
 
 Among these, \textit{self-preference} has emerged as a particularly intriguing phenomenon, where models appear to favor their own outputs over those of other models. Panickssery, Bowman and Feng \yrcite{panicksseryLLMEvaluatorsRecognize2024} isolate this behavior using proxy tests on summarization tasks, while Liu, Moosavi and Lin \yrcite{liuLLMsNarcissisticEvaluators2024} observe a similar behavior using judges trained on encoding-based representations. This behavior has been interpreted as evidence of \textit{situational awareness}, suggesting that models can recognize their own outputs and adjust their evaluations accordingly \cite{laineSituationalAwarenessBenchmark2023}.
-\section{Methodology}
+\section{Evolving Baselines}
 
 \subsection{Setup}
 \label{subsec:setup}
@@ -180,7 +180,7 @@ oracle labels also enable us to discern whether self-preference is valid for any
 
 We can reformulate bias as the weighted average of these terms:
 \[\textbf{Bias} = ((1 - \textbf{Acc}) \cdot \textbf{\textcolor{red}{ILSP}}) - (\textbf{Acc} \cdot (1 - \textbf{\textcolor{DarkGreenHex}{LSP}}))\]
-\subsection{From ``Generation Quality'' to ``Evaluator Quality''}
+\subsection{Hypothesis 1: ``Evaluator Quality'' Baseline}
 Under this framing, a new failure mode comes to light. Most neural networks that return a softmax in logit space will not be trained to produce exact 0 or 1 answers \todo[]{dani: find cite for this}. Thus, for the \textbf{\textcolor{red}{ILSP}} case, any surplus in probability (uncertainty) is automatically penalized unless that uncertainty is counterbalanced by an equal deficit in probability in the \textbf{\textcolor{DarkGreenHex}{LSP}} case.
 
 Then [a little bit more theory... idk...], yada yada yada. \todo[]{dani: yada yada bruh}
@@ -191,15 +191,30 @@ Then, run a test returning a proxy preference score, where the judge evaluates t
 $- \textbf{SP}(J, R, G, \mathcal{X}_K)$.  Then, the distribution of vote labels from J comparing J against R significantly different from J comparing a similarly-capable model K against R?
 (H\_0: J(J v. R) = J(K v. R))
 
+\subsection{Hypothesis 2: Self-Recognition Baseline}
 The Self-Recognition Correlation: On examples where J exhibits bias toward J relative to both the ground-truth G and the control K, are these instances correlated with the model’s ability to recognize itself?
 (H\_0: Corr(J\_pref, J\_rec) = 0)
 
+
+\subsection{Hypothesis 3: Mechanistic Insolvency Baseline}
 2) We show that many previous experimental setups fail to reject one or both of these null hypotheses. In many cases, evaluation setups previously thought to elicit self-preference do not meaningfully distinguish between judges evaluating themselves and judges evaluating others. Furthermore, we find a lack of correlation with self-recognition, a necessary precursor for intentional situational awareness.
 
 3) Mechanistically, we evaluate the utility of representation engineering in mitigating these behaviors. Building on recent findings that identify a "self-authorship" vector in the residual stream (Ackerman \& Panickssery, 2024), we attempt to use similar steering vectors to suppress self-recognition and, by extension, self-preference. We demonstrate that while these vectors can successfully modulate explicit authorship claims on in-distribution data, they fail to generalize in out-of-distribution (OOD) settings. Specifically, when J evaluates a model K with similar architectural or stylistic priors, the steering vector fails to decouple "preference" from "recognition."
+\subsection{Hypothesis Testing}
 
 \section{Experimental Details}
+\subsection{Selected Setups}
+\subsubsection{``Debiased Gold Judges''}
+\subsubsection{Crowdsourced Annotations}
+\subsubsection{Verifiable Outputs}
+\subsection{Implementation}
 \section{Results and Discussion}
+\begin{figure*}
+  \centering
+  \includegraphics[width=\linewidth]{plots/dbg_qwen3.5_deepseek_llama70b.png}
+  \label{fig:distribution_shifts}
+  \caption{hehehe}
+\end{figure*}
 \section{Limitations}
 \section{Conclusion and Future Work}
 
