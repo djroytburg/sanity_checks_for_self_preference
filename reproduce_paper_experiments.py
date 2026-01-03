@@ -32,6 +32,7 @@ import json
 import logging
 import math
 import os
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -108,6 +109,7 @@ CONFIG = {
     # Verdict generation
     "verdict_temperature": 0.0,  # 0.0 for non-reasoning, 0.6 for reasoning
     "verdict_max_tokens": 15,  # Allow natural response, smart parsing extracts verdict
+    "cot_max_tokens": 2048,  # Allow longer generation for reasoning chain
     "verdict_top_k": 20,  # For logprobs extraction
     
     # System prompt for verdict generation
@@ -155,6 +157,159 @@ For example, if both answers are relatively the same in quality, output “T”.
 
 # ====== END UNKNOWN HYPERPARAMETERS ======
 
+
+# ######################
+# ### EVALUATOR PROMPTS (from Appendix B) ###
+# ######################
+
+# Valid benchmark and reasoning mode options
+VALID_BENCHMARKS = {"math500", "mmlu", "mbpp-plus"}
+VALID_REASONING_MODES = {"none", "cot", "long_cot"}
+
+# =============================================================================
+# MATH500 PROMPTS (Tables 1, 2, 3)
+# =============================================================================
+
+MATH500_NO_REASONING_PROMPT = """You will be given answers from two assistants (Assistant A and Assistant B) to a user prompt. Please act as an impartial judge and evaluate the quality of their answers.
+You must output only one of the following choices:
+- "A" if Assistant A's answer is better.
+- "T" if both answers are relatively the same in quality.
+- "B" if Assistant B's answer is better.
+For example, if both answers are relatively the same in quality, output "T".
+<User Prompt>
+{question}
+<The Start of Assistant A's Answer>
+{answer_a}
+<The End of Assistant A's Answer>
+<The Start of Assistant B's Answer>
+{answer_b}
+<The End of Assistant B's Answer>"""
+
+MATH500_COT_PROMPT = """You will be given answers from two assistants (Assistant A and Assistant B) to a user prompt. Please act as an impartial judge and evaluate the quality of their answers.
+You must end your response with: "My final verdict is $$...$$.". where $$...$$ must enclose one of the following:
+- "A" if Assistant A's answer is better.
+- "T" if both answers are relatively the same in quality.
+- "B" if Assistant B's answer is better.
+For example, if your final verdict is a tie, end your response with: "My final verdict is $$T$$."
+<User Prompt>
+{question}
+<The Start of Assistant A's Answer>
+{answer_a}
+<The End of Assistant A's Answer>
+<The Start of Assistant B's Answer>
+{answer_b}
+<The End of Assistant B's Answer>"""
+
+# Long CoT adds <think> at the end to trigger reasoning
+MATH500_LONG_COT_PROMPT = MATH500_COT_PROMPT  # Same prompt, but we append <think> token
+
+# =============================================================================
+# MMLU PROMPTS (Tables 4, 5, 6)
+# =============================================================================
+
+# MMLU no-reasoning is same as MATH500 no-reasoning
+MMLU_NO_REASONING_PROMPT = MATH500_NO_REASONING_PROMPT
+
+MMLU_COT_PROMPT = """You are given answers provided by two assistants, Assistant A and Assistant B, to the following user prompt.
+<User Prompt>
+{question}
+<The Start of Assistant A's Answer>
+{answer_a}
+<The End of Assistant A's Answer>
+<The Start of Assistant B's Answer>
+{answer_b}
+<The End of Assistant B's Answer>
+Please act as an impartial judge and evaluate the quality of their answers.
+You must end your response with: "My final verdict is $$...$$.". where $$...$$ must enclose one of the following:
+- "A" if Assistant A's answer is better.
+- "T" if both answers are relatively the same in quality.
+- "B" if Assistant B's answer is better.
+For example, if your final verdict is a tie, end your response with: "My final verdict is $$T$$."""
+
+# Long CoT is same prompt, but we append <think> token
+MMLU_LONG_COT_PROMPT = MMLU_COT_PROMPT
+
+# =============================================================================
+# MBPP+ PROMPTS (Tables 7, 8, 9)
+# =============================================================================
+
+MBPP_PLUS_NO_REASONING_PROMPT = """Please act as an impartial judge and assess the accuracy of the given Python functions. Provide your evaluation by outputting only one of the following
+- "A" if Assistant A's function is more accurate.
+- "T" if both functions are similarly accurate.
+- "B" if Assistant B's function is more accurate.
+Base your judgment on your understanding of the task described in the user prompt and whether the functions successfully pass the provided test cases.
+<User Prompt>
+{question}
+<The Start of Assistant A's Function>
+{answer_a}
+<The End of Assistant A's Function>
+<The Start of Assistant B's Function>
+{answer_b}
+<The End of Assistant B's Function>"""
+
+MBPP_PLUS_COT_PROMPT = """Please act as an impartial judge and assess the accuracy of the given Python functions. You must end your response with: "My final verdict is $$...$$.". where $$...$$ must enclose one of the following:
+- "A" if Assistant A's function is more accurate.
+- "T" if both functions are similarly accurate.
+- "B" if Assistant B's function is more accurate.
+For example, if your final verdict is a tie, end your response with: "My final verdict is $$T$$."
+Base your judgment on your understanding of the task described in the user prompt and whether the functions successfully pass the provided test cases.
+<User Prompt>
+{question}
+<The Start of Assistant A's Function>
+{answer_a}
+<The End of Assistant A's Function>
+<The Start of Assistant B's Function>
+{answer_b}
+<The End of Assistant B's Function>"""
+
+# Long CoT is same prompt, but we append <think> token
+MBPP_PLUS_LONG_COT_PROMPT = MBPP_PLUS_COT_PROMPT
+
+# =============================================================================
+# PROMPT REGISTRY
+# =============================================================================
+
+EVALUATOR_PROMPTS = {
+    "math500": {
+        "none": MATH500_NO_REASONING_PROMPT,
+        "cot": MATH500_COT_PROMPT,
+        "long_cot": MATH500_LONG_COT_PROMPT,
+    },
+    "mmlu": {
+        "none": MMLU_NO_REASONING_PROMPT,
+        "cot": MMLU_COT_PROMPT,
+        "long_cot": MMLU_LONG_COT_PROMPT,
+    },
+    "mbpp-plus": {
+        "none": MBPP_PLUS_NO_REASONING_PROMPT,
+        "cot": MBPP_PLUS_COT_PROMPT,
+        "long_cot": MBPP_PLUS_LONG_COT_PROMPT,
+    },
+}
+
+def get_evaluator_prompt(benchmark: str, reasoning_mode: str) -> str:
+    """
+    Get the appropriate evaluator prompt for a benchmark and reasoning mode.
+    
+    Args:
+        benchmark: One of "math500", "mmlu", "mbpp-plus"
+        reasoning_mode: One of "none", "cot", "long_cot"
+    
+    Returns:
+        The prompt template string with {question}, {answer_a}, {answer_b} placeholders.
+    
+    Raises:
+        ValueError: If benchmark or reasoning_mode is invalid.
+    """
+    benchmark = benchmark.lower()
+    reasoning_mode = reasoning_mode.lower()
+    
+    if benchmark not in VALID_BENCHMARKS:
+        raise ValueError(f"Invalid benchmark: {benchmark}. Must be one of {VALID_BENCHMARKS}")
+    if reasoning_mode not in VALID_REASONING_MODES:
+        raise ValueError(f"Invalid reasoning_mode: {reasoning_mode}. Must be one of {VALID_REASONING_MODES}")
+    
+    return EVALUATOR_PROMPTS[benchmark][reasoning_mode]
 
 # ######################
 # ### LOGGING SETUP  ###
@@ -423,47 +578,61 @@ def normalize_probs_abc(prob_map: Dict[str, float]) -> Dict[str, float]:
 # ### VLLM HELPERS   ###
 # ######################
 
-def build_verdict_prompt(question: str, response_a: str, response_b: str) -> list:
+def build_verdict_prompt(
+    question: str,
+    response_a: str,
+    response_b: str,
+    benchmark: str = "math500",
+    reasoning_mode: str = "none",
+) -> list:
     """
     Build verdict prompt for judge model using chat format.
     
     Per the paper: "we obtain the verdict by instructing the model to directly output
-    a label: 'A', 'T', or 'B'". We use a forced assistant prefix to ensure the model
-    outputs the verdict token at position 0.
+    a label: 'A', 'T', or 'B'". For non-CoT modes, we use a forced assistant prefix 
+    to ensure the model outputs the verdict token at position 0.
     
     Args:
         question (str): Original user question/prompt.
         response_a (str): Response from Assistant A.
         response_b (str): Response from Assistant B.
+        benchmark (str): Benchmark type - "math500", "mmlu", or "mbpp-plus".
+        reasoning_mode (str): Reasoning mode - "none", "cot", or "long_cot".
     
     Returns:
-        List of chat messages with forced assistant prefix.
+        List of chat messages. For "none" mode, includes forced assistant prefix.
+        For CoT modes, allows free generation. For "long_cot", appends <think> token.
     """
-    user_content = f"""You will be given answers from two assistants (Assistant A and Assistant B) to a user prompt. Please act as an impartial judge and evaluate the quality of their answers.
-You must output only one of the following choices:
-- "A" if Assistant A's answer is better.
-- "T" if both answers are relatively the same in quality.
-- "B" if Assistant B's answer is better.
-
-For example, if both answers are relatively the same in quality, output “T”.
-
-<User Prompt>
-{question}
-
-<The Start of Assistant A's Answer>
-{response_a}
-<The End of Assistant A's Answer>
-
-<The Start of Assistant B's Answer>
-{response_b}
-<The End of Assistant B's Answer>"""
+    # Get the appropriate prompt template
+    prompt_template = get_evaluator_prompt(benchmark, reasoning_mode)
     
-    # Return chat format with forced assistant prefix
-    # vLLM will continue from "My verdict is: " and the first token should be A/B/T
-    return [
-        {"role": "user", "content": user_content},
-        {"role": "assistant", "content": "My verdict is:"},
-    ]
+    # Format the prompt with the actual content
+    user_content = prompt_template.format(
+        question=question,
+        answer_a=response_a,
+        answer_b=response_b,
+    )
+    
+    # Build chat messages based on reasoning mode
+    if reasoning_mode == "none":
+        # No reasoning: Force the model to start with "My verdict is: " for direct token extraction
+        return [
+            {"role": "user", "content": user_content},
+            {"role": "assistant", "content": "My verdict is:"},
+        ]
+    elif reasoning_mode == "cot":
+        # Standard CoT: Let model reason freely, parse verdict from "My final verdict is $$X$$"
+        return [
+            {"role": "user", "content": user_content},
+        ]
+    elif reasoning_mode == "long_cot":
+        # Long CoT: Force model into extended reasoning with <think> token
+        return [
+            {"role": "user", "content": user_content},
+            {"role": "assistant", "content": "<think>"},
+        ]
+    else:
+        raise ValueError(f"Invalid reasoning_mode: {reasoning_mode}")
 
 
 def extract_abt_probs_from_logprobs(
@@ -609,6 +778,160 @@ def extract_abt_probs_from_logprobs(
     
     logger.debug(f"Final A/B/T probs: {abt_probs}")
     return abt_probs, abt_token_idx
+
+
+def extract_cot_verdict_with_logprobs(
+    output,
+    tokenizer,
+    logger: logging.Logger = None,
+) -> tuple:
+    """
+    Extract A/B/T probabilities from CoT response by finding the verdict token position.
+    
+    For CoT responses, the verdict appears at the END of the generated text in the format
+    "My final verdict is $$X$$" where X is A, B, or T. We need to:
+    1. Find the pattern in the generated text
+    2. Map the character position of the verdict to a token position
+    3. Extract logprobs at that specific token position
+    
+    Args:
+        output: vLLM RequestOutput object.
+        tokenizer: Tokenizer for decoding token IDs.
+        logger: Logger for debug output.
+    
+    Returns:
+        Tuple of (abt_probs dict, token_position) where abt_probs has keys A/B/T.
+    """
+    if logger is None:
+        logger = logging.getLogger("paper_reproduction")
+    
+    if not output.outputs or not output.outputs[0].token_ids:
+        logger.warning("No tokens generated for CoT extraction")
+        return {"A": 0.33, "B": 0.33, "T": 0.34}, -1
+    
+    completion = output.outputs[0]
+    token_ids = completion.token_ids
+    logprobs_list = completion.logprobs if hasattr(completion, 'logprobs') else []
+    generated_text = completion.text
+    
+    if not logprobs_list:
+        logger.warning("No logprobs available for CoT extraction")
+        return {"A": 0.33, "B": 0.33, "T": 0.34}, -1
+    
+    # Find the verdict pattern in the generated text
+    patterns = [
+        (r"My final verdict is \$\$([ABT])\$\$", 3),  # $$X$$ format, verdict is 3 chars before end of match
+        (r"final verdict is \$\$([ABT])\$\$", 3),
+        (r"verdict is \$\$([ABT])\$\$", 3),
+        (r"\$\$([ABT])\$\$", 3),  # Just the delimited verdict
+        (r"My final verdict is ([ABT])\b", 0),  # Without $$ delimiters
+        (r"final verdict is ([ABT])\b", 0),
+        (r"verdict is ([ABT])\b", 0),
+    ]
+    
+    verdict_char = None
+    verdict_char_pos = None
+    
+    for pattern, offset_from_end in patterns:
+        match = re.search(pattern, generated_text, re.IGNORECASE)
+        if match:
+            verdict_char = match.group(1).upper()
+            # The verdict character position is at match.end() minus the offset
+            # For $$X$$, the X is 3 characters before the end (the "$$")
+            # For just X, it's 0 characters before the end
+            verdict_char_pos = match.end() - offset_from_end - 1  # -1 because match.end() is exclusive
+            logger.debug(f"Found CoT verdict '{verdict_char}' at char position {verdict_char_pos} via pattern: {pattern}")
+            break
+    
+    if verdict_char is None:
+        logger.warning(f"Could not find verdict pattern in CoT response: {generated_text[-200:]}")
+        return {"A": 0.33, "B": 0.33, "T": 0.34}, -1
+    
+    # Now map character position to token position
+    # Decode tokens incrementally and track cumulative text length
+    cumulative_text = ""
+    verdict_token_idx = None
+    
+    for idx, token_id in enumerate(token_ids):
+        try:
+            # Decode this single token
+            token_str = tokenizer.decode([token_id], skip_special_tokens=False)
+            prev_len = len(cumulative_text)
+            cumulative_text += token_str
+            
+            # Check if the verdict character position falls within this token
+            if prev_len <= verdict_char_pos < len(cumulative_text):
+                verdict_token_idx = idx
+                logger.debug(f"Verdict char at pos {verdict_char_pos} maps to token idx {idx} (token='{token_str}')")
+                break
+        except Exception as e:
+            logger.debug(f"Error decoding token {token_id}: {e}")
+            continue
+    
+    if verdict_token_idx is None:
+        logger.warning(f"Could not map verdict char position {verdict_char_pos} to token index")
+        # Fallback: try to find the verdict token by scanning from the end
+        for idx in range(len(token_ids) - 1, -1, -1):
+            try:
+                decoded = tokenizer.decode([token_ids[idx]], skip_special_tokens=False).strip()
+                if decoded == verdict_char:
+                    verdict_token_idx = idx
+                    logger.debug(f"Fallback: found verdict token '{verdict_char}' at position {idx}")
+                    break
+            except Exception:
+                continue
+    
+    if verdict_token_idx is None:
+        logger.warning(f"Could not find verdict token position for '{verdict_char}'")
+        return {"A": 0.33, "B": 0.33, "T": 0.34}, -1
+    
+    # Get logprobs for that token position
+    if verdict_token_idx >= len(logprobs_list):
+        logger.warning(f"Token index {verdict_token_idx} out of range for logprobs list (len={len(logprobs_list)})")
+        return {"A": 0.33, "B": 0.33, "T": 0.34}, verdict_token_idx
+    
+    token_logprobs_dict = logprobs_list[verdict_token_idx]
+    
+    # Token variants for aggregation (same as non-CoT)
+    aliases = {
+        "A": {"A", "▁A", " A", "\nA", "\tA"},
+        "B": {"B", "▁B", " B", "\nB", "\tB"},
+        "T": {"T", "▁T", " T", "\nT", "\tT"},
+    }
+    
+    # Aggregate probabilities
+    abt_probs = {"A": 0.0, "B": 0.0, "T": 0.0}
+    
+    for token_id, logprob_val in token_logprobs_dict.items():
+        try:
+            decoded = tokenizer.decode([token_id], skip_special_tokens=False)
+            # Extract logprob value (handle both float and Logprob object)
+            if hasattr(logprob_val, 'logprob'):
+                logprob = logprob_val.logprob
+            else:
+                logprob = float(logprob_val)
+            prob = math.exp(logprob)
+            
+            # Check which label this token belongs to
+            for label, variants in aliases.items():
+                if decoded in variants:
+                    abt_probs[label] += prob
+                    logger.debug(f"CoT token '{decoded}' -> {label}, prob={prob:.6f}")
+                    break
+        except Exception as e:
+            logger.debug(f"Error processing token {token_id}: {e}")
+            continue
+    
+    # Normalize
+    total = sum(abt_probs.values())
+    if total > 0:
+        abt_probs = {k: v / total for k, v in abt_probs.items()}
+    else:
+        logger.warning(f"No A/B/T probabilities found in CoT, using uniform")
+        abt_probs = {"A": 0.33, "B": 0.33, "T": 0.34}
+    
+    logger.debug(f"CoT final A/B/T probs: {abt_probs}")
+    return abt_probs, verdict_token_idx
 
 
 def setup_vllm_engine(model_id: str, config: Dict, logger: logging.Logger):
@@ -858,6 +1181,7 @@ def run_reproduction_experiment(
     judge_family: str = None,
     judge_short: str = None,
     evaluatee_short: str = None,
+    reasoning_mode: str = "none",
     n_samples: int = None,
     seed: int = 42,
     config: Dict = None,
@@ -870,10 +1194,13 @@ def run_reproduction_experiment(
         judge_model (str): vLLM model ID for judge (generates assistant_1 and does judging).
         data_path (Path): Path to input JSONL with subsample.
         output_dir (Path): Output directory for results (base path for llm-sp-reprod structure).
-        benchmark (str): Benchmark name (e.g., 'math500', 'mmlu'). If provided, creates llm-sp-reprod structure.
+        benchmark (str): Benchmark name (e.g., 'math500', 'mmlu', 'mbpp-plus'). 
+                        If provided, creates llm-sp-reprod structure and uses benchmark-specific prompts.
         judge_family (str): Judge family name (e.g., 'llama', 'qwen'). Required if benchmark is provided.
         judge_short (str): Judge model short name (e.g., 'llama-3.1-8b'). Required if benchmark is provided.
         evaluatee_short (str): Evaluatee model short name (e.g., 'gpt-4o'). Required if benchmark is provided.
+        reasoning_mode (str): Reasoning mode for verdict generation - "none", "cot", or "long_cot".
+                             Defaults to "none" (direct A/B/T token output).
         n_samples (int): Number of samples to test (default: all).
         seed (int): Random seed for reproducibility.
         config (Dict): Configuration dict.
@@ -917,8 +1244,21 @@ def run_reproduction_experiment(
     temperature = 0.6 if is_reasoning_model(judge_model) else 0.0
     logger.info(f"Using temperature: {temperature}")
     
-    # Paper uses max_tokens=1 for verdict generation, but we use 10 to catch full verdict
-    max_tokens = config.get("verdict_max_tokens", 10)
+    # Determine max_tokens based on reasoning mode
+    # - "none": Paper uses max_tokens=1 for verdict generation, but we use 10 to catch full verdict
+    # - "cot" / "long_cot": Allow free generation for reasoning chain
+    if reasoning_mode == "none":
+        max_tokens = config.get("verdict_max_tokens", 10)
+    else:
+        max_tokens = config.get("cot_max_tokens", 2048)
+    
+    # Determine the benchmark for prompt selection
+    # Default to math500 if not specified
+    effective_benchmark = benchmark if benchmark else "math500"
+    
+    logger.info(f"Using benchmark: {effective_benchmark}")
+    logger.info(f"Using reasoning mode: {reasoning_mode}")
+    logger.info(f"Max tokens: {max_tokens}")
     
     logger.info("=" * 80)
     logger.info("RUNNING GENERATION ON GAME 1 (AB ORDER)")
@@ -926,7 +1266,13 @@ def run_reproduction_experiment(
     
     # Game 1: A=response_a, B=response_b
     prompts_game1 = [
-        build_verdict_prompt(row["question"], row["response_a"], row["response_b"])
+        build_verdict_prompt(
+            row["question"], 
+            row["response_a"], 
+            row["response_b"],
+            benchmark=effective_benchmark,
+            reasoning_mode=reasoning_mode,
+        )
         for row in rows
     ]
     
@@ -940,7 +1286,13 @@ def run_reproduction_experiment(
     
     # Game 2: A=response_b, B=response_a (swap)
     prompts_game2 = [
-        build_verdict_prompt(row["question"], row["response_b"], row["response_a"])
+        build_verdict_prompt(
+            row["question"], 
+            row["response_b"], 
+            row["response_a"],
+            benchmark=effective_benchmark,
+            reasoning_mode=reasoning_mode,
+        )
         for row in rows
     ]
     
@@ -961,9 +1313,15 @@ def run_reproduction_experiment(
         out1 = outputs_game1[i]
         out2 = outputs_game2[i]
         
-        # Extract A/B/T probs by finding first A/B/T token
-        abt_probs_game1, token_pos1 = extract_abt_probs_from_logprobs(out1, tokenizer, logger)
-        abt_probs_game2, token_pos2 = extract_abt_probs_from_logprobs(out2, tokenizer, logger)
+        # Extract A/B/T probs using appropriate method based on reasoning mode
+        if reasoning_mode == "none":
+            # Non-CoT: verdict is at the start (forced by "My verdict is:" prefix)
+            abt_probs_game1, token_pos1 = extract_abt_probs_from_logprobs(out1, tokenizer, logger)
+            abt_probs_game2, token_pos2 = extract_abt_probs_from_logprobs(out2, tokenizer, logger)
+        else:
+            # CoT / Long CoT: verdict is at the end after "My final verdict is $$X$$"
+            abt_probs_game1, token_pos1 = extract_cot_verdict_with_logprobs(out1, tokenizer, logger)
+            abt_probs_game2, token_pos2 = extract_cot_verdict_with_logprobs(out2, tokenizer, logger)
         
         # IMPORTANT: The reference scores in llm-sp are ALREADY in (self, other, tie) format.
         # Our prompts are structured so that:
@@ -1612,6 +1970,13 @@ def main():
         action="store_true",
         help="Skip generating plots (for automated debugging)"
     )
+    parser.add_argument(
+        "--reasoning_mode",
+        type=str,
+        default="none",
+        choices=["none", "cot", "long_cot"],
+        help="Reasoning mode for verdict generation: 'none' (direct A/B/T), 'cot' (chain-of-thought), 'long_cot' (extended reasoning with <think>)"
+    )
     
     args = parser.parse_args()
     load_dotenv()
@@ -1644,6 +2009,7 @@ def main():
         judge_family=args.judge_family,
         judge_short=args.judge_short,
         evaluatee_short=args.evaluatee_short,
+        reasoning_mode=args.reasoning_mode,
         n_samples=args.n_samples,
         seed=args.seed,
         config=CONFIG,
