@@ -1,0 +1,18 @@
+2026-01-05 19:38:08 | INFO     | setup_logging:67 | ================================================================================
+2026-01-05 19:38:08 | INFO     | setup_logging:68 | EVALUATION SELF-PREFERENCE ANALYSIS STARTED
+2026-01-05 19:38:08 | INFO     | setup_logging:69 | ================================================================================
+2026-01-05 19:38:08 | INFO     | setup_logging:70 | Log file: file_logs/analyze_evaluation_sp_20260105_193808.log
+2026-01-05 19:38:08 | INFO     | setup_logging:71 | Output directory: xsum/gpt4vsxsum_orig_results
+2026-01-05 19:38:08 | INFO     | setup_logging:72 | User: root
+2026-01-05 19:38:08 | INFO     | main:579 | Evaluation results file: xsum/gpt4_results_xsum.json
+2026-01-05 19:38:08 | INFO     | main:580 | Ground truth file: gpt4vsllama_orig_paper_gpt5_judge.json
+2026-01-05 19:38:08 | INFO     | main:581 | Model name: Unknown
+2026-01-05 19:38:08 | INFO     | main:582 | Output directory: xsum/gpt4vsxsum_orig_results
+2026-01-05 19:38:08 | INFO     | load_evaluation_results:83 | Loading evaluation results from xsum/gpt4_results_xsum.json
+2026-01-05 19:38:08 | INFO     | load_evaluation_results:86 | Loaded 4000 examples
+2026-01-05 19:38:08 | INFO     | load_ground_truth_judge:92 | Loading ground truth judge results from gpt4vsllama_orig_paper_gpt5_judge.json
+2026-01-05 19:38:08 | INFO     | load_ground_truth_judge:95 | Loaded 350 ground truth judgments
+2026-01-05 19:38:08 | INFO     | main:597 | ================================================================================
+2026-01-05 19:38:08 | INFO     | main:598 | EXTRACTING SELF-PREFERENCE PROBABILITIES
+2026-01-05 19:38:08 | INFO     | main:599 | ================================================================================
+2026-01-05 19:38:08 | INFO     | extract_self_preference_probs:196 | Extracting self-preference probabilities from evaluation data
