@@ -36,6 +36,8 @@ async def query_model(client: AsyncOpenAI, model: str, system_prompt: str, user_
     """Query the model asynchronously without collecting logprobs."""
     response = await client.chat.completions.create(
         model=model,
+        reasoning_effort="minimal",
+        verbosity='low',
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}

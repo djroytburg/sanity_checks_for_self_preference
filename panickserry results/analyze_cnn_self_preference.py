@@ -87,7 +87,7 @@ def load_cnn_results(json_path: Path, logger: logging.Logger) -> List[Dict]:
 
     # Filter for human model only if 'model' field exists
     if results and 'model' in results[0]:
-        human_results = [r for r in results if r.get("model") == "human"]
+        human_results = [r for r in results if r.get("model") == "llama"]
         logger.info(f"Filtered to {len(human_results)} human examples")
     else:
         # If no 'model' field, assume all results are for human comparisons
