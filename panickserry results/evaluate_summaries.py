@@ -46,7 +46,7 @@ async def query_model(client: AsyncOpenAI, model: str, system_prompt: str, user_
         logprobs=True,
         top_logprobs=2,
         temperature=0,  
-        max_tokens=10  
+        max_tokens=2
     )
 
     answer = response.choices[0].message.content.strip()
