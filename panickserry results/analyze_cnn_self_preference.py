@@ -136,7 +136,7 @@ def aggregate_verdict_from_answers(answer_original: str, answer_flipped: str) ->
         return "T"
 
 
-def determine_human_is_correct(gt_item: Dict, cnn_item: Dict, logger: logging.Logger) -> bool:
+def determine_human_is_correct(gt_item: Dict, cnn_item: Dict, logger: logging.Logger) -> tuple:
     """
     Determine if human response is correct based on ground truth verdict.
 
@@ -144,13 +144,17 @@ def determine_human_is_correct(gt_item: Dict, cnn_item: Dict, logger: logging.Lo
     The ground truth tells us which summary is objectively better.
 
     Returns:
-        True if human summary is the one preferred by ground truth.
+        Tuple of (human_correct: bool, is_tie: bool) or (None, False) for unclear detection
     """
     # Get ground truth verdict
     gt_verdict = aggregate_verdict_from_answers(
         gt_item["original_order"]["answer"],
         gt_item["flipped_order"]["answer"]
     )
+
+    # Check if ground truth is a tie
+    if gt_verdict == "T":
+        return (None, True)
 
     # Determine which position human is in from CNN detection results
     # In CNN data:
@@ -171,10 +175,10 @@ def determine_human_is_correct(gt_item: Dict, cnn_item: Dict, logger: logging.Lo
         human_position = "2"
     else:
         # Unclear detection - skip this example
-        return None
+        return (None, False)
 
     # Human is correct if ground truth verdict matches human position
-    return gt_verdict == human_position
+    return (gt_verdict == human_position, False)
 
 
 # ----------------------
@@ -227,7 +231,11 @@ def extract_self_preference_probs(cnn_results: List[Dict],
         gt_item = gt_map[key]
 
         # Determine if human is correct
-        human_correct = determine_human_is_correct(gt_item, cnn_item, logger)
+        human_correct, is_tie = determine_human_is_correct(gt_item, cnn_item, logger)
+
+        if is_tie:
+            skipped_tie += 1
+            continue
 
         if human_correct is None:
             skipped_unclear_detection += 1
@@ -265,6 +273,7 @@ def extract_self_preference_probs(cnn_results: List[Dict],
     logger.info(f"    Skipped (no ground truth): {skipped_no_gt}")
     logger.info(f"    Skipped (missing fields): {skipped_missing_fields}")
     logger.info(f"    Skipped (unclear detection): {skipped_unclear_detection}")
+    logger.info(f"    Skipped (ties): {skipped_tie}")
 
     # Balance LSP and ILSP to avoid skew in final distribution
     min_count = min(len(lsp_probs), len(ilsp_probs))
@@ -290,6 +299,7 @@ def extract_self_preference_probs(cnn_results: List[Dict],
         "skipped_no_gt": skipped_no_gt,
         "skipped_missing_fields": skipped_missing_fields,
         "skipped_unclear_detection": skipped_unclear_detection,
+        "skipped_ties": skipped_tie,
     }
 
 
