@@ -109,6 +109,7 @@ def load_raw_probabilities(eval_file: Path, gt_file: Path, logger: logging.Logge
 
     lsp_probs = []
     ilsp_probs = []
+    skipped_ties = 0
 
     # Check if this is the new format (has 'key' and 'forward_comparison')
     if eval_data and 'key' in eval_data[0] and 'forward_comparison' in eval_data[0]:
@@ -163,7 +164,11 @@ def load_raw_probabilities(eval_file: Path, gt_file: Path, logger: logging.Logge
             else:
                 gt_verdict = "T"
 
-            # Don't filter out ties - include all cases
+            # Discard ties - skip examples where either verdict is a tie
+            if eval_verdict == "T" or gt_verdict == "T":
+                skipped_ties += 1
+                continue
+
             judge_correct = (eval_verdict == gt_verdict)
 
             # Get probabilities
@@ -221,7 +226,11 @@ def load_raw_probabilities(eval_file: Path, gt_file: Path, logger: logging.Logge
             else:
                 gt_verdict = "T"
 
-            # Don't filter out ties - include all cases
+            # Discard ties - skip examples where either verdict is a tie
+            if eval_verdict == "T" or gt_verdict == "T":
+                skipped_ties += 1
+                continue
+
             judge_correct = (eval_verdict == gt_verdict)
 
             # Extract self-preference probability
@@ -253,19 +262,26 @@ def load_raw_probabilities(eval_file: Path, gt_file: Path, logger: logging.Logge
                 ilsp_probs.append(self_pref)
 
     logger.info(f"    Loaded {len(lsp_probs)} LSP and {len(ilsp_probs)} ILSP probabilities")
+    logger.info(f"    Skipped {skipped_ties} ties")
 
-    # Balance (same logic as in the analysis scripts)
+    # Balance LSP and ILSP to have equal counts
     import random
     random.seed(42)
-    min_count = min(len(lsp_probs), len(ilsp_probs))
+    lsp_original_count = len(lsp_probs)
+    ilsp_original_count = len(ilsp_probs)
+    min_count = min(lsp_original_count, ilsp_original_count)
     if min_count > 0:
         lsp_probs = random.sample(lsp_probs, min_count)
         ilsp_probs = random.sample(ilsp_probs, min_count)
+        logger.info(f"    Balanced LSP and ILSP to {min_count} examples each (original: LSP={lsp_original_count}, ILSP={ilsp_original_count})")
 
     return {
         'lsp': lsp_probs,
         'ilsp': ilsp_probs,
-        'all': lsp_probs + ilsp_probs
+        'all': lsp_probs + ilsp_probs,
+        'lsp_original_count': lsp_original_count,
+        'ilsp_original_count': ilsp_original_count,
+        'skipped_ties': skipped_ties
     }
 
 

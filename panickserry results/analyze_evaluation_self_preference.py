@@ -152,7 +152,7 @@ def aggregate_verdict_from_answers(answer_original: str, answer_flipped: str) ->
         return "T"
 
 
-def get_judge_correct_from_ground_truth(gt_original: str, gt_flipped: str) -> bool:
+def get_judge_correct_from_ground_truth(gt_original: str, gt_flipped: str) -> tuple:
     """
     Determine if summary1 (judge's own response) is correct based on ground truth.
 
@@ -161,10 +161,12 @@ def get_judge_correct_from_ground_truth(gt_original: str, gt_flipped: str) -> bo
         gt_flipped: Ground truth answer when summary2 is in position 1
 
     Returns:
-        True if summary1 is preferred by ground truth, False otherwise
+        Tuple of (is_correct: bool, is_tie: bool)
     """
     verdict = aggregate_verdict_from_answers(gt_original, gt_flipped)
-    return verdict == "1"
+    if verdict == "T":
+        return (None, True)
+    return (verdict == "1", False)
 
 
 # ----------------------
@@ -200,6 +202,7 @@ def extract_self_preference_probs(eval_results: List[Dict], gt_results: List[Dic
     all_probs = []
 
     skipped = 0
+    skipped_ties = 0
 
     # Build ground truth mapping by article_index
     gt_map = {gt["article_index"]: gt for gt in gt_results}
@@ -215,10 +218,15 @@ def extract_self_preference_probs(eval_results: List[Dict], gt_results: List[Dic
         gt_item = gt_map[article_idx]
 
         # Determine if judge (summary1) is correct based on ground truth
-        judge_correct = get_judge_correct_from_ground_truth(
+        judge_correct, is_tie = get_judge_correct_from_ground_truth(
             gt_item["original_order"]["answer"],
             gt_item["flipped_order"]["answer"]
         )
+
+        # Skip ties
+        if is_tie:
+            skipped_ties += 1
+            continue
 
         # Get probabilities from logprobs
         probs_original = get_probabilities_from_logprobs(
@@ -245,6 +253,7 @@ def extract_self_preference_probs(eval_results: List[Dict], gt_results: List[Dic
     logger.info(f"    LSP (judge correct): {len(lsp_probs)}")
     logger.info(f"    ILSP (judge incorrect): {len(ilsp_probs)}")
     logger.info(f"    Skipped (no ground truth): {skipped}")
+    logger.info(f"    Skipped (ties): {skipped_ties}")
 
     # Balance LSP and ILSP to avoid skew in final distribution
     min_count = min(len(lsp_probs), len(ilsp_probs))
@@ -268,6 +277,7 @@ def extract_self_preference_probs(eval_results: List[Dict], gt_results: List[Dic
         "lsp_original_count": len(lsp_probs),
         "ilsp_original_count": len(ilsp_probs),
         "skipped": skipped,
+        "skipped_ties": skipped_ties,
     }
 
 
@@ -297,6 +307,7 @@ def calculate_paper_metrics(eval_results: List[Dict], gt_results: List[Dict],
     judge_correct_count = 0
     judge_incorrect_count = 0
     harmful_sp_count = 0
+    skipped_ties = 0
 
     # Build ground truth mapping by article_index
     gt_map = {gt["article_index"]: gt for gt in gt_results}
@@ -310,19 +321,29 @@ def calculate_paper_metrics(eval_results: List[Dict], gt_results: List[Dict],
 
         gt_item = gt_map[article_idx]
 
-        total_examples += 1
-
         # Determine if judge (summary1) is correct based on ground truth
-        judge_correct = get_judge_correct_from_ground_truth(
+        judge_correct, is_tie = get_judge_correct_from_ground_truth(
             gt_item["original_order"]["answer"],
             gt_item["flipped_order"]["answer"]
         )
+
+        # Skip ties in ground truth
+        if is_tie:
+            skipped_ties += 1
+            continue
 
         # Get judge's verdict from evaluation results
         eval_verdict = aggregate_verdict_from_answers(
             eval_item["original_order"]["answer"],
             eval_item["flipped_order"]["answer"]
         )
+
+        # Skip ties in evaluation verdict as well
+        if eval_verdict == "T":
+            skipped_ties += 1
+            continue
+
+        total_examples += 1
 
         # Check if judge prefers own response (summary1)
         prefers_own = (eval_verdict == "1")
@@ -355,6 +376,7 @@ def calculate_paper_metrics(eval_results: List[Dict], gt_results: List[Dict],
         "judge_correct_count": judge_correct_count,
         "judge_incorrect_count": judge_incorrect_count,
         "harmful_sp_count": harmful_sp_count,
+        "skipped_ties": skipped_ties,
     }
 
     logger.info(f"  Metrics:")
@@ -364,6 +386,7 @@ def calculate_paper_metrics(eval_results: List[Dict], gt_results: List[Dict],
     logger.info(f"    Total examples: {total_examples}")
     logger.info(f"    Self-pref count: {self_pref_count}")
     logger.info(f"    Legitimate SP count: {legitimate_self_pref_count}")
+    logger.info(f"    Skipped ties: {skipped_ties}")
 
     return metrics
 
