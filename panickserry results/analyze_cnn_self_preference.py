@@ -559,6 +559,8 @@ def main():
             "ilsp_count_balanced": len(probs["ilsp"]),
             "lsp_count_original": probs.get("lsp_original_count", len(probs["lsp"])),
             "ilsp_count_original": probs.get("ilsp_original_count", len(probs["ilsp"])),
+            "lsp_probs": probs["lsp"],
+            "ilsp_probs": probs["ilsp"],
         },
     }
 
