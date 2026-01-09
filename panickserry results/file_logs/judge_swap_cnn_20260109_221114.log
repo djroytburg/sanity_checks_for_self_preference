@@ -1,0 +1,7 @@
+2026-01-09 22:11:14 | INFO     | setup_logging:58 | ================================================================================
+2026-01-09 22:11:14 | INFO     | setup_logging:59 | JUDGE SWAP ANALYSIS - CNN DATASET
+2026-01-09 22:11:14 | INFO     | setup_logging:60 | ================================================================================
+2026-01-09 22:11:14 | INFO     | setup_logging:61 | Log file: file_logs/judge_swap_cnn_20260109_221114.log
+2026-01-09 22:11:14 | INFO     | setup_logging:62 | Output directory: xsum/judge_swap_llama3.1-8b
+2026-01-09 22:11:14 | INFO     | main:748 | Loading J(J vs R) statistics from xsum/gpt_3.5_vs_llama2/cnn_self_preference_statistics.json
+2026-01-09 22:11:14 | ERROR    | main:750 | File not found: xsum/gpt_3.5_vs_llama2/cnn_self_preference_statistics.json
