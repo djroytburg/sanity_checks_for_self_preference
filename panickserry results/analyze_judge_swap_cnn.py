@@ -65,227 +65,6 @@ def setup_logging(output_dir: Path) -> logging.Logger:
 
 
 # ----------------------
-# --- DATA LOADING   ---
-# ----------------------
-
-def load_raw_probabilities(eval_file: Path, gt_file: Path, logger: logging.Logger) -> Dict:
-    """
-    Load raw probability data from evaluation and ground truth files.
-
-    This function handles two data formats:
-    1. New format: Items with 'key', 'forward_comparison', 'backward_comparison', etc.
-    2. Old format: Items with 'article_index', 'original_order.top_logprobs', etc.
-
-    Args:
-        eval_file: Path to evaluation results JSON
-        gt_file: Path to ground truth JSON
-        logger: Logger instance
-
-    Returns:
-        Dict with 'lsp' and 'ilsp' lists of probabilities
-    """
-    logger.info(f"  Loading raw data from {eval_file}")
-
-    if not eval_file.exists():
-        logger.warning(f"  Evaluation file not found: {eval_file}")
-        return None
-
-    if not gt_file.exists():
-        logger.warning(f"  Ground truth file not found: {gt_file}")
-        return None
-
-    with open(eval_file, 'r', encoding='utf-8') as f:
-        eval_data = json.load(f)
-
-    with open(gt_file, 'r', encoding='utf-8') as f:
-        gt_data = json.load(f)
-
-    # Build ground truth map
-    gt_map = {}
-    for gt_item in gt_data:
-        key = gt_item.get('article_index')
-        if key:
-            gt_map[key] = gt_item
-
-    lsp_probs = []
-    ilsp_probs = []
-    skipped_ties = 0
-
-    # Check if this is the new format (has 'key' and 'forward_comparison')
-    if eval_data and 'key' in eval_data[0] and 'forward_comparison' in eval_data[0]:
-        # For new format, filter to:
-        # 1. Only include model='human' comparisons
-        # 2. Only include items that match GT keys
-        # 3. Deduplicate - keep only first instance of each key
-        original_count = len(eval_data)
-        seen_keys = set()
-        filtered_data = []
-        for item in eval_data:
-            key = item.get('key')
-            model = item.get('model')
-            if model == 'human' and key in gt_map and key not in seen_keys:
-                filtered_data.append(item)
-                seen_keys.add(key)
-        eval_data = filtered_data
-        logger.info(f"    Filtered to {len(eval_data)} unique 'human' examples (from {original_count}) matching GT keys")
-        logger.info(f"    Detected new data format with 'key' and comparison fields")
-
-        for eval_item in eval_data:
-            key = eval_item.get('key')
-            if not key or key not in gt_map:
-                continue
-
-            gt_item = gt_map[key]
-
-            # Get evaluation verdicts from forward/backward comparisons
-            eval_forward = eval_item.get('forward_comparison')
-            eval_backward = eval_item.get('backward_comparison')
-
-            # Get ground truth verdicts
-            gt_answer_orig = gt_item.get('original_order', {}).get('answer')
-            gt_answer_flip = gt_item.get('flipped_order', {}).get('answer')
-
-            if not all([eval_forward, eval_backward, gt_answer_orig, gt_answer_flip]):
-                continue
-
-            # Aggregate eval verdicts
-            if eval_forward == "1" and eval_backward == "2":
-                eval_verdict = "1"
-            elif eval_forward == "2" and eval_backward == "1":
-                eval_verdict = "2"
-            else:
-                eval_verdict = "T"
-
-            # Aggregate GT verdicts
-            if gt_answer_orig == "1" and gt_answer_flip == "2":
-                gt_verdict = "1"
-            elif gt_answer_orig == "2" and gt_answer_flip == "1":
-                gt_verdict = "2"
-            else:
-                gt_verdict = "T"
-
-            # Discard ties - skip examples where either verdict is a tie
-            if eval_verdict == "T" or gt_verdict == "T":
-                skipped_ties += 1
-                continue
-
-            judge_correct = (eval_verdict == gt_verdict)
-
-            # Get probabilities
-            # Try to get individual probabilities first
-            p1_orig = eval_item.get('forward_comparison_probability')
-            p2_flip = eval_item.get('backward_comparison_probability')
-
-            if p1_orig is not None and p2_flip is not None:
-                # Use averaged probability from forward and backward
-                self_pref = (p1_orig + p2_flip) / 2.0
-            elif 'self_preference' in eval_item:
-                # Fall back to self_preference field if individual probs not available
-                self_pref = eval_item.get('self_preference')
-            else:
-                continue
-
-            if judge_correct:
-                lsp_probs.append(self_pref)
-            else:
-                ilsp_probs.append(self_pref)
-
-    else:
-        # Old format with article_index and top_logprobs
-        logger.info(f"    Detected old data format with 'article_index' and logprobs")
-
-        for eval_item in eval_data:
-            key = eval_item.get('article_index')
-            if not key or key not in gt_map:
-                continue
-
-            gt_item = gt_map[key]
-
-            # Determine judge correctness
-            eval_answer_orig = eval_item.get('original_order', {}).get('answer')
-            eval_answer_flip = eval_item.get('flipped_order', {}).get('answer')
-
-            gt_answer_orig = gt_item.get('original_order', {}).get('answer')
-            gt_answer_flip = gt_item.get('flipped_order', {}).get('answer')
-
-            if not all([eval_answer_orig, eval_answer_flip, gt_answer_orig, gt_answer_flip]):
-                continue
-
-            # Aggregate verdicts
-            if eval_answer_orig == "1" and eval_answer_flip == "2":
-                eval_verdict = "1"
-            elif eval_answer_orig == "2" and eval_answer_flip == "1":
-                eval_verdict = "2"
-            else:
-                eval_verdict = "T"
-
-            if gt_answer_orig == "1" and gt_answer_flip == "2":
-                gt_verdict = "1"
-            elif gt_answer_orig == "2" and gt_answer_flip == "1":
-                gt_verdict = "2"
-            else:
-                gt_verdict = "T"
-
-            # Discard ties - skip examples where either verdict is a tie
-            if eval_verdict == "T" or gt_verdict == "T":
-                skipped_ties += 1
-                continue
-
-            judge_correct = (eval_verdict == gt_verdict)
-
-            # Extract self-preference probability
-            orig_logprobs = eval_item.get('original_order', {}).get('top_logprobs', [])
-            flip_logprobs = eval_item.get('flipped_order', {}).get('top_logprobs', [])
-
-            # Get P(1|original) and P(2|flipped)
-            p1_orig = None
-            p2_flip = None
-
-            for logprob_item in orig_logprobs:
-                if logprob_item.get('token') == '1':
-                    p1_orig = logprob_item.get('probability')
-                    break
-
-            for logprob_item in flip_logprobs:
-                if logprob_item.get('token') == '2':
-                    p2_flip = logprob_item.get('probability')
-                    break
-
-            if p1_orig is None or p2_flip is None:
-                continue
-
-            self_pref = (p1_orig + p2_flip) / 2.0
-
-            if judge_correct:
-                lsp_probs.append(self_pref)
-            else:
-                ilsp_probs.append(self_pref)
-
-    logger.info(f"    Loaded {len(lsp_probs)} LSP and {len(ilsp_probs)} ILSP probabilities")
-    logger.info(f"    Skipped {skipped_ties} ties")
-
-    # Balance LSP and ILSP to have equal counts
-    import random
-    random.seed(42)
-    lsp_original_count = len(lsp_probs)
-    ilsp_original_count = len(ilsp_probs)
-    min_count = min(lsp_original_count, ilsp_original_count)
-    if min_count > 0:
-        lsp_probs = random.sample(lsp_probs, min_count)
-        ilsp_probs = random.sample(ilsp_probs, min_count)
-        logger.info(f"    Balanced LSP and ILSP to {min_count} examples each (original: LSP={lsp_original_count}, ILSP={ilsp_original_count})")
-
-    return {
-        'lsp': lsp_probs,
-        'ilsp': ilsp_probs,
-        'all': lsp_probs + ilsp_probs,
-        'lsp_original_count': lsp_original_count,
-        'ilsp_original_count': ilsp_original_count,
-        'skipped_ties': skipped_ties
-    }
-
-
-# ----------------------
 # --- STATISTICS     ---
 # ----------------------
 
@@ -951,14 +730,6 @@ def main():
                        help="Path to J(J vs R) statistics JSON (gpt3.5 judging gpt3.5 vs human)")
     parser.add_argument("--k_vs_r_stats", type=str, required=True,
                        help="Path to J(K vs R) statistics JSON (gpt3.5 judging llama vs human)")
-    parser.add_argument("--j_vs_r_eval", type=str, default=None,
-                       help="Optional: Path to J(J vs R) evaluation JSON for t-test and KS test")
-    parser.add_argument("--j_vs_r_gt", type=str, default=None,
-                       help="Optional: Path to J(J vs R) ground truth JSON for t-test and KS test")
-    parser.add_argument("--k_vs_r_eval", type=str, default=None,
-                       help="Optional: Path to J(K vs R) evaluation JSON for t-test and KS test")
-    parser.add_argument("--k_vs_r_gt", type=str, default=None,
-                       help="Optional: Path to J(K vs R) ground truth JSON for t-test and KS test")
     parser.add_argument("--output_dir", type=str, default="judge_swap_analysis",
                        help="Output directory for plots and results")
 
@@ -992,25 +763,37 @@ def main():
 
     logger.info("")
 
-    # Load raw probability data if provided
+    # Extract raw probability data from stats files
     probs_j = None
     probs_k = None
 
-    if args.j_vs_r_eval and args.j_vs_r_gt:
-        logger.info("Loading raw probability data for J(J vs R)...")
-        probs_j = load_raw_probabilities(
-            Path(args.j_vs_r_eval),
-            Path(args.j_vs_r_gt),
-            logger
-        )
+    # Load probabilities from J stats if available
+    if 'probability_stats' in stats_j:
+        prob_stats_j = stats_j['probability_stats']
+        if 'lsp_probs' in prob_stats_j and 'ilsp_probs' in prob_stats_j:
+            logger.info("Loading raw probability data for J(J vs R) from stats file...")
+            lsp_probs_j = prob_stats_j['lsp_probs']
+            ilsp_probs_j = prob_stats_j['ilsp_probs']
+            probs_j = {
+                'lsp': lsp_probs_j,
+                'ilsp': ilsp_probs_j,
+                'all': lsp_probs_j + ilsp_probs_j
+            }
+            logger.info(f"  Loaded {len(lsp_probs_j)} LSP and {len(ilsp_probs_j)} ILSP probabilities")
 
-    if args.k_vs_r_eval and args.k_vs_r_gt:
-        logger.info("Loading raw probability data for J(K vs R)...")
-        probs_k = load_raw_probabilities(
-            Path(args.k_vs_r_eval),
-            Path(args.k_vs_r_gt),
-            logger
-        )
+    # Load probabilities from K stats if available
+    if 'probability_stats' in stats_k:
+        prob_stats_k = stats_k['probability_stats']
+        if 'lsp_probs' in prob_stats_k and 'ilsp_probs' in prob_stats_k:
+            logger.info("Loading raw probability data for J(K vs R) from stats file...")
+            lsp_probs_k = prob_stats_k['lsp_probs']
+            ilsp_probs_k = prob_stats_k['ilsp_probs']
+            probs_k = {
+                'lsp': lsp_probs_k,
+                'ilsp': ilsp_probs_k,
+                'all': lsp_probs_k + ilsp_probs_k
+            }
+            logger.info(f"  Loaded {len(lsp_probs_k)} LSP and {len(ilsp_probs_k)} ILSP probabilities")
 
     logger.info("")
 
