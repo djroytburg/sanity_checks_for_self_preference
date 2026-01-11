@@ -125,12 +125,11 @@
   Abstracts must be a single paragraph, ideally between 4--6 sentences long.
   Gross violations will trigger corrections at the camera-ready phase.
 \end{abstract}
-
 \section{Introduction}
 
 As language models see increasing deployment as evaluators, raters, and proxies for human preference, researchers have observed consistent patterns of unreliability \cite{guSurveyLLMasaJudge2025,liLLMsasJudgesComprehensiveSurvey2024}. These patterns are frequently categorized as \textit{biases} \cite{dietzLLMEvaluationTropesPerspectives2025,yeJusticePrejudiceQuantifying2024} and are often interpreted through anthropomorphic lenses or linked to emerging theory-of-mind frameworks. To index these reliability gaps, current literature has identified a gamut of behaviors, some of which---namely, the auto-evaluation behaviors described as \textit{self-preference} \cite{panicksseryLLMEvaluatorsRecognize2024} or \textit{narcissism} \cite{liuLLMsNarcissisticEvaluators2024}---suggest that models exhibit \textit{situational awareness} \cite{laineSituationalAwarenessBenchmark2023}: that is, the ability to infer details about the evaluation context (e.g., recognizing their own output) and modify their behavior accordingly to favor their own generations.
 
-Ironically, eliciting of awawreness behaviors like self-preference remains as unpredictable as  reliable evaluation itself. While self-preference is often presented as a failure of alignment, existing metrics frequently lack robust null hypotheses. Early testing omitted essential ``ground-truth'' baselines, leading researchers to claim self-preference even when a model’s high ratings were simply an accurate assessment of its own superior performance \cite{chenLLMEvaluatorsPrefer2025,wataokaSelfPreferenceBiasLLMasaJudge2025}. While recent efforts have introduced baselines for generation quality, a critical gap remains regarding \textit{evaluation quality}: the ability of a judge model to assign accurate preference ratings regardless of its own generative capacity. In the context of scalable oversight, the inability to distinguish between a model's general evaluative proficiency and an active self-bias undermines the validity of situational awareness claims.
+Ironically, the elicitation of awareness behaviors like self-preference remains as unpredictable as reliable evaluation itself. While self-preference is often presented as a failure of alignment, existing metrics frequently lack robust null hypotheses. Early testing omitted essential ``ground-truth'' baselines, leading researchers to claim self-preference even when a model’s high ratings were simply an accurate assessment of its own superior performance \cite{chenLLMEvaluatorsPrefer2025,wataokaSelfPreferenceBiasLLMasaJudge2025}. While recent efforts have introduced baselines for generation quality, a critical gap remains regarding \textit{evaluation quality}: the ability of a judge model to assign accurate preference ratings regardless of its own generative capacity. In the context of scalable oversight, the inability to distinguish between a model's general evaluative proficiency and an active self-bias undermines the validity of situational awareness claims.
 
 In this paper, we argue that claims of situational awareness in LLM evaluators require observed, statistically significant effects under more rigorous null hypotheses. Using the case study of self-preference, we propose baselines for two under-explored dimensions: first, a model’s baseline effectiveness in making superiority judgements on difficult problems (judgement skill); and second, the direct correlation between a model’s ability to recognize its own outputs and its tendency to favor that output (self-recognition).
 
@@ -152,44 +151,66 @@ Together, these findings offer a more realistic view of prevailing theory-of-min
 \section{Background}
 Literature on LLM evaluation has rapidly expanded in recent years, with numerous surveys cataloging the diverse methodologies and challenges \cite{zhengJudgingLLMasaJudgeMTBench2023,shenLargeLanguageModels2023,chenHumansLLMsJudge2024,liLLMsasJudgesComprehensiveSurvey2024, liGenerationJudgmentOpportunities2025, guSurveyLLMasaJudge2025}. A significant subset of this work focuses on the reliability and biases of LLM evaluators, identifying various failure modes including inconsistency, susceptibility to manipulation, and context sensitivity \cite{kooBenchmarkingCognitiveBiases2024,yeJusticePrejudiceQuantifying2024, dietzLLMEvaluationTropesPerspectives2025}.
 
-Among these, \textit{self-preference} has emerged as a particularly intriguing phenomenon, where models appear to favor their own outputs over those of other models. Panickssery, Bowman and Feng \yrcite{panicksseryLLMEvaluatorsRecognize2024} isolate this behavior using proxy tests on summarization tasks, while Liu, Moosavi and Lin \yrcite{liuLLMsNarcissisticEvaluators2024} observe a similar behavior using judges trained on encoding-based representations. This behavior has been interpreted as evidence of \textit{situational awareness}, suggesting that models can recognize their own outputs and adjust their evaluations accordingly \cite{laineSituationalAwarenessBenchmark2023}.
-\section{Evolving Baselines}
+Among these, \textit{self-preference} has emerged as a particularly intriguing phenomenon, where models appear to favor their own outputs over those of other models. \citet{panicksseryLLMEvaluatorsRecognize2024} isolate this behavior using proxy tests on summarization tasks, while \citet{liuLLMsNarcissisticEvaluators2024} observe a similar behavior using judges trained on encoding-based representations. This behavior has been interpreted as evidence of \textit{situational awareness}, suggesting that models can recognize their own outputs and adjust their evaluations accordingly \cite{laineSituationalAwarenessBenchmark2023}.
 
+\section{Evolving Baselines}
 \subsection{Setup}
 \label{subsec:setup}
-First, consider a judge model \( J \) prompted to conduct pairwise evaluations task responses completed by itself and another generative model \( R \) on a given task \( x \). We define outputs from a judge model \( J \) as \( o_J \) and outputs from the reference model \( R \) as \( o_R \). The judge model is shown $x$ and the two outputs and returns a number between [0, 1] corresponding to the probability that $J$ generates a token corresponding to a vote for itself: \( S_J(x, o_J, o_R): (\mathcal{X}, \mathcal{O_J}, \mathcal{O_R}) \rightarrow [0, 1]\). Then, taken over all tasks \( x \in \mathcal{X} \), we can define the self-preference score (\textbf{SP}) of model \( J \) against model \( R \) as:
-\[\textbf{SP}(J, R, \mathcal{X}) = \mathbb{E}_{(x, o_J, o_R)} [S_J(x, o_J, o_R)]\]
-where a score greater than 0.5 indicates a preference for its own output.
+Consider a judge model \( J \) prompted to conduct pairwise evaluations of task responses completed by itself and a reference model \( R \) on a task \( x \in \mathcal{X} \). We denote the outputs of the judge and reference models as \( o_J \) and \( o_R \), respectively. Let $P_J(\cdot | x, o_J, o_R)$ be the judge's predictive distribution over the vote tokens. We define the preference score $s_J$ as the scalar probability that $J$ favors its own output:
+\[ s_J(x, o_J, o_R) = P_J(\hat{y} = \text{self} | x, o_J, o_R) \in [0, 1] \]
+The aggregate self-preference score (\textbf{SP}) over the task set $\mathcal{X}$ is then:
+\[ \textbf{SP}(J, R, \mathcal{X}) = \mathbb{E}_{(x, o_J, o_R)} [s_J(x, o_J, o_R)] \]
+where $\textbf{SP} > 0.5$ implies a systemic tendency for the model to favor its own generations.
 
 \subsection{Comparison against ``Generation Quality''}
 \label{subsec:genqual}
-The metric above, introduced by Panickssery, Bowman and Feng \yrcite{panicksseryLLMEvaluatorsRecognize2024} to elicit self-preference behavior, harbors a key limitation: the judge model \( J \) may simply be better at the task than the reference model \( R \), leading to a higher self-preference score that reflects evaluation skill rather than true self-bias. In response, different approaches have introduced a formulation which relies on oracle labels which resemble alignment with human preferences \cite{wataokaSelfPreferenceBiasLLMasaJudge2025,chenSurfaceMeasuringSelfPreference2025} or verifiable outputs \cite{chenLLMEvaluatorsPrefer2025}. 
+The raw \textbf{SP} metric is fundamentally limited: a high score may reflect $J$'s objective superiority over $R$ rather than an internal bias. To correct for this, recent literature employs oracle labels $Y = G(x, o_J, o_R) \in \{0, 1\}$ representing the ``ground truth'' preference. The task accuracy, or win-rate, is:
+\[ \textbf{Acc}(J, R, \mathcal{X}) = \mathbb{E}_{(x, o_J, o_R)} [G(x, o_J, o_R)] \]
+Under a perfectly unbiased judge, $s_J$ would match the oracle exactly ($s_J = G$). We define the self-preference bias as the deviation from this oracle:
+\begin{equation}
+\textbf{Bias}(J, R, \mathcal{X}) = \textbf{SP}(J,R,\mathcal{X}) - \textbf{Acc}(J, R, \mathcal{X})\label{eq:bias}
+\end{equation}
 
-Now, consider ground truth labels: $ G(x, o_J, o_R): (\mathcal{X}, \mathcal{O_J}, \mathcal{O_R}) \rightarrow \{0, 1\}$ produced by some oracle $G$ which takes the same pairwise input and returns the indicator $\mathbb{I}[o_J \succ o_R]$. The win-rate, or \textit{generation quality}, of the judge is defined as the expected value of the oracle label: 
-\[\textbf{Acc}(J, R, \mathcal{X}) = \mathbb{E}_{(x, o_J, o_R)} [G(x, o_J, o_R)]\]
-It follows that the optimal self-preference rate is when $\textbf{SP}(J,R,\mathcal{X})$ is perfectly aligned with $\textbf{Acc}(J, R, \mathcal{X})$. Then, the self-preference bias of a judge $J$ may be defined as this gap: 
-\[\textbf{Bias}(J, R, \mathcal{X}) = \textbf{SP}(J,R,\mathcal{X}) - \textbf{Acc}(J, R, \mathcal{X})\]
 \subsection{Illegitimate versus Legitimate Self-Preference}
 
-The above formulation enables us to frame \textbf{Bias} as the mean self-preference probability derived in Section \ref{subsec:setup} subtracted by the expected winrate, thus successfully decoupling a model's ``generation quality'' from its self preference. 
+The oracle $G$ allows us to decompose \textbf{Bias} into two distinct failure modes based on whether the judge \textit{wins} ($Y=1$) or \textit{loses} ($Y=0$). We define the \textit{\textcolor{red}{illegitimate}} (\textbf{\textcolor{red}{ILSP}}) and \textit{\textcolor{DarkGreenHex}{legitimate}} (\textbf{\textcolor{DarkGreenHex}{LSP}}) self-preference rates as follows:
+\[\text{\textbf{\textcolor{red}{ILSP}}} = \mathbb{E}[s_J | Y=0], \quad \text{\textbf{\textcolor{DarkGreenHex}{LSP}}} = \mathbb{E}[s_J | Y=1]\]
+Intuitively, \textbf{\textcolor{red}{ILSP}} represents ``unearned credit''---instances where the judge favors itself despite producing an inferior response. Conversely, \textbf{\textcolor{DarkGreenHex}{LSP}} measures ``recognized merit.'' We can now reformulate Equation \ref{eq:bias} as a weighted decomposition:
+\begin{equation}
+\textbf{Bias} = \underbrace{(1 - \textbf{Acc}) \cdot \textbf{\textcolor{red}{ILSP}}}_{\text{Unearned Credit}} - \underbrace{\textbf{Acc} \cdot (1 - \textbf{\textcolor{DarkGreenHex}{LSP}})}_{\text{Unrecognized Merit}} \label{eq:bias_decomp}
+\end{equation}
 
-oracle labels also enable us to discern whether self-preference is valid for any individual example. We then define the \textit{illegitimate} self preference rate (\textbf{\textcolor{red}{ILSP}}) and the \textit{legitimate} self-preference rate (\textbf{\textcolor{DarkGreenHex}{LSP}}):
-\[\text{\textbf{\textcolor{red}{ILSP}}}(J, R, G, \mathcal{X}) = \mathbb{E}_{(x, o_J, o_R)} [S_J(x, o_J, o_R) | \lnot G(x, o_J, o_R)]\]
-\[\text{\textbf{\textcolor{DarkGreenHex}{LSP}}}(J, R, G, \mathcal{X}) = \mathbb{E}_{(x, o_J, o_R)} [S_J(x, o_J, o_R) | G(x, o_J, o_R)]\]
-\textcolor{red}{Illegitimate} self-preference rates are taken from ``losing'' examples per oracle labels. By definition, the human-aligned ILSP would match the oracle labels at exactly 0. On the contrary, \textcolor{DarkGreenHex}{legitimate} self-preference rates are taken from ``winning examples'', and the the human-aligned LSP would be exactly 1. 
-
-We can reformulate bias as the weighted average of these terms:
-\[\textbf{Bias} = ((1 - \textbf{Acc}) \cdot \textbf{\textcolor{red}{ILSP}}) - (\textbf{Acc} \cdot (1 - \textbf{\textcolor{DarkGreenHex}{LSP}}))\]
 \subsection{Hypothesis 1: ``Evaluator Quality'' Baseline}
-Under this framing, a new failure mode comes to light. Most neural networks that return a softmax in logit space will not be trained to produce exact 0 or 1 answers \todo[]{dani: find cite for this}. Thus, for the \textbf{\textcolor{red}{ILSP}} case, any surplus in probability (uncertainty) is automatically penalized unless that uncertainty is counterbalanced by an equal deficit in probability in the \textbf{\textcolor{DarkGreenHex}{LSP}} case.
 
-Then [a little bit more theory... idk...], yada yada yada. \todo[]{dani: yada yada bruh}
+The decomposition in Equation \ref{eq:bias_decomp} suggests that a positive \textbf{Bias} is not merely an indicator of situational awareness, but may be a mathematical inevitability under common evaluative conditions. Specifically, we can characterize the existence of bias by the relationship between two ratios. Setting $\textbf{Bias} > 0$ and rearranging Equation \ref{eq:bias_decomp}, we find that bias exists if and only if:
 
-Thus, we propose the \textit{Evaluator Quality Baseline}. Consider now a proxy model $K$, and take a subset of the dataset $\mathcal{X}_K$ such that $K$ and $J$ are of \textit{similar capability} against reference model $R$ on $\mathcal{X}_K$ according to the oracle $G$. That is, \[\mathcal{X}_K : \{x \in \mathcal{X} | \mathbb{I}[G(x, o_J, o_R) = G(x, o_K, o_R)]\}\]
-Then, run a test returning a proxy preference score, where the judge evaluates the proxy $K$ against the reference $R$ instead of itself: \[\text{\textbf{PP}} =\mathbb{E}_{x \in \mathcal{X}_K}[S_J(x, o_K, o_R)]\]. 
+\begin{equation}
+\frac{\textbf{\textcolor{red}{ILSP}}}{1 - \textbf{\textcolor{DarkGreenHex}{LSP}}} > \frac{\textbf{Acc}}{1 - \textbf{Acc}} \label{eq:ratio_test}
+\end{equation}
 
-$- \textbf{SP}(J, R, G, \mathcal{X}_K)$.  Then, the distribution of vote labels from J comparing J against R significantly different from J comparing a similarly-capable model K against R?
-(H\_0: J(J v. R) = J(K v. R))
+We define the Left-Hand Side (LHS) as the \textbf{Evaluative Preference Ratio} (the ratio of unearned credit to unrecognized merit) and the Right-Hand Side (RHS) as the \textbf{Capability Odds Ratio}. 
+
+As derived in Appendix \ref{proof:ratio}, this formulation reveals that the propensity for bias is a product of three variables: \textbf{\textcolor{red}{ILSP}}, \textbf{\textcolor{DarkGreenHex}{LSP}}, and \textbf{Acc}. Crucially, for high-capability models ($\textbf{Acc} > 0.5$), the "bar" for claiming self-preference is significantly higher, requiring an Evaluative Preference Ratio that exceeds 1. Conversely, for weak models, symmetric noise in the judge's estimation is sufficient to produce a positive bias score. 
+
+We further argue that this bias is driven by asymmetric variance in the model's judgment. When a model fails to produce a high-quality output ($Y=0$), it often simultaneously lacks the evaluative capability to adjudicate potential answers on the problem, leading to high-entropy, noisy distributions on $s_J$. Work on hallucinations \cite(kalaiWhyLanguageModels2025) and uncertainty estimation ...\todo{add} demonstrate that baseline task accuracy predicts evaluator quality. This is analagous to a student's performance on a multiple choice exam (pairwise preference), which may be lower-bounded by their performance in a free response setting (generative task). Further work motivates why asymmetric variance may be expected in LLM evaluators \todo{add cites}.
+
+We refer to these intrinsic distributional tendencies as \textbf{evaluator quality}. Under this framing, "narcissism" is only justified if the observed bias exceeds the level predicted by these baseline evaluative properties (see Appendix \ref{proof:variance}).
+
+% We pose a null hypothesis. Given $J$ and $R$, consider a ``proxy model'' $K$ which is of a similar relative capability to $J$ on tasks in $\mathcal{X}$. Concretely,  
+% % Intuitively, a student's performance on a multiple choice test can be approximately lower-bounded by their performance on a free response test containing the same material.  
+%  ability evaluation of Furthermore, would proposed remedies like style perturbation or activation steering align $S_J$ to $G$? in Appendix \ref{proof} \todo[]{dani: find cite for this}. Thus, 
+% Then [a little bit more theory... idk...], yada yada yada. \todo[]{dani: yada yada bruh}
+To isolate true self-bias, we introduce the \textit{Evaluator Quality Baseline}. We define a proxy model $K$ and a capability-matched subset $\mathcal{X}_K$ where $K$ and $J$ share identical performance against reference $R$:
+\[ \mathcal{X}_K : \{x \in \mathcal{X} | G(x, o_J, o_R) = G(x, o_K, o_R)\} \]
+We then compute a proxy preference (\textbf{PP}) score, where $J$ evaluates the proxy $K$ against $R$ instead of itself:
+\[ \textbf{PP}(J, R, K, \mathcal{X}_K) = \mathbb{E}_{x \in \mathcal{X}_K} [s_J(x, o_K, o_R)] \]
+The resulting test statistic, $T_{\text{quality}} = \textbf{SP}(J, R, \mathcal{X}_K) - \textbf{PP}(J, R, K, \mathcal{X}_K)$, measures the marginal preference $J$ exhibits for its own output over a similarly capable external output. We formalize this as a one-sided hypothesis test:
+\[ H_0: T_{\text{quality}}(J, R, K, \mathcal{X}_K) < c_{1 - \alpha} \]
+
+While the one-sided test statistic $T_{\text{quality}} = \textbf{SP} - \textbf{PP}$ provides a mean-based comparison, it remains susceptible to the variance issues discussed above. A judge may exhibit the different mean preferences for itself and a proxy caused by sampling noise, coupled with a high-entropy distribution under uncertainty. To capture these nuances, we utilize a Kolmogorov-Smirnov (KS) test to compare the empirical distribution functions (CDFs) of preference scores on the capability-matched set:
+\[ H_0: \sup_s |F_{\text{SP}}(s) - F_{\text{PP}}(s)| = 0 \]
+
+By testing for distributional identity as well as mean equivalence, we account for the spread and skewness inherent in high-noise evaluations. If $J$ is truly self-preferencing, its distribution should not only center around a higher mean, but should do so without a high-spread overlap with the proxy distribution.
 
 \subsection{Hypothesis 2: Self-Recognition Baseline}
 The Self-Recognition Correlation: On examples where J exhibits bias toward J relative to both the ground-truth G and the control K, are these instances correlated with the model’s ability to recognize itself?
@@ -254,6 +275,37 @@ for ethics review.
 \newpage
 \appendix
 \onecolumn
+\appendix
+\section{Proofs of Bias Inevitability}
+
+\subsection{Proof of the Ratio Condition and Variable Propensity}
+\label{proof:ratio}
+\textbf{Proposition:} A judge $J$ exhibits positive self-preference bias if its Evaluative Preference Ratio exceeds its Capability Odds Ratio.
+
+\textit{Proof:} Starting from the definition of bias:
+$ \textbf{Bias} = (1 - \textbf{Acc}) \cdot \textbf{ILSP} - \textbf{Acc} \cdot (1 - \textbf{LSP}) $
+To find the condition for $\textbf{Bias} > 0$:
+$ (1 - \textbf{Acc}) \cdot \textbf{ILSP} > \textbf{Acc} \cdot (1 - \textbf{LSP}) \implies \frac{\textbf{ILSP}}{1 - \textbf{LSP}} > \frac{\textbf{Acc}}{1 - \textbf{Acc}} $
+
+\textbf{Implications for Variable Contribution:}
+We analyze the sensitivity of overall bias to each component via partial derivatives:
+\begin{itemize}
+    \item \textbf{Illegitimate Preference ($\textbf{ILSP}$):} $\frac{\partial \textbf{Bias}}{\partial \textbf{ILSP}} = (1 - \textbf{Acc}) \ge 0$. Bias increases linearly with unearned credit, but the effect of this bias is inversely proportional to model capability.
+    \item \textbf{Legitimate Preference ($\textbf{LSP}$):} $\frac{\partial \textbf{Bias}}{\partial \textbf{LSP}} = \textbf{Acc} \ge 0$. Bias increases as the model gets better at recognizing its own merit.
+    \item \textbf{Capability ($\textbf{Acc}$):} $\frac{\partial \textbf{Bias}}{\partial \textbf{Acc}} = -(\textbf{ILSP} + 1 - \textbf{LSP})$. Since $s_J \in [0, 1]$, $(\textbf{ILSP} + 1 - \textbf{LSP}) \ge 0$. Thus, increasing accuracy \textit{always} reduces the propensity for positive bias, provided the judge's internal preference rates remain stable.
+\end{itemize}
+
+\textbf{The Symmetrical Noise Case:} Under symmetric noise ($\textbf{ILSP} = 1 - \textbf{LSP}$), the Evaluative Preference Ratio is 1. Thus, $\textbf{Bias} > 0$ if and only if $1 > \frac{\textbf{Acc}}{1 - \textbf{Acc}}$, or $\textbf{Acc} < 0.5$. This proves that low-capability models will exhibit positive bias simply through noisy auto-evaluation.
+
+\subsection{Variance-Based Noise and Entropy Breakdown}
+\label{proof:variance}
+\textbf{Proposition:} Asymmetric variance in judge responses guarantees bias in models where $Y=0$ is the high-noise regime.
+
+\textit{Proof (Variance):} Let $s_J = G + \epsilon$, where $\epsilon$ is a noise term with $\text{Var}(\epsilon) = \sigma^2$. In the illegitimate case ($Y=0$), $s_J = \epsilon$. Because $s_J$ is bounded by $[0, 1]$, any increase in $\sigma^2_0$ (variance in the illegitimate case) tends to shift the mean $\textbf{ILSP}$ toward 0.5. Conversely, for successful generations ($Y=1$), if the model exhibits low variance ($\sigma^2_1 \to 0$), then $\textbf{LSP} \to 1$.
+As $\textbf{ILSP} \to 0.5$ and $\textbf{LSP} \to 1$, the Evaluative Preference Ratio $\frac{0.5}{1 - 1} \to \infty$. This ratio will eventually exceed any finite Capability Odds Ratio, making bias inevitable.
+
+\textit{Proof (Entropy):} Alternatively, let $H(P_J | Y)$ be the conditional entropy of the judge's preference distribution. If $H(P_J | Y=0) \gg H(P_J | Y=1)$, the judge's predictions for $Y=0$ will drift toward the maximum entropy (uniform) distribution ($s_J \rightarrow 0.5$). For $Y=1$, low entropy preserves $s_J \rightarrow 1$. As with the variance proof, this drives the Evaluative Preference Ratio to infinity, ensuring positive bias across all capability levels.
+
 \section{You \emph{can} have an appendix here.}
 
 You can have as much text here as you want. The main body must be at most $8$

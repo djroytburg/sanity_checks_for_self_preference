@@ -1,4 +1,4 @@
-\begin{thebibliography}{17}
+\begin{thebibliography}{16}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -18,18 +18,10 @@ Chen, G.~H., Chen, S., Liu, Z., Jiang, F., and Wang, B.
 \newblock \doi{10.18653/v1/2024.emnlp-main.474}.
 \newblock URL \url{https://aclanthology.org/2024.emnlp-main.474/}.
 
-\bibitem[Chen et~al.(2025{\natexlab{a}})Chen, Wei, Zhu, Feng, and Meng]{chenLLMEvaluatorsPrefer2025}
+\bibitem[Chen et~al.(2025)Chen, Wei, Zhu, Feng, and Meng]{chenLLMEvaluatorsPrefer2025}
 Chen, W.-L., Wei, Z., Zhu, X., Feng, S., and Meng, Y.
-\newblock Do {{LLM Evaluators Prefer Themselves}} for a {{Reason}}?, December 2025{\natexlab{a}}.
+\newblock Do {{LLM Evaluators Prefer Themselves}} for a {{Reason}}?, December 2025.
 \newblock URL \url{http://arxiv.org/abs/2504.03846}.
-
-\bibitem[Chen et~al.(2025{\natexlab{b}})Chen, Wang, Zhang, Hu, and Lin]{chenSurfaceMeasuringSelfPreference2025}
-Chen, Z.-Y., Wang, H., Zhang, X., Hu, E., and Lin, Y.
-\newblock Beyond the {{Surface}}: {{Measuring Self-Preference}} in {{LLM Judgments}}.
-\newblock In Christodoulopoulos, C., Chakraborty, T., Rose, C., and Peng, V. (eds.), \emph{Proceedings of the 2025 {{Conference}} on {{Empirical Methods}} in {{Natural Language Processing}}}, pp.\  1653--1672, Suzhou, China, November 2025{\natexlab{b}}. Association for Computational Linguistics.
-\newblock ISBN 979-8-89176-332-6.
-\newblock \doi{10.18653/v1/2025.emnlp-main.86}.
-\newblock URL \url{https://aclanthology.org/2025.emnlp-main.86/}.
 
 \bibitem[Dietz et~al.(2025)Dietz, Zendel, Bailey, Clarke, Cotterill, Dalton, Hasibi, Sanderson, and Craswell]{dietzLLMEvaluationTropesPerspectives2025}
 Dietz, L., Zendel, O., Bailey, P., Clarke, C., Cotterill, E., Dalton, J., Hasibi, F., Sanderson, M., and Craswell, N.
