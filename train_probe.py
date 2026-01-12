@@ -1,17 +1,12 @@
 """
-Train linear probes on model activations from all layers.
-
 Hyperparameters from: "Detecting Strategic Deception Using Linear Probes" (arXiv:2502.03407)
 https://github.com/ApolloResearch/deception-detection
-
-Probe types supported:
-- Logistic Regression (linear probe)
-- MLP (2-layer neural network probe)
 """
 
 import argparse
 import json
 import os
+import pickle
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal, Optional
@@ -27,15 +22,11 @@ from torch.utils.data import DataLoader, TensorDataset
 @dataclass
 class ProbeConfig:
     """Configuration for probe training.
-
-    Hyperparameters from arXiv:2502.03407:
-    - LogisticRegression: reg_coeff=1e3, normalize=True, fit_intercept=False
-    - MLP: hidden_dim=64, lr=0.0001, epochs=10000, early_stopping=True
     """
     probe_type: Literal["lr", "mlp"] = "lr"
 
     # Logistic Regression hyperparameters
-    reg_coeff: float = 1e3  # Regularization coefficient (C = 1/reg_coeff)
+    reg_coeff: float = 1e3  (C = 1/reg_coeff)
     normalize: bool = True  # Normalize activations before training
 
     # MLP hyperparameters
@@ -52,10 +43,7 @@ class ProbeConfig:
 
 
 class MLPProbe(nn.Module):
-    """MLP probe with architecture: Linear -> ReLU -> Linear -> Sigmoid.
-
-    From arXiv:2502.03407 detectors.py
-    """
+    
 
     def __init__(self, input_dim: int, hidden_dim: int = 64):
         super().__init__()
@@ -71,7 +59,7 @@ class MLPProbe(nn.Module):
 
 
 class LinearProbe:
-    """Logistic Regression probe wrapper.
+    """
 
     From arXiv:2502.03407:
     - reg_coeff: float = 1e3 (default)
@@ -135,17 +123,17 @@ class MLPProbeTrainer:
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> "MLPProbeTrainer":
         """Train the MLP probe."""
-        # Normalize activations
+        
         if self.config.normalize:
             self.mean = X.mean(axis=0)
             self.std = X.std(axis=0) + 1e-8
             X = (X - self.mean) / self.std
 
-        # Convert to tensors
+        
         X_tensor = torch.tensor(X, dtype=self.config.dtype)
         y_tensor = torch.tensor(y, dtype=self.config.dtype).unsqueeze(1)
 
-        # Train/val split
+       
         n_val = int(len(X) * self.config.val_split)
         indices = torch.randperm(len(X), generator=torch.Generator().manual_seed(self.config.random_state))
         val_indices = indices[:n_val]
@@ -159,11 +147,11 @@ class MLPProbeTrainer:
         X_train, y_train = X_train.to(device), y_train.to(device)
         X_val, y_val = X_val.to(device), y_val.to(device)
 
-        # Initialize model
+      
         input_dim = X.shape[1]
         self.model = MLPProbe(input_dim, self.config.hidden_dim).to(device)
 
-        # Optimizer and loss
+        
         optimizer = torch.optim.AdamW(self.model.parameters(), lr=self.config.lr)
         criterion = nn.BCELoss()
 
@@ -180,7 +168,7 @@ class MLPProbeTrainer:
             train_loss.backward()
             optimizer.step()
 
-            # Validation step
+            
             self.model.eval()
             with torch.no_grad():
                 val_pred = self.model(X_val)
@@ -223,6 +211,7 @@ def load_activations(path: str) -> dict:
     Expects either:
     - .npz file with 'activations' key (shape: [n_samples, n_layers, hidden_dim])
     - .pt file with tensor of same shape
+    - .pkl file with dict containing 'activations' key (from cache_activations.py)
 
     Returns dict with layer indices as keys and activation arrays as values.
     """
@@ -235,6 +224,10 @@ def load_activations(path: str) -> dict:
         activations = torch.load(path).numpy()
     elif path.suffix == ".npy":
         activations = np.load(path)
+    elif path.suffix == ".pkl":
+        with open(path, "rb") as f:
+            data = pickle.load(f)
+        activations = data["activations"]
     else:
         raise ValueError(f"Unsupported file format: {path.suffix}")
 
@@ -272,7 +265,7 @@ def train_probes_all_layers(
     for layer_idx in layers:
         print(f"Training probe for layer {layer_idx}...")
 
-        # Combine positive and negative activations
+        
         pos_acts = positive_acts[layer_idx]
         neg_acts = negative_acts[layer_idx]
 
@@ -284,7 +277,7 @@ def train_probes_all_layers(
         indices = rng.permutation(len(X))
         X, y = X[indices], y[indices]
 
-        # Train probe
+        
         if config.probe_type == "lr":
             probe = LinearProbe(config)
         else:
@@ -386,13 +379,13 @@ def main():
         "--positive_acts",
         type=str,
         required=True,
-        help="Path to positive class activations (.npz, .pt, or .npy)",
+        help="Path to positive class activations (.npz, .pt, .npy, or .pkl)",
     )
     parser.add_argument(
         "--negative_acts",
         type=str,
         required=True,
-        help="Path to negative class activations (.npz, .pt, or .npy)",
+        help="Path to negative class activations (.npz, .pt, .npy, or .pkl)",
     )
     parser.add_argument(
         "--output_dir",
