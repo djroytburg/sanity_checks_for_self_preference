@@ -639,7 +639,7 @@ def plot_results(results: dict, output_dir: Path, logger: logging.Logger) -> Pat
     fig.suptitle(f"Big MLP Probe Sweep ({tag})", fontsize=14)
     fig.tight_layout(rect=[0, 0, 1, 0.95])
 
-    plot_path = output_dir / f"{tag}_big_mlp_sweep_{cache_pkl['metadata']['dataset']}_{'-'.join(label_types)}.pdf"
+    plot_path = output_dir / f"{tag}_big_mlp_sweep_{results['metadata']['dataset']}_{'-'.join(label_types)}.pdf"
     fig.savefig(plot_path, dpi=200)
     plt.close(fig)
 
