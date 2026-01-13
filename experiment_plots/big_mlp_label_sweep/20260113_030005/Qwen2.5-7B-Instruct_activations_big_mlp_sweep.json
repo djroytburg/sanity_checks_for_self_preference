@@ -2,7 +2,7 @@
   "cache_pkl": "activation_cache/dbg/alpaca_eval/Qwen2.5-7B-Instruct_activations.pkl",
   "metadata": {
     "judge_model": "Qwen2.5-7B-Instruct",
-    "dataset": "alpaca_eval",
+    "dataset": "alpaca_aeval",
     "paper": "dbg",
     "hyperparameters": {
       "max_length": 512,
