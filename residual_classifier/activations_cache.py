@@ -15,11 +15,14 @@ import pickle
 from pathlib import Path
 from typing import Literal, Optional
 
+from dotenv import load_dotenv
 import numpy as np
 import torch
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import sys
 
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 from run_judge_swap_null_dbg import format_preference_prompt, get_hf_model_path
 
 def load_jsonl(filepath: str):
@@ -104,7 +107,7 @@ def extract_residual_activations(
             assert cache_metadata.get("dataset", "") == dataset, "Dataset in cache does not match."
             assert cache_metadata.get("paper", "") == paper, "Paper in cache does not match."
             
-            already_in_cache = {(item['id'], item['judge'], item['reference']): i for i, item in enumerate(current_cache.get("data", []))}
+            already_in_cache = current_cache.get("data", {})
             print(f"Loading existing cache from {save_file}, {len(already_in_cache)} samples found.")
         else:
             if save_file.exists(): # Wipe current cache
@@ -172,7 +175,7 @@ def extract_residual_activations(
                 
                 # Check cache
                 if (text['id'], text['judge'], text['reference']) in already_in_cache:
-                    if already_in_cache[(text['id'], text['judge'], text['reference'])]['num_layers'] != len(layer_indices):
+                    if already_in_cache[(text['id'], text['judge'], text['reference'])]['layer_indices'] != layer_indices:
                         print(f"Warning: Cached sample {text['id']} has different number of layers than requested. Recomputing.")
                     else:
                         print(f"Skipping sample {text['id']} with ref {text['reference']}--already in cache.")
@@ -191,6 +194,7 @@ def extract_residual_activations(
                 #   Extract residual stream activations (last token of each sequence)
                 #   hidden_states is a tuple of (n_layers + 1) tensors of shape [batch, seq_len, hidden_dim]
                 #   Index 0 is embeddings, 1..n_layers are layer outputs
+                cache_data['forward_gen_text'] = tokenizer.decode(outputs.text[0].detach().cpu(), skip_special_tokens=False)
                 hidden_states = outputs.hidden_states
 
                 #   Get last token position for each sequence (before padding)
@@ -208,7 +212,7 @@ def extract_residual_activations(
                     sample_acts.append(layer_output.cpu().float().numpy())
 
                 cache_data['forward_activations'] = np.stack(sample_acts, axis=0)  # [n_layers, hidden_dim]
-                del hidden_states  # Free memory
+                del outputs  # Free memory
                 torch.cuda.empty_cache()
 
 
@@ -219,6 +223,8 @@ def extract_residual_activations(
                         add_special_tokens=False
                     ).to(model.device)
                 outputs = model(**inputs, output_hidden_states=True)
+                cache_data['backward_gen_text'] = tokenizer.decode(outputs.text[0].detach().cpu(), skip_special_tokens=False)
+
                 hidden_states = outputs.hidden_states
                 attention_mask = inputs["attention_mask"]
                 last_token_indices = attention_mask.sum(dim=1) - 1  # [batch_size]
@@ -230,8 +236,8 @@ def extract_residual_activations(
                     sample_acts.append(layer_output.cpu().float().numpy())
                 
                 cache_data['backward_activations'] = np.stack(sample_acts, axis=0)  # [n_layers, hidden_dim]
-                cache_data['num_layers'] = len(layer_indices)
-                del hidden_states  # Free memory
+                cache_data['layer_indices'] = layer_indices
+                del outputs  # Free memory
                 torch.cuda.empty_cache()
 
                 # ---- add to cache dict ----
@@ -300,7 +306,7 @@ def prepare_texts(paper: str, dataset: str, data_dir: str, judge_model: str):
                 raise ValueError(f"Evaluator subdirectory '{evaluator_subdir}' not found in '{preference_dir}'.")
             evaluator_subdir = preference_dir / evaluator_subdir
 
-            gold_responses_path = preference_dir / 'gold_aggregated.jsonl'
+            gold_responses_path = preference_dir / 'gold_aggregated.json'
             gold_data = json.load(open(gold_responses_path, 'r'))
 
             response_dir = Path(data_dir) / 'model_responses_fullset' / f"{dataset}"
@@ -324,7 +330,10 @@ def prepare_texts(paper: str, dataset: str, data_dir: str, judge_model: str):
                     raise ValueError(f"Judge model '{judge_model}' not found in file name: {preference_data_file.stem}")
                 
                 #gold_data file for dbg is sorted by filenames relative to the gold judge directories.
-                gold_data_keys = [fname for fname in gold_data.keys() if (reference_model in fname and judge_model in fname)]
+                gold_data_keys = [
+                    fname for fname in gold_data.keys()
+                    if fname in [f'merge_{reference_model}_{judge_model}.jsonl', f'merge_{judge_model}_{reference_model}.jsonl']
+                ]                
                 if len(gold_data_keys) == 0:
                     raise ValueError(f"No matching gold data keys found for models '{reference_model}' and '{judge_model}'")
                 elif len(gold_data_keys) > 1:
@@ -335,15 +344,18 @@ def prepare_texts(paper: str, dataset: str, data_dir: str, judge_model: str):
                 preference_data = load_jsonl(preference_data_file)
 
                 for ex in preference_data:
-                    idx = ex[ex['id']]
+                    idx = ex['id']
                     gold_lookup = next((item for item in j_r_gold_data if item['id'] == idx), None)
+                    
                     if gold_lookup is None:
                         raise ValueError(f"ID '{idx}' not found in gold data for key '{gold_data_key}'")
                     assert gold_lookup[f"{judge_model}_response"] == ex[f"{judge_model}_response"], f"Gold data response does not match preference data for {dataset} {gold_data_key} {idx}."
                     assert gold_lookup[f"{reference_model}_response"] == ex[f"{reference_model}_response"], f"Gold data response does not match preference data for {dataset} {gold_data_key} {idx}."
+                    
                     labels = [win for gold_judge in gold_lookup['preferences'].values() for win in gold_judge]
                     if labels.count(judge_model) == labels.count(reference_model):
                         continue  # Skip ties
+                    
                     gold_label = 'lsp' if labels.count(judge_model) > labels.count(reference_model) else 'ilsp'
                     
                     assert isinstance(ex['preferences'], str), f"Preference data 'preferences' field should be a string indicating the winning model. {ex['preferences']}"
@@ -356,7 +368,7 @@ def prepare_texts(paper: str, dataset: str, data_dir: str, judge_model: str):
                     query_key = 'german' if dataset == 'translation' else 'query'
                     
                     input_text_forward = format_preference_prompt(
-                        query=gold_lookup[query_key],
+                        query=response_lookup[query_key],
                         response1=ex[f"{judge_model}_response"],
                         response2=ex[f"{reference_model}_response"],
                         dataset=dataset,
@@ -364,7 +376,7 @@ def prepare_texts(paper: str, dataset: str, data_dir: str, judge_model: str):
                     )
 
                     input_text_backward = format_preference_prompt(
-                        query=gold_lookup[query_key],
+                        query=response_lookup[query_key],
                         response1=ex[f"{reference_model}_response"],
                         response2=ex[f"{judge_model}_response"],
                         dataset=dataset,
@@ -412,7 +424,7 @@ def prepare_texts(paper: str, dataset: str, data_dir: str, judge_model: str):
                                 "response_file": str(response_path),
                                 "gold_file": str(gold_responses_path)
                             },
-                            "query": gold_lookup[query_key],
+                            "query": response_lookup[query_key],
                             "judge_response": ex[f"{judge_model}_response"],
                             "reference_response": ex[f"{reference_model}_response"],
                             "gold_preferences": gold_lookup['preferences'],
@@ -500,9 +512,15 @@ def main():
         default="cuda" if torch.cuda.is_available() else "cpu",
         help="Device to run on (default: cuda if available)",
     )
+    parser.add_argument(
+        "--num_samples",
+        type=int,
+        default=None,
+        help="Number of samples to process (default: all)"
+    )
 
     args = parser.parse_args()
-
+    load_dotenv()
     # Load dataset
     texts = prepare_texts(
         paper=args.paper,
@@ -510,13 +528,20 @@ def main():
         data_dir=args.data_dir,
         judge_model=args.model,
     )
+    print(f"Total samples loaded: {len(texts)}")
 
+    if args.num_samples is not None and args.num_samples < len(texts):
+        texts = texts[:args.num_samples]
+        print(f"Processing only first {args.num_samples} samples.")
     # Parse layer indices
     layer_indices = None
     if args.layers:
         layer_indices = [int(x.strip()) for x in args.layers.split(",")]
 
     # Extract activations
+    save_dir = Path(args.output_dir) / args.paper / args.dataset / args.model.replace("/", "-")
+    save_dir.mkdir(parents=True, exist_ok=True)
+
     data = extract_residual_activations(
         judge_model_path=args.model,
         paper=args.paper,
@@ -526,7 +551,7 @@ def main():
         device=args.device,
         layer_indices=layer_indices,
         save_cache=not args.dont_save_cache,
-        save_dir=Path(args.output_dir) / args.paper / args.dataset / args.model.replace("/", "-"),
+        save_dir=save_dir,
         overwrite=args.overwrite,
         batch_size=args.batch_size,
     )
@@ -534,7 +559,7 @@ def main():
     print("\nDone!")
     print(f"Extracted activations for {len(data['data'])} samples.")
     if not args.dont_save_cache:
-        print(f"Cached activations saved to {Path(args.output_dir) / args.paper / args.dataset / args.model.replace('/', '-')}")
+        print(f"Cached activations saved to {save_dir}")
 
 if __name__ == "__main__":
     main()
