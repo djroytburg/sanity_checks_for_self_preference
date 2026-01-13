@@ -205,6 +205,7 @@ def run_batch(
     seed: int,
     resume: bool = True,
     logger: logging.Logger = None,
+    tensor_parallel_size: int = None,
 ) -> List[Dict[str, Any]]:
     """
     Run reproduction experiments for a batch of J/R pairs.
@@ -217,6 +218,7 @@ def run_batch(
         seed: Random seed
         resume: Skip completed pairs if True
         logger: Logger instance
+        tensor_parallel_size: Number of GPUs for tensor parallelism
     
     Returns:
         List of result summaries for each pair
@@ -297,6 +299,7 @@ def run_batch(
                     seed=seed,
                     config=CONFIG,
                     logger=logger,
+                    tensor_parallel_size=tensor_parallel_size,
                 )
                 
                 elapsed = time.time() - start_time
@@ -777,6 +780,12 @@ Examples:
         action="store_true",
         help="List all available J/R pairs and exit"
     )
+    parser.add_argument(
+        "--tensor_parallel",
+        type=int,
+        default=None,
+        help="Number of GPUs for tensor parallelism (e.g., 2 or 4 for 70B models)"
+    )
     
     args = parser.parse_args()
     
@@ -799,6 +808,7 @@ Examples:
     logger.info(f"Evaluatee filter: {args.evaluatee or 'all'}")
     logger.info(f"N samples: {args.n_samples}")
     logger.info(f"Resume mode: {not args.no_resume}")
+    logger.info(f"Tensor parallel: {args.tensor_parallel or 'default (1)'}")
     
     # Discover pairs
     all_pairs = []
@@ -836,7 +846,7 @@ Examples:
     
     # Run batch
     resume = not args.no_resume
-    results = run_batch(all_pairs, args.n_samples, args.seed, resume=resume, logger=logger)
+    results = run_batch(all_pairs, args.n_samples, args.seed, resume=resume, logger=logger, tensor_parallel_size=args.tensor_parallel)
     
     # Generate summary
     generate_summary(results, output_dir, logger)
