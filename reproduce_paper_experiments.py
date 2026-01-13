@@ -1216,6 +1216,7 @@ def run_reproduction_experiment(
     seed: int = 42,
     config: Dict = None,
     logger: logging.Logger = None,
+    tensor_parallel_size: int = None,
 ) -> None:
     """
     Run reproduction experiment comparing generated verdicts to reference scores.
@@ -1260,13 +1261,15 @@ def run_reproduction_experiment(
         rows = random.sample(rows, n_samples)
         logger.info(f"Sampled {n_samples} rows for testing")
     
-    logger.info(f"Setting up vLLM engine for: {judge_model}")
+    # Determine tensor parallel size: CLI arg > config > default (1)
+    tp_size = tensor_parallel_size if tensor_parallel_size is not None else config.get("vllm_tensor_parallel_size", 1)
+    logger.info(f"Setting up vLLM engine for: {judge_model} (tensor_parallel_size={tp_size})")
     llm = LLM(
         model=judge_model,
         tokenizer=judge_model,
         trust_remote_code=True,
         gpu_memory_utilization=config.get("vllm_gpu_memory_utilization", 0.9),
-        tensor_parallel_size=config.get("vllm_tensor_parallel_size", 1),
+        tensor_parallel_size=tp_size,
     )
     tokenizer = llm.get_tokenizer()
     
@@ -1995,6 +1998,12 @@ def main():
         choices=["none", "cot", "long_cot"],
         help="Reasoning mode for verdict generation: 'none' (direct A/B/T), 'cot' (chain-of-thought), 'long_cot' (extended reasoning with <think>)"
     )
+    parser.add_argument(
+        "--tensor_parallel",
+        type=int,
+        default=None,
+        help="Number of GPUs for tensor parallelism (e.g., 2 or 4 for 70B models). Overrides config if set."
+    )
     
     args = parser.parse_args()
     load_dotenv()
@@ -2032,6 +2041,7 @@ def main():
         seed=args.seed,
         config=CONFIG,
         logger=logger,
+        tensor_parallel_size=args.tensor_parallel,
     )
 
 
