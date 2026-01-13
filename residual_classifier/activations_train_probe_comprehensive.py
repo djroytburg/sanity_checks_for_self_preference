@@ -1,14 +1,10 @@
-# activations_train_probe.py: Train and evaluate linear/MLP probes on cached residual activations
-# Supports cache-pickle input with leakage-safe splits, regularization sweeps, optional PCA, and plots.
+# activations_train_probe_comprehensive.py: Comprehensive hyperparameter sweep for logistic regression probes
+# Includes CV, penalties, solvers, class weights, and more to avoid overfitting and improve performance.
 # Written by: Dani
 # Created: Jan 12, 2026, 00:00 EST
 # Last Modified: Jan 12, 2026, 00:00 EST
 
-"""Probe training and evaluation utilities.
-
-Hyperparameters are based on: "Detecting Strategic Deception Using Linear Probes" (arXiv:2502.03407)
-https://github.com/ApolloResearch/deception-detection
-"""
+"""Comprehensive probe training with extensive hyperparameter sweeps to combat overfitting."""
 
 import argparse
 import getpass
@@ -30,6 +26,7 @@ import torch.nn as nn
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support, roc_auc_score, confusion_matrix
+from sklearn.model_selection import StratifiedKFold
 
 import matplotlib
 
@@ -84,7 +81,7 @@ def setup_logging(output_dir: Path, run_name: str) -> logging.Logger:
     logger.addHandler(console_handler)
 
     logger.info("=" * 80)
-    logger.info("PROBE TRAINING RUN STARTED")
+    logger.info("COMPREHENSIVE PROBE SWEEP RUN STARTED")
     logger.info("=" * 80)
     logger.info(f"User: {getpass.getuser()}")
     logger.info(f"Hostname: {socket.gethostname()}")
@@ -116,6 +113,11 @@ class ProbeConfig:
     reg_coeff: float = 1e3  # (C = 1/reg_coeff)
     normalize: bool = True  # Normalize activations before training
     track_loss: bool = False  # Track loss curve during training (uses torch LR)
+    penalty: Literal['l1', 'l2', 'elasticnet'] = 'l2'
+    solver: str = 'auto'
+    max_iter: int = 1000
+    class_weight: Optional[str] = None
+    l1_ratio: float = 0.0
 
     # MLP hyperparameters
     hidden_dim: int = 64
@@ -162,11 +164,29 @@ class LinearProbe:
         self.std = None
         self.loss_curve = [] if self.track_loss else None
         if not self.track_loss:
+            solver = config.solver
+            if solver == 'auto':
+                solver = 'liblinear' if config.penalty == 'l1' else 'lbfgs'
+            
+            penalty_kwargs = {}
+            if config.penalty == 'l1':
+                penalty_kwargs = {'penalty': 'elasticnet', 'l1_ratio': 1.0}
+                if solver not in ['saga']:
+                    solver = 'saga'
+            elif config.penalty == 'l2':
+                # Use default penalty='l2' by not setting penalty
+                pass
+            else:
+                penalty_kwargs = {'penalty': config.penalty, 'l1_ratio': config.l1_ratio}
+            
             self.model = LogisticRegression(
                 C=1 / config.reg_coeff,
+                **penalty_kwargs,
+                solver=solver,
+                max_iter=config.max_iter,
+                class_weight=config.class_weight,
                 random_state=config.random_state,
-                fit_intercept=False,
-                max_iter=1000
+                fit_intercept=False
             )
             self.torch_model = None
         else:
@@ -657,20 +677,21 @@ def train_eval_probe_all_layers_from_cache(
     train_samples: list[dict],
     test_samples: list[dict],
     probe_type: str,
-    reg_coeff_or_hidden_dim: float,
+    hyper_dict: dict,
     normalize: bool,
     pca_config: PCAConfig,
     layers: Optional[list[int]],
     track_loss: bool,
+    cv_folds: int,
     logger: logging.Logger,
     lr: float = 0.0001,
     epochs: int = 20000,
     early_stopping: bool = True,
-) -> tuple[dict[int, dict], dict[int, dict], dict[int, dict]]:
-    """Train/evaluate probes for all layers for a single hyperparam.
+) -> tuple[dict[int, dict], dict[int, dict], dict[int, dict], float]:
+    """Train/evaluate probes for all layers for a single hyperparam dict.
 
-    For LR: reg_coeff_or_hidden_dim is reg_coeff
-    For MLP: reg_coeff_or_hidden_dim is hidden_dim
+    For LR: hyper_dict has 'reg_coeff', 'penalty', 'solver'
+    For MLP: hyper_dict has 'hidden_dim'
     Returns:
         tuple: (train_metrics_by_layer, test_metrics_by_layer, artifacts_by_layer)
     """
@@ -687,9 +708,9 @@ def train_eval_probe_all_layers_from_cache(
     artifacts: dict[int, dict] = {}
 
     if probe_type == "lr":
-        cfg = ProbeConfig(probe_type="lr", reg_coeff=float(reg_coeff_or_hidden_dim), normalize=normalize, track_loss=track_loss)
+        cfg = ProbeConfig(probe_type="lr", reg_coeff=hyper_dict['reg_coeff'], penalty=hyper_dict['penalty'], solver=hyper_dict['solver'], class_weight=hyper_dict.get('class_weight'), l1_ratio=hyper_dict.get('l1_ratio', 0.0), normalize=normalize, track_loss=track_loss)
     else:
-        cfg = ProbeConfig(probe_type="mlp", hidden_dim=int(reg_coeff_or_hidden_dim), lr=lr, epochs=epochs, early_stopping=early_stopping, normalize=normalize)
+        cfg = ProbeConfig(probe_type="mlp", hidden_dim=hyper_dict['hidden_dim'], lr=lr, epochs=epochs, early_stopping=early_stopping, normalize=normalize)
 
     for layer_idx in layers:
         X_train, y_train = _extract_xy_for_layer(train_samples, layer_idx)
@@ -704,7 +725,7 @@ def train_eval_probe_all_layers_from_cache(
             train_metrics[layer_idx] = compute_binary_metrics(y_train, y_pred_train)
             test_metrics[layer_idx] = compute_binary_metrics(y_test, y_pred_test)
             artifacts[layer_idx] = {
-                "hyperparam": float(reg_coeff_or_hidden_dim),
+                "hyperparam": hyper_dict,
                 "normalize": bool(normalize),
                 "coef": None,
                 "mean": None,
@@ -722,22 +743,40 @@ def train_eval_probe_all_layers_from_cache(
         # PCA (fit on train only)
         pca = _fit_pca_if_needed(X_train, pca_config)
         if pca is not None:
-            X_train = pca.transform(X_train)
-            X_test = pca.transform(X_test)
+            X_train_pca = pca.transform(X_train)
+            X_test_pca = pca.transform(X_test)
+        else:
+            X_train_pca = X_train
+            X_test_pca = X_test
 
-        # Train
+        if cv_folds > 0:
+            skf = StratifiedKFold(n_splits=cv_folds, shuffle=True, random_state=cfg.random_state)
+            cv_scores = []
+            for train_idx, val_idx in skf.split(X_train_pca, y_train):
+                X_tr, X_val = X_train_pca[train_idx], X_train_pca[val_idx]
+                y_tr, y_val = y_train[train_idx], y_train[val_idx]
+                probe_cv = LinearProbe(cfg)
+                probe_cv.fit(X_tr, y_tr)
+                y_pred_val = probe_cv.predict(X_val)
+                val_metrics = compute_binary_metrics(y_val, y_pred_val)
+                cv_scores.append(val_metrics['f1_macro'])
+            cv_score = np.mean(cv_scores)
+        else:
+            cv_score = 0.0
+
+        # Train on full train
         probe = LinearProbe(cfg)
-        probe.fit(X_train, y_train)
+        probe.fit(X_train_pca, y_train)
 
         # Eval
-        y_pred_train = probe.predict(X_train)
-        y_pred_test = probe.predict(X_test)
+        y_pred_train = probe.predict(X_train_pca)
+        y_pred_test = probe.predict(X_test_pca)
 
         train_metrics[layer_idx] = compute_binary_metrics(y_train, y_pred_train)
         test_metrics[layer_idx] = compute_binary_metrics(y_test, y_pred_test)
 
         artifacts[layer_idx] = {
-            "hyperparam": float(reg_coeff_or_hidden_dim),
+            "hyperparam": hyper_dict,
             "normalize": bool(normalize),
             "coef": probe.get_direction().astype(np.float32) if probe.torch_model is None else probe.get_direction().astype(np.float32),
             "mean": None if probe.mean is None else probe.mean.astype(np.float32),
@@ -756,12 +795,12 @@ def train_eval_probe_all_layers_from_cache(
 
         if True:  # Log for all layers since sweep is small
             logger.info(
-                f"{probe_type.upper()} hyper={reg_coeff_or_hidden_dim:g} layer={layer_idx} "
-                f"test acc={test_metrics[layer_idx]['accuracy']:.3f} "
+                f"{probe_type.upper()} hyper={hyper_dict} layer={layer_idx} "
+                f"cv_f1={cv_score:.3f} test acc={test_metrics[layer_idx]['accuracy']:.3f} "
                 f"test f1_macro={test_metrics[layer_idx]['f1_macro']:.3f}"
             )
 
-    return train_metrics, test_metrics, artifacts
+    return train_metrics, test_metrics, artifacts, cv_score
 
 
 
@@ -1134,6 +1173,30 @@ def main():
         action="store_true",
         help="Track loss curve during training (uses torch LR)",
     )
+    parser.add_argument(
+        "--cv_folds",
+        type=int,
+        default=5,
+        help="Number of CV folds for hyperparameter selection (0 to disable)",
+    )
+    parser.add_argument(
+        "--penalties",
+        type=str,
+        default="l1,l2",
+        help="Comma-separated penalties for LR",
+    )
+    parser.add_argument(
+        "--solvers",
+        type=str,
+        default="liblinear,lbfgs",
+        help="Comma-separated solvers for LR",
+    )
+    parser.add_argument(
+        "--class_weight",
+        type=str,
+        default=None,
+        help="Class weight for LR (e.g., 'balanced')",
+    )
 
     args = parser.parse_args()
 
@@ -1197,51 +1260,78 @@ def main():
         n_layers = train_samples[0]["activations"].shape[0]
         layers = None
         if args.layers:
-            layers = [int(x.strip()) for x in args.layers.split(",")]
+            original_layers = [int(x.strip()) for x in args.layers.split(",")]
+            layers = [l for l in original_layers if 0 <= l < n_layers]
+            if len(layers) != len(original_layers):
+                logger.warning(f"Some layers were out of bounds (0-{n_layers-1}), filtered to {layers}")
         else:
             layers = list(range(n_layers))  # All layers
             logger.info(f"Using all {len(layers)} layers")
 
         reg_coeffs = _parse_float_list(args.reg_coeffs)
+        penalties = [p.strip() for p in args.penalties.split(',')]
+        solvers = [s.strip() for s in args.solvers.split(',')]
         if args.probe_type == "lr":
-            hyperparams = reg_coeffs
-            hyper_name = "reg_coeffs"
+            hyperparams = []
+            for reg in reg_coeffs:
+                for pen in penalties:
+                    if pen == 'l1':
+                        penalty = 'elasticnet'
+                        l1_ratio = 1.0
+                        allowed_solvers = ['saga']
+                    elif pen == 'l2':
+                        penalty = 'l2'
+                        l1_ratio = 0.0
+                        allowed_solvers = ['lbfgs', 'liblinear', 'newton-cg', 'sag', 'saga']
+                    else:
+                        penalty = pen
+                        l1_ratio = 0.0
+                        allowed_solvers = solvers  # fallback
+                    for sol in solvers:
+                        if sol not in allowed_solvers:
+                            continue
+                        hyperparams.append({'reg_coeff': reg, 'penalty': penalty, 'l1_ratio': l1_ratio, 'solver': sol, 'class_weight': args.class_weight if hasattr(args, 'class_weight') else None})
+            hyper_name = "lr_hypers"
         else:
-            hyperparams = _parse_float_list(args.hidden_dims)
+            hyperparams = [{'hidden_dim': h} for h in _parse_float_list(args.hidden_dims)]
             hyper_name = "hidden_dims"
-        logger.info(f"{args.probe_type.upper()} {hyper_name} sweep: {hyperparams}")
+        logger.info(f"{args.probe_type.upper()} {hyper_name} sweep: {len(hyperparams)} combinations")
+        logger.info(f"CV folds: {args.cv_folds}")
         logger.info(f"PCA enabled: {pca_cfg.enabled} (components={pca_cfg.n_components}, var={pca_cfg.variance})")
 
         results_by_hyper: dict[str, dict] = {}
         best_by_layer: dict[int, dict] = {}
 
         for hyper in hyperparams:
-            logger.info(f"Training/evaluating {hyper_name}={hyper:g}")
-            train_m, test_m, artifacts = train_eval_probe_all_layers_from_cache(
+            logger.info(f"Training/evaluating hyper={hyper}")
+            train_m, test_m, artifacts, cv_score = train_eval_probe_all_layers_from_cache(
                 train_samples=train_samples,
                 test_samples=test_samples,
                 probe_type=args.probe_type,
-                reg_coeff_or_hidden_dim=hyper,
+                hyper_dict=hyper,
                 normalize=not args.no_normalize,
                 pca_config=pca_cfg,
                 layers=layers,
                 track_loss=args.track_loss,
+                cv_folds=args.cv_folds,
                 logger=logger,
             )
             results_by_hyper[str(hyper)] = {"train": train_m, "test": test_m}
 
-            # Update best-by-layer selection (maximize test f1_macro)
+            # Update best-by-layer selection (maximize cv_score if cv, else test f1_macro)
+            score_key = 'cv_score' if args.cv_folds > 0 else 'test_f1'
             for layer_idx, test_metrics in test_m.items():
                 candidate = {
-                    "hyper": float(hyper),
+                    "hyper": hyper,
                     "train": train_m[layer_idx],
                     "test": test_metrics,
                     "artifact": artifacts[layer_idx],
+                    "cv_score": cv_score if args.cv_folds > 0 else test_metrics['f1_macro'],
                 }
                 if layer_idx not in best_by_layer:
                     best_by_layer[layer_idx] = candidate
                 else:
-                    if candidate["test"]["f1_macro"] > best_by_layer[layer_idx]["test"]["f1_macro"]:
+                    if candidate["cv_score"] > best_by_layer[layer_idx]["cv_score"]:
                         best_by_layer[layer_idx] = candidate
 
         # Save best models per layer
@@ -1278,6 +1368,10 @@ def main():
                 "layers": layers,
                 "hyperparams": hyperparams,
                 "normalize": bool(not args.no_normalize),
+                "cv_folds": args.cv_folds,
+                "penalties": penalties,
+                "solvers": solvers,
+                "class_weight": args.class_weight,
                 "pca": {
                     "enabled": pca_cfg.enabled,
                     "n_components": pca_cfg.n_components,
@@ -1287,7 +1381,7 @@ def main():
             },
             "sweep": results_by_hyper,
             "best_by_layer": {
-                str(k): {"hyper": v["hyper"], "train": v["train"], "test": v["test"]}
+                str(k): {"hyper": v["hyper"], "train": v["train"], "test": v["test"], "cv_score": v["cv_score"]}
                 for k, v in best_by_layer.items()
             },
         }
