@@ -1,22 +1,109 @@
-"""
-Hyperparameters from: "Detecting Strategic Deception Using Linear Probes" (arXiv:2502.03407)
+# activations_train_probe.py: Train and evaluate linear/MLP probes on cached residual activations
+# Supports cache-pickle input with leakage-safe splits, regularization sweeps, optional PCA, and plots.
+# Written by: Dani
+# Created: Jan 12, 2026, 00:00 EST
+# Last Modified: Jan 12, 2026, 00:00 EST
+
+"""Probe training and evaluation utilities.
+
+Hyperparameters are based on: "Detecting Strategic Deception Using Linear Probes" (arXiv:2502.03407)
 https://github.com/ApolloResearch/deception-detection
 """
 
 import argparse
+import getpass
 import json
+import logging
 import os
 import pickle
+import random
+import socket
+import sys
+from datetime import datetime
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Any, Literal, Optional
 
 import numpy as np
 import torch
 import torch.nn as nn
+from sklearn.decomposition import PCA
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, roc_auc_score
-from torch.utils.data import DataLoader, TensorDataset
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support, roc_auc_score, confusion_matrix
+
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import seaborn as sns
+
+
+
+# ----------------------
+# --- LOGGING SETUP ---
+# ----------------------
+
+
+def setup_logging(output_dir: Path, run_name: str) -> logging.Logger:
+    """Set up comprehensive logging with metadata.
+
+    Args:
+        output_dir (Path): Root output directory for this run.
+        run_name (str): Short name used for the log file prefix.
+
+    Returns:
+        logging.Logger: Configured logger writing to file and console.
+    """
+    log_dir = output_dir / "file_logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = log_dir / f"{run_name}_{timestamp}.log"
+
+    logger = logging.getLogger(run_name)
+    logger.setLevel(logging.DEBUG)
+
+    if logger.handlers:
+        logger.handlers.clear()
+
+    file_handler = logging.FileHandler(log_file, mode="w", encoding="utf-8")
+    file_handler.setLevel(logging.DEBUG)
+    file_formatter = logging.Formatter(
+        "%(asctime)s | %(levelname)-8s | %(funcName)s:%(lineno)d | %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    file_handler.setFormatter(file_formatter)
+
+    console_handler = logging.StreamHandler(sys.stderr)
+    console_handler.setLevel(logging.INFO)
+    console_formatter = logging.Formatter("%(levelname)s: %(message)s")
+    console_handler.setFormatter(console_formatter)
+
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+
+    logger.info("=" * 80)
+    logger.info("PROBE TRAINING RUN STARTED")
+    logger.info("=" * 80)
+    logger.info(f"User: {getpass.getuser()}")
+    logger.info(f"Hostname: {socket.gethostname()}")
+    logger.info(f"Timestamp: {timestamp}")
+    logger.info(f"CUDA available: {torch.cuda.is_available()}")
+    if torch.cuda.is_available():
+        logger.info(f"CUDA devices: {torch.cuda.device_count()}")
+        for i in range(torch.cuda.device_count()):
+            logger.info(f"  Device {i}: {torch.cuda.get_device_name(i)}")
+    logger.info(f"Log file: {log_file}")
+    logger.info("=" * 80)
+
+    return logger
+
+
+
+# -------------------------
+# --- PROBE DEFINITIONS ---
+# -------------------------
 
 
 @dataclass
@@ -26,13 +113,14 @@ class ProbeConfig:
     probe_type: Literal["lr", "mlp"] = "lr"
 
     # Logistic Regression hyperparameters
-    reg_coeff: float = 1e3  (C = 1/reg_coeff)
+    reg_coeff: float = 1e3  # (C = 1/reg_coeff)
     normalize: bool = True  # Normalize activations before training
+    track_loss: bool = False  # Track loss curve during training (uses torch LR)
 
     # MLP hyperparameters
     hidden_dim: int = 64
     lr: float = 0.0001
-    epochs: int = 10000
+    epochs: int = 20000
     val_split: float = 0.2  # 80% train, 20% validation
     early_stopping: bool = True
 
@@ -69,40 +157,98 @@ class LinearProbe:
 
     def __init__(self, config: ProbeConfig):
         self.config = config
+        self.track_loss = config.track_loss
         self.mean = None
         self.std = None
-        self.model = LogisticRegression(
-            C=1 / config.reg_coeff,
-            random_state=config.random_state,
-            fit_intercept=False,
-            max_iter=1000
-        )
+        self.loss_curve = [] if self.track_loss else None
+        if not self.track_loss:
+            self.model = LogisticRegression(
+                C=1 / config.reg_coeff,
+                random_state=config.random_state,
+                fit_intercept=False,
+                max_iter=1000
+            )
+            self.torch_model = None
+        else:
+            self.model = None
+            self.torch_model = None
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> "LinearProbe":
         """Fit the logistic regression probe."""
-        if self.config.normalize:
-            self.mean = X.mean(axis=0)
-            self.std = X.std(axis=0) + 1e-8
-            X = (X - self.mean) / self.std
+        if not self.track_loss:
+            if self.config.normalize:
+                self.mean = X.mean(axis=0)
+                self.std = X.std(axis=0) + 1e-8
+                X = (X - self.mean) / self.std
 
-        self.model.fit(X, y)
+            self.model.fit(X, y)
+        else:
+            if self.config.normalize:
+                self.mean = np.array(X.mean(axis=0))
+                self.std = np.array(X.std(axis=0) + 1e-8)
+                X_norm = (X - self.mean) / self.std
+            else:
+                X_norm = X
+                self.mean = None
+                self.std = None
+
+            X_tensor = torch.tensor(X_norm, dtype=torch.float32)
+            y_tensor = torch.tensor(y, dtype=torch.float32)
+
+            input_dim = X.shape[1]
+            self.torch_model = nn.Linear(input_dim, 1)
+
+            optimizer = torch.optim.LBFGS(self.torch_model.parameters(), lr=1.0, max_iter=50)
+            criterion = nn.BCEWithLogitsLoss()
+
+            self.loss_curve = []
+
+            def closure():
+                optimizer.zero_grad()
+                y_pred = self.torch_model(X_tensor).squeeze()
+                loss = criterion(y_pred, y_tensor)
+                loss.backward()
+                self.loss_curve.append(loss.item())
+                return loss
+
+            optimizer.step(closure)
+
         return self
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         """Predict class labels."""
-        if self.config.normalize and self.mean is not None:
-            X = (X - self.mean) / self.std
-        return self.model.predict(X)
+        if self.torch_model is not None:
+            if self.config.normalize and self.mean is not None:
+                X = (X - self.mean) / self.std
+            X_tensor = torch.tensor(X, dtype=torch.float32)
+            with torch.no_grad():
+                logits = self.torch_model(X_tensor).squeeze()
+                return (torch.sigmoid(logits) > 0.5).long().numpy()
+        else:
+            if self.config.normalize and self.mean is not None:
+                X = (X - self.mean) / self.std
+            return self.model.predict(X)
 
     def predict_proba(self, X: np.ndarray) -> np.ndarray:
         """Predict class probabilities."""
-        if self.config.normalize and self.mean is not None:
-            X = (X - self.mean) / self.std
-        return self.model.predict_proba(X)[:, 1]
+        if self.torch_model is not None:
+            if self.config.normalize and self.mean is not None:
+                X = (X - self.mean) / self.std
+            X_tensor = torch.tensor(X, dtype=torch.float32)
+            with torch.no_grad():
+                logits = self.torch_model(X_tensor).squeeze()
+                return torch.sigmoid(logits).numpy()
+        else:
+            if self.config.normalize and self.mean is not None:
+                X = (X - self.mean) / self.std
+            return self.model.predict_proba(X)[:, 1]
 
     def get_direction(self) -> np.ndarray:
         """Get the probe direction (coefficients)."""
-        return self.model.coef_[0]
+        if self.torch_model is not None:
+            return self.torch_model.weight.data.numpy().squeeze()
+        else:
+            return self.model.coef_[0]
 
 
 class MLPProbeTrainer:
@@ -205,7 +351,14 @@ class MLPProbeTrainer:
         return proba
 
 
-def load_activations(path: str) -> dict:
+
+
+# ---------------------------
+# --- ACTIVATION LOADING  ---
+# ---------------------------
+
+
+def load_activations(path: str) -> dict[int, np.ndarray]:
     """Load activations from a file.
 
     Expects either:
@@ -238,6 +391,486 @@ def load_activations(path: str) -> dict:
         layer_idx: activations[:, layer_idx, :]
         for layer_idx in range(n_layers)
     }
+
+@dataclass
+class DataConfig:
+    label_type: Literal['lsp', 'self'] = 'lsp'  # 'lsp' or 'self'
+    train_split: float = 0.7  # Fraction of data to use for training
+    balance_feature: str = 'combined'  # Feature to balance on: 'combined', 'order', 'reference', etc.
+    train_balance: Optional[dict] = None  # Ratios for balancing train data, e.g., {'forward': 0.5, 'backward': 0.5}
+    test_balance: Optional[dict] = None  # Ratios for balancing test data
+    random_state: int = 42
+    split_groupby: Literal["pair"] = "pair"  # Prevent leakage by splitting at cache-pair granularity
+
+
+@dataclass
+class PCAConfig:
+    enabled: bool = False
+    n_components: Optional[int] = None
+    variance: Optional[float] = None
+    whiten: bool = False
+
+def _parse_cache_key(key: Any, sample: dict) -> tuple[Any, str, str]:
+    """Normalize cache key variants into (id, judge, reference).
+
+    Supports cache dictionaries keyed as either:
+    - (id, reference)
+    - (id, judge, reference)
+
+    Args:
+        key (Any): Raw key from cache['data'].
+        sample (dict): Sample value from cache['data'][key].
+
+    Returns:
+        tuple[Any, str, str]: (id, judge, reference)
+
+    Raises:
+        ValueError: If key shape is unsupported and sample lacks needed fields.
+    """
+    if isinstance(key, tuple) and len(key) == 2:
+        idx, reference = key
+        judge = sample.get("judge")
+        if judge is None:
+            raise ValueError("Cache key is (id, reference) but sample missing 'judge'")
+        return idx, str(judge), str(reference)
+
+    if isinstance(key, tuple) and len(key) == 3:
+        idx, judge, reference = key
+        return idx, str(judge), str(reference)
+
+    judge = sample.get("judge")
+    reference = sample.get("reference")
+    idx = sample.get("id")
+    if idx is None or judge is None or reference is None:
+        raise ValueError(f"Unsupported cache key format: {type(key)} {key}")
+    return idx, str(judge), str(reference)
+
+
+def load_cache_pickle(path: Path) -> tuple[dict, dict]:
+    """Load a cache pickle produced by cache_activations.py.
+
+    Args:
+        path (Path): Path to cache pickle.
+
+    Returns:
+        tuple[dict, dict]: (metadata, data)
+
+    Raises:
+        ValueError: If pickle schema is not recognized.
+    """
+    with open(path, "rb") as f:
+        cache = pickle.load(f)
+    if not isinstance(cache, dict) or "metadata" not in cache or "data" not in cache:
+        raise ValueError("Cache pickle must be a dict with keys 'metadata' and 'data'.")
+    if not isinstance(cache["data"], dict):
+        raise ValueError("Cache['data'] must be a dict keyed by cache identifiers.")
+    return cache["metadata"], cache["data"]
+
+
+def load_from_cache(path: Path, data_config: Optional[DataConfig] = None) -> dict:
+    """Load activations from a cache pickle into leakage-safe train/test splits.
+
+    Split is performed at the cache-pair granularity (id/judge/reference). Forward/backward
+    variants for a given pair are kept in the same split to avoid leakage.
+
+    Args:
+        path (Path): Path to cache pickle.
+        data_config (Optional[DataConfig]): Data configuration.
+
+    Returns:
+        dict: {'metadata': ..., 'train': [...], 'test': [...]} sample entries.
+    """
+    if data_config is None:
+        data_config = DataConfig()
+
+    metadata, data = load_cache_pickle(path)
+
+    keys = list(data.keys())
+    rng = np.random.RandomState(data_config.random_state)
+    rng.shuffle(keys)
+    num_train_pairs = int(len(keys) * data_config.train_split)
+    train_keys = set(keys[:num_train_pairs])
+    test_keys = set(keys[num_train_pairs:])
+
+    def expand_pair(pair_key: Any, sample: dict) -> list[dict]:
+        idx, judge, reference = _parse_cache_key(pair_key, sample)
+        if data_config.label_type == "lsp":
+            label = 1 if sample.get("gold_label") == "lsp" else 0
+        elif data_config.label_type == "ilsp":
+            label = 1 if sample.get("gold_label") == "ilsp" else 0
+        else:
+            label = 1 if sample.get("self_label") == "self" else 0
+
+        expanded = []
+        for act_key, order in [("forward_activations", "forward"), ("backward_activations", "backward")]:
+            if act_key not in sample:
+                continue
+            expanded.append(
+                {
+                    "group_key": (idx, reference),
+                    "id": idx,
+                    "judge": judge,
+                    "reference": reference,
+                    "lsp": sample.get("gold_label"),
+                    "self": sample.get("self_label"),
+                    "label": int(label),
+                    "order": order,
+                    "layer_indices": sample.get("layer_indices"),
+                    "activations": sample[act_key],
+                }
+            )
+        return expanded
+
+    train_samples: list[dict] = []
+    test_samples: list[dict] = []
+
+    for k, sample in data.items():
+        if k in train_keys:
+            train_samples.extend(expand_pair(k, sample))
+        elif k in test_keys:
+            test_samples.extend(expand_pair(k, sample))
+
+    if data_config.train_balance is not None:
+        train_samples = balance_samples(train_samples, data_config.balance_feature, data_config.train_balance)
+    if data_config.test_balance is not None:
+        test_samples = balance_samples(test_samples, data_config.balance_feature, data_config.test_balance)
+
+    return {"metadata": metadata, "train": train_samples, "test": test_samples}
+
+
+def balance_samples(samples: list, balance_feature: str, balance_ratios: dict) -> list:
+    """Balance samples based on a feature and ratios."""
+    # Determine key for each sample
+    def get_key(sample):
+        if balance_feature == 'combined':
+            return f"{'lsp' if sample['lsp'] == 'lsp' else 'ilsp'}/{'self' if sample['self'] == 'self' else 'other'}"
+        elif balance_feature in sample:
+            return sample[balance_feature]
+        else:
+            return 'default'
+    
+    # Count totals
+    total_counts = {}
+    for sample in samples:
+        key = get_key(sample)
+        total_counts[key] = total_counts.get(key, 0) + 1
+    
+    # Calculate targets
+    total_samples = len(samples)
+    targets = {k: int(total_samples * balance_ratios.get(k, 0)) for k in total_counts}
+    
+    # Collect balanced
+    balanced = []
+    counts = {k: 0 for k in total_counts}
+    for sample in samples:
+        key = get_key(sample)
+        if counts[key] < targets.get(key, 0):
+            balanced.append(sample)
+            counts[key] += 1
+    
+    return balanced
+
+
+def prepare_probe_data(samples: list) -> tuple[dict[int, np.ndarray], dict[int, np.ndarray]]:
+    """Prepare positive and negative activations for probe training from samples."""
+    positive_samples = [s for s in samples if s['label'] == 1]
+    negative_samples = [s for s in samples if s['label'] == 0]
+    
+    # Assume all samples have the same layer structure
+    n_layers = positive_samples[0]['activations'].shape[0]
+    
+    positive_acts = {layer: np.array([s['activations'][layer] for s in positive_samples]) for layer in range(n_layers)}
+    negative_acts = {layer: np.array([s['activations'][layer] for s in negative_samples]) for layer in range(n_layers)}
+    
+    return positive_acts, negative_acts
+
+
+
+# ---------------------------
+# --- METRICS / TRAINING  ---
+# ---------------------------
+
+
+def compute_binary_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
+    """Compute accuracy plus binary-positive and macro-averaged PRF metrics.
+
+    Args:
+        y_true (np.ndarray): Ground truth labels (0/1).
+        y_pred (np.ndarray): Predicted labels (0/1).
+
+    Returns:
+        dict: Metric dict.
+    """
+    accuracy = accuracy_score(y_true, y_pred)
+
+    precision_pos, recall_pos, f1_pos, _ = precision_recall_fscore_support(
+        y_true,
+        y_pred,
+        average="binary",
+        pos_label=1,
+        zero_division=0,
+    )
+    precision_macro, recall_macro, f1_macro, _ = precision_recall_fscore_support(
+        y_true,
+        y_pred,
+        average="macro",
+        zero_division=0,
+    )
+
+    return {
+        "accuracy": float(accuracy),
+        "precision_pos": float(precision_pos),
+        "recall_pos": float(recall_pos),
+        "f1_pos": float(f1_pos),
+        "precision_macro": float(precision_macro),
+        "recall_macro": float(recall_macro),
+        "f1_macro": float(f1_macro),
+        "n": int(len(y_true)),
+        "pos_rate": float(np.mean(y_true)) if len(y_true) else 0.0,
+    }
+
+
+def _extract_xy_for_layer(samples: list[dict], layer_idx: int) -> tuple[np.ndarray, np.ndarray]:
+    X = np.stack([s["activations"][layer_idx] for s in samples], axis=0)
+    y = np.array([s["label"] for s in samples], dtype=np.int64)
+    return X, y
+
+
+def _fit_pca_if_needed(X_train: np.ndarray, pca_config: PCAConfig) -> Optional[PCA]:
+    if not pca_config.enabled:
+        return None
+    if pca_config.n_components is None and pca_config.variance is None:
+        return None
+
+    n_components: Any
+    if pca_config.n_components is not None:
+        n_components = int(pca_config.n_components)
+    else:
+        n_components = float(pca_config.variance)
+
+    pca = PCA(n_components=n_components, whiten=pca_config.whiten, random_state=0)
+    pca.fit(X_train)
+    return pca
+
+
+def train_eval_probe_all_layers_from_cache(
+    train_samples: list[dict],
+    test_samples: list[dict],
+    probe_type: str,
+    reg_coeff_or_hidden_dim: float,
+    normalize: bool,
+    pca_config: PCAConfig,
+    layers: Optional[list[int]],
+    track_loss: bool,
+    logger: logging.Logger,
+    lr: float = 0.0001,
+    epochs: int = 20000,
+    early_stopping: bool = True,
+) -> tuple[dict[int, dict], dict[int, dict], dict[int, dict]]:
+    """Train/evaluate probes for all layers for a single hyperparam.
+
+    For LR: reg_coeff_or_hidden_dim is reg_coeff
+    For MLP: reg_coeff_or_hidden_dim is hidden_dim
+    Returns:
+        tuple: (train_metrics_by_layer, test_metrics_by_layer, artifacts_by_layer)
+    """
+    if not train_samples or not test_samples:
+        raise ValueError("Train/test samples are empty; cannot train probes.")
+
+    # Determine number of layers from first sample activations.
+    n_layers = int(train_samples[0]["activations"].shape[0])
+    if layers is None:
+        layers = list(range(n_layers))
+
+    train_metrics: dict[int, dict] = {}
+    test_metrics: dict[int, dict] = {}
+    artifacts: dict[int, dict] = {}
+
+    if probe_type == "lr":
+        cfg = ProbeConfig(probe_type="lr", reg_coeff=float(reg_coeff_or_hidden_dim), normalize=normalize, track_loss=track_loss)
+    else:
+        cfg = ProbeConfig(probe_type="mlp", hidden_dim=int(reg_coeff_or_hidden_dim), lr=lr, epochs=epochs, early_stopping=early_stopping, normalize=normalize)
+
+    for layer_idx in layers:
+        X_train, y_train = _extract_xy_for_layer(train_samples, layer_idx)
+        X_test, y_test = _extract_xy_for_layer(test_samples, layer_idx)
+
+        # If a split has only one class, sklearn LR will error. Fall back to constant prediction.
+        if len(np.unique(y_train)) < 2:
+            constant = int(y_train[0])
+            y_pred_train = np.full_like(y_train, fill_value=constant)
+            y_pred_test = np.full_like(y_test, fill_value=constant)
+
+            train_metrics[layer_idx] = compute_binary_metrics(y_train, y_pred_train)
+            test_metrics[layer_idx] = compute_binary_metrics(y_test, y_pred_test)
+            artifacts[layer_idx] = {
+                "hyperparam": float(reg_coeff_or_hidden_dim),
+                "normalize": bool(normalize),
+                "coef": None,
+                "mean": None,
+                "std": None,
+                "pca": None,
+                "confusion_matrix": confusion_matrix(y_test, y_pred_test).tolist(),
+                "loss_curve": None,
+                "note": "single_class_train_split_constant_predictor",
+            }
+            logger.warning(
+                f"Layer {layer_idx}: train split has a single class; using constant predictor={constant}"
+            )
+            continue
+
+        # PCA (fit on train only)
+        pca = _fit_pca_if_needed(X_train, pca_config)
+        if pca is not None:
+            X_train = pca.transform(X_train)
+            X_test = pca.transform(X_test)
+
+        # Train
+        probe = LinearProbe(cfg)
+        probe.fit(X_train, y_train)
+
+        # Eval
+        y_pred_train = probe.predict(X_train)
+        y_pred_test = probe.predict(X_test)
+
+        train_metrics[layer_idx] = compute_binary_metrics(y_train, y_pred_train)
+        test_metrics[layer_idx] = compute_binary_metrics(y_test, y_pred_test)
+
+        artifacts[layer_idx] = {
+            "hyperparam": float(reg_coeff_or_hidden_dim),
+            "normalize": bool(normalize),
+            "coef": probe.get_direction().astype(np.float32) if probe.torch_model is None else probe.get_direction().astype(np.float32),
+            "mean": None if probe.mean is None else probe.mean.astype(np.float32),
+            "std": None if probe.std is None else probe.std.astype(np.float32),
+            "pca": None
+            if pca is None
+            else {
+                "components": pca.components_.astype(np.float32),
+                "mean": pca.mean_.astype(np.float32),
+                "explained_variance_ratio": pca.explained_variance_ratio_.astype(np.float32),
+                "n_components": int(pca.n_components_) if hasattr(pca, "n_components_") else None,
+            },
+            "confusion_matrix": confusion_matrix(y_test, y_pred_test).tolist(),
+            "loss_curve": probe.loss_curve,
+        }
+
+        if True:  # Log for all layers since sweep is small
+            logger.info(
+                f"{probe_type.upper()} hyper={reg_coeff_or_hidden_dim:g} layer={layer_idx} "
+                f"test acc={test_metrics[layer_idx]['accuracy']:.3f} "
+                f"test f1_macro={test_metrics[layer_idx]['f1_macro']:.3f}"
+            )
+
+    return train_metrics, test_metrics, artifacts
+
+
+
+# ----------------------
+# --- PLOTTING UTILS ---
+# ----------------------
+
+
+def plot_confusion_matrix(cm: list[list[int]], output_path: Path, title: str) -> None:
+    """Plot confusion matrix."""
+    cm = np.array(cm)
+    fig, ax = plt.subplots(figsize=(8, 6))
+    sns.set_style("white")
+    plt.rcParams.update({
+        'font.family': 'sans-serif',
+        'font.sans-serif': ['Ubuntu'],
+        'axes.labelsize': 14,
+        'axes.titlesize': 16,
+        'xtick.labelsize': 12,
+        'ytick.labelsize': 12,
+    })
+    im = ax.imshow(cm, interpolation='nearest', cmap=sns.color_palette("Blues", as_cmap=True))
+    ax.figure.colorbar(im, ax=ax, shrink=0.8)
+    ax.set_title(title, fontweight='bold', fontfamily='Volkhov')
+    ax.set_xlabel('Predicted Label', fontfamily='Ubuntu Mono')
+    ax.set_ylabel('True Label', fontfamily='Ubuntu Mono')
+    tick_marks = np.arange(len(['ILSP', 'LSP']))
+    ax.set_xticks(tick_marks)
+    ax.set_yticks(tick_marks)
+    ax.set_xticklabels(['ILSP', 'LSP'], fontfamily='Ubuntu Mono')
+    ax.set_yticklabels(['ILSP', 'LSP'], fontfamily='Ubuntu Mono')
+    thresh = cm.max() / 2.
+    for i in range(cm.shape[0]):
+        for j in range(cm.shape[1]):
+            ax.text(j, i, format(cm[i, j], 'd'),
+                    ha="center", va="center",
+                    color="white" if cm[i, j] > thresh else "black",
+                    fontsize=14, fontweight='bold', fontfamily='Ubuntu Mono')
+    fig.tight_layout()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_path, dpi=200, bbox_inches='tight')
+    plt.close(fig)
+
+
+def plot_all_layerwise_metrics(results_by_hyper: dict[str, dict], output_path: Path, title: str) -> None:
+    """Plot accuracy/precision/recall/F1 across layers for all hyperparams."""
+    sns.set_style("whitegrid")
+    plt.rcParams.update({
+        'font.family': 'sans-serif',
+        'font.sans-serif': ['Ubuntu'],
+        'axes.labelsize': 14,
+        'axes.titlesize': 16,
+        'xtick.labelsize': 12,
+        'ytick.labelsize': 12,
+        'legend.fontsize': 12,
+        'axes.titleweight': 'bold',
+    })
+
+    layers = sorted(list(results_by_hyper.values())[0]['test'].keys())
+    metrics = ["accuracy", "precision", "recall", "f1"]
+
+    fig, axes = plt.subplots(2, 2, figsize=(16, 12), sharex=True)
+    axes = axes.flatten()
+
+    colors = sns.color_palette("husl", len(results_by_hyper))
+
+    for ax, metric in zip(axes, metrics):
+        for i, (hyper, data) in enumerate(results_by_hyper.items()):
+            test_vals = [data['test'][l][f"{metric}_macro"] for l in layers]
+            ax.plot(layers, test_vals, label=f"reg={hyper}", color=colors[i], linewidth=2)
+        ax.set_title(metric.capitalize(), fontweight='bold', fontfamily='Volkhov')
+        ax.set_xlabel("Layer", fontfamily='Ubuntu Mono')
+        ax.set_ylabel(metric.capitalize(), fontfamily='Ubuntu Mono')
+        ax.set_ylim(0.0, 1.0)
+        ax.legend()
+        ax.grid(True, alpha=1.0, color='black', linewidth=0.8)
+
+    # Find best performer
+    best_hyper = max(results_by_hyper, key=lambda h: max(results_by_hyper[h]['test'][l]['f1_macro'] for l in layers))
+    best_layer = max(layers, key=lambda l: results_by_hyper[best_hyper]['test'][l]['f1_macro'])
+    best_val = results_by_hyper[best_hyper]['test'][best_layer]['f1_macro']
+
+    ax = axes[3]  # f1 plot
+    ax.annotate(f'Best: reg={best_hyper}, layer={best_layer}, f1={best_val:.3f}', 
+                xy=(best_layer, best_val), xytext=(best_layer+1, best_val+0.05), 
+                arrowprops=dict(arrowstyle='->', color='red'), 
+                fontsize=10, fontfamily='Ubuntu Mono')
+
+    fig.suptitle(title, fontsize=18, fontweight='bold', fontfamily='Volkhov')
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+    fig.savefig(output_path, dpi=200, bbox_inches='tight')
+    plt.close(fig)
+
+
+
+# ----------------------
+# --- MAIN EXECUTION ---
+# ----------------------
+
+
+def _parse_float_list(csv: str) -> list[float]:
+    vals: list[float] = []
+    for part in csv.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        vals.append(float(part))
+    return vals
 
 
 def train_probes_all_layers(
@@ -376,16 +1009,24 @@ def main():
         description="Train probes on model activations from all layers"
     )
     parser.add_argument(
+        "--cache_pkl",
+        type=str,
+        default=None,
+        help="Path to activation cache pickle from cache_activations.py (enables cache mode)",
+    )
+    parser.add_argument(
         "--positive_acts",
         type=str,
-        required=True,
-        help="Path to positive class activations (.npz, .pt, .npy, or .pkl)",
+        required=False,
+        default=None,
+        help="Path to positive class activations (.npz, .pt, .npy, or .pkl) [legacy mode]",
     )
     parser.add_argument(
         "--negative_acts",
         type=str,
-        required=True,
-        help="Path to negative class activations (.npz, .pt, .npy, or .pkl)",
+        required=False,
+        default=None,
+        help="Path to negative class activations (.npz, .pt, .npy, or .pkl) [legacy mode]",
     )
     parser.add_argument(
         "--output_dir",
@@ -409,8 +1050,14 @@ def main():
     parser.add_argument(
         "--hidden_dim",
         type=int,
-        default=64,
-        help="Hidden dimension for MLP probe (default: 64)",
+        default=256,
+        help="Hidden dimension for MLP probe (default: 256)",
+    )
+    parser.add_argument(
+        "--hidden_dims",
+        type=str,
+        default="128,256,512",
+        help="Comma-separated hidden_dims sweep for MLP (default: 128,256,512)",
     )
     parser.add_argument(
         "--lr",
@@ -446,14 +1093,60 @@ def main():
         default=42,
         help="Random seed (default: 42)",
     )
+    parser.add_argument(
+        "--label_type",
+        type=str,
+        default="lsp",
+        choices=["lsp", "self", "ilsp"],
+        help="Label type for cache mode (default: lsp)",
+    )
+    parser.add_argument(
+        "--train_split",
+        type=float,
+        default=0.8,
+        help="Train split fraction for cache mode (default: 0.8)",
+    )
+    parser.add_argument(
+        "--reg_coeffs",
+        type=str,
+        default="1,10,100,1000,10000",
+        help="Comma-separated reg_coeff sweep for LR (default: 1..10000)",
+    )
+    parser.add_argument(
+        "--pca_components",
+        type=int,
+        default=None,
+        help="Optional PCA components (fit on train per-layer) before probing",
+    )
+    parser.add_argument(
+        "--pca_variance",
+        type=float,
+        default=None,
+        help="Optional PCA variance (0-1], alternative to --pca_components",
+    )
+    parser.add_argument(
+        "--pca_whiten",
+        action="store_true",
+        help="Whiten PCA components (only if PCA enabled)",
+    )
+    parser.add_argument(
+        "--track_loss",
+        action="store_true",
+        help="Track loss curve during training (uses torch LR)",
+    )
 
     args = parser.parse_args()
 
-    # Create config
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    logger = setup_logging(output_dir, run_name="activations_train_probe")
+
+    # Create config (used for non-cache legacy mode)
     config = ProbeConfig(
         probe_type=args.probe_type,
         reg_coeff=args.reg_coeff,
         normalize=not args.no_normalize,
+        track_loss=args.track_loss,
         hidden_dim=args.hidden_dim,
         lr=args.lr,
         epochs=args.epochs,
@@ -474,7 +1167,188 @@ def main():
     print(f"  Device: {config.device}")
     print()
 
-    # Load activations
+    # Cache mode: load cache pickle and run unbalanced full-set train/test + reg sweep
+    if args.cache_pkl is not None:
+        cache_path = Path(args.cache_pkl)
+        data_cfg = DataConfig(
+            label_type=args.label_type,
+            train_split=float(args.train_split),
+            train_balance=None,
+            test_balance=None,
+            random_state=int(args.seed),
+        )
+        pca_cfg = PCAConfig(
+            enabled=(args.pca_components is not None or args.pca_variance is not None),
+            n_components=args.pca_components,
+            variance=args.pca_variance,
+            whiten=bool(args.pca_whiten),
+        )
+
+        logger.info("Loading cache pickle (may be large)...")
+        loaded = load_from_cache(cache_path, data_cfg)
+        cache_meta = loaded.get("metadata", {})
+        train_samples = loaded["train"]
+        test_samples = loaded["test"]
+
+        logger.info(f"Cache metadata: {cache_meta}")
+        logger.info(f"Train samples: {len(train_samples)}")
+        logger.info(f"Test samples: {len(test_samples)}")
+
+        n_layers = train_samples[0]["activations"].shape[0]
+        layers = None
+        if args.layers:
+            layers = [int(x.strip()) for x in args.layers.split(",")]
+        else:
+            layers = list(range(n_layers))  # All layers
+            logger.info(f"Using all {len(layers)} layers")
+
+        reg_coeffs = _parse_float_list(args.reg_coeffs)
+        if args.probe_type == "lr":
+            hyperparams = reg_coeffs
+            hyper_name = "reg_coeffs"
+        else:
+            hyperparams = _parse_float_list(args.hidden_dims)
+            hyper_name = "hidden_dims"
+        logger.info(f"{args.probe_type.upper()} {hyper_name} sweep: {hyperparams}")
+        logger.info(f"PCA enabled: {pca_cfg.enabled} (components={pca_cfg.n_components}, var={pca_cfg.variance})")
+
+        results_by_hyper: dict[str, dict] = {}
+        best_by_layer: dict[int, dict] = {}
+
+        for hyper in hyperparams:
+            logger.info(f"Training/evaluating {hyper_name}={hyper:g}")
+            train_m, test_m, artifacts = train_eval_probe_all_layers_from_cache(
+                train_samples=train_samples,
+                test_samples=test_samples,
+                probe_type=args.probe_type,
+                reg_coeff_or_hidden_dim=hyper,
+                normalize=not args.no_normalize,
+                pca_config=pca_cfg,
+                layers=layers,
+                track_loss=args.track_loss,
+                logger=logger,
+            )
+            results_by_hyper[str(hyper)] = {"train": train_m, "test": test_m}
+
+            # Update best-by-layer selection (maximize test f1_macro)
+            for layer_idx, test_metrics in test_m.items():
+                candidate = {
+                    "hyper": float(hyper),
+                    "train": train_m[layer_idx],
+                    "test": test_metrics,
+                    "artifact": artifacts[layer_idx],
+                }
+                if layer_idx not in best_by_layer:
+                    best_by_layer[layer_idx] = candidate
+                else:
+                    if candidate["test"]["f1_macro"] > best_by_layer[layer_idx]["test"]["f1_macro"]:
+                        best_by_layer[layer_idx] = candidate
+
+        # Save best models per layer
+        models_dir = output_dir / "models"
+        models_dir.mkdir(parents=True, exist_ok=True)
+        for layer_idx, best in best_by_layer.items():
+            art = best["artifact"]
+            npz_path = models_dir / f"best_lr_layer_{layer_idx}.npz"
+            coef = np.array([]) if art.get("coef") is None else art["coef"]
+            mean = np.array([]) if art.get("mean") is None else art["mean"]
+            std = np.array([]) if art.get("std") is None else art["std"]
+            np.savez(
+                npz_path,
+                hyperparam=art["hyperparam"],
+                normalize=int(art["normalize"]),
+                coef=coef,
+                mean=mean,
+                std=std,
+                pca_components=np.array([]) if art["pca"] is None else art["pca"]["components"],
+                pca_mean=np.array([]) if art["pca"] is None else art["pca"]["mean"],
+                pca_explained_variance_ratio=np.array([])
+                if art["pca"] is None
+                else art["pca"]["explained_variance_ratio"],
+            )
+
+        # Save results JSON
+        results_payload = {
+            "run": {
+                "cache_pkl": str(cache_path),
+                "cache_metadata": cache_meta,
+                "label_type": args.label_type,
+                "train_split": float(args.train_split),
+                "seed": int(args.seed),
+                "layers": layers,
+                "hyperparams": hyperparams,
+                "normalize": bool(not args.no_normalize),
+                "pca": {
+                    "enabled": pca_cfg.enabled,
+                    "n_components": pca_cfg.n_components,
+                    "variance": pca_cfg.variance,
+                    "whiten": pca_cfg.whiten,
+                },
+            },
+            "sweep": results_by_hyper,
+            "best_by_layer": {
+                str(k): {"hyper": v["hyper"], "train": v["train"], "test": v["test"]}
+                for k, v in best_by_layer.items()
+            },
+        }
+        with open(output_dir / "results_cache_sweep.json", "w") as f:
+            json.dump(results_payload, f, indent=2)
+
+        # Plots
+        plots_dir = output_dir / "plots"
+        best_metrics_for_plot = {k: {"train": v["train"], "test": v["test"]} for k, v in best_by_layer.items()}
+        plot_all_layerwise_metrics(
+            best_metrics_for_plot,
+            plots_dir / "metrics_by_layer_pos.png",
+            title="Layerwise metrics (positive-class PRF) - best reg per layer",
+            averaging="pos",
+        )
+        plot_all_layerwise_metrics(
+            best_metrics_for_plot,
+            plots_dir / "metrics_by_layer_macro.png",
+            title="Layerwise metrics (macro PRF) - best reg per layer",
+            averaging="macro",
+        )
+
+        # Confusion matrices
+        cm_dir = output_dir / "confusion_matrices"
+        cm_dir.mkdir(parents=True, exist_ok=True)
+        for layer, data in best_by_layer.items():
+            cm = data["artifact"]["confusion_matrix"]
+            plot_confusion_matrix(cm, cm_dir / f"layer_{layer}_confusion_matrix.png", f"Layer {layer} Confusion Matrix")
+
+        # Loss curves
+        if args.track_loss:
+            loss_dir = output_dir / "loss_curves"
+            loss_dir.mkdir(parents=True, exist_ok=True)
+            for layer, data in best_by_layer.items():
+                if "loss_curve" in data["artifact"] and data["artifact"]["loss_curve"]:
+                    sns.set_style("whitegrid")
+                    plt.rcParams.update({
+                        'font.family': 'serif',
+                        'font.size': 12,
+                        'axes.labelsize': 14,
+                        'axes.titlesize': 16,
+                        'xtick.labelsize': 12,
+                        'ytick.labelsize': 12,
+                    })
+                    fig, ax = plt.subplots(figsize=(8, 6))
+                    loss_curve = data["artifact"]["loss_curve"]
+                    ax.plot(loss_curve, color=sns.color_palette("husl", 1)[0], linewidth=2)
+                    ax.set_title(f"Layer {layer} Loss Curve", fontweight='bold')
+                    ax.set_xlabel("Iteration")
+                    ax.set_ylabel("Loss")
+                    ax.grid(True, alpha=1.0, color='black')
+                    fig.tight_layout()
+                    fig.savefig(loss_dir / f"layer_{layer}_loss_curve.png", dpi=200, bbox_inches='tight')
+                    plt.close(fig)
+
+        logger.info(f"Artifacts saved to: {output_dir}")
+        return
+
+    # Legacy mode (requires explicit positive/negative act files)
+    if args.positive_acts is None or args.negative_acts is None:
+        raise ValueError("Legacy mode requires --positive_acts and --negative_acts, or use --cache_pkl")
     print("Loading activations...")
     positive_acts = load_activations(args.positive_acts)
     negative_acts = load_activations(args.negative_acts)

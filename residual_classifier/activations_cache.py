@@ -171,17 +171,26 @@ def extract_residual_activations(
         # --------
 
         with torch.no_grad():
-            for i, text in enumerate(text_dict):
+            for i, text in tqdm(enumerate(text_dict), total=len(text_dict), desc="Processing samples"):
                 
                 # Check cache
-                if (text['id'], text['judge'], text['reference']) in already_in_cache:
-                    if already_in_cache[(text['id'], text['judge'], text['reference'])]['layer_indices'] != layer_indices:
+                if (text['id'], text['reference']) in already_in_cache:
+                    if already_in_cache[(text['id'], text['reference'])]['layer_indices'] != layer_indices:
                         print(f"Warning: Cached sample {text['id']} has different number of layers than requested. Recomputing.")
                     else:
                         print(f"Skipping sample {text['id']} with ref {text['reference']}--already in cache.")
                         continue  # Skip already cached samples
                 
-                cache_data = copy.deepcopy(text) #could be too expensive? TODO
+                cache_data = {
+                    "id": text['id'],
+                    "judge": text['judge'],
+                    "reference": text['reference'],
+                    "gold_label": text['gold_label'],
+                    "self_label": text['self_label'],
+                    "forward_prompt": text['forward_prompt'],
+                    "backward_prompt": text['backward_prompt'],
+                    "raw_data": text['raw_data']
+                }
                 
                 # ---- forward ----
                 inputs = tokenizer(
@@ -190,21 +199,21 @@ def extract_residual_activations(
                         add_special_tokens=False
                     ).to(model.device)
                 outputs = model(**inputs, output_hidden_states=True)
+                
+                attention_mask = inputs["attention_mask"]
+                last_token_indices = attention_mask.sum(dim=1) - 1  # [batch_size]
+                last_pos = last_token_indices[0].item()
 
+                output_text = torch.argmax(outputs.logits[0, last_pos:, :], dim=-1).detach().cpu()
+                cache_data['forward_gen_text'] = tokenizer.decode(output_text[0], skip_special_tokens=False)
+                
                 #   Extract residual stream activations (last token of each sequence)
                 #   hidden_states is a tuple of (n_layers + 1) tensors of shape [batch, seq_len, hidden_dim]
                 #   Index 0 is embeddings, 1..n_layers are layer outputs
-                cache_data['forward_gen_text'] = tokenizer.decode(outputs.text[0].detach().cpu(), skip_special_tokens=False)
-                hidden_states = outputs.hidden_states
-
                 #   Get last token position for each sequence (before padding)
-                attention_mask = inputs["attention_mask"]
-                last_token_indices = attention_mask.sum(dim=1) - 1  # [batch_size]
-
-                
-                last_pos = last_token_indices[0].item()
-
                 # Extract activations from requested layers
+
+                hidden_states = outputs.hidden_states
                 sample_acts = []
                 for layer_idx in layer_indices:
                     # hidden_states[0] is embeddings, hidden_states[layer_idx+1] is layer output
@@ -223,12 +232,16 @@ def extract_residual_activations(
                         add_special_tokens=False
                     ).to(model.device)
                 outputs = model(**inputs, output_hidden_states=True)
-                cache_data['backward_gen_text'] = tokenizer.decode(outputs.text[0].detach().cpu(), skip_special_tokens=False)
-
-                hidden_states = outputs.hidden_states
+                
                 attention_mask = inputs["attention_mask"]
                 last_token_indices = attention_mask.sum(dim=1) - 1  # [batch_size]
                 last_pos = last_token_indices[0].item()
+
+                output_text = torch.argmax(outputs.logits[0, last_pos:, :], dim=-1).detach().cpu()
+                cache_data['backward_gen_text'] = tokenizer.decode(output_text[0], skip_special_tokens=False)
+                
+
+                hidden_states = outputs.hidden_states
                 sample_acts = []
                 
                 for layer_idx in layer_indices:
@@ -241,19 +254,20 @@ def extract_residual_activations(
                 torch.cuda.empty_cache()
 
                 # ---- add to cache dict ----
-                already_in_cache[(text['id'], text['judge'], text['reference'])] = cache_data
+                already_in_cache[(text['id'], text['reference'])] = cache_data
                 
                 if (i + 1) % 100 == 0:
                     print(f"Processed {i + 1} / {len(text_dict)} samples.")
                 
                 # ---- save intermittently ----
-                if save_cache and save_dir is not None and (i + 1) % 100 == 0:
-                    save_cache_file = save_dir / f"{judge_model_path}_activations.pkl"
+                if save_cache and save_dir is not None and ((i + 1) % 100 == 0 or (i + 1) == len(text_dict)):
+                    save_cache_file = save_file
                     with open(save_cache_file, "wb") as f:
                         pickle.dump({
                             "metadata": cache_metadata,
                             "data": already_in_cache,
                         }, f)
+                    print(f"Saved cache to {save_cache_file} at sample {i + 1}.")
     else:
         raise NotImplementedError(f"Paper '{paper}' not supported for activation extraction.")
     
@@ -539,7 +553,7 @@ def main():
         layer_indices = [int(x.strip()) for x in args.layers.split(",")]
 
     # Extract activations
-    save_dir = Path(args.output_dir) / args.paper / args.dataset / args.model.replace("/", "-")
+    save_dir = Path(args.output_dir) / args.paper / args.dataset
     save_dir.mkdir(parents=True, exist_ok=True)
 
     data = extract_residual_activations(
@@ -559,7 +573,7 @@ def main():
     print("\nDone!")
     print(f"Extracted activations for {len(data['data'])} samples.")
     if not args.dont_save_cache:
-        print(f"Cached activations saved to {save_dir}")
+        print(f"Cached activations saved to {save_dir}/{args.model}_activations.pkl")
 
 if __name__ == "__main__":
     main()
