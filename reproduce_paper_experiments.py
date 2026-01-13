@@ -144,6 +144,7 @@ For example, if both answers are relatively the same in quality, output “T”.
     "vllm_tensor_parallel_size": 1,  # UNKNOWN - depends on GPU setup
     "vllm_gpu_memory_utilization": 0.9,  # UNKNOWN
     "vllm_seed": 42,  # UNKNOWN - check if paper specifies random seed
+    "vllm_block_size": 32,  # Use 32 to avoid FlashInfer bug with head_size=256 (gemma-2-9b)
     
     # Dataset configuration
     "mmlu_sample_size": 1000,  # Paper: "1K instances from MMLU test set"
@@ -1264,12 +1265,18 @@ def run_reproduction_experiment(
     # Determine tensor parallel size: CLI arg > config > default (1)
     tp_size = tensor_parallel_size if tensor_parallel_size is not None else config.get("vllm_tensor_parallel_size", 1)
     logger.info(f"Setting up vLLM engine for: {judge_model} (tensor_parallel_size={tp_size})")
+    
+    # Use block_size=32 to avoid FlashInfer bug with head_size=256 models (e.g., gemma-2-9b)
+    # "There is a bug in FlashInfer block_size 16 head size 256 support"
+    block_size = config.get("vllm_block_size", 32)
+    
     llm = LLM(
         model=judge_model,
         tokenizer=judge_model,
         trust_remote_code=True,
         gpu_memory_utilization=config.get("vllm_gpu_memory_utilization", 0.9),
         tensor_parallel_size=tp_size,
+        block_size=block_size,
     )
     tokenizer = llm.get_tokenizer()
     

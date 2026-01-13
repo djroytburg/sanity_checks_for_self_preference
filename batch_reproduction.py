@@ -5,7 +5,6 @@ across multiple judge/evaluatee pairs.
 
 Usage:
     # Run all pairs for a specific judge
-    python batch_reproduction.py --judge llama-3.1-8b --n_samples 200
 
     # Run specific benchmark only
     python batch_reproduction.py --judge llama-3.1-8b --benchmark math500
