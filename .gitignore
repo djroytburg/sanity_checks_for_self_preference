@@ -1,11 +1,18 @@
 .env
 
 logs/*
+*/logs/*
+*/file_logs/*
+*.log
 file_logs/*
+
 project_docs/*
 _archive/*
+*/_archive/*
 *__pycache__*
 *.pyc
 .github/*
+
+test_output/*
 
 CHANGELOG.md
