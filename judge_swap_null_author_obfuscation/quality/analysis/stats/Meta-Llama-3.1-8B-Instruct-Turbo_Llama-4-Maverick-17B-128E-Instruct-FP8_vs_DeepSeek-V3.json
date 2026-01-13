@@ -1,0 +1,23 @@
+{
+  "mean_j_vs_r": 0.32468039024837053,
+  "std_j_vs_r": 0.18684042658373332,
+  "mean_k_vs_r": 0.44695239608970155,
+  "std_k_vs_r": 0.18449249392284456,
+  "mean_diff": -0.12227200584133102,
+  "ttest_two_sided_t": -10.943648014511345,
+  "ttest_two_sided_p": 4.79647609303474e-23,
+  "ttest_one_sided_t": -10.943648014511345,
+  "ttest_one_sided_p": 1.0,
+  "ks_statistic": 0.2857142857142857,
+  "ks_pvalue": 1.8185890655816628e-09,
+  "correlation": 0.5455902950502951,
+  "correlation_pvalue": 6.0178406025080095e-21,
+  "cohens_d": -0.658544152355466,
+  "judge": "Meta-Llama-3.1-8B-Instruct-Turbo",
+  "proxy": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+  "reference": "DeepSeek-V3",
+  "n_examples_total": 306,
+  "n_lsp": 54,
+  "n_ilsp": 252,
+  "n_examples_tested": 252
+}

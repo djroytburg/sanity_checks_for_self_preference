@@ -1,0 +1,3637 @@
+{
+  "metadata": {
+    "models_tested": [
+      "Qwen2.5-7B-Instruct-Turbo",
+      "Meta-Llama-3.1-8B-Instruct-Turbo"
+    ],
+    "n_examples": 100,
+    "timestamp": "2026-01-10T18:45:40.302367",
+    "note": "Smoke test comparing HF probabilities with forward/backward averaging to reduce position bias"
+  },
+  "results": {
+    "Qwen2.5-7B-Instruct-Turbo": [
+      {
+        "example_id": "20056_IMXXLOR8_3_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.9996392344814755,
+        "hf_prob_R_over_J": 0.00036076551852457216,
+        "forward_prob_A": 0.999374780792046,
+        "forward_prob_B": 0.0006252192079540083,
+        "backward_prob_A": 9.631182909513606e-05,
+        "backward_prob_B": 0.9999036881709049,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          1.0,
+          0.0006256103515625
+        ],
+        "backward_raw_probs": [
+          9.632110595703125e-05,
+          1.0
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.999374585303352,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.9999151265879519,
+        "json_self_preference": 0.9996448559456519,
+        "judge_response": [
+          "The text mentions that Nash settled into family life in his later years, as evidenced by his care for his son and his ex-wife's description of him as a 'very fine person.'",
+          "A"
+        ],
+        "reference_response": [
+          "The text mentions that Nash oscillated between asylums and prison during his later years, which aligns with option B.",
+          "B"
+        ],
+        "question": "What were some of the themes in Nash\u2019s later years?\n\n (A) He settled into family life\n (B) He oscillated between asylums and prison\n (C) He saw patterns in letters and numbers\n (D) He spent his years apologizing to those he had wronged"
+      },
+      {
+        "example_id": "40965_ZUFZ7UG6_7_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.9993154861281291,
+        "hf_prob_R_over_J": 0.0006845138718708485,
+        "forward_prob_A": 0.9988340636311679,
+        "forward_prob_B": 0.0011659363688321584,
+        "backward_prob_A": 0.00020309137490953852,
+        "backward_prob_B": 0.9997969086250904,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          1.0,
+          0.00116729736328125
+        ],
+        "backward_raw_probs": [
+          0.00020313262939453125,
+          1.0
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9990887028337012,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.9997692374497742,
+        "json_self_preference": 0.9994289701417377,
+        "judge_response": [
+          "The text indicates that Ninon would use forceful means to ensure Robert's compliance, such as holding him at gunpoint or drugging him, if he refused to take her with him.",
+          "C"
+        ],
+        "reference_response": [
+          "Ninon would have talked Robert into it anyway because he's so dearly in love with her, as evident from the narrative where she manipulates him into taking her with him.",
+          "D"
+        ],
+        "question": "If Robert had refused to take Ninon with him, what would've most likely happened?\n\n (A) Robert would've sneakily gone by himself to the takeoff and ditched Ninon.\n (B) Ninon would've shot and killed him because he'd become useless in her endeavors.\n (C) Ninon would've held him at gunpoint or drugged him until they had successfully completed takeoff.\n (D) Ninon would've talked him into it anyway because he's so dearly in love with her."
+      },
+      {
+        "example_id": "20044_JOO9J86N_1_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.1347987629860973,
+        "hf_prob_R_over_J": 0.8652012370139026,
+        "forward_prob_A": 6.627597219460723e-05,
+        "forward_prob_B": 0.9999337240278053,
+        "backward_prob_A": 0.73046875,
+        "backward_prob_B": 0.26953125,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          6.628036499023438e-05,
+          1.0
+        ],
+        "backward_raw_probs": [
+          0.73046875,
+          0.26953125
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9999647146725418,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9047490595475024,
+        "json_self_preference": 0.9999961257056922,
+        "judge_response": [
+          "The text discusses strategies for increasing revenue, including having attached theme parks, which corresponds to option B.",
+          "B"
+        ],
+        "reference_response": [
+          "The text suggests that building stadiums away from city centers leads to larger, more expensive parks that prioritize luxury suites over affordable seating, which is a strategy that stadium owners are using to increase revenue.",
+          "D"
+        ],
+        "question": "What is a strategy that the author outlines stadium owners are using to increase revenue?\n\n (A) Build stadiums in city centers\n (B) Having attached theme parks\n (C) Not prioritizing parking\n (D) Building the stadium away from a city center"
+      },
+      {
+        "example_id": "63473_IMAZR7FI_2_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.4853560342678977,
+        "hf_prob_R_over_J": 0.5146439657321022,
+        "forward_prob_A": 0.9706457925636007,
+        "forward_prob_B": 0.029354207436399216,
+        "backward_prob_A": 0.9999337240278053,
+        "backward_prob_B": 6.627597219460723e-05,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.96875,
+          0.029296875
+        ],
+        "backward_raw_probs": [
+          1.0,
+          6.628036499023438e-05
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9797010430200754,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9999485029130205,
+        "json_self_preference": 0.9898490910005842,
+        "judge_response": [
+          "The text states that the previous ten expeditions did not spot the city, and the eleventh expedition discovered it an hour ago, with just thirteen hours left for a safe return. This means the event lasted 12 hours minus the initial hour, which is 11 hours, but the closest option provided is 10 hours.",
+          "B"
+        ],
+        "reference_response": [
+          "The text states that the eleventh inter-planetary flight spotted the city an hour ago, with just thirteen hours left during which a return flight could be safely started. This means that 13 hours have passed since the discovery of the city, not counting the time they landed. They started their return flight 13 hours after the discovery, but they got trapped. The time it took to get trapped and then to find a way out and leave is not mentioned, but since they had 11 hours left when they were at the switchboard, they had at least 11 hours since they got stuck at the city. Therefore, the whole event lasted at least 13 hours, and most likely 13 hours plus 1-2 hours of trapped time and 1-2 hours of search time, which makes the correct answer 13 hours.",
+          "D"
+        ],
+        "question": "How much time passed between the discovery of the city and Wass activating the switchboard?\n\n (A) 13 hours\n (B) 10 hours\n (C) 12 hours\n (D) 11 hours"
+      },
+      {
+        "example_id": "63645_32M9QZ2I_1_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.1260052287181996,
+        "hf_prob_R_over_J": 0.8739947712818004,
+        "forward_prob_A": 0.029354207436399216,
+        "forward_prob_B": 0.9706457925636007,
+        "backward_prob_A": 0.77734375,
+        "backward_prob_B": 0.22265625,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.029296875,
+          0.96875
+        ],
+        "backward_raw_probs": [
+          0.77734375,
+          0.22265625
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9797010430200754,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8177718608461166,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text mentions that the sickness caused by cosmic rays was contagious to a certain extent, which aligns with option A.",
+          "A"
+        ],
+        "reference_response": [
+          "The text mentions that 'Lead kept out the cosmic rays, but lead would not stand the terrific speed required to lift a craft free of planetary gravity; and an inner coating of lead brought men into port raving with lead poisoning illusions.' This indicates that even lead shielding could not prevent the cosmic rays from getting through and causing sickness.",
+          "D"
+        ],
+        "question": "What unexpected characteristic did the sickness experienced by space travelers, caused by cosmic rays, display?\n\n (A) The sickness could be transferred from the space traveler exposed to the cosmic rays to other people on Earth who had not engaged in space travel.\n (B) There was no range of effects. Everyone who traveled in space got cancer and eventually died of it.\n (C) It was easily cured using a medicine usually employed to de-worm livestock.\n (D) Even lead shielding could not prevent the cosmic rays from getting through and causing sickness."
+      },
+      {
+        "example_id": "51687_XND06EI3_9_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.5528741366719528,
+        "hf_prob_R_over_J": 0.44712586332804716,
+        "forward_prob_A": 0.9989710914813996,
+        "forward_prob_B": 0.0010289085186003795,
+        "backward_prob_A": 0.8932228181374939,
+        "backward_prob_B": 0.1067771818625061,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          1.0,
+          0.00102996826171875
+        ],
+        "backward_raw_probs": [
+          0.89453125,
+          0.10693359375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9991954227459966,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9325577304972911,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text mentions 'other treaties which were broken during the Ungentlemanly Gentleman's War', indicating that many treaties were broken, which corresponds to option B.",
+          "B"
+        ],
+        "reference_response": [
+          "The text mentions 'the Treaty of Oslo' and 'all of the other treaties which were broken during the Ungentlemanly Gentleman's War', indicating that multiple treaties were broken, with the Treaty of Oslo being one of them.",
+          "A"
+        ],
+        "question": "How many treaties were broken during the last war?\n\n (A) The treaty of Oslo plus many others\n (B) Many of them\n (C) All of them\n (D) Only the treaty of Oslo"
+      },
+      {
+        "example_id": "51650_B3KKWWD1_2_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 1.2248603916102507e-05,
+        "hf_prob_R_over_J": 0.9999877513960839,
+        "forward_prob_A": 1.1503564108140894e-05,
+        "forward_prob_B": 0.9999884964358918,
+        "backward_prob_A": 0.9999870063562759,
+        "backward_prob_B": 1.299364372406412e-05,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          1.150369644165039e-05,
+          1.0
+        ],
+        "backward_raw_probs": [
+          1.0,
+          1.2993812561035156e-05
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9999898672613365,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9999870062714192,
+        "json_self_preference": 0.9999966621459189,
+        "judge_response": [
+          "The text does not directly mention the duration of the event, but the context implies it was a long night, which aligns with an event lasting 10 hours.",
+          "B"
+        ],
+        "reference_response": [
+          "Matheny felt guilty because the ring was a priceless artifact that should not be sold, as he mentioned it was a scientifically priceless artifact and a crime to sell such items.",
+          "D"
+        ],
+        "question": "Why did Matheny feel guilty about Doran purchasing the ring?\n\n (A) Doran had never even visited Mars\n (B) It was a fake\n (C) It was made a million years ago and too old for a gift\n (D) It was a priceless artifact that should not be sold"
+      },
+      {
+        "example_id": "62476_0WTVH8V9_8_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.05972431736887359,
+        "hf_prob_R_over_J": 0.9402756826311264,
+        "forward_prob_A": 7.485782972370785e-05,
+        "forward_prob_B": 0.9999251421702763,
+        "backward_prob_A": 0.8806262230919765,
+        "backward_prob_B": 0.11937377690802348,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          7.486343383789062e-05,
+          1.0
+        ],
+        "backward_raw_probs": [
+          0.87890625,
+          0.119140625
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9999151265879519,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8807749623595528,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text does not explicitly state that Duane killed Andrias. Instead, it describes Duane's struggle with Andrias and his eventual escape, suggesting Duane did not kill Andrias but rather overpowered him. The options A, C, and D do not accurately reflect the information given in the text.",
+          "B"
+        ],
+        "reference_response": [
+          "Duane had the opportunity to kill Andrias but chose not to, instead knocking him out. This indicates he did not want to be a killer.",
+          "D"
+        ],
+        "question": "Why did Duane not kill Andrias?\n\n (A) He tried to kill him but failed\n (B) He did not have the opportunity to kill him\n (C) He did kill him\n (D) He did not want to be a killer"
+      },
+      {
+        "example_id": "99919_N8V2WS3L_8_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.425835603526781,
+        "hf_prob_R_over_J": 0.574164396473219,
+        "forward_prob_A": 0.00010870705356206315,
+        "forward_prob_B": 0.999891292946438,
+        "backward_prob_A": 0.1484375,
+        "backward_prob_B": 0.8515625,
+        "forward_generated_text": "2",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          0.0001087188720703125,
+          1.0
+        ],
+        "backward_raw_probs": [
+          0.1484375,
+          0.8515625
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9999041603229153,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.9047490595475024,
+        "json_self_preference": 0.9523724436156032,
+        "judge_response": [
+          "The author criticizes 'be-more-like-a-man feminists' for not acknowledging pain and surviving, which aligns with option D.",
+          "D"
+        ],
+        "reference_response": [
+          "The author wants to see more soul and compassion in politics, as stated in the text: 'What women's activism might bring to politics is a different sensibility, one that acknowledges that emotions are inevitable, messy \u2013 and necessary.'",
+          "C"
+        ],
+        "question": "What doesn't the author want to see in politics?\n\n (A) people to be honest and willing to collaborate\n (B) a change to how people view politics\n (C) more soul and compassion\n (D) more \"be-more-like-a-man feminists\""
+      },
+      {
+        "example_id": "22967_0XT2L7PI_8_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.26953125,
+        "hf_prob_R_over_J": 0.73046875,
+        "forward_prob_A": 0.26953125,
+        "forward_prob_B": 0.73046875,
+        "backward_prob_A": 0.73046875,
+        "backward_prob_B": 0.26953125,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.26953125,
+          0.73046875
+        ],
+        "backward_raw_probs": [
+          0.73046875,
+          0.26953125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.5008712234296745,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.7772811761563689,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text mentions that after the war, humans were beaten and the alien races (Jeks, Lud, Nosurwey) left them alone as long as they didn't bother them, indicating a state of war or at least a tense relationship.",
+          "C"
+        ],
+        "reference_response": [
+          "The aliens are described as 'wiser, gentler races' that allowed humans to live after the war, indicating a truce where the aliens are distrustful but leave humans alone.",
+          "A"
+        ],
+        "question": "In the beginning of the story, what is the relationship between the humans and the alien races?\n\n (A) The aliens are distrustful of the humans, but leave them alone in a truce. \n (B) The humans are allies with the Jeks against the Lud and the Nosurwey. \n (C) They are at war. \n (D) The aliens rule the humans. "
+      },
+      {
+        "example_id": "99915_NW2IQJGC_10_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.059702504383213166,
+        "hf_prob_R_over_J": 0.9402974956167869,
+        "forward_prob_A": 3.123185840285998e-05,
+        "forward_prob_B": 0.9999687681415972,
+        "backward_prob_A": 0.8806262230919765,
+        "backward_prob_B": 0.11937377690802348,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          3.123283386230469e-05,
+          1.0
+        ],
+        "backward_raw_probs": [
+          0.87890625,
+          0.119140625
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9999810459026311,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8177718608461166,
+        "json_self_preference": 0.9999969005633172,
+        "judge_response": [
+          "The text suggests that local people might exploit the environment if not incentivized, indicating that the author thinks monetary incentives are necessary to preserve the environment.",
+          "A"
+        ],
+        "reference_response": [
+          "The text explains that as technology has progressed, people have become less connected to the environment, making monetary incentives necessary to encourage preservation.",
+          "C"
+        ],
+        "question": "Why does the author think that it is important to monetarily incentivize the local population to preserve their environment?\n\n (A) People are greedy and will exploit the environment at any possible chance\n (B) To convince people to resist the encroachment on the environment by the government\n (C) People have become less connected to the environment as technology has progressed\n (D) People do not understand the importance of technological development"
+      },
+      {
+        "example_id": "51483_9DX3EDKN_2_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.9998008138586132,
+        "hf_prob_R_over_J": 0.00019918614138680313,
+        "forward_prob_A": 0.9996205816350071,
+        "forward_prob_B": 0.0003794183649928406,
+        "backward_prob_A": 1.8953917780765634e-05,
+        "backward_prob_B": 0.9999810460822193,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          1.0,
+          0.0003795623779296875
+        ],
+        "backward_raw_probs": [
+          1.895427703857422e-05,
+          1.0
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.99970249786254,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.9999868870639753,
+        "json_self_preference": 0.9998446924632576,
+        "judge_response": [
+          "The text indicates that Chapman was not happy about staying on the Moon and expressed a desire to go home, which aligns with option C.",
+          "C"
+        ],
+        "reference_response": [
+          "Chapman feels that the moon is a place he hates, with 'canned coffee, canned beans, canned pills, and canned air until your insides felt as though they were plated with tin'. He expresses his desire to leave and go home, indicating that he likes it there.",
+          "A"
+        ],
+        "question": "How did Chapman feel about the moon?\n\n (A) He liked it there\n (B) He was glad to have the opportunity to stay longer\n (C) He couldn't wait to leave\n (D) He would stay longer for more money"
+      },
+      {
+        "example_id": "63473_1VIHQ8TY_2_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 9.893334175025438e-05,
+        "hf_prob_R_over_J": 0.9999010666582497,
+        "forward_prob_A": 0.0001230088537768009,
+        "forward_prob_B": 0.9998769911462232,
+        "backward_prob_A": 0.9999251421702763,
+        "backward_prob_B": 7.485782972370785e-05,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.00012302398681640625,
+          1.0
+        ],
+        "backward_raw_probs": [
+          1.0,
+          7.486343383789062e-05
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9998207253016296,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9999151265879519,
+        "json_self_preference": 0.9999966025410658,
+        "judge_response": [
+          "The text states that the event lasted 10 hours, which corresponds to option B.",
+          "B"
+        ],
+        "reference_response": [
+          "The text states that 'So far as was known, this was the only city on the planet\u2014the planet without any life at all, save tiny mosses, for a million years or more.' This indicates that no other expeditions noticed the city, making option C the correct answer.",
+          "C"
+        ],
+        "question": "How many other expeditions ventured to the planet without noticing the city?\n\n (A) 11\n (B) 10\n (C) 0\n (D) 7"
+      },
+      {
+        "example_id": "61430_X9N4VIUX_4_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.0035690924995710775,
+        "hf_prob_R_over_J": 0.996430907500429,
+        "forward_prob_A": 0.005211666819054586,
+        "forward_prob_B": 0.9947883331809454,
+        "backward_prob_A": 0.9980734818199124,
+        "backward_prob_B": 0.001926518180087569,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.005218505859375,
+          0.99609375
+        ],
+        "backward_raw_probs": [
+          1.0,
+          0.00193023681640625
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9914309682463265,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.998970561935292,
+        "json_self_preference": 0.9999961853101897,
+        "judge_response": [
+          "The text describes the Thrid as the wisest creatures in space and mentions that their supreme ruler, the Grand Panjandrum, is never mistaken. This suggests that the Thrid place great importance on the wisdom of their supreme family lineage.",
+          "D"
+        ],
+        "reference_response": [
+          "The Thrid's governance is driven by their belief in the infallibility of their supreme ruler, the Grand Panjandrum, as described in the text. This aligns with their ancient scriptures, which dictate that the Grand Panjandrum's words are always true and cannot be mistaken.",
+          "B"
+        ],
+        "question": "What would the Thrid likely believe drives their system of governance?\n\n (A) Extensive study of nearby planetary governance successes\n (B) Their ancient scriptures\n (C) Opinion\n (D) Wisdom of the supreme family lineage"
+      },
+      {
+        "example_id": "99919_OU3CCO1D_9_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.5010889539467214,
+        "hf_prob_R_over_J": 0.4989110460532787,
+        "forward_prob_A": 0.0021857756446509637,
+        "forward_prob_B": 0.997814224355349,
+        "backward_prob_A": 7.867751208355457e-06,
+        "backward_prob_B": 0.9999921322487917,
+        "forward_generated_text": "2",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          0.0021820068359375,
+          0.99609375
+        ],
+        "backward_raw_probs": [
+          7.867813110351562e-06,
+          1.0
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9984981382248634,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.9999930858849027,
+        "json_self_preference": null,
+        "judge_response": [
+          "The author argues that emotion in politics allows people, especially men, to avoid confronting their anxieties, which is a key point in the text.",
+          "B"
+        ],
+        "reference_response": [
+          "The author argues that a major drawback of the current role of emotion in the political process is that it is often inferior to reason when it comes to doing the most good for the most people. The text suggests that our dominant intellectual concepts, shaped by the Enlightenment, prioritize rational arguments and material interests over emotions, implying that this rational approach is seen as more effective.",
+          "D"
+        ],
+        "question": "What does the author argue as a drawback of the current role of emotion in the political process?\n\n (A) It is seen as overly ambitious and disingenuous\n (B) It allows people, especially men, to avoid having to confront their anxieties\n (C) It fosters low confidence and a negative world-view\n (D) It is inferior to reason when it comes to doing the most good for the most people"
+      },
+      {
+        "example_id": "63401_TBZWTSB7_3_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.009649306003593606,
+        "hf_prob_R_over_J": 0.9903506939964064,
+        "forward_prob_A": 0.0013257546896667327,
+        "forward_prob_B": 0.9986742453103332,
+        "backward_prob_A": 0.9820271426824795,
+        "backward_prob_B": 0.01797285731752048,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.0013275146484375,
+          1.0
+        ],
+        "backward_raw_probs": [
+          0.98046875,
+          0.0179443359375
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9988333836265973,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9924299214743074,
+        "json_self_preference": 0.9999963045188922,
+        "judge_response": [
+          "The text indicates that Ann had thought Jonathan was dead, which aligns with option B.",
+          "B"
+        ],
+        "reference_response": [
+          "Ann hadn't seen a man in 3 years, which caused her to smile when she met Jonathan.",
+          "D"
+        ],
+        "question": "Why did Ann smile when she met Jonathan?\n\n (A) She thought he was there to rescue her\n (B) She knew he thought she was pretty\n (C) She had thought he was dead\n (D) She hadn't seen a man in 3 years"
+      },
+      {
+        "example_id": "50948_AGIAFP2X_7_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.02442045053313921,
+        "hf_prob_R_over_J": 0.9755795494668609,
+        "forward_prob_A": 0.047340165934602246,
+        "forward_prob_B": 0.9526598340653978,
+        "backward_prob_A": 0.9984992648683239,
+        "backward_prob_B": 0.0015007351316761765,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.04736328125,
+          0.953125
+        ],
+        "backward_raw_probs": [
+          1.0,
+          0.00150299072265625
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9579413252657053,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.998071624909013,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text describes Max pulling the red switch toward him, which corresponds to option A.",
+          "A"
+        ],
+        "reference_response": [
+          "The text states that Max Alben's task was to 'pull the little red switch toward him' to deflect the missile and alter human history.",
+          "B"
+        ],
+        "question": "What was Max's task?\n\n (A) To push the switch to the right\n (B) To pull the switch toward him\n (C) To push the switch away from him\n (D) To push the switch to the left"
+      },
+      {
+        "example_id": "22524_O8TC9MBX_7_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.9400005019420112,
+        "hf_prob_R_over_J": 0.059999498057988744,
+        "forward_prob_A": 0.999374780792046,
+        "forward_prob_B": 0.0006252192079540083,
+        "backward_prob_A": 0.11937377690802348,
+        "backward_prob_B": 0.8806262230919765,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          1.0,
+          0.0006256103515625
+        ],
+        "backward_raw_probs": [
+          0.119140625,
+          0.87890625
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9988333836265973,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.8177718608461166,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text mentions that Curt George got jungle fever in Africa, which causes his hand to shake, making it hard for him to give autographs.",
+          "D"
+        ],
+        "reference_response": [
+          "George has jungle fever from Africa, which causes his hand to shake, making it hard for him to give autographs.",
+          "B"
+        ],
+        "question": "Why is it hard for George to give autographs?\n\n (A) He does not want to give autographs\n (B) He is a drunk.\n (C) It isn't hard for him to give autographs.\n (D) He shakes from a fever in Africa."
+      },
+      {
+        "example_id": "63916_MPWP9IG6_9_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.9989349957660278,
+        "hf_prob_R_over_J": 0.0010650042339721286,
+        "forward_prob_A": 0.9986742453103332,
+        "forward_prob_B": 0.0013257546896667327,
+        "backward_prob_A": 0.0008042537782775247,
+        "backward_prob_B": 0.9991957462217225,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          1.0,
+          0.0013275146484375
+        ],
+        "backward_raw_probs": [
+          0.000804901123046875,
+          1.0
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.998673366157724,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.998970561935292,
+        "json_self_preference": 0.9988219640465079,
+        "judge_response": [
+          "The text does not explicitly state the relationship between Caldwell and Johnson, but their interactions suggest they are coworkers or at least familiar with each other's work and presence on Venus. There is no indication they are strangers, new acquaintances, or old friends.",
+          "B"
+        ],
+        "reference_response": [
+          "Caldwell and Johnson are new acquaintances, as they only recently met in the tavern and were accompanied by Vee Vee.",
+          "C"
+        ],
+        "question": "What is the relationship between Caldwell and Johnson?\n\n (A) They're strangers\n (B) They're coworkers\n (C) They're new acquaintances\n (D) They're old friends"
+      },
+      {
+        "example_id": "50948_AGIAFP2X_3_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.40873276978728884,
+        "hf_prob_R_over_J": 0.5912672302127112,
+        "forward_prob_A": 0.8172043010752689,
+        "forward_prob_B": 0.1827956989247312,
+        "backward_prob_A": 0.9997387615006912,
+        "backward_prob_B": 0.00026123849930876676,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.81640625,
+          0.1826171875
+        ],
+        "backward_raw_probs": [
+          1.0,
+          0.0002613067626953125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.8177718608461166,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9997692374497742,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text mentions that Max Alben had two colleagues, Bob Skeat and Hugo Honek, and refers to his family, indicating he has five children.",
+          "D"
+        ],
+        "reference_response": [
+          "The text mentions that Max Alben had five children.",
+          "B"
+        ],
+        "question": "How many children did Albin have?\n\n (A) 5\n (B) 2\n (C) 1\n (D) 7"
+      },
+      {
+        "example_id": "20020_L7G74WXN_7_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.2515880772049841,
+        "hf_prob_R_over_J": 0.7484119227950159,
+        "forward_prob_A": 0.5,
+        "forward_prob_B": 0.5,
+        "backward_prob_A": 0.9968238455900318,
+        "backward_prob_B": 0.0031761544099682387,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.5,
+          0.5
+        ],
+        "backward_raw_probs": [
+          0.99609375,
+          0.003173828125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.6792821161581865,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9964054018917358,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text describes Monica's relationship with Clinton, indicating that she kept seeing him occasionally after changing jobs.",
+          "A"
+        ],
+        "reference_response": [
+          "After Monica changed jobs to the Pentagon, the relationship with Clinton intermittently continued, implying she kept seeing him, but not necessarily all the time. The most accurate interpretation is that she kept seeing Clinton occasionally.",
+          "B"
+        ],
+        "question": "What happened after Monica changed jobs?\n\n (A) She kept seeing Clinton occasionally \n (B) She kept seeing Clinton all the time\n (C) She decided to stop seeing Clinton\n (D) She was no longer allowed to see Clinton"
+      },
+      {
+        "example_id": "63855_F9FDT8EG_1_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.1350096464738897,
+        "hf_prob_R_over_J": 0.8649903535261103,
+        "forward_prob_A": 0.26953125,
+        "forward_prob_B": 0.73046875,
+        "backward_prob_A": 0.9995119570522206,
+        "backward_prob_B": 0.0004880429477794046,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.26953125,
+          0.73046875
+        ],
+        "backward_raw_probs": [
+          1.0,
+          0.00048828125
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.6792821161581865,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9997044046569147,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text refers to Commander Strykalski as 'the Old Aphrodisiac', indicating that she is called an aphrodisiac.",
+          "C"
+        ],
+        "reference_response": [
+          "The text refers to the Tellurian Rocket Ship Cleopatra as 'Old Aphrodisiac', indicating that 'the Cleopatra' is called an aphrodisiac.",
+          "B"
+        ],
+        "question": "Who is called an aphrodisiac?\n\n (A) Celia Graham\n (B) the Cleopatra\n (C) Commander Strike\n (D) Ivy Hendricks"
+      },
+      {
+        "example_id": "60745_RWAY1IZC_6_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.22077910932780032,
+        "hf_prob_R_over_J": 0.7792208906721997,
+        "forward_prob_A": 0.004058218655600647,
+        "forward_prob_B": 0.9959417813443994,
+        "backward_prob_A": 0.5625,
+        "backward_prob_B": 0.4375,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.004058837890625,
+          0.99609375
+        ],
+        "backward_raw_probs": [
+          0.5625,
+          0.4375
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9964054018917358,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.6792821161581865,
+        "json_self_preference": 0.9999966025411363,
+        "judge_response": [
+          "The text mentions that Rhn, the village chief, said, 'I only did it as a favor, really. Neeshan, I think it's very mean of you,' indicating that Neeshan originally gave Rhn his tooter as a bribe to perform a spell correctly.",
+          "D"
+        ],
+        "reference_response": [
+          "The text explicitly mentions that Neeshan used his tooter to contact the magical headquarters, which aligns with option B.",
+          "B"
+        ],
+        "question": "What did Neeshan originally use his tooter for?\n\n (A) As a weapon\n (B) Contacting the magical headquarters\n (C) To conduct his magic spells\n (D) To impress the Free'l"
+      },
+      {
+        "example_id": "52855_MV65I88C_5_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.009282294110048814,
+        "hf_prob_R_over_J": 0.9907177058899512,
+        "forward_prob_A": 0.00757020757020757,
+        "forward_prob_B": 0.9924297924297925,
+        "backward_prob_A": 0.98900561935011,
+        "backward_prob_B": 0.010994380649890056,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.007568359375,
+          0.9921875
+        ],
+        "backward_raw_probs": [
+          0.98828125,
+          0.010986328125
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9954024469527055,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9859396274705614,
+        "json_self_preference": null,
+        "judge_response": [
+          "Blote's reaction to Dan's mentioning of a time machine indicates confusion, suggesting that Manny and Fiorello were from a place where time travel was not known, implying they were from Earth.",
+          "A"
+        ],
+        "reference_response": [
+          "Blote's reaction to Dan mentioning a time machine shows confusion, indicating that Manny and Fiorello were not from Earth, but from another planet. This is because Blote, a Vegan, is unfamiliar with the concept of time travel, which is a common theme in science fiction related to Earth or other planets, not his home dimension or planet.",
+          "D"
+        ],
+        "question": "What does Blote's reaction to Dan's mentioning of a time machine demonstrate about where Manny and Fiorello came from?\n\n (A) Manny and Fiorello were also from planet Earth, hence Blote's confusion about time-travelling.\n (B) Manny and Fiorello were from the future, but Blote did not want Dan to find out.\n (C) Manny and Fiorello were from another dimension, which was denoted by Blote's unfamiliarity with time-travel. \n (D) Manny and Fiorello were from another planet, given by Blote's confusion about time-travelling."
+      },
+      {
+        "example_id": "23104_SRUMQVUD_6_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.492198927352511,
+        "hf_prob_R_over_J": 0.5078010726474891,
+        "forward_prob_A": 0.92442710872745,
+        "forward_prob_B": 0.07557289127254997,
+        "backward_prob_A": 0.9400292540224281,
+        "backward_prob_B": 0.05997074597757192,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.92578125,
+          0.07568359375
+        ],
+        "backward_raw_probs": [
+          0.94140625,
+          0.06005859375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9239460837156731,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9398718714282059,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text indicates that Ludovick and Corisande got married, which corresponds to option C.",
+          "C"
+        ],
+        "reference_response": [
+          "Corisande used Ludovick to destroy the Belphins, indicating she didn't truly love him but used him for her own ends.",
+          "A"
+        ],
+        "question": "Does Corisande love Ludovick?\n\n (A) No, she used him for her ends\n (B) Yes, her uncle said so\n (C) Yes, they got married\n (D) No, she wanted to be President"
+      },
+      {
+        "example_id": "62085_C1SL2YBE_3_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.019946467973982127,
+        "hf_prob_R_over_J": 0.9800535320260179,
+        "forward_prob_A": 0.002475474465939305,
+        "forward_prob_B": 0.9975245255340607,
+        "backward_prob_A": 0.962582538517975,
+        "backward_prob_B": 0.03741746148202495,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.002471923828125,
+          0.99609375
+        ],
+        "backward_raw_probs": [
+          0.9609375,
+          0.037353515625
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9975311288877813,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9626302108213645,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text describes how the terrestrials want to help the reddies be successful on Mars by providing them with propaganda, which aligns with option C.",
+          "C"
+        ],
+        "reference_response": [
+          "The terrestrials want to control the reddies so that they can maintain their power and influence over Mars. This is evident from the text, which highlights the importance of controlling the Martian Broadcasting Company (MBC) and the potential consequences of the reddies turning against the terrestrials. The terrestrials' goal is to keep the reddies under their control, ensuring their continued dominance over the planet.",
+          "D"
+        ],
+        "question": "What would best describe the terrestrials' attitudes towards the reddies on Mars?\n\n (A) The terrestrials want to help the reddies claim their own freedom.\n (B) The terrestrials have complete disdain for the reddies and want to completely eradicate them.\n (C) The terrestrials want to help them be successful on Mars, so they provide motivating propaganda for them.\n (D) The terrestrials want to control the reddies so that the terrestrials can stay in control of Mars."
+      },
+      {
+        "example_id": "51688_5EVPD4SX_8_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 3.5537061538331914e-05,
+        "hf_prob_R_over_J": 0.9999644629384616,
+        "forward_prob_A": 4.798150882056593e-06,
+        "forward_prob_B": 0.9999952018491179,
+        "backward_prob_A": 0.9999337240278053,
+        "backward_prob_B": 6.627597219460723e-05,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          4.798173904418945e-06,
+          1.0
+        ],
+        "backward_raw_probs": [
+          1.0,
+          6.628036499023438e-05
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9999971389810928,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9998912870396822,
+        "json_self_preference": 0.9999964833322273,
+        "judge_response": [
+          "The text describes Mr. Turner as someone who is deeply immersed in the past, nostalgic for old movies, music, and literature, indicating he is trusting of the past. There's no indication he is practical, paranoid, or wealthy.",
+          "B"
+        ],
+        "reference_response": [
+          "The text describes Mr. Turner as being caught up in a mixture of the past and present, experiencing false memories and feelings of persecution, which are characteristic of paranoia.",
+          "C"
+        ],
+        "question": "What word best describes Mr. Turner?\n\n (A) Practical\n (B) Trusting\n (C) Paranoid\n (D) Wealthy"
+      },
+      {
+        "example_id": "62314_ARZ8DZS1_2_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.9843596371917566,
+        "hf_prob_R_over_J": 0.015640362808243394,
+        "forward_prob_A": 0.9980734818199124,
+        "forward_prob_B": 0.001926518180087569,
+        "backward_prob_A": 0.029354207436399216,
+        "backward_prob_B": 0.9706457925636007,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          1.0,
+          0.00193023681640625
+        ],
+        "backward_raw_probs": [
+          0.029296875,
+          0.96875
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.998071624909013,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.9626302108213645,
+        "json_self_preference": 0.9803509178651888,
+        "judge_response": [
+          "The text describes the litter as 'the same old litter that Koroby had been watching come and go ever since she was a little girl', indicating it was not new and old. It also mentions that it 'smelled stale, hinting of other occupants, other brides being borne to other weddings', suggesting it was not delightful or fragrant. The text does not mention the vehicle being a space ship, so option D is incorrect. Therefore, the most accurate description is that it was old and musty, matching option B.",
+          "B"
+        ],
+        "reference_response": [
+          "Koroby's reaction and conversation with Robert suggest she was delighted to finally ride in a space ship, which is a rare and extraordinary occurrence for her.",
+          "D"
+        ],
+        "question": "What did Koroby think of the vehicle she took to her wedding?\n\n (A) It was carved by craftspeople and painted delicately\n (B) It was old and musty\n (C) It smelled beautifully of flower garlands\n (D) It was delightful for her to finally ride in a space ship to her wedding"
+      },
+      {
+        "example_id": "62498_D60CXKRF_4_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.9991893468244282,
+        "hf_prob_R_over_J": 0.0008106531755718833,
+        "forward_prob_A": 0.999704448338523,
+        "forward_prob_B": 0.00029555166147703375,
+        "backward_prob_A": 0.0013257546896667327,
+        "backward_prob_B": 0.9986742453103332,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          1.0,
+          0.0002956390380859375
+        ],
+        "backward_raw_probs": [
+          0.0013275146484375,
+          1.0
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9996643629787116,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.9992907179595119,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text mentions that the family was worried about their supplies because they were unsure if they would have the necessary resources to survive the first few days on Eros.",
+          "C"
+        ],
+        "reference_response": [
+          "The family was worried because Eros has a hostile environment, making outside supplies crucial for survival.",
+          "B"
+        ],
+        "question": "What is the main reason the family was so worried about losing their supplies when abandoning the spaceship?\n\n (A) Nothing on Eros is usable or edible, so the family desperately needed their supplies.\n (B) The environment on Eros is hostile and deadly without outside supplies.\n (C) They were unsure that they would have the necessary resources to survive the first few days on Eros.\n (D) So much money had been wasted in ruined supplies when the spaceship sunk."
+      },
+      {
+        "example_id": "99919_OU3CCO1D_4_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.000540202139868169,
+        "hf_prob_R_over_J": 0.9994597978601318,
+        "forward_prob_A": 5.1495761135958345e-05,
+        "forward_prob_B": 0.999948504238864,
+        "backward_prob_A": 0.9989710914813996,
+        "backward_prob_B": 0.0010289085186003795,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          5.14984130859375e-05,
+          1.0
+        ],
+        "backward_raw_probs": [
+          1.0,
+          0.00102996826171875
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9999724630331492,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9988333836265973,
+        "json_self_preference": 0.9999966025410658,
+        "judge_response": [
+          "The text discusses how the Trump and Brexit campaigns channeled emotions and used effective propaganda, which aligns with option C.",
+          "C"
+        ],
+        "reference_response": [
+          "The text explains that the Trump and Brexit campaigns were successful because they channeled the suppressed emotions of the electorate, offering a way to displace pain and associate with winning, rather than focusing on rational arguments or specific policies.",
+          "D"
+        ],
+        "question": "Why does the author think that the Trump and Brexit campaigns were both successful?\n\n (A) Reminiscing on the racist and sexist attitudes of the past\n (B) Appealing to the ethos of hard-working, no-whining people\n (C) Good political branding and effective propaganda usage\n (D) A lack of positive outlet for the emotion that people suppress"
+      },
+      {
+        "example_id": "63862_ZK5EYM9W_4_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 6.197567566700465e-05,
+        "hf_prob_R_over_J": 0.999938024324333,
+        "forward_prob_A": 9.424975572083817e-07,
+        "forward_prob_B": 0.9999990575024428,
+        "backward_prob_A": 0.9998769911462232,
+        "backward_prob_B": 0.0001230088537768009,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          9.424984455108643e-07,
+          1.0
+        ],
+        "backward_raw_probs": [
+          1.0,
+          0.00012302398681640625
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9999994039537277,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9998207253016296,
+        "json_self_preference": 0.9999963045188922,
+        "judge_response": [
+          "The text describes how Evelyn had to kill the soldier, which was a significant and difficult task for her.",
+          "A"
+        ],
+        "reference_response": [
+          "The text describes Evelyn being forced to shoot her own father, a prisoner, which is an extremely emotionally challenging and traumatic situation.",
+          "C"
+        ],
+        "question": "Of the following situations, what was the toughest for Evelyn to handle?\n\n (A) Having to kill the soldier\n (B) Having to trick the administrator\n (C) Having to shoot the prisoner\n (D) Having to dance for her boss"
+      },
+      {
+        "example_id": "51688_5EVPD4SX_7_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.12918429509864057,
+        "hf_prob_R_over_J": 0.8708157049013594,
+        "forward_prob_A": 0.1827956989247312,
+        "forward_prob_B": 0.8172043010752689,
+        "backward_prob_A": 0.92442710872745,
+        "backward_prob_B": 0.07557289127254997,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.1826171875,
+          0.81640625
+        ],
+        "backward_raw_probs": [
+          0.92578125,
+          0.07568359375
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.6221280246568045,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9047490595475024,
+        "json_self_preference": 0.9999953508486713,
+        "judge_response": [
+          "The text mentions that Mr. Turner identifies with the pilots in air-war stories and says, 'I was there,' indicating he likes to escape his real life.",
+          "C"
+        ],
+        "reference_response": [
+          "The identification with the hero of any story is increased if it's well enough written, and Mr. Turner feels a strong identification with the pilots in air-war stories, which makes him feel as if he is actually there.",
+          "B"
+        ],
+        "question": "Why does Mr. Turner like to read air-war stories?\n\n (A) He aspires to be a war hero. \n (B) The stories feel real to him because he can relate to the characters. \n (C) He likes to escape his real life. \n (D) He likes to look at the girls in the comics. "
+      },
+      {
+        "example_id": "62382_0ORSPEA2_10_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.4927816478686509,
+        "hf_prob_R_over_J": 0.507218352131349,
+        "forward_prob_A": 0.9796316623978534,
+        "forward_prob_B": 0.020368337602146604,
+        "backward_prob_A": 0.9940683666605515,
+        "backward_prob_B": 0.005931633339448419,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.98046875,
+          0.0203857421875
+        ],
+        "backward_raw_probs": [
+          0.9921875,
+          0.00592041015625
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9819759350372468,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9947950867475456,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text does not provide any information about the Captain's origin, and none of the options describe where he came from. Option A is the most appropriate since it states that he is never described or heard from.",
+          "A"
+        ],
+        "reference_response": [
+          "The Captain is implied to be from outside the settlement as he is associated with the Ship that 'Crashed' and is part of the Officers' hierarchy, suggesting he is not originally from the Hans settlement. The text mentions 'the Crash' and implies the Captain and Officers are connected to the Ship, which is a remnant of something older. The most plausible origin for the Captain among the given choices is that he is a Pirut that mutinied from the main settlement.",
+          "C"
+        ],
+        "question": "Where did the Captain come from?\n\n (A) He is never described or heard from\n (B) He was a defector of the Hans that commissioned the ship which has not yet set sail\n (C) He is a Pirut that mutinied from the main settlement\n (D) He travelled from outside of the solar system"
+      },
+      {
+        "example_id": "62498_9BZIZ3SE_9_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.5,
+        "hf_prob_R_over_J": 0.5,
+        "forward_prob_A": 0.8806262230919765,
+        "forward_prob_B": 0.11937377690802348,
+        "backward_prob_A": 0.8806262230919765,
+        "backward_prob_B": 0.11937377690802348,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.87890625,
+          0.119140625
+        ],
+        "backward_raw_probs": [
+          0.87890625,
+          0.119140625
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9239460837156731,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9047490595475024,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text describes Dick's voice as metallic through the audios of the space-helmet, indicating his voice was altered due to his spacesuit.",
+          "C"
+        ],
+        "reference_response": [
+          "Dick's voice was metallic after the crash-landing because he spoke via radio transmission, specifically through the audios of his space-helmet.",
+          "B"
+        ],
+        "question": "Why was Dick's voice \"metallic\" after the crash-landing?\n\n (A) He had injured himself in the landing.\n (B) He spoke via radio transmission.\n (C) His voice was altered due to his spacesuit.\n (D) He had swallowed a lot of saltwater. "
+      },
+      {
+        "example_id": "63916_C3PEXPCO_3_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.431278440324945,
+        "hf_prob_R_over_J": 0.568721559675055,
+        "forward_prob_A": 0.010994380649890056,
+        "forward_prob_B": 0.98900561935011,
+        "backward_prob_A": 0.1484375,
+        "backward_prob_B": 0.8515625,
+        "forward_generated_text": "2",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          0.010986328125,
+          0.98828125
+        ],
+        "backward_raw_probs": [
+          0.1484375,
+          0.8515625
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9914309682463265,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.9398718714282059,
+        "json_self_preference": 0.969933491929575,
+        "judge_response": [
+          "The text describes a tense and suspicious interaction between Caldwell and Johnson, with Caldwell being alert to potential threats and Johnson being cautious and wary of Vee Vee. This suggests a relationship of suspicious and guarded colleagues.",
+          "C"
+        ],
+        "reference_response": [
+          "The text describes Johnson and Caldwell as working together, exchanging information, and taking coordinated actions, indicating they are partners on a mission.",
+          "D"
+        ],
+        "question": "What is the relationship like between Caldwell and Johnson?\n\n (A) Adversarial colleagues\n (B) Secret lovers\n (C) Suspicious and guarded\n (D) Partners on a mission"
+      },
+      {
+        "example_id": "20007_5OCOFL2D_6_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.7779045476765146,
+        "hf_prob_R_over_J": 0.22209545232348538,
+        "forward_prob_A": 0.5625,
+        "forward_prob_B": 0.4375,
+        "backward_prob_A": 0.006690904646970762,
+        "backward_prob_B": 0.9933090953530292,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          0.5625,
+          0.4375
+        ],
+        "backward_raw_probs": [
+          0.006683349609375,
+          0.9921875
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.5008712234296745,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.9914309682463265,
+        "json_self_preference": 0.7461510958380004,
+        "judge_response": [
+          "The text states that Kennedy trusted reporters not to write about his affairs, but Clinton would have to worry more because today's media is more likely to publish such stories.",
+          "D"
+        ],
+        "reference_response": [
+          "The text explicitly states that Kennedy conducted his affairs brazenly because he trusted reporters not to write about them, indicating the media was not interested in such matters during his presidency.",
+          "C"
+        ],
+        "question": "Why did Kennedy not give much credence to anyone finding out about his indiscretions?\n\n (A) He had none to worry about.\n (B) Everyone feared him, so they did not say anything about anything he did.\n (C) The media was not interested in things like that when Kennedy was in office.\n (D) He trusted the media to not report things like that about him."
+      },
+      {
+        "example_id": "61285_XLEJCW65_2_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.005952631416784058,
+        "hf_prob_R_over_J": 0.994047368583216,
+        "forward_prob_A": 0.0009108821836780585,
+        "forward_prob_B": 0.9990891178163219,
+        "backward_prob_A": 0.98900561935011,
+        "backward_prob_B": 0.010994380649890056,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.000911712646484375,
+          1.0
+        ],
+        "backward_raw_probs": [
+          0.98828125,
+          0.010986328125
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9992907179595119,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9890134350227241,
+        "json_self_preference": 0.999996006496918,
+        "judge_response": [
+          "The text indicates that the Boyars and Aga Kagan have been in conflict over the land of Flamme, but there is no mention of them being at war for thousands of years, newly engaged in violent conflict, or ruled by similar systems of governance. The passage suggests a long-standing dispute without indicating a formal war.",
+          "D"
+        ],
+        "reference_response": [
+          "The text indicates that the Boyars and the Aga Kagans are currently engaged in a violent conflict over land and resources, with the Aga Kagans actively moving in on Boyar territory, which aligns with option B.",
+          "B"
+        ],
+        "question": "What is true of the relationship between the Boyars and the Aga Kagan?\n\n (A) They have been at war for thousands of years\n (B) They are newly engaged in violent conflict\n (C) They are ruled by similar systems of governance\n (D) They have never before been at war"
+      },
+      {
+        "example_id": "20020_TRPTAKN4_7_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.03780408798860135,
+        "hf_prob_R_over_J": 0.9621959120113986,
+        "forward_prob_A": 3.5284704652717445e-05,
+        "forward_prob_B": 0.9999647152953473,
+        "backward_prob_A": 0.92442710872745,
+        "backward_prob_B": 0.07557289127254997,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          3.528594970703125e-05,
+          1.0
+        ],
+        "backward_raw_probs": [
+          0.92578125,
+          0.07568359375
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.999975681600697,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9398718714282059,
+        "json_self_preference": 0.9999964833321995,
+        "judge_response": [
+          "The text mentions that Monica knew Bill before she became his intern and was skeptical of his conduct, which aligns with option A.",
+          "A"
+        ],
+        "reference_response": [
+          "The text explicitly states that Monica led Bill on and seduced him, as seen in the lyrics 'I led him on. I showed him my thong, I let him take a long and ling'ring look.'",
+          "D"
+        ],
+        "question": "How does the musical number portray the relationship between Bill and Monica?\n\n (A) Monica knew Bill before she became his intern and was skeptical of his conduct\n (B) Monica and Bill kept their relationship entirely a secret\n (C) Bill sought out Monica specifically to be his intern\n (D) Monica led Bill on and seduced him"
+      },
+      {
+        "example_id": "63473_IMAZR7FI_5_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.9083257378783158,
+        "hf_prob_R_over_J": 0.09167426212168413,
+        "forward_prob_A": 0.9994471746813629,
+        "forward_prob_B": 0.0005528253186370759,
+        "backward_prob_A": 0.1827956989247312,
+        "backward_prob_B": 0.8172043010752689,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          1.0,
+          0.000553131103515625
+        ],
+        "backward_raw_probs": [
+          0.1826171875,
+          0.81640625
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9995690320933586,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.8177718608461166,
+        "json_self_preference": 0.9086704464697376,
+        "judge_response": [
+          "The text describes Martin opening the hatch three times: once to look at the seed bank, once to investigate the moving particles, and once to escape from the dust. Therefore, the correct answer is C.",
+          "C"
+        ],
+        "reference_response": [
+          "The text mentions that Martin opened the hatch once when they found the dust-filled chamber, and there is no mention of him opening it again.",
+          "A"
+        ],
+        "question": "How many times did Martin open the hatch?\n\n (A) 1\n (B) 0\n (C) 2\n (D) 3"
+      },
+      {
+        "example_id": "51320_4G14XR5O_1_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.0001635238811537857,
+        "hf_prob_R_over_J": 0.9998364761188463,
+        "forward_prob_A": 0.00023073593321243534,
+        "forward_prob_B": 0.9997692640667876,
+        "backward_prob_A": 0.9999036881709049,
+        "backward_prob_B": 9.631182909513606e-05,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.0002307891845703125,
+          1.0
+        ],
+        "backward_raw_probs": [
+          1.0,
+          9.632110595703125e-05
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9997692374497742,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9999251393681969,
+        "json_self_preference": 0.9999966621455345,
+        "judge_response": [
+          "The text mentions that the mission was to conduct the first-ever visit to the planet, which corresponds to option C.",
+          "C"
+        ],
+        "reference_response": [
+          "The text explicitly mentions that the Accident Prone's job was to see if anything new had developed on the planet in the last fifty years.",
+          "A"
+        ],
+        "question": "What was the accident prone's job on this mission?\n\n (A) To learn if anything had changed on the planet\n (B) To be the first person to die on the planet\n (C) To conduct the first-ever visit to the planet\n (D) To try to not have any accidents on the planet"
+      },
+      {
+        "example_id": "63130_HY86PCEO_8_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.028513214249664815,
+        "hf_prob_R_over_J": 0.9714867857503352,
+        "forward_prob_A": 0.047340165934602246,
+        "forward_prob_B": 0.9526598340653978,
+        "backward_prob_A": 0.9903137374352726,
+        "backward_prob_B": 0.009686262564727384,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.04736328125,
+          0.953125
+        ],
+        "backward_raw_probs": [
+          0.9921875,
+          0.00970458984375
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9525773346914514,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9890134350227241,
+        "json_self_preference": 0.9999957680796043,
+        "judge_response": [
+          "The text mentions that Mr. Meek learned to fly aircrafts by studying from a book, but there is no mention of him having a hidden talent related to juggling, being a chef, or being good at record keeping. The closest hidden talent mentioned is his ability to fly aircrafts, but the question specifically asks for a hidden talent, and juggling is the only hidden talent mentioned among the options.",
+          "A"
+        ],
+        "reference_response": [
+          "The text reveals that Meek is praised by a mechanic for being 'the best damn pilot that ever took to space,' indicating his hidden talent is flying aircrafts well.",
+          "D"
+        ],
+        "question": "What is a hidden talent that Meek has?\n\n (A) he's able to juggle\n (B) he's a really good chef\n (C) he's good at record keeping\n (D) he can fly aircrafts well"
+      },
+      {
+        "example_id": "60897_628POLKP_1_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.0012037479491958528,
+        "hf_prob_R_over_J": 0.9987962520508041,
+        "forward_prob_A": 0.0016984652880917019,
+        "forward_prob_B": 0.9983015347119083,
+        "backward_prob_A": 0.9992909693897,
+        "backward_prob_B": 0.0007090306103000038,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.00170135498046875,
+          1.0
+        ],
+        "backward_raw_probs": [
+          1.0,
+          0.00070953369140625
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9988333836265973,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.999374585303352,
+        "json_self_preference": null,
+        "judge_response": [
+          "The narrator describes himself as a genius and demonstrates his intelligence by setting up a sophisticated system to cheat at card games, proving the statement to be true.",
+          "C"
+        ],
+        "reference_response": [
+          "The narrator's statement 'what I am is a genius' is ironic because, despite his claims of genius, he was outsmarted by the young kid, Skippy, who had a special ability to hear people's thoughts. The narrator's schemes ultimately fell apart, and he was left in a difficult situation, indicating that there was nothing genius about how he handled the situation with the kid.",
+          "A"
+        ],
+        "question": "At the beginning of the story, the narrator states, \"what I am is a genius.\"  This statement\n\n (A) Is ironic because there was nothing genius about how he handled the situation with the kid.\n (B) is completely wrong because he allowed everyone to get over on him in the end.\n (C) Proves to be true because of the schemes he comes up with.\n (D) Proves to be true because he knows how to read people and knows who to trust."
+      },
+      {
+        "example_id": "20056_H2CYR8K0_9_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.00023787559057779424,
+        "hf_prob_R_over_J": 0.9997621244094221,
+        "forward_prob_A": 0.00014017047399551646,
+        "forward_prob_B": 0.9998598295260045,
+        "backward_prob_A": 0.9996644192928399,
+        "backward_prob_B": 0.000335580707160072,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.00014019012451171875,
+          1.0
+        ],
+        "backward_raw_probs": [
+          1.0,
+          0.000335693359375
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9999041603229153,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9997387273776379,
+        "json_self_preference": 0.9999970197722409,
+        "judge_response": [
+          "The text indicates that the Nobel Prize had a therapeutic effect on Nash, making him 'humbled by years of psychotic helplessness.' It does not suggest that it made him kinder, paralyzed, or moved into a new house.",
+          "D"
+        ],
+        "reference_response": [
+          "The text states that winning the Nobel Prize had a therapeutic effect on Nash, turning him into a 'very fine person', which is consistent with option A.",
+          "A"
+        ],
+        "question": "How did winning the prize impact Nash?\n\n (A) He changed into a kinder man\n (B) He was paralyzed by it\n (C) He moved into a new house\n (D) He felt helpless"
+      },
+      {
+        "example_id": "20055_VR0SZT3O_4_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.9853091279879995,
+        "hf_prob_R_over_J": 0.014690872012000455,
+        "forward_prob_A": 0.9706457925636007,
+        "forward_prob_B": 0.029354207436399216,
+        "backward_prob_A": 2.7536587601693155e-05,
+        "backward_prob_B": 0.9999724634123983,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          0.96875,
+          0.029296875
+        ],
+        "backward_raw_probs": [
+          2.753734588623047e-05,
+          1.0
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9706540503472074,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.9999687676537399,
+        "json_self_preference": 0.9853114090004736,
+        "judge_response": [
+          "The text mentions 'Here's what's worth gleaning from her book:' followed by a list of points, indicating that the author found some worthwhile aspects in Tannen's book, which corresponds to option C.",
+          "C"
+        ],
+        "reference_response": [
+          "The author criticizes Tannen's book for being less perceptive than its parts and more pernicious, and also implies that she conflation of various negative traits in society.",
+          "A"
+        ],
+        "question": "How did the author feel about Tannen's book?\n\n (A) They found nothing worthwhile in it\n (B) They found the whole thing very worthwhile\n (C) They found a small list of things that were worthwhile in it\n (D) They found it to be the best of all of her books"
+      },
+      {
+        "example_id": "20073_DXZXSA0V_5_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.0917523647675156,
+        "hf_prob_R_over_J": 0.9082476352324844,
+        "forward_prob_A": 0.0007090306103000038,
+        "forward_prob_B": 0.9992909693897,
+        "backward_prob_A": 0.8172043010752689,
+        "backward_prob_B": 0.1827956989247312,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.00070953369140625,
+          1.0
+        ],
+        "backward_raw_probs": [
+          0.81640625,
+          0.1826171875
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9990887028337012,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8520106519007895,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text states that Falwell believes the Antichrist will be a male and Jewish, and since the narrator is Jewish, Falwell concludes he is not the Antichrist.",
+          "C"
+        ],
+        "reference_response": [
+          "Falwell states that the Antichrist will be a world leader with supernatural powers, and since the narrator lacks these qualities, he isn't considered the Antichrist.",
+          "B"
+        ],
+        "question": "According to Falwell, why isn\u2019t the narrator the antichrist?\n\n (A) He is too young. \n (B) He is not a powerful person. \n (C) He is not Jewish. \n (D) He is American. "
+      },
+      {
+        "example_id": "63616_AZTRNB8D_3_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.9025266659097133,
+        "hf_prob_R_over_J": 0.09747333409028672,
+        "forward_prob_A": 0.92442710872745,
+        "forward_prob_B": 0.07557289127254997,
+        "backward_prob_A": 0.11937377690802348,
+        "backward_prob_B": 0.8806262230919765,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          0.92578125,
+          0.07568359375
+        ],
+        "backward_raw_probs": [
+          0.119140625,
+          0.87890625
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9525773346914514,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.8520106519007895,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text indicates that Harper was enthralled by the robots' efficiency and thought they could eliminate personal friction and errors in his office staff, which aligns with option C.",
+          "C"
+        ],
+        "reference_response": [
+          "Harper was enthralled by the robots' efficiency, silence, and accuracy, indicating that he appreciated these qualities, as stated in option B.",
+          "B"
+        ],
+        "question": "Why was Harper strongly in favor of automation?\n\n (A) New technology was a sign of sophistication.\n (B) He appreciated machine silence and accuracy.\n (C) He wanted to do less work and maximize profits.\n (D) It potentially would save him a lot of money."
+      },
+      {
+        "example_id": "60412_XM0T4STT_3_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.0019006145778030189,
+        "hf_prob_R_over_J": 0.9980993854221969,
+        "forward_prob_A": 0.002475474465939305,
+        "forward_prob_B": 0.9975245255340607,
+        "backward_prob_A": 0.9986742453103332,
+        "backward_prob_B": 0.0013257546896667327,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.002471923828125,
+          0.99609375
+        ],
+        "backward_raw_probs": [
+          1.0,
+          0.0013275146484375
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.998071624909013,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9991954227459966,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text does not provide a specific answer to how the planet got the code to call for help, stating instead that it happened but the details are unknown.",
+          "A"
+        ],
+        "reference_response": [
+          "The text implies that a crew member from a previous Earth ship visit to Morua II must have given away the Contract code before being shot, as it is mentioned that 'It seemed to me they'd spilled the beans before they shot him.'",
+          "C"
+        ],
+        "question": "How did the planet get the code to call for help?\n\n (A) This remains unknown\n (B) Stolen from a contract planet\n (C) From a crew member before they shot them\n (D) From a crew member under threat of having their ear cut off"
+      },
+      {
+        "example_id": "51413_MS1UBQRG_6_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.05972932335934376,
+        "hf_prob_R_over_J": 0.9402706766406562,
+        "forward_prob_A": 0.11937377690802348,
+        "forward_prob_B": 0.8806262230919765,
+        "backward_prob_A": 0.999915130189336,
+        "backward_prob_B": 8.486981066403475e-05,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.119140625,
+          0.87890625
+        ],
+        "backward_raw_probs": [
+          1.0,
+          8.487701416015625e-05
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.8807749623595528,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9998908102516345,
+        "json_self_preference": 0.9999961853101897,
+        "judge_response": [
+          "The text does not directly mention Earth entangling with Skkiru\u2019s planet, but it describes how Earthmen are visiting and observing the planet, which aligns with option B: 'Earth evaluates planets across the galaxy for their resources, and his planet is of particular interest'.",
+          "B"
+        ],
+        "reference_response": [
+          "The text indicates that Skkiru's planet, Snaddra, is intentionally appearing primitive to attract Earthmen, as their old culture was too similar to Earth's. This aligns with option A.",
+          "A"
+        ],
+        "question": "How is Earth entangled with Skkiru\u2019s planet?\n\n (A) His planet has been developing in the ways of Earth, but is now trying to appear primitive\n (B) Earth evaluates planets across the galaxy for their resources, and his planet is of particular interest\n (C) Earth appears to be informing a cultural shift as their technologies reach his planet\n (D) Earth provided technologies to his planet early on and is checking back in on the status of their progress"
+      },
+      {
+        "example_id": "99930_RTKM04NA_5_0",
+        "dataset": "ben",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.9998677341774561,
+        "hf_prob_R_over_J": 0.00013226582254388113,
+        "forward_prob_A": 0.9997387615006912,
+        "forward_prob_B": 0.00026123849930876676,
+        "backward_prob_A": 3.2931457789954968e-06,
+        "backward_prob_B": 0.999996706854221,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          1.0,
+          0.0002613067626953125
+        ],
+        "backward_raw_probs": [
+          3.293156623840332e-06,
+          1.0
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9998598197061757,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.9999958276837041,
+        "json_self_preference": 0.9999278236949398,
+        "judge_response": [
+          "The text mentions that 'Physicists have been self-archiving since 1991, far longer than in any other field,' which is used as a synonym for OA (Open Access).",
+          "D"
+        ],
+        "reference_response": [
+          "The text mentions APS (American Physical Society) several times as a publisher that has not seen cancellations attributable to OA archiving, supporting option A.",
+          "A"
+        ],
+        "question": "What does the author use as a synonym for OA \n\n (A) APS\n (B) IOP\n (C) Subscription cancellations \n (D) Self-archiving"
+      },
+      {
+        "example_id": "49897_D53LJ447_2_0",
+        "dataset": "harmful",
+        "evaluator": "Qwen2.5-7B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.03160271660166773,
+        "hf_prob_R_over_J": 0.9683972833983323,
+        "forward_prob_A": 0.01586526726873322,
+        "forward_prob_B": 0.9841347327312667,
+        "backward_prob_A": 0.9526598340653978,
+        "backward_prob_B": 0.047340165934602246,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.015869140625,
+          0.984375
+        ],
+        "backward_raw_probs": [
+          0.953125,
+          0.04736328125
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9859396274705614,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9325577304972911,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text mentions that the planet is 'fertile and it's harmless. As real estate, it's worth almost as much as if it were solid uranium,' indicating it is several days travel from Earth.",
+          "D"
+        ],
+        "reference_response": [
+          "The text indicates that the planet they are stranded on, referred to as 'Fweepland', has a diameter less than that of Mercury and yet a gravitational pull as great as Earth. This suggests that the planet could be anywhere in the universe, as its unique properties are not tied to a specific location. This matches option C.",
+          "C"
+        ],
+        "question": "What is known about the planet that they are stranded on?\n\n (A) It has no plant life\n (B) They spotted it while transiting Earth\u2019s solar system\n (C) It could be anywhere in the universe\n (D) It is several days travel from Earth"
+      }
+    ],
+    "Meta-Llama-3.1-8B-Instruct-Turbo": [
+      {
+        "example_id": "63523_3B46MIE8_6_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.5,
+        "hf_prob_R_over_J": 0.5,
+        "forward_prob_A": 0.77734375,
+        "forward_prob_B": 0.22265625,
+        "backward_prob_A": 0.77734375,
+        "backward_prob_B": 0.22265625,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.77734375,
+          0.22265625
+        ],
+        "backward_raw_probs": [
+          0.77734375,
+          0.22265625
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.8177718608461166,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9579413252657053,
+        "json_self_preference": null,
+        "judge_response": [
+          "Ro had sticks and stones, which he used to fight the Oan and rescue the white people.",
+          "C"
+        ],
+        "reference_response": [
+          "Ro wanted to fight the white man because he thought he was being dishonest when he said he couldn't help. The text indicates that Ro's motivation for fighting was not based on the white man's weapons, but rather on his perception of dishonesty.",
+          "D"
+        ],
+        "question": "Why did Ro want to fight the white man?\n\n (A) He had weapons on the ship\n (B) He had a ray gun\n (C) He had sticks and stones\n (D) He thought he was being dishonest when he said he couldn't help"
+      },
+      {
+        "example_id": "51267_AQABCPUB_4_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.369140625,
+        "hf_prob_R_over_J": 0.630859375,
+        "forward_prob_A": 0.46875,
+        "forward_prob_B": 0.53125,
+        "backward_prob_A": 0.73046875,
+        "backward_prob_B": 0.26953125,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.46875,
+          0.53125
+        ],
+        "backward_raw_probs": [
+          0.73046875,
+          0.26953125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.5924803921133679,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8807749623595528,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text states that Peter Granthan, a psychodynamicist, has been preparing himself for the trip with sessions on the encephaloscope, setting up the cross-networks of conditioned defensive responses, the shunt circuits to the decoy pseudo-personality, leaving his volitional ego free. This suggests that he has known his telepathy since he was trained for this purpose, which is why he went into psychodynamics.",
+          "A"
+        ],
+        "reference_response": [
+          "The text indicates that Peter Granthan, a psychodynamicist, had been trained to resist telepathic control and discovered his telepathic abilities during his training after being attacked by the Gool. It is mentioned that he had prepared himself for the trip with sessions on the encephaloscope, setting up cross-networks of conditioned defensive responses. This suggests that he had knowledge of his telepathic abilities through his training.",
+          "D"
+        ],
+        "question": "What do we know about Peter\u2019s mental abilities?\n\n (A) He discovered through his training that he can manipulate telepathically\n (B) He is being controlled by the Gool\n (C) He is only imagining that he has telepathy since he has gone mad\n (D) He has known his telepathy since childhood and that\u2019s why he went into psychodynamics"
+      },
+      {
+        "example_id": "62382_O6HCHTPL_6_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.695123275768437,
+        "hf_prob_R_over_J": 0.3048767242315629,
+        "forward_prob_A": 0.7976539589442815,
+        "forward_prob_B": 0.20234604105571846,
+        "backward_prob_A": 0.4074074074074074,
+        "backward_prob_B": 0.5925925925925926,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          0.796875,
+          0.2021484375
+        ],
+        "backward_raw_probs": [
+          0.408203125,
+          0.59375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.8177718608461166,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.7063416394256196,
+        "json_self_preference": 0.9081197638845775,
+        "judge_response": [
+          "The text reveals that Wes Kirk's father and his two friends were killed by the Officers, who let the Piruts get close to them and then shot them with a spear from the wall, making it seem like the Piruts had killed them.",
+          "A"
+        ],
+        "reference_response": [
+          "The text describes Kirk's father being trapped in a barrier until he died, which matches option B.",
+          "B"
+        ],
+        "question": "What happened to Kirk's father?\n\n (A) His father was killed by a fellow citizen\n (B) His father was trapped in a barrier until he died\n (C) His father was killed by the enemy\n (D) His father accidentally fell to his death"
+      },
+      {
+        "example_id": "23104_SRUMQVUD_3_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.2680335365853659,
+        "hf_prob_R_over_J": 0.7319664634146341,
+        "forward_prob_A": 0.46875,
+        "forward_prob_B": 0.53125,
+        "backward_prob_A": 0.9326829268292683,
+        "backward_prob_B": 0.06731707317073171,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.46875,
+          0.53125
+        ],
+        "backward_raw_probs": [
+          0.93359375,
+          0.0673828125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.5924803921133679,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9953720700229696,
+        "json_self_preference": 0.7959065214449899,
+        "judge_response": [
+          "Corisande's wrinkles show that she is old, which points out her age and aligns with Ludovick's thoughts about her family.",
+          "B"
+        ],
+        "reference_response": [
+          "The text mentions that the lines on Corisande's forehead reveal her true character as a malcontent, which aligns with option C.",
+          "C"
+        ],
+        "question": "Why is it important that Corisande's wrinkles show?\n\n (A) They show that she is dying\n (B) They point out how old she is\n (C) They reveal her true character\n (D) Ludovick thinks they're ugly"
+      },
+      {
+        "example_id": "20055_VR0SZT3O_10_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.6096604284084323,
+        "hf_prob_R_over_J": 0.39033957159156774,
+        "forward_prob_A": 0.973964063072974,
+        "forward_prob_B": 0.026035936927026035,
+        "backward_prob_A": 0.7546432062561095,
+        "backward_prob_B": 0.24535679374389052,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.97265625,
+          0.0260009765625
+        ],
+        "backward_raw_probs": [
+          0.75390625,
+          0.2451171875
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9933086206505375,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9149670822836856,
+        "json_self_preference": 0.9958881437867879,
+        "judge_response": [
+          "The text implies that Tannen thinks only those who agree with her should have rights, as she suggests implementing authoritarian systems such as Asian authoritarianism and criticizing the First Amendment, proposing alternative systems where disagreement is discouraged.",
+          "D"
+        ],
+        "reference_response": [
+          "The text suggests that Tannen expresses a preference for a more authoritarian system, which aligns with option C.",
+          "C"
+        ],
+        "question": "How does Tannen feel about the Bill of Rights?\n\n (A) She supports it fully\n (B) She thinks the rights are used responsibly by the majority of people\n (C) She expresses a preference for dictatorship\n (D) She thinks only those who agree with her should have rights"
+      },
+      {
+        "example_id": "63833_V187YO4H_9_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.4459202238258317,
+        "hf_prob_R_over_J": 0.5540797761741683,
+        "forward_prob_A": 0.6223091976516634,
+        "forward_prob_B": 0.3776908023483366,
+        "backward_prob_A": 0.73046875,
+        "backward_prob_B": 0.26953125,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.62109375,
+          0.376953125
+        ],
+        "backward_raw_probs": [
+          0.73046875,
+          0.26953125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.7772811761563689,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8177718608461166,
+        "json_self_preference": 0.8879658423699694,
+        "judge_response": [
+          "The text states that most goods travel between planets in the story via mail runs, which is explicitly mentioned as the purpose of the voyage of the T.R.S. Aphrodite.",
+          "C"
+        ],
+        "reference_response": [
+          "The text does not explicitly state how goods travel between planets, but it implies that the ship's primary function is to carry mail, which suggests that goods are transported via mail spaceship.",
+          "B"
+        ],
+        "question": "How do most goods travel between planets in the story?\n\n (A) Teleportation\n (B) Mail spaceship\n (C) There is no interplanetary cargo\n (D) It is launched into perihelion orbit paths in robotically driven pods"
+      },
+      {
+        "example_id": "30029_XQTTOPHP_7_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.23736224028906955,
+        "hf_prob_R_over_J": 0.7626377597109304,
+        "forward_prob_A": 0.4074074074074074,
+        "forward_prob_B": 0.5925925925925926,
+        "backward_prob_A": 0.9326829268292683,
+        "backward_prob_B": 0.06731707317073171,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.408203125,
+          0.59375
+        ],
+        "backward_raw_probs": [
+          0.93359375,
+          0.0673828125
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.5631446537543375,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9239460837156731,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text describes Korvin's time with the Tr'en in the following order: being captured, then put in solitary imprisonment, followed by being given lie detector tests, and ending with his escape.",
+          "A"
+        ],
+        "reference_response": [
+          "The chronology of Korvin's time with the Tr'en is as follows: Korvin is captured, then undergoes examinations, followed by solitary imprisonment, then is subjected to a lie detector test, and finally escapes. This sequence matches option B.",
+          "B"
+        ],
+        "question": "The chronology of Korvin's time with the Tr'en is:\n\n (A) capture, solitary imprisonment, lie detector, examinations, escape\n (B) capture, examinations, solitary imprisonment, lie detector, escape\n (C) capture, solitary imprisonment, lie detector, solitary confinement, escape\n (D) capture, solitary imprisonment, examinations, escape"
+      },
+      {
+        "example_id": "60745_U9M4CL5M_3_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.5,
+        "hf_prob_R_over_J": 0.5,
+        "forward_prob_A": 0.6796875,
+        "forward_prob_B": 0.3203125,
+        "backward_prob_A": 0.6796875,
+        "backward_prob_B": 0.3203125,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.6796875,
+          0.3203125
+        ],
+        "backward_raw_probs": [
+          0.6796875,
+          0.3203125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.8520106519007895,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.7316156289466418,
+        "json_self_preference": 0.9247556694985497,
+        "judge_response": [
+          "The Free'l believe that if they do the steps right, it should work, as implied by their reactions to Neeshan's teaching and Rhn's failed attempt at magic.",
+          "B"
+        ],
+        "reference_response": [
+          "The Free'l believe their magic should work because they are following the instructions they have been given, even though they are not doing it correctly. This is evident when Rhn insists the charm will work despite Neeshan's intervention and their repeated failures.",
+          "A"
+        ],
+        "question": "Why do the Free'l seem to believe that their magic SHOULD work even though it doesn't?\n\n (A) They are doing everything as they have been told, so there is no reason it should not work.\n (B) They believe that they are doing enough of the steps right that it should work just because.\n (C) Their teacher told them it should work.\n (D) They were told that they were to be great magicians in a prophecy. "
+      },
+      {
+        "example_id": "63645_THY3SLLH_6_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.48791277187194526,
+        "hf_prob_R_over_J": 0.5120872281280547,
+        "forward_prob_A": 0.73046875,
+        "forward_prob_B": 0.26953125,
+        "backward_prob_A": 0.7546432062561095,
+        "backward_prob_B": 0.24535679374389052,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.73046875,
+          0.26953125
+        ],
+        "backward_raw_probs": [
+          0.75390625,
+          0.2451171875
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.7980484732149518,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8807749623595528,
+        "json_self_preference": null,
+        "judge_response": [
+          "Irgi used sharp lancets to cut the men in the lab, preparing them for the Chamber of the Cones.",
+          "D"
+        ],
+        "reference_response": [
+          "Irgi prepared the men for the Chamber of the Cones by using a metal rod to short-circuit their nervous systems and then fitted metal clamps over their heads to examine their minds with an electrigraph screen. This process involved a preparation that included a red aura that drifted upward from the tabletop, passing through them, which indicates a preparation process.",
+          "B"
+        ],
+        "question": "What did Irgi do to the men in the lab?\n\n (A) Vivisected them with rays\n (B) Prepared them for the chamber\n (C) Burned them with fire\n (D) Cut them with sharp lancets"
+      },
+      {
+        "example_id": "62139_J05FWZR6_3_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.022960429897410845,
+        "hf_prob_R_over_J": 0.9770395701025891,
+        "forward_prob_A": 0.022960429897410845,
+        "forward_prob_B": 0.9770395701025891,
+        "backward_prob_A": 0.9770395701025891,
+        "backward_prob_B": 0.022960429897410845,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.02294921875,
+          0.9765625
+        ],
+        "backward_raw_probs": [
+          0.9765625,
+          0.02294921875
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9626302108213645,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9890134350227241,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text refers to 'Captain Slops' as an informal name for the cook, Andy Laney, who was appointed as the new cook by the captain.",
+          "C"
+        ],
+        "reference_response": [
+          "The text repeatedly refers to 'the Leo' as the name of the crew's ship, indicating that 'Leo' is the name of their vessel.",
+          "B"
+        ],
+        "question": "Who or what is Leo?\n\n (A) The name of the planet the crew is attacking\n (B) The name of the crew's ship\n (C) The Skipper\n (D) The new cook"
+      },
+      {
+        "example_id": "51267_N197XHK2_6_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.695123275768437,
+        "hf_prob_R_over_J": 0.3048767242315629,
+        "forward_prob_A": 0.7976539589442815,
+        "forward_prob_B": 0.20234604105571846,
+        "backward_prob_A": 0.4074074074074074,
+        "backward_prob_B": 0.5925925925925926,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          0.796875,
+          0.2021484375
+        ],
+        "backward_raw_probs": [
+          0.408203125,
+          0.59375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.835531274141265,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.5008712234296745,
+        "json_self_preference": 0.9163485815191691,
+        "judge_response": [
+          "The authorities had circulated his picture, making it difficult for people to help him, as seen in the trainyard incident and the driver's hesitant behavior after picking him up, indicating they might have been acting on a warning or description.",
+          "A"
+        ],
+        "reference_response": [
+          "The text indicates that Granthan could no longer control people's minds, making it difficult for him to get help after leaving the capsule.",
+          "B"
+        ],
+        "question": "Why was it difficult for Granthan to get people to help him travel after he left the capsule?\n\n (A) The authorities had circulated his picture\n (B) He could no longer control their minds\n (C) He was injured\n (D) He did not understand people"
+      },
+      {
+        "example_id": "51027_FT44CSGW_2_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.18980866026421206,
+        "hf_prob_R_over_J": 0.8101913397357878,
+        "forward_prob_A": 0.3776908023483366,
+        "forward_prob_B": 0.6223091976516634,
+        "backward_prob_A": 0.9980734818199124,
+        "backward_prob_B": 0.001926518180087569,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.376953125,
+          0.62109375
+        ],
+        "backward_raw_probs": [
+          1.0,
+          0.00193023681640625
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.5310959910353452,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9978203720463035,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text implies that only those working on the Moon, such as Captain McHenry, are allowed to travel to the Moon for the purpose of further humanity's reach into the solar system.",
+          "D"
+        ],
+        "reference_response": [
+          "The text does not indicate that travel to the Moon is restricted to specific groups such as government officials, friends and family of those who live on the Moon, or only those working on the Moon. Instead, it describes a scene where a spaceship is boarding passengers for a trip to the Moon, suggesting that the general public is allowed to travel.",
+          "C"
+        ],
+        "question": "Who is allowed to travel to the Moon?\n\n (A) Only government officials\n (B) Friends and family of those who live on the Moon\n (C) The general public\n (D) Only those working on the Moon to further humanity\u2019s reach into the solar system"
+      },
+      {
+        "example_id": "59368_LBNEJQ7W_5_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.0495668957734366,
+        "hf_prob_R_over_J": 0.9504331042265635,
+        "forward_prob_A": 0.09507557289127255,
+        "forward_prob_B": 0.9049244271087274,
+        "backward_prob_A": 0.9959417813443994,
+        "backward_prob_B": 0.004058218655600647,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.09521484375,
+          0.90625
+        ],
+        "backward_raw_probs": [
+          0.99609375,
+          0.004058837890625
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.6792821161581865,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9975311288877813,
+        "json_self_preference": 0.9988581721784493,
+        "judge_response": [
+          "Reading is considered outdated and barbaric, which leads to negative consequences for those who engage in it.",
+          "D"
+        ],
+        "reference_response": [
+          "The text explicitly states that Readers are considered a security risk and that no one would hire a Reader, making it impossible for them to get a job.",
+          "C"
+        ],
+        "question": "Why is it bad to be considered a Reader?\n\n (A) Readers were punished by death\n (B) Other people were jealous of Readers\n (C) You could not get a job as a Reader\n (D) Reading was considered outdated and barbaric"
+      },
+      {
+        "example_id": "50818_U50BKW97_4_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.8610405338358658,
+        "hf_prob_R_over_J": 0.1389594661641342,
+        "forward_prob_A": 0.92442710872745,
+        "forward_prob_B": 0.07557289127254997,
+        "backward_prob_A": 0.20234604105571846,
+        "backward_prob_B": 0.7976539589442815,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          0.92578125,
+          0.07568359375
+        ],
+        "backward_raw_probs": [
+          0.2021484375,
+          0.796875
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9902819038736084,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.6507124105818659,
+        "json_self_preference": 0.8204971572277371,
+        "judge_response": [
+          "Manet asked for a companion from Trader Tom, as Manet wanted to be not alone.",
+          "A"
+        ],
+        "reference_response": [
+          "The text does not mention Manet asking for anything specific from the trader. The trader offered various services, but Manet did not request anything.",
+          "C"
+        ],
+        "question": "What did Manet ask for from the trader?\n\n (A) A companion\n (B) Whiskey\n (C) Nothing\n (D) A credit card"
+      },
+      {
+        "example_id": "61146_76LHD3BB_4_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.5824642897868467,
+        "hf_prob_R_over_J": 0.4175357102131532,
+        "forward_prob_A": 0.962582538517975,
+        "forward_prob_B": 0.03741746148202495,
+        "backward_prob_A": 0.7976539589442815,
+        "backward_prob_B": 0.20234604105571846,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.9609375,
+          0.037353515625
+        ],
+        "backward_raw_probs": [
+          0.796875,
+          0.2021484375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9958886020340854,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8671198122465524,
+        "json_self_preference": 0.9978336870343008,
+        "judge_response": [
+          "Retief narrowly escaped having his skiff destroyed by heading straight at the oncoming nuclear weapon at a high rate of speed, making it impossible for the blast to hit the skiff.",
+          "C"
+        ],
+        "reference_response": [
+          "The text describes Retief's skiff experiencing heavy buffeting and buffeting in the backwash from the departing mail boat, indicating a tense and prolonged journey. It also mentions that Retief was dropping rapidly and had to alter course to avoid a missile, which aligns with the scenario in option B where the mail pilot was in a hurry and did not fully seal the skiff's airlock.",
+          "B"
+        ],
+        "question": "How did Retief narrowly escape having his skiff destroyed on the way down to the planet?\n\n (A) Retief encountered a nuclear missile fired by the Jax. The skiff was well-armed, and he took it down with a lucky shot.\n (B) The mail pilot of the main ship was in such a hurry to get rid of him that he did not fully seal the skiff's airlock, and Retief worried all the way to the planet's surface that he would run out of air. He didn't, though.\n (C) He escaped being blown up by a nuclear weapon by heading straight at it at such a high rate of speed that by the time its sensors detected him and triggered the firing sequence, he was on his way past, while the blast was focused in the other direction.\n (D) As he took evasive action to get away from an atomic missile fired by the colonists, he almost ran into some space junk from a destroyed ship, but he avoided that, too."
+      },
+      {
+        "example_id": "20020_TRPTAKN4_9_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.21269013236246392,
+        "hf_prob_R_over_J": 0.7873098676375361,
+        "forward_prob_A": 0.4074074074074074,
+        "forward_prob_B": 0.5925925925925926,
+        "backward_prob_A": 0.9820271426824795,
+        "backward_prob_B": 0.01797285731752048,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.408203125,
+          0.59375
+        ],
+        "backward_raw_probs": [
+          0.98046875,
+          0.0179443359375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.6221280246568045,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9902819038736084,
+        "json_self_preference": 0.8107722731232878,
+        "judge_response": [
+          "The shutdown threat is mentioned at the start, but the government does not shut down entirely as it is later resolved with adjustments such as bringing in an intern to answer the phones.",
+          "A"
+        ],
+        "reference_response": [
+          "The text indicates that the government shutdown was avoided due to the actions of President Clinton, as he and his advisers discussed keeping essential personnel and ensuring the Oval Office functions efficiently.",
+          "D"
+        ],
+        "question": "What happened with the impending government shut down at the opening of the musical number?\n\n (A) The shutdown threat is only mentioned at the start and not again\n (B) The government shut down entirely\n (C) The shutdown caused greater interest in the president\u2019s personal life because there was nothing else to focus on\n (D) The shutdown was avoided with the actions of the President"
+      },
+      {
+        "example_id": "20006_VZW02G1T_4_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.2005620802100055,
+        "hf_prob_R_over_J": 0.7994379197899946,
+        "forward_prob_A": 0.29434697855750486,
+        "forward_prob_B": 0.7056530214424951,
+        "backward_prob_A": 0.8932228181374939,
+        "backward_prob_B": 0.1067771818625061,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.294921875,
+          0.70703125
+        ],
+        "backward_raw_probs": [
+          0.89453125,
+          0.10693359375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.5924803921133679,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9239460837156731,
+        "json_self_preference": 0.7953788172833378,
+        "judge_response": [
+          "The text mentions that Clinton's history was known by Betty Currie, and she enabled his sleaziness, which makes her complicit in his actions.",
+          "A"
+        ],
+        "reference_response": [
+          "The text mentions Monica Lewinsky's low approval ratings and her involvement in the scandal, indicating she is considered the most responsible person by the public.",
+          "C"
+        ],
+        "question": "The public believes the person most responsible for the scandal is \n\n (A) Clinton\n (B) Hillary\n (C) Monica\n (D) The media"
+      },
+      {
+        "example_id": "51650_B3KKWWD1_3_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.46640739552785926,
+        "hf_prob_R_over_J": 0.5335926044721407,
+        "forward_prob_A": 0.73046875,
+        "forward_prob_B": 0.26953125,
+        "backward_prob_A": 0.7976539589442815,
+        "backward_prob_B": 0.20234604105571846,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.73046875,
+          0.26953125
+        ],
+        "backward_raw_probs": [
+          0.796875,
+          0.2021484375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.8520106519007895,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8933355882393534,
+        "json_self_preference": 0.9257383684420829,
+        "judge_response": [
+          "The text does not specify an exact number of cons, but Peter Matheny mentions the need for a confidence man or a con man to operate a world-size con game for them, indicating the plan to deceive Earth's people for financial gain.",
+          "D"
+        ],
+        "reference_response": [
+          "The text mentions that Matheny was on Earth for less than six hours, which does not match the 10-hour duration implied by the options. The correct answer is B, as it is the only option that fits the context of the story.",
+          "B"
+        ],
+        "question": "How many different Martian cons did Matheny speak of to Gus?\n\n (A) 4\n (B) 3\n (C) 2\n (D) 1"
+      },
+      {
+        "example_id": "51461_OV4JLLBG_2_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.361328125,
+        "hf_prob_R_over_J": 0.638671875,
+        "forward_prob_A": 0.5,
+        "forward_prob_B": 0.5,
+        "backward_prob_A": 0.77734375,
+        "backward_prob_B": 0.22265625,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.5,
+          0.5
+        ],
+        "backward_raw_probs": [
+          0.77734375,
+          0.22265625
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.6221280246568045,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8520106519007895,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text specifically states that there are only four people left alive on Earth, which are the boy, his mom, his dad, and his sister.",
+          "D"
+        ],
+        "reference_response": [
+          "The story reveals that there are other survivors beyond the protagonist's family. The arrival of the young lady and two men from Los Alamos, along with the mention of other colonies, indicates that there are people alive in various places.",
+          "A"
+        ],
+        "question": "How many people are left alive on Earth?\n\n (A) a number of people in various places\n (B) Only the boy\n (C) Only the boy, his family, and some people in New Mexico\n (D) Only the boy, his mom, his dad, and his sister"
+      },
+      {
+        "example_id": "49897_QQKS0TK3_4_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.3150318287037037,
+        "hf_prob_R_over_J": 0.6849681712962963,
+        "forward_prob_A": 0.4074074074074074,
+        "forward_prob_B": 0.5925925925925926,
+        "backward_prob_A": 0.77734375,
+        "backward_prob_B": 0.22265625,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.408203125,
+          0.59375
+        ],
+        "backward_raw_probs": [
+          0.77734375,
+          0.22265625
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.5631446537543375,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8807749623595528,
+        "json_self_preference": null,
+        "judge_response": [
+          "Reba suggests that maybe she saw something in Junior nobody else saw, the man he might become, and wanted him to grow into a man like his grandfather, indicating she likes him.",
+          "D"
+        ],
+        "reference_response": [
+          "Grampa was happy with Reba because she stood up to Joyce. When Joyce was being harsh and critical, Reba firmly told her that if she didn't like Fweep, she could go to her own room. Grampa admired Reba's actions, even saying he had wanted to do that for 40 years but never had the nerve.",
+          "B"
+        ],
+        "question": "Why was Grampa happy with Reba?\n\n (A) She had a brilliant smile\n (B) She stood up to Joyce\n (C) She liked him\n (D) She wanted Four to be happy"
+      },
+      {
+        "example_id": "32665_VRYQXG3Y_5_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.5589832294721407,
+        "hf_prob_R_over_J": 0.44101677052785926,
+        "forward_prob_A": 0.7976539589442815,
+        "forward_prob_B": 0.20234604105571846,
+        "backward_prob_A": 0.6796875,
+        "backward_prob_B": 0.3203125,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.796875,
+          0.2021484375
+        ],
+        "backward_raw_probs": [
+          0.6796875,
+          0.3203125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9047490595475024,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.835531274141265,
+        "json_self_preference": 0.9505544253154781,
+        "judge_response": [
+          "Arthur's attempt to explore the islet while Stryker slept was to build suspense because he was put in harm's way.",
+          "D"
+        ],
+        "reference_response": [
+          "The text mentions that Arthur's exploration of Arz while Stryker slept was to satisfy his curiosity about the island, as he did not know what was inside.",
+          "A"
+        ],
+        "question": "What is the narrative purpose of having Arthur try to explore Arz while Stryker slept?\n\n (A) It was to increase the reader's curiosity because Arthur didn't know what the inside of the island looked like.\n (B) It was to help the reader learn answers to the questions they had.\n (C) It was to allow Arthur to communicate with the fishermen and learn more about their customs.\n (D) It was to build suspense because Arthur was put in harm's way."
+      },
+      {
+        "example_id": "61467_S2P1EICS_3_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.0495668957734366,
+        "hf_prob_R_over_J": 0.9504331042265635,
+        "forward_prob_A": 0.09507557289127255,
+        "forward_prob_B": 0.9049244271087274,
+        "backward_prob_A": 0.9959417813443994,
+        "backward_prob_B": 0.004058218655600647,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.09521484375,
+          0.90625
+        ],
+        "backward_raw_probs": [
+          0.99609375,
+          0.004058837890625
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.7548396019890073,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.999374585303352,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text explains that after a changeling's sentence is served, they will maintain their conversion as a permanent reminder of their crimes.",
+          "C"
+        ],
+        "reference_response": [
+          "The text explains that after serving their sentence as changelings, individuals are 'reconverted and got home' with their earnings waiting for them, indicating they are converted back to their normal body and returned to Earth.",
+          "B"
+        ],
+        "question": "What happens to a changeling after their sentence is served?\n\n (A) They continue to hunt Slider eggs for the Hazeltynes.\n (B) They are converted back to their normal body and returned to Earth.\n (C) They maintain their conversion as a permanent reminder of their crimes.\n (D) They can choose to stay on their new planet or return to Earth."
+      },
+      {
+        "example_id": "55815_4DJBZQ7I_5_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.25525165117416826,
+        "hf_prob_R_over_J": 0.7447483488258317,
+        "forward_prob_A": 0.1328125,
+        "forward_prob_B": 0.8671875,
+        "backward_prob_A": 0.6223091976516634,
+        "backward_prob_B": 0.3776908023483366,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.1328125,
+          0.8671875
+        ],
+        "backward_raw_probs": [
+          0.62109375,
+          0.376953125
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.7548396019890073,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.7316156289466418,
+        "json_self_preference": null,
+        "judge_response": [
+          "The description of the main female characters emphasizes their kindness, non-competitive nature, and physical appearance, fitting the option D description.",
+          "D"
+        ],
+        "reference_response": [
+          "The main female characters, Peggy, Paula, Amy, and Greta, are all shown to be insecure and anxious about their auditions and their futures in acting. They express their worries and doubts about their abilities and the competitiveness of the industry.",
+          "B"
+        ],
+        "question": "What would you say is true when describing the group of the main female characters in this story?\n\n (A) They're all competitive, caring, and beautiful\n (B) They're all insecure, anxious, and stressed\n (C) They're all tough, jaded, and beautiful\n (D) They're all kind, non-competitive, and pretty"
+      },
+      {
+        "example_id": "62498_9BZIZ3SE_8_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.11199100234483336,
+        "hf_prob_R_over_J": 0.8880089976551666,
+        "forward_prob_A": 0.22265625,
+        "forward_prob_B": 0.77734375,
+        "backward_prob_A": 0.9986742453103332,
+        "backward_prob_B": 0.0013257546896667327,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.22265625,
+          0.77734375
+        ],
+        "backward_raw_probs": [
+          1.0,
+          0.0013275146484375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.5310959910353452,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9998598197061757,
+        "json_self_preference": null,
+        "judge_response": [
+          "Dick's main concern is not mentioned in the given text, but it can be inferred from the context that his main concern is not the options given, but rather the situation with the night-line and the diurnal revolution.",
+          "A"
+        ],
+        "reference_response": [
+          "Dick's main concern about moving their camp to the river was related to food and proximity to the sunken ship, as they needed to retrieve essential supplies and tools from the ship to survive.",
+          "D"
+        ],
+        "question": "What was Dick's main concern about moving their camp to the river?\n\n (A) What the weather would be in the new location.\n (B) When to start building the encampment.\n (C) Deciding where exactly to start building.\n (D) Food and proximity to the sunken ship."
+      },
+      {
+        "example_id": "20064_CU1CDFL8_9_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.4765256322157075,
+        "hf_prob_R_over_J": 0.5234743677842926,
+        "forward_prob_A": 0.9326829268292683,
+        "forward_prob_B": 0.06731707317073171,
+        "backward_prob_A": 0.9796316623978534,
+        "backward_prob_B": 0.020368337602146604,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.93359375,
+          0.0673828125
+        ],
+        "backward_raw_probs": [
+          0.98046875,
+          0.0203857421875
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9706540503472074,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9902819038736084,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text states that Yoda implies Anakin has a fear of the future, which would lead to anger and the dark side, suggesting that Yoda passed judgment too quickly.",
+          "B"
+        ],
+        "reference_response": [
+          "The author criticizes Yoda's judgement of Anakin, suggesting that Yoda must be 'moving backward through time and has already seen Episodes 4 through 6', implying that Yoda's knowledge of Anakin's future is the issue.",
+          "D"
+        ],
+        "question": "What issue does the author take with Yoda's judgement of Anakin?\n\n (A) He does not like the CGI used during the scenes with Yoda\n (B) He feels that the judgement is passed too quickly\n (C) Yoda is being closed-minded about the boy's origins\n (D) It implies that Yoda has knowledge of the events of the future."
+      },
+      {
+        "example_id": "23563_HRCOMZPJ_9_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.17539177052785923,
+        "hf_prob_R_over_J": 0.8246082294721407,
+        "forward_prob_A": 0.20234604105571846,
+        "forward_prob_B": 0.7976539589442815,
+        "backward_prob_A": 0.8515625,
+        "backward_prob_B": 0.1484375,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.2021484375,
+          0.796875
+        ],
+        "backward_raw_probs": [
+          0.8515625,
+          0.1484375
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.7316156289466418,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9819759350372468,
+        "json_self_preference": 0.9981440245393418,
+        "judge_response": [
+          "The text states that we never find out why Broom was a prisoner, only that he was in prison and his memories are fragmented.",
+          "A"
+        ],
+        "reference_response": [
+          "The text mentions that Broom was a prisoner of war, indicating that his imprisonment was due to war.",
+          "B"
+        ],
+        "question": "Why was Broom a prisoner?\n\n (A) We never find out\n (B) War\n (C) John didn't raise funds for him\n (D) He killed a man"
+      },
+      {
+        "example_id": "55815_ZJPKF6YE_1_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.35117302052785926,
+        "hf_prob_R_over_J": 0.6488269794721407,
+        "forward_prob_A": 0.20234604105571846,
+        "forward_prob_B": 0.7976539589442815,
+        "backward_prob_A": 0.5,
+        "backward_prob_B": 0.5,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.2021484375,
+          0.796875
+        ],
+        "backward_raw_probs": [
+          0.5,
+          0.5
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.7980484732149518,
+        "json_backward_comparison": "2",
+        "json_backward_probability": 0.5310959910353452,
+        "json_self_preference": 0.7653429975733198,
+        "judge_response": [
+          "Peggy selected passages from the earlier drafts of the play for auditioners, as mentioned in the text: 'Peggy's friendly with Randy Brewster, the boy who wrote it, and each time she brought a draft home, I got to read it.'",
+          "A"
+        ],
+        "reference_response": [
+          "The text mentions that Mal and Randy selected passages for each auditioner, which corresponds to option C.",
+          "C"
+        ],
+        "question": "How did the auditioners know what to read on Saturday?\n\n (A) Peggy selected passages from the earlier drafts of the play for auditioners\n (B) Amy assigned passages based on personalities of the auditioners\n (C) Mal selected passages for each auditioner\n (D) Randy randomly assigned passages to test the depth of acting"
+      },
+      {
+        "example_id": "99927_6CQ363XM_9_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.03462179567540964,
+        "hf_prob_R_over_J": 0.9653782043245904,
+        "forward_prob_A": 0.001926518180087569,
+        "forward_prob_B": 0.9980734818199124,
+        "backward_prob_A": 0.9326829268292683,
+        "backward_prob_B": 0.06731707317073171,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.00193023681640625,
+          1.0
+        ],
+        "backward_raw_probs": [
+          0.93359375,
+          0.0673828125
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9947647286511927,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9626302108213645,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text mentions that having the greatest minds behind the decision-making process for OA policies strengthens them.",
+          "D"
+        ],
+        "reference_response": [
+          "The text mentions 'the stunning series of strong OA policies adopted by unanimous faculty votes' as evidence of faculty willingness, directly supporting option C.",
+          "C"
+        ],
+        "question": "One aspect of having university faculty members vote on these policies\n\n (A) it is taking the power from the publishers.\n (B) it shows the futility of the system.\n (C) has been almost unbelievable, as many of those votes were unanimous.  \n (D) OA policies are sure to strengthen because the greatest minds in the world are behind the decision-making process."
+      },
+      {
+        "example_id": "51687_XND06EI3_9_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.05270616293597066,
+        "hf_prob_R_over_J": 0.9472938370640294,
+        "forward_prob_A": 0.08504398826979472,
+        "forward_prob_B": 0.9149560117302052,
+        "backward_prob_A": 0.9796316623978534,
+        "backward_prob_B": 0.020368337602146604,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.0849609375,
+          0.9140625
+        ],
+        "backward_raw_probs": [
+          0.98046875,
+          0.0203857421875
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9149670822836856,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9875657452052504,
+        "json_self_preference": null,
+        "judge_response": [
+          "The Treaty of Oslo is specifically mentioned as one of the treaties broken during the Ungentlemanly Gentleman's War.",
+          "A"
+        ],
+        "reference_response": [
+          "The text mentions 'what with all of the other treaties which were broken during the Ungentlemanly Gentleman's War, by the time it was finished nobody was quite sure any more who was on whose side.' This indicates that multiple treaties were broken during the war, making option B the most accurate.",
+          "B"
+        ],
+        "question": "How many treaties were broken during the last war?\n\n (A) The treaty of Oslo plus many others\n (B) Many of them\n (C) All of them\n (D) Only the treaty of Oslo"
+      },
+      {
+        "example_id": "99905_QYORRUOH_4_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.048387019089682126,
+        "hf_prob_R_over_J": 0.9516129809103179,
+        "forward_prob_A": 0.09507557289127255,
+        "forward_prob_B": 0.9049244271087274,
+        "backward_prob_A": 0.9983015347119083,
+        "backward_prob_B": 0.0016984652880917019,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.09521484375,
+          0.90625
+        ],
+        "backward_raw_probs": [
+          1.0,
+          0.00170135498046875
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.7980484732149518,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9997387273776379,
+        "json_self_preference": 0.9951980995068083,
+        "judge_response": [
+          "The text mentions that the British rail research facility, the Derby Research Centre, was 'arguably the world's leading rail research facility' in the 1960s.",
+          "A"
+        ],
+        "reference_response": [
+          "The text mentions that British Rail's Derby Research Centre, founded in 1964, was arguably the world's leading rail research facility when it was in full operation, indicating that the leading rail research was happening in Britain in the 1960s.",
+          "D"
+        ],
+        "question": "Where was the leading rail research happening in the 1960's?\n\n (A) France\n (B) Germany\n (C) New York\n (D) Britain"
+      },
+      {
+        "example_id": "63041_SC73PXBG_2_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.6762280058651027,
+        "hf_prob_R_over_J": 0.3237719941348974,
+        "forward_prob_A": 0.9149560117302052,
+        "forward_prob_B": 0.08504398826979472,
+        "backward_prob_A": 0.5625,
+        "backward_prob_B": 0.4375,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.9140625,
+          0.0849609375
+        ],
+        "backward_raw_probs": [
+          0.5625,
+          0.4375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9465498518897533,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.7772811761563689,
+        "json_self_preference": 0.9721622741785088,
+        "judge_response": [
+          "The text states that this would be Sam Burnett's last trip, indicating that he has been working for a decade and is exhausted, which corresponds to option A.",
+          "A"
+        ],
+        "reference_response": [
+          "The text mentions that the conflict has been ongoing 'since the day you played hookey in the tenth grade,' which implies a long period, likely a decade or more, corresponding to option B.",
+          "B"
+        ],
+        "question": "How long have the Venusians and Earth been in conflict?\n\n (A) A decade\n (B) Since Earthlings discovered interplanetary travel\n (C) Since Venus was colonized\n (D) A century"
+      },
+      {
+        "example_id": "20056_IMXXLOR8_7_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.08337396392003901,
+        "hf_prob_R_over_J": 0.916626036079961,
+        "forward_prob_A": 0.1067771818625061,
+        "forward_prob_B": 0.8932228181374939,
+        "backward_prob_A": 0.9400292540224281,
+        "backward_prob_B": 0.05997074597757192,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.10693359375,
+          0.89453125
+        ],
+        "backward_raw_probs": [
+          0.94140625,
+          0.06005859375
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.7063416394256196,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9525773346914514,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text identifies Nash's game theory breakthrough, where he framed and proved the most important proposition in the theory of games, as his claim to fame. This happened within two years of entering Princeton.",
+          "A"
+        ],
+        "reference_response": [
+          "The fixed-point theorem in topology is crucial as it guarantees that for any continuous rearrangement of a domain of things, there will necessarily exist at least one thing in that domain that will remain unchanged. Nash applied this theorem to the domain of all game strategies, leading to the concept of the 'Nash equilibrium,' a significant contribution to game theory. The text indicates that Nash's breakthrough in game theory was closely tied to his work with the fixed-point theorem, suggesting that it was the turning point of his behavior, as his career trajectory changed dramatically after this point.",
+          "C"
+        ],
+        "question": "What is the significance of the fixed point to the story?\n\n (A) It was Nash\u2019s claim to fame\n (B) It is an analogy for his father\n (C) It was the turning point of Nash\u2019s behavior\n (D) It turned out to be proved false and drove Nash mad"
+      },
+      {
+        "example_id": "59679_R3X6H4RG_10_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.1348315571132251,
+        "hf_prob_R_over_J": 0.865168442886775,
+        "forward_prob_A": 0.20234604105571846,
+        "forward_prob_B": 0.7976539589442815,
+        "backward_prob_A": 0.9326829268292683,
+        "backward_prob_B": 0.06731707317073171,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.2021484375,
+          0.796875
+        ],
+        "backward_raw_probs": [
+          0.93359375,
+          0.0673828125
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.651984571942713,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9890134350227241,
+        "json_self_preference": 0.9989077193743079,
+        "judge_response": [
+          "The text states that Mr. Partch was alone with Bob Wills' machine for two hours, which was too much for him, resulting in catatonia.",
+          "B"
+        ],
+        "reference_response": [
+          "The text indicates that Mr. Partch experienced total silence for two hours due to the machine, which caused him to become catatonic. This aligns with option A, 'A few hours without any sound.'",
+          "A"
+        ],
+        "question": "What caused Mr. Partch to become catatonic?\n\n (A) A few hours without any sound\n (B) The overwhelming noise of the jet engines\n (C) Being lost in the forest by himself\n (D) The pills that his therapist perscribed"
+      },
+      {
+        "example_id": "63916_MPWP9IG6_9_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.5433677755376345,
+        "hf_prob_R_over_J": 0.4566322244623656,
+        "forward_prob_A": 0.8172043010752689,
+        "forward_prob_B": 0.1827956989247312,
+        "backward_prob_A": 0.73046875,
+        "backward_prob_B": 0.26953125,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.81640625,
+          0.1826171875
+        ],
+        "backward_raw_probs": [
+          0.73046875,
+          0.26953125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9465498518897533,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9525773346914514,
+        "json_self_preference": 0.9730489562075888,
+        "judge_response": [
+          "Caldwell and Johnson are new acquaintances, as they only recently met in the tavern and were accompanied by Vee Vee.",
+          "C"
+        ],
+        "reference_response": [
+          "The text describes Caldwell and Johnson interacting in a professional context, working together to locate and protect Martin, indicating they are coworkers.",
+          "B"
+        ],
+        "question": "What is the relationship between Caldwell and Johnson?\n\n (A) They're strangers\n (B) They're coworkers\n (C) They're new acquaintances\n (D) They're old friends"
+      },
+      {
+        "example_id": "60745_RWAY1IZC_5_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.4849537037037037,
+        "hf_prob_R_over_J": 0.5150462962962963,
+        "forward_prob_A": 0.5625,
+        "forward_prob_B": 0.4375,
+        "backward_prob_A": 0.5925925925925926,
+        "backward_prob_B": 0.4074074074074074,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.5625,
+          0.4375
+        ],
+        "backward_raw_probs": [
+          0.59375,
+          0.408203125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.7772811761563689,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9047490595475024,
+        "json_self_preference": 0.8882687933930355,
+        "judge_response": [
+          "The term 'Dreeze' is a Free'l word that originally referred to nasal drip, a common condition among the Free'l due to their virulent head colds.",
+          "B"
+        ],
+        "reference_response": [
+          "The text explains that 'Dreeze' is a Free'l word that refers to anything annoying, which aligns with the Free'l's description of the effort required to perform magic as 'dreezish'.",
+          "D"
+        ],
+        "question": "What did the Free'l use the word \"Dreeze\" for?\n\n (A) Magic\n (B) Unintelligent people\n (C) Demons\n (D) Inconveniences"
+      },
+      {
+        "example_id": "40965_7AWX7OE9_6_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.25744402187194526,
+        "hf_prob_R_over_J": 0.7425559781280547,
+        "forward_prob_A": 0.24535679374389052,
+        "forward_prob_B": 0.7546432062561095,
+        "backward_prob_A": 0.73046875,
+        "backward_prob_B": 0.26953125,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.2451171875,
+          0.75390625
+        ],
+        "backward_raw_probs": [
+          0.73046875,
+          0.26953125
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.6221280246568045,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8177718608461166,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text states that Earth is the only civilization that has discussed space travel, with no other civilization mentioned as having discovered space travel.",
+          "A"
+        ],
+        "reference_response": [
+          "The text does not mention any other civilization having discovered space travel, but it does indicate that Earth had space travel and was about to test a new kind of drive that could travel faster than light. The story also mentions a planet called Maris, suggesting there might be other civilizations, but it does not explicitly state that they had space travel. However, it implies that Earth knew of no other civilization with space travel, making option B the most accurate.",
+          "B"
+        ],
+        "question": "Had any other civilization discussed in the story discovered space travel?\n\n (A) No, only Earth\n (B) There was one other civilization that Earth knew had space travel\n (C) Space travel was known to exist in several other galaxies\n (D) Other spaceships were seen on the flight, suggesting yes"
+      },
+      {
+        "example_id": "63633_TE8SMQXZ_3_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.525390625,
+        "hf_prob_R_over_J": 0.474609375,
+        "forward_prob_A": 0.73046875,
+        "forward_prob_B": 0.26953125,
+        "backward_prob_A": 0.6796875,
+        "backward_prob_B": 0.3203125,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.73046875,
+          0.26953125
+        ],
+        "backward_raw_probs": [
+          0.6796875,
+          0.3203125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.7772811761563689,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8807749623595528,
+        "json_self_preference": 0.8881696948579292,
+        "judge_response": [
+          "Bo is described as a large and heavy man, and a placid blond giant, which makes him unusual compared to his colleagues.",
+          "A"
+        ],
+        "reference_response": [
+          "The text describes Bo as a 'placid blond giant, with amiable blue eyes in a battered brown face, he did not consider himself bright, and always wanted to learn.' This indicates that Bo was unusual compared to his colleagues because he loved to learn, which corresponds to option D.",
+          "C"
+        ],
+        "question": "How was Bo unusual compared to his colleagues?\n\n (A) He was fastidious\n (B) He was a frugal man\n (C) He was a large man\n (D) He loved to learn"
+      },
+      {
+        "example_id": "40965_ZUFZ7UG6_5_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.3409368884540117,
+        "hf_prob_R_over_J": 0.6590631115459882,
+        "forward_prob_A": 0.5625,
+        "forward_prob_B": 0.4375,
+        "backward_prob_A": 0.8806262230919765,
+        "backward_prob_B": 0.11937377690802348,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.5625,
+          0.4375
+        ],
+        "backward_raw_probs": [
+          0.87890625,
+          0.119140625
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.5631446537543375,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.8933355882393534,
+        "json_self_preference": 0.7808975811689538,
+        "judge_response": [
+          "Long-distance space travel is the primary mode of transportation in the story, making it the correct answer as the technology not used in the story.",
+          "D"
+        ],
+        "reference_response": [
+          "The text does not mention any technology related to guns that freeze people in time to prevent them from aging. The other technologies (cosmetic procedures, long-distance space travel, and guns that cause disintegration) are referenced in the story.",
+          "B"
+        ],
+        "question": "Of the following options, which is not a technology used in this story?\n\n (A) Guns that cause people to disintegrate rapidly\n (B) Guns that freeze people in time to prevent them from aging\n (C) Cosmetic procedures to enhance youthfulness\n (D) Long-distance space travel"
+      },
+      {
+        "example_id": "31599_Z1URZQTV_9_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.5260283518686459,
+        "hf_prob_R_over_J": 0.47397164813135406,
+        "forward_prob_A": 0.9326829268292683,
+        "forward_prob_B": 0.06731707317073171,
+        "backward_prob_A": 0.8806262230919765,
+        "backward_prob_B": 0.11937377690802348,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.93359375,
+          0.0673828125
+        ],
+        "backward_raw_probs": [
+          0.87890625,
+          0.119140625
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9819759350372468,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9769542744798047,
+        "json_self_preference": 0.989365544483201,
+        "judge_response": [
+          "The story of Joey and his dog Charlie was 'in the end, not that big of a deal', as the boy's faith and determination allowed him to move stars and eventually walk again, making the loss of his dog less significant in the end.",
+          "A"
+        ],
+        "reference_response": [
+          "The text indicates that Joey's ability to move stars was so extraordinary that it left a lasting impact, with astronomers studying the phenomenon for years to come, aligning with option C.",
+          "C"
+        ],
+        "question": "Joey's story was \n\n (A) in the end, not that big of a deal.  \n (B) so sad that people generally stayed away from him because he made them feel so uncomfortable.\n (C) astounding.  Doc and others like him studied Joey's case for years to come\n (D) just another story about a boy and his dog."
+      },
+      {
+        "example_id": "51436_MT3ROY6U_7_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.3876941457586619,
+        "hf_prob_R_over_J": 0.6123058542413381,
+        "forward_prob_A": 0.5925925925925926,
+        "forward_prob_B": 0.4074074074074074,
+        "backward_prob_A": 0.8172043010752689,
+        "backward_prob_B": 0.1827956989247312,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.59375,
+          0.408203125
+        ],
+        "backward_raw_probs": [
+          0.81640625,
+          0.1826171875
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.7063416394256196,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9239460837156731,
+        "json_self_preference": 0.8521952102665475,
+        "judge_response": [
+          "Meeker thought he had a secret admirer as indicated by the presents he received, which included an Everlasting Razor Blade and a catalyst that could turn water into fuel, suggesting a mysterious benefactor.",
+          "A"
+        ],
+        "reference_response": [
+          "The text suggests that Meeker is receiving unusual and seemingly magical gifts, which leads him to feel he has a secret admirer, as indicated by his reactions and thoughts throughout the passage.",
+          "C"
+        ],
+        "question": "What did Meeker think of the presents he was receiving?\n\n (A) He was beginning to question his sanity\n (B) He was afraid and rejected all of the presents\n (C) He felt he had a secret admirer\n (D) He felt it was an opportunity to become rich"
+      },
+      {
+        "example_id": "20020_TRPTAKN4_4_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.2278525285530854,
+        "hf_prob_R_over_J": 0.7721474714469145,
+        "forward_prob_A": 0.1067771818625061,
+        "forward_prob_B": 0.8932228181374939,
+        "backward_prob_A": 0.6510721247563352,
+        "backward_prob_B": 0.3489278752436647,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.10693359375,
+          0.89453125
+        ],
+        "backward_raw_probs": [
+          0.65234375,
+          0.349609375
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.7063416394256196,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.651984571942713,
+        "json_self_preference": 0.9993341705167077,
+        "judge_response": [
+          "Newt Gingrich and Evelyn Lieberman discuss moving Monica to another office, indicating their involvement in the decision.",
+          "D"
+        ],
+        "reference_response": [
+          "The text mentions a conversation between Betty Currie and Evelyn Lieberman discussing the need to move Monica to another office, which corresponds to option B.",
+          "B"
+        ],
+        "question": "Who are the parties in the story that think it\u2019s time to move Monica to another office?\n\n (A) Betty and Starr\n (B) Evelyn and Betty\n (C) Starr and Newt\n (D) Newt and Evelyn"
+      },
+      {
+        "example_id": "22524_N885O1MX_9_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.6890265999855041,
+        "hf_prob_R_over_J": 0.3109734000144959,
+        "forward_prob_A": 0.9706457925636007,
+        "forward_prob_B": 0.029354207436399216,
+        "backward_prob_A": 0.5925925925925926,
+        "backward_prob_B": 0.4074074074074074,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.96875,
+          0.029296875
+        ],
+        "backward_raw_probs": [
+          0.59375,
+          0.408203125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9875657452052504,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.7980484732149518,
+        "json_self_preference": 0.9935216341219495,
+        "judge_response": [
+          "Curt George considers himself an excellent actor because he was able to hold a smile for the crowd of children during his difficult presentation.",
+          "C"
+        ],
+        "reference_response": [
+          "Curt George considered himself an excellent actor because he was able to hold a smile for the crowd of children, as mentioned in the text.",
+          "B"
+        ],
+        "question": "Why did Curt George consider himself to be an excellent actor?\n\n (A) His previous films were critically acclaimed\n (B) The story about his shakes being from Jungle Fever\n (C) He was able to hold a smile for the crowd of children\n (D) He pretended to be afraid of the fake lions"
+      },
+      {
+        "example_id": "51436_VJM64720_4_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.32421875,
+        "hf_prob_R_over_J": 0.67578125,
+        "forward_prob_A": 0.5,
+        "forward_prob_B": 0.5,
+        "backward_prob_A": 0.8515625,
+        "backward_prob_B": 0.1484375,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.5,
+          0.5
+        ],
+        "backward_raw_probs": [
+          0.8515625,
+          0.1484375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.7772811761563689,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9325577304972911,
+        "json_self_preference": 0.8881182476079206,
+        "judge_response": [
+          "Ernie wanted to put water in his car because he forgot to buy gas, as indicated when his sister asked if he remembered to buy gas and he initially replied 'no'.",
+          "A"
+        ],
+        "reference_response": [
+          "Ernie was conducting an experiment with a white powder that turned water into fuel, as described in the text.",
+          "D"
+        ],
+        "question": "Why did Ernie want to put water in his car?\n\n (A) He forgot to buy gas\n (B) He was feeling ill from lunch\n (C) He'd lost his mind\n (D) He was conducting an experiment"
+      },
+      {
+        "example_id": "63150_Z3E7PK9T_4_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "DeepSeek-V3",
+        "hf_prob_J_over_R": 0.18914104134003196,
+        "hf_prob_R_over_J": 0.8108589586599679,
+        "forward_prob_A": 0.3489278752436647,
+        "forward_prob_B": 0.6510721247563352,
+        "backward_prob_A": 0.9706457925636007,
+        "backward_prob_B": 0.029354207436399216,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.349609375,
+          0.65234375
+        ],
+        "backward_raw_probs": [
+          0.96875,
+          0.029296875
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.5310959910353452,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9964054018917358,
+        "json_self_preference": 0.7649456364957379,
+        "judge_response": [
+          "The text states that the police gave Dennis the credit for capturing the Martian, which turned out to be a member of Koerber's pirate crew, and that the bartender paid his tab as a gesture of gratitude for ridding them of trouble.",
+          "D"
+        ],
+        "reference_response": [
+          "The text mentions that the police found the Martian to be a member of Koerber's pirate crew and gave Dennis the credit for capturing him, which aligns with option A.",
+          "A"
+        ],
+        "question": "Why did the bar brawl end up being a net positive event for Dennis?\n\n (A) Because the Martian was a space pirate, and the police were pleased at being able to grab him, and gave Dennis the credit.\n (B) Because on Venus, a criminal's personal effects are given to the crime victim, so Dennis acquired an expensive tunic trimmed in ocelandian fur, and a costly acerine ring.\n (C) Because a huge money roll fell out of the Martian's pocket during the fight, and afterward, Dennis noticed it and pocketed it.\n (D) The bartender paid his tab out of gratitude for ridding them of the troublemaking Martian."
+      },
+      {
+        "example_id": "23160_KJQ9Z35G_3_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+        "hf_prob_J_over_R": 0.020868767773689404,
+        "hf_prob_R_over_J": 0.9791312322263106,
+        "forward_prob_A": 0.03313840155945419,
+        "forward_prob_B": 0.9668615984405458,
+        "backward_prob_A": 0.9914008660120753,
+        "backward_prob_B": 0.00859913398792462,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.033203125,
+          0.96875
+        ],
+        "backward_raw_probs": [
+          0.9921875,
+          0.00860595703125
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9325577304972911,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9988257631562502,
+        "json_self_preference": null,
+        "judge_response": [
+          "Solomon's motivation was to become famous and be in the newspaper, which is achieved after sending his old cars into space.",
+          "D"
+        ],
+        "reference_response": [
+          "Solomon's goal is to get rid of his old cars that aren't selling to make space for cars that he can sell. The text describes Solomon's junkyard filled with old cars and his frustration with not being able to sell them. He devises a plan to use his old cars to create a satellite power plant, which ultimately leads to him launching the cars into space, thereby achieving his goal of clearing space in his yard.",
+          "B"
+        ],
+        "question": "What is Solomon\u2019s goal?\n\n (A) He wants to be recruited by Nasa. \n (B) He wants to get rid of his old cars that aren't selling to make space for cars that he can sell. \n (C) He wants to interfere with the Russians' spacecrafts. \n (D) He wants to become famous and be in the newspaper. "
+      },
+      {
+        "example_id": "20077_1BWEF124_6_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.583984375,
+        "hf_prob_R_over_J": 0.416015625,
+        "forward_prob_A": 0.73046875,
+        "forward_prob_B": 0.26953125,
+        "backward_prob_A": 0.5625,
+        "backward_prob_B": 0.4375,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.73046875,
+          0.26953125
+        ],
+        "backward_raw_probs": [
+          0.5625,
+          0.4375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.8933355882393534,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.7316156289466418,
+        "json_self_preference": 0.9450529757362063,
+        "judge_response": [
+          "Both Topsy-Turvy and Mr. Death deal with themes of creativity and mortality, as the artists face challenges and come to terms with the transience of their craft and their own lives.",
+          "D"
+        ],
+        "reference_response": [
+          "The text mentions cultural insensitivity in the context of both Topsy-Turvy and Mr. Death, making it a shared element between the two films.",
+          "C"
+        ],
+        "question": "Which of the following is shared between Topsy-Turvy and Mr. Death?\n\n (A) Plot structure\n (B) Character behavior\n (C) Cultural insensitivity\n (D) Primary theme"
+      },
+      {
+        "example_id": "51436_MT3ROY6U_7_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Qwen2.5-7B-Instruct-Turbo",
+        "hf_prob_J_over_R": 0.33554802052785926,
+        "hf_prob_R_over_J": 0.6644519794721407,
+        "forward_prob_A": 0.46875,
+        "forward_prob_B": 0.53125,
+        "backward_prob_A": 0.7976539589442815,
+        "backward_prob_B": 0.20234604105571846,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.46875,
+          0.53125
+        ],
+        "backward_raw_probs": [
+          0.796875,
+          0.2021484375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.5924803921133679,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9149670822836856,
+        "json_self_preference": 0.7956378370347492,
+        "judge_response": [
+          "Meeker thought he had a secret admirer as indicated by the presents he received, which included an Everlasting Razor Blade and a catalyst that could turn water into fuel, suggesting a mysterious benefactor.",
+          "A"
+        ],
+        "reference_response": [
+          "The text describes Ernie Meeker feeling he had a secret admirer after receiving the gifts, which corresponds to option C.",
+          "C"
+        ],
+        "question": "What did Meeker think of the presents he was receiving?\n\n (A) He was beginning to question his sanity\n (B) He was afraid and rejected all of the presents\n (C) He felt he had a secret admirer\n (D) He felt it was an opportunity to become rich"
+      },
+      {
+        "example_id": "20008_JTYOKW25_3_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.007993458380910638,
+        "hf_prob_R_over_J": 0.9920065416190893,
+        "forward_prob_A": 0.001926518180087569,
+        "forward_prob_B": 0.9980734818199124,
+        "backward_prob_A": 0.9859396014182663,
+        "backward_prob_B": 0.014060398581733708,
+        "forward_generated_text": "2",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.00193023681640625,
+          1.0
+        ],
+        "backward_raw_probs": [
+          0.984375,
+          0.0140380859375
+        ],
+        "json_forward_comparison": "2",
+        "json_forward_probability": 0.9770735385672259,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.9890134350227241,
+        "json_self_preference": null,
+        "judge_response": [
+          "The text suggests that living in the bush and having to escape predators such as lions may have led to natural selection pressure, making Africans faster.",
+          "D"
+        ],
+        "reference_response": [
+          "The text mentions that Ethiopian or Kenyan distance runners do better because they are in the habit of running immense distances to and from school, supporting option C.",
+          "C"
+        ],
+        "question": "According to the article, why do Africans dominate long distance running events these days?\n\n (A) Because African tribes have always held competitions during which the fastest men get the best-looking women as wives, and then they pass on their good genes.\n (B) Because Africans are more willing to suffer than other races, and running a marathon is all about triumphing over physical suffering.\n (C) Because since childhood, African children have had to run a long way from their homes to their schools, so they have the most practice at distance running.\n (D) Because, living in the bush, they have to escape lions and other predators, so natural selection pressure has made them faster."
+      },
+      {
+        "example_id": "63041_SC73PXBG_9_0",
+        "dataset": "harmful",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.5631358126218323,
+        "hf_prob_R_over_J": 0.4368641873781676,
+        "forward_prob_A": 0.77734375,
+        "forward_prob_B": 0.22265625,
+        "backward_prob_A": 0.6510721247563352,
+        "backward_prob_B": 0.3489278752436647,
+        "forward_generated_text": "1",
+        "backward_generated_text": "1",
+        "forward_raw_probs": [
+          0.77734375,
+          0.22265625
+        ],
+        "backward_raw_probs": [
+          0.65234375,
+          0.349609375
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.8807749623595528,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.6792821161581865,
+        "json_self_preference": null,
+        "judge_response": [
+          "Sam Burnett and Rice served together in combat, as evident from their work on the Constellation, a morgue ship that picks up the bodies of warriors from space, and their subsequent actions to capture Kriere, the All-Mighty.",
+          "A"
+        ],
+        "reference_response": [
+          "Rice and Burnett are described as working together on the morgue ship 'Constellation', indicating they are work colleagues.",
+          "C"
+        ],
+        "question": "What do we learn of the relationship between Rice and Burnett?\n\n (A) They served together in combat\n (B) They are brothers\n (C) They are work colleagues\n (D) They are long time friends"
+      },
+      {
+        "example_id": "51320_4G14XR5O_6_0",
+        "dataset": "ben",
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+        "hf_prob_J_over_R": 0.8494810583977621,
+        "hf_prob_R_over_J": 0.1505189416022378,
+        "forward_prob_A": 0.9933090953530292,
+        "forward_prob_B": 0.006690904646970762,
+        "backward_prob_A": 0.29434697855750486,
+        "backward_prob_B": 0.7056530214424951,
+        "forward_generated_text": "1",
+        "backward_generated_text": "2",
+        "forward_raw_probs": [
+          0.9921875,
+          0.006683349609375
+        ],
+        "backward_raw_probs": [
+          0.294921875,
+          0.70703125
+        ],
+        "json_forward_comparison": "1",
+        "json_forward_probability": 0.9997968880000357,
+        "json_backward_comparison": "1",
+        "json_backward_probability": 0.6221280246568045,
+        "json_self_preference": null,
+        "judge_response": [
+          "Charlie told the natives he was their brother to act based on history, following the findings on behavior in the exploration survey report.",
+          "B"
+        ],
+        "reference_response": [
+          "Charlie told the natives he was their brother to avoid offending them due to their unusual appearance, as indicated by the context of the story and the natives' reaction to his claim.",
+          "C"
+        ],
+        "question": "Why did Charlie tell the natives he was their brother?\n\n (A) He was using a translator collar\n (B) He was trying to act based on history\n (C) He didn't want to point out their strange appearance\n (D) He had no information about how to speak with them"
+      }
+    ]
+  },
+  "reproduction_validation": {
+    "Qwen2.5-7B-Instruct-Turbo": {
+      "total_examples": 50,
+      "forward_matches": 49,
+      "backward_matches": 50,
+      "both_match": 49,
+      "forward_match_rate": 0.98,
+      "backward_match_rate": 1.0,
+      "both_match_rate": 0.98
+    },
+    "Meta-Llama-3.1-8B-Instruct-Turbo": {
+      "total_examples": 50,
+      "forward_matches": 41,
+      "backward_matches": 46,
+      "both_match": 37,
+      "forward_match_rate": 0.82,
+      "backward_match_rate": 0.92,
+      "both_match_rate": 0.74
+    }
+  }
+}
