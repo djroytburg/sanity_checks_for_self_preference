@@ -51,18 +51,24 @@ async def query_model(client: AsyncOpenAI, model: str, system_prompt: str, user_
 
     answer = response.choices[0].message.content.strip()
 
-  
-    logprobs_data = response.choices[0].logprobs.content[0].top_logprobs if response.choices[0].logprobs else []
+    # Extract logprobs with proper error handling
+    top_logprobs = []
+    if (response.choices[0].logprobs and
+        response.choices[0].logprobs.content and
+        len(response.choices[0].logprobs.content) > 0 and
+        response.choices[0].logprobs.content[0].top_logprobs):
 
-    # Format logprobs as a list of dicts with token, logprob, and probability
-    top_logprobs = [
-        {
-            "token": lp.token,
-            "logprob": lp.logprob,
-            "probability": math.exp(lp.logprob)  # Convert log probability to actual probability
-        }
-        for lp in logprobs_data
-    ]
+        logprobs_data = response.choices[0].logprobs.content[0].top_logprobs
+
+        # Format logprobs as a list of dicts with token, logprob, and probability
+        top_logprobs = [
+            {
+                "token": lp.token,
+                "logprob": lp.logprob,
+                "probability": math.exp(lp.logprob)  # Convert log probability to actual probability
+            }
+            for lp in logprobs_data
+        ]
 
     return {
         "answer": answer,

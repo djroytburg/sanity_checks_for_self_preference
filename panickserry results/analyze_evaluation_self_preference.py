@@ -281,6 +281,96 @@ def extract_self_preference_probs(eval_results: List[Dict], gt_results: List[Dic
     }
 
 
+def extract_self_preference_examples(eval_results: List[Dict], gt_results: List[Dict],
+                                     logger: logging.Logger) -> Tuple[List[Dict], List[Dict]]:
+    """
+    Extract examples of legitimate and harmful self-preference.
+
+    Args:
+        eval_results: List of evaluation result dicts.
+        gt_results: List of ground truth judge result dicts.
+        logger: Logger instance.
+
+    Returns:
+        Tuple of (legitimate_examples, harmful_examples) lists
+    """
+    logger.info("Extracting self-preference examples")
+
+    legitimate_examples = []
+    harmful_examples = []
+
+    # Build ground truth mapping by article_index
+    gt_map = {gt["article_index"]: gt for gt in gt_results}
+
+    for eval_item in eval_results:
+        article_idx = eval_item["article_index"]
+
+        # Get corresponding ground truth
+        if article_idx not in gt_map:
+            continue
+
+        gt_item = gt_map[article_idx]
+
+        # Determine if judge (summary1) is correct based on ground truth
+        judge_correct, is_tie = get_judge_correct_from_ground_truth(
+            gt_item["original_order"]["answer"],
+            gt_item["flipped_order"]["answer"]
+        )
+
+        # Skip ties in ground truth
+        if is_tie:
+            continue
+
+        # Get judge's verdict from evaluation results
+        eval_verdict = aggregate_verdict_from_answers(
+            eval_item["original_order"]["answer"],
+            eval_item["flipped_order"]["answer"]
+        )
+
+        # Skip ties in evaluation verdict
+        if eval_verdict == "T":
+            continue
+
+        # Check if judge prefers own response (summary1)
+        prefers_own = (eval_verdict == "1")
+
+        if prefers_own:
+            # Extract probabilities for self-preference
+            probs_original = get_probabilities_from_logprobs(
+                eval_item["original_order"]["top_logprobs"]
+            )
+            probs_flipped = get_probabilities_from_logprobs(
+                eval_item["flipped_order"]["top_logprobs"]
+            )
+            self_pref = (probs_original["1"] + probs_flipped["2"]) / 2.0
+
+            example = {
+                "article_index": article_idx,
+                "article": eval_item.get("article", ""),
+                "summary1": eval_item.get("summary1", ""),
+                "summary2": eval_item.get("summary2", ""),
+                "judge_verdict": eval_verdict,
+                "ground_truth_verdict": aggregate_verdict_from_answers(
+                    gt_item["original_order"]["answer"],
+                    gt_item["flipped_order"]["answer"]
+                ),
+                "judge_correct": judge_correct,
+                "self_preference": float(self_pref),
+                "probabilities_original": probs_original,
+                "probabilities_flipped": probs_flipped,
+            }
+
+            if judge_correct:
+                legitimate_examples.append(example)
+            else:
+                harmful_examples.append(example)
+
+    logger.info(f"  Extracted {len(legitimate_examples)} legitimate self-preference examples")
+    logger.info(f"  Extracted {len(harmful_examples)} harmful self-preference examples")
+
+    return legitimate_examples, harmful_examples
+
+
 def calculate_paper_metrics(eval_results: List[Dict], gt_results: List[Dict],
                             logger: logging.Logger) -> Dict:
     """
@@ -623,6 +713,14 @@ def main():
 
     probs = extract_self_preference_probs(eval_results, gt_results, logger)
 
+    # Extract self-preference examples
+    logger.info("")
+    logger.info("=" * 80)
+    logger.info("EXTRACTING SELF-PREFERENCE EXAMPLES")
+    logger.info("=" * 80)
+
+    legitimate_examples, harmful_examples = extract_self_preference_examples(eval_results, gt_results, logger)
+
     # Calculate paper metrics
     logger.info("")
     logger.info("=" * 80)
@@ -668,6 +766,34 @@ def main():
         json.dump(stats_output, f, indent=2, ensure_ascii=False)
 
     logger.info(f"Saved statistics to {stats_path}")
+
+    # Save legitimate self-preference examples
+    legitimate_path = output_dir / "legitimate_self_preference_examples.json"
+    legitimate_output = {
+        "model_name": args.model_name,
+        "timestamp": datetime.now().isoformat(),
+        "description": "Examples where the judge prefers its own response AND is correct (legitimate self-preference)",
+        "count": len(legitimate_examples),
+        "examples": legitimate_examples,
+    }
+    with open(legitimate_path, 'w', encoding='utf-8') as f:
+        json.dump(legitimate_output, f, indent=2, ensure_ascii=False)
+
+    logger.info(f"Saved {len(legitimate_examples)} legitimate self-preference examples to {legitimate_path}")
+
+    # Save harmful self-preference examples
+    harmful_path = output_dir / "harmful_self_preference_examples.json"
+    harmful_output = {
+        "model_name": args.model_name,
+        "timestamp": datetime.now().isoformat(),
+        "description": "Examples where the judge prefers its own response BUT is incorrect (harmful self-preference)",
+        "count": len(harmful_examples),
+        "examples": harmful_examples,
+    }
+    with open(harmful_path, 'w', encoding='utf-8') as f:
+        json.dump(harmful_output, f, indent=2, ensure_ascii=False)
+
+    logger.info(f"Saved {len(harmful_examples)} harmful self-preference examples to {harmful_path}")
 
     logger.info("=" * 80)
     logger.info("ANALYSIS COMPLETE")
