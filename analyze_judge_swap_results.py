@@ -2,7 +2,7 @@
 # Plots P(J chooses J over R) vs P(J chooses K over R) split by LSP/ILSP
 # Written by: Dani
 # Created: Dec 24, 2025, 02:45 EST
-# Last Modified: Dec 24, 2025, 02:45 EST
+# Last Modified: Jan 13, 2026, 02:45 EST
 
 import argparse
 import json
@@ -156,6 +156,128 @@ def load_cached_preferences(cache_dir: Path, logger: logging.Logger) -> Dict:
     return results
 
 
+def load_author_obfuscation_cache(quality_dir: Path, logger: logging.Logger) -> Dict:
+    """
+    Load preferences from author_obfuscation format: quality/judge/*.json
+    
+    Returns:
+        Dict mapping (judge, proxy, reference) -> {
+            'J_vs_R_game1': [...],
+            'J_vs_R_game2': [...],
+            'K_vs_R_game1': [...],
+            'K_vs_R_game2': [...]
+        }
+    """
+    results = {}
+
+    dataset_name = quality_dir.name
+    proxy_dir = Path(__file__).parent / "author_obfuscation" / "data" / dataset_name / "proxies"
+    if not proxy_dir.exists():
+        logger.warning(f"Proxy directory not found: {proxy_dir}. Will fall back to per-item 'category' when available.")
+
+    # Cache proxy label sets keyed by (judge, reference, proxy)
+    label_cache = {}  # (judge, reference, proxy) -> (lsp_set, ilsp_set)
+
+    def _get_label_sets(judge: str, reference: str, proxy: str):
+        """Get (lsp_ids, ilsp_ids) sets for a judge/reference/proxy from proxy_dir."""
+        cache_key = (judge, reference, proxy)
+        if cache_key in label_cache:
+            return label_cache[cache_key]
+
+        if not proxy_dir.exists():
+            label_cache[cache_key] = (set(), set())
+            return label_cache[cache_key]
+
+        proxy_file = proxy_dir / f"evaluator_{judge}_vs_{reference}.json"
+        if not proxy_file.exists():
+            logger.warning(f"Missing proxy file for label mapping: {proxy_file}")
+            label_cache[cache_key] = (set(), set())
+            return label_cache[cache_key]
+
+        try:
+            with open(proxy_file) as f:
+                proxy_data = json.load(f)
+        except Exception as e:
+            logger.warning(f"Failed to load proxy file {proxy_file}: {e}")
+            label_cache[cache_key] = (set(), set())
+            return label_cache[cache_key]
+
+        proxy_info = (proxy_data.get("proxies") or {}).get(proxy)
+        if not proxy_info:
+            logger.warning(f"Proxy '{proxy}' not found in {proxy_file.name}; available={list((proxy_data.get('proxies') or {}).keys())}")
+            label_cache[cache_key] = (set(), set())
+            return label_cache[cache_key]
+
+        lsp_set = set(proxy_info.get("lsp_ids", []))
+        ilsp_set = set(proxy_info.get("ilsp_ids", []))
+        label_cache[cache_key] = (lsp_set, ilsp_set)
+        return label_cache[cache_key]
+    
+    # Walk quality_dir / judge / *.json
+    for judge_dir in quality_dir.iterdir():
+        if not judge_dir.is_dir():
+            continue
+        
+        judge = judge_dir.name
+        
+        for json_file in judge_dir.glob("*.json"):
+            try:
+                with open(json_file) as f:
+                    data = json.load(f)
+                if not isinstance(data, dict) or 'metadata' not in data:
+                    logger.warning(f"Skipping invalid file: {json_file}")
+                    continue
+            except Exception as e:
+                logger.warning(f"Failed to load {json_file}: {e}")
+                continue
+            
+            metadata = data['metadata']
+            judge = metadata['judge']
+            proxy = metadata['proxy']
+            reference = metadata['reference']
+
+            lsp_set, ilsp_set = _get_label_sets(judge, reference, proxy)
+            
+            key = (judge, proxy, reference)
+            
+            games = {}
+            for game_name in ['J_vs_R_game1', 'J_vs_R_game2', 'K_vs_R_game1', 'K_vs_R_game2']:
+                items = []
+                for item in data[game_name]:
+                    example_id = item['example_id']
+                    if example_id in lsp_set:
+                        category = "lsp"
+                    elif example_id in ilsp_set:
+                        category = "ilsp"
+                    else:
+                        # Fallback: some author_obfuscation outputs include category per item
+                        category = item.get('category', 'unknown')
+
+                    new_item = {
+                        'example_id': example_id,
+                        'prob_response1': item['prob_A'],
+                        'prob_response2': item['prob_B'],
+                        'raw_probs': item['raw_probs'],
+                        'normalized_sum': item['normalized_sum'],
+                        'judge': judge,
+                        'reference': reference,
+                        'dataset': dataset_name,
+                        'category': category
+                    }
+                    if game_name.startswith('K_vs_R'):
+                        new_item['proxy'] = proxy
+                    items.append(new_item)
+                games[game_name] = items
+            
+            results[key] = games
+            logger.debug(f"Loaded {judge}/{proxy} vs {reference}: "
+                        f"J_vs_R_g1={len(games['J_vs_R_game1'])}, J_vs_R_g2={len(games['J_vs_R_game2'])}, "
+                        f"K_vs_R_g1={len(games['K_vs_R_game1'])}, K_vs_R_g2={len(games['K_vs_R_game2'])}")
+    
+    logger.info(f"Loaded preferences for {len(results)} (judge, proxy, reference) triplets")
+    return results
+
+
 def compute_averaged_probabilities(
     game1_results: List[Dict],
     game2_results: List[Dict],
@@ -225,6 +347,8 @@ def plot_histogram_with_stats(ax, data, objective, title=None, xlabel=None,
     ax.axvline(objective, color='red', linestyle='--', linewidth=2, label='Objective')
     ax.axvspan(CI.low, CI.high, alpha=0.2, color='orange', label='95% CI')
     
+    ax.set_xlim(0, 1)
+
     if title:
         ax.set_title(title, fontweight='bold', fontsize=11, pad=15)
         subtitle = f"μ: {mean:.3f} | Obj: {objective:.3f} | n={len(data)}"
@@ -385,6 +509,26 @@ def compute_hypothesis_tests(
         Dict with test statistics
     """
     stats_dict = {}
+
+    if len(j_vs_r_probs) == 0 or len(k_vs_r_probs) == 0:
+        logger.warning("Hypothesis tests skipped: empty input arrays")
+        stats_dict.update({
+            "mean_j_vs_r": float("nan"),
+            "std_j_vs_r": float("nan"),
+            "mean_k_vs_r": float("nan"),
+            "std_k_vs_r": float("nan"),
+            "mean_diff": float("nan"),
+            "ttest_two_sided_t": float("nan"),
+            "ttest_two_sided_p": float("nan"),
+            "ttest_one_sided_t": float("nan"),
+            "ttest_one_sided_p": float("nan"),
+            "ks_statistic": float("nan"),
+            "ks_pvalue": float("nan"),
+            "correlation": float("nan"),
+            "correlation_pvalue": float("nan"),
+            "cohens_d": float("nan"),
+        })
+        return stats_dict
     
     # Basic statistics
     stats_dict["mean_j_vs_r"] = np.mean(j_vs_r_probs)
@@ -462,11 +606,11 @@ def main():
     
     # Load cached preferences
     cache_dir = results_dir / "cache"
-    if not cache_dir.exists():
-        logger.error(f"Cache directory not found: {cache_dir}")
-        return
-    
-    all_preferences = load_cached_preferences(cache_dir, logger)
+    if cache_dir.exists():
+        all_preferences = load_cached_preferences(cache_dir, logger)
+    else:
+        # Try author_obfuscation format
+        all_preferences = load_author_obfuscation_cache(results_dir, logger)
     
     if not all_preferences:
         logger.error("No preferences loaded. Exiting.")
@@ -527,9 +671,11 @@ def main():
             if j_label == "lsp":
                 j_probs_split['lsp'].append(j_prob)
                 k_probs_split['lsp'].append(k_prob)
-            else:
+            elif j_label == "ilsp":
                 j_probs_split['ilsp'].append(j_prob)
                 k_probs_split['ilsp'].append(k_prob)
+            else:
+                logger.warning(f"  Unknown label for {ex_id}: {j_label}. Skipping from LSP/ILSP splits.")
         
         logger.info(f"  J(J vs R) - LSP: {len(j_probs_split['lsp'])}, ILSP: {len(j_probs_split['ilsp'])}")
         logger.info(f"  J(K vs R) - LSP: {len(k_probs_split['lsp'])}, ILSP: {len(k_probs_split['ilsp'])}")
@@ -688,8 +834,11 @@ def main():
     logger.info("SUMMARY - AGGREGATED STATISTICS (ALL PROXIES COMBINED)")
     logger.info("=" * 80)
     logger.info(f"Total judge-reference pairs: {len(aggregated_stats)}")
-    logger.info(f"Rejections (two-sided, α={alpha_two}): {agg_rejections_two}/{len(aggregated_stats)} ({100*agg_rejections_two/len(aggregated_stats):.1f}%)")
-    logger.info(f"Rejections (one-sided, α={alpha_one}): {agg_rejections_one}/{len(aggregated_stats)} ({100*agg_rejections_one/len(aggregated_stats):.1f}%)")
+    if len(aggregated_stats) == 0:
+        logger.info("No aggregated stats computed (likely no common ILSP examples across proxies).")
+    else:
+        logger.info(f"Rejections (two-sided, α={alpha_two}): {agg_rejections_two}/{len(aggregated_stats)} ({100*agg_rejections_two/len(aggregated_stats):.1f}%)")
+        logger.info(f"Rejections (one-sided, α={alpha_one}): {agg_rejections_one}/{len(aggregated_stats)} ({100*agg_rejections_one/len(aggregated_stats):.1f}%)")
     
     logger.info("\n" + "=" * 80)
     logger.info("ANALYSIS COMPLETE")

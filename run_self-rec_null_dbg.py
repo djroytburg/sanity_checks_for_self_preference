@@ -112,12 +112,18 @@ class BatchHFManager:
         if "gemma-2" in model_path.lower():
             self.tokenizer.padding_side = "right"
         
+        # Load model - use explicit device instead of device_map='auto' 
+        # to avoid device mismatch issues with .to(device) calls
         self.model = AutoModelForCausalLM.from_pretrained(
             model_path,
             torch_dtype=torch.bfloat16,
-            trust_remote_code=True,
-            device_map="auto"
+            trust_remote_code=True
         )
+        
+        # Move to GPU explicitly
+        if torch.cuda.is_available():
+            self.model = self.model.to('cuda:0')
+        
         self.model.eval()
         
         logger.info(f"Model loaded successfully on {self.model.device}")
@@ -171,62 +177,57 @@ class BatchHFManager:
             prompts = self.format_messages([msg])
             prompt = prompts[0]
             
-            # Tokenize (CRITICAL: add_special_tokens=False when chat template already applied)
-            if self.is_instruct:
-                inputs = self.tokenizer(prompt, return_tensors="pt", add_special_tokens=False)
-            else:
-                inputs = self.tokenizer(prompt, return_tensors="pt", add_special_tokens=True)
+            # Tokenize - always use add_special_tokens=False because
+            # apply_chat_template already adds them for instruct models
+            inputs = self.tokenizer(prompt, return_tensors="pt", add_special_tokens=False).to(self.model.device)
             
-            inputs = inputs.to(device)
-            
-            # Generate output
-            with torch.no_grad():
-                gen_outputs = self.model.generate(
-                    **inputs,
-                    max_new_tokens=10,
-                    do_sample=False,
-                    pad_token_id=self.tokenizer.pad_token_id
-                )
-            
-            # Decode generated text (only new tokens)
-            seq_len = inputs.input_ids.shape[1]
-            generated_tokens = gen_outputs[0][seq_len:]
-            generated_text = self.tokenizer.decode(generated_tokens, skip_special_tokens=True).strip()
-            
-            # Get logits at last input position for probability extraction
+            # Get logits for next token prediction
             with torch.no_grad():
                 outputs = self.model(**inputs)
-                logits = outputs.logits[:, -1, :]  # [1, vocab_size]
             
-            # Apply softmax to get probabilities
-            probs = F.softmax(logits, dim=-1)
+            logits = outputs.logits
             
-            # Get A and B token IDs
-            a_token_id = self.tokenizer.encode("A", add_special_tokens=False)[0]
-            b_token_id = self.tokenizer.encode("B", add_special_tokens=False)[0]
+            # Get logits at last position (following judge swap pattern)
+            last_pos = inputs.input_ids.shape[1] - 1
+            last_logits = logits[0, last_pos, :]
+            probs = F.softmax(last_logits, dim=-1)
             
-            # Extract probabilities
-            prob_a = probs[0, a_token_id].item()
-            prob_b = probs[0, b_token_id].item()
+            # Get probabilities for A and B tokens
+            token_A = self.tokenizer.convert_tokens_to_ids("A")
+            token_B = self.tokenizer.convert_tokens_to_ids("B")
+            
+            prob_a = probs[token_A].item()
+            prob_b = probs[token_B].item()
             
             # Normalize
             total = prob_a + prob_b
-            if total < 0.01:
-                self.logger.warning(f"Very low probability sum: {total:.6f} (A={prob_a:.6f}, B={prob_b:.6f})")
-                self.logger.warning(f"Generated text: {generated_text}")
-                # Use uniform distribution as fallback
-                prob_a_norm = 0.5
-                prob_b_norm = 0.5
-            else:
+            if total > 0:
                 prob_a_norm = prob_a / total
                 prob_b_norm = prob_b / total
+            else:
+                self.logger.warning(f"Zero probability sum")
+                prob_a_norm, prob_b_norm = 0.5, 0.5
+            
+            # Generate actual output to verify (optional, for debugging)
+            with torch.no_grad():
+                gen_outputs = self.model.generate(
+                    input_ids=inputs.input_ids,
+                    attention_mask=inputs.attention_mask,
+                    max_new_tokens=5,
+                    pad_token_id=self.tokenizer.pad_token_id,
+                    do_sample=False
+                )
+            
+            # Decode only the new tokens
+            generated_tokens = gen_outputs[0][inputs.input_ids.shape[1]:]
+            generated_text = self.tokenizer.decode(generated_tokens, skip_special_tokens=True).strip()
             
             results.append({
                 "prob_A": prob_a_norm,
                 "prob_B": prob_b_norm,
                 "generated_text": generated_text,
                 "raw_probs": [prob_a, prob_b],
-                "normalized_sum": total
+                "normalized_sum": prob_a_norm + prob_b_norm
             })
         
         return results
