@@ -24,6 +24,7 @@ import torch.nn as nn
 import torch.optim as optim
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
 from sklearn.model_selection import StratifiedKFold, train_test_split
+from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 
@@ -155,51 +156,53 @@ def _determine_label(sample: dict, label_type: str) -> int:
     raise ValueError(f"Unknown label_type: {label_type}")
 
 
-def load_activation_cache(cache_pkl: Path, logger: logging.Logger) -> Tuple[dict, List[dict]]:
-    """Load activation cache pickle and flatten into sample views.
+def load_activation_cache(cache_pkls: List[Path], logger: logging.Logger) -> Tuple[dict, List[dict]]:
+    """Load activation cache pickles and flatten into sample views.
 
     Args:
-        cache_pkl (Path): Path to activation cache pickle.
+        cache_pkls (List[Path]): Paths to activation cache pickles.
         logger (logging.Logger): Logger.
 
     Returns:
-        Tuple[dict, List[dict]]: (cache_metadata, samples) where samples contain fwd/bwd views.
+        Tuple[dict, List[dict]]: (combined_metadata, samples) where samples contain fwd/bwd views from all caches.
 
     Raises:
-        FileNotFoundError: If cache_pkl does not exist.
+        FileNotFoundError: If any cache_pkl does not exist.
         KeyError: If required cache keys are missing.
     """
 
-    if not cache_pkl.exists():
-        raise FileNotFoundError(f"Missing cache pickle: {cache_pkl}")
-
-    logger.info(f"Loading activation cache: {cache_pkl}")
-    with open(cache_pkl, "rb") as f:
-        cache = pickle.load(f)
-
-    if "data" not in cache:
-        raise KeyError(f"Cache missing 'data': {cache_pkl}")
-
-    metadata = cache.get("metadata", {})
-    data = cache["data"]
-
     samples: List[dict] = []
-    for _, s in data.items():
-        pid = f"{s.get('id')}_{s.get('reference')}"
-        for view in ["forward_activations", "backward_activations"]:
-            if view in s:
-                samples.append(
-                    {
-                        "pid": pid,
-                        "gold_label": s.get("gold_label"),
-                        "self_label": s.get("self_label"),
-                        "layer_indices": s.get("layer_indices"),
-                        "act": s[view],
-                    }
-                )
+    metadata = {}
+    for cache_pkl in cache_pkls:
+        if not cache_pkl.exists():
+            raise FileNotFoundError(f"Missing cache pickle: {cache_pkl}")
+
+        logger.info(f"Loading activation cache: {cache_pkl}")
+        with open(cache_pkl, "rb") as f:
+            cache = pickle.load(f)
+
+        if "data" not in cache:
+            raise KeyError(f"Cache missing 'data': {cache_pkl}")
+
+        metadata.update(cache.get("metadata", {}))  # Merge metadata
+        data = cache["data"]
+
+        for _, s in data.items():
+            pid = f"{s.get('id')}_{s.get('reference')}"
+            for view in ["forward_activations", "backward_activations"]:
+                if view in s:
+                    samples.append(
+                        {
+                            "pid": pid,
+                            "gold_label": s.get("gold_label"),
+                            "self_label": s.get("self_label"),
+                            "layer_indices": s.get("layer_indices"),
+                            "act": s[view],
+                        }
+                    )
 
     if not samples:
-        raise ValueError(f"No activation views found in cache: {cache_pkl}")
+        raise ValueError(f"No activation views found in caches: {cache_pkls}")
 
     return metadata, samples
 
@@ -301,9 +304,6 @@ def train_big_mlp(
 
     input_size = int(X_train.shape[1])
     model = RobustMLP(input_size=input_size, hidden_sizes=hidden_sizes, dropout_rate=dropout).to(device)
-    if torch.cuda.device_count() > 1:
-        model = nn.DataParallel(model)
-
     optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
     criterion = nn.BCEWithLogitsLoss()
 
@@ -359,7 +359,9 @@ def train_big_mlp(
 
 
 def sweep_cache(
-    cache_pkl: Path,
+    cache_pkls: List[Path],
+    model: str,
+    dataset: str,
     layers: List[int] | None,
     label_types: List[str],
     cv_folds: int,
@@ -373,10 +375,12 @@ def sweep_cache(
     output_dir: Path,
     logger: logging.Logger,
 ) -> dict:
-    """Run the big-MLP probe sweep for one cache across labels/layers.
+    """Run the big-MLP probe sweep for one or more caches across labels/layers.
 
     Args:
-        cache_pkl (Path): Cache pickle.
+        cache_pkls (List[Path]): Cache pickles.
+        model (str): Model name.
+        dataset (str): Dataset option.
         layers (List[int]): True layer indices to evaluate.
         label_types (List[str]): Label types.
         cv_folds (int): Number of CV folds.
@@ -394,18 +398,18 @@ def sweep_cache(
         ValueError: If requested layers not present.
     """
 
-    metadata, samples = load_activation_cache(cache_pkl, logger)
+    metadata, samples = load_activation_cache(cache_pkls, logger)
     if layers is None:
         layers = list(range(0, metadata.get("n_layers", 26)))
     layer_map = build_layer_index_map(samples)
 
     missing_layers = [l for l in layers if l not in layer_map]
     if missing_layers:
-        logger.warning(f"Requested layers missing from cache {cache_pkl}: {missing_layers}. These will be skipped.")
+        logger.warning(f"Requested layers missing from caches {cache_pkls}: {missing_layers}. These will be skipped.")
     # Only keep layers that exist in this cache
     available_layers = [l for l in layers if l in layer_map]
     if not available_layers:
-        logger.warning(f"No requested layers available in cache {cache_pkl}; skipping this cache.")
+        logger.warning(f"No requested layers available in caches {cache_pkls}; skipping.")
         results["results"] = {}
         return results
 
@@ -419,7 +423,9 @@ def sweep_cache(
     u_pids, u_idx = np.unique(pids, return_index=True)
 
     results: dict = {
-        "cache_pkl": str(cache_pkl),
+        "cache_pkls": [str(p) for p in cache_pkls],
+        "model": model,
+        "dataset": dataset,
         "metadata": metadata,
         "hyperparameters": {
             "hidden_sizes": list(hidden_sizes),
@@ -467,8 +473,11 @@ def sweep_cache(
                 X_te_raw, y_te = X_all[te_mask], y_all[te_mask]
 
                 sc = StandardScaler().fit(X_tr_raw)
-                X_tr = sc.transform(X_tr_raw)
-                X_te = sc.transform(X_te_raw)
+                X_tr_scaled = sc.transform(X_tr_raw)
+                pca = PCA(n_components=512).fit(X_tr_scaled)
+                X_tr = pca.transform(X_tr_scaled)
+                X_te_scaled = sc.transform(X_te_raw)
+                X_te = pca.transform(X_te_scaled)
 
                 # Inner split (no leakage by pid)
                 tr_pids = pids[tr_mask]
@@ -484,9 +493,32 @@ def sweep_cache(
                 in_train = np.isin(tr_pids, tr_u_train)
                 in_val = np.isin(tr_pids, tr_u_val)
 
+                X_train_fold = X_tr[in_train]
+                y_train_fold = y_tr[in_train]
+
+                # Class balancing via upsampling within the training portion
+                if len(np.unique(y_train_fold)) == 2:
+                    pos_idx = np.where(y_train_fold == 1)[0]
+                    neg_idx = np.where(y_train_fold == 0)[0]
+                    n_pos = len(pos_idx)
+                    n_neg = len(neg_idx)
+
+                    if n_pos != n_neg:
+                        rng = np.random.RandomState(42)
+                        if n_pos < n_neg:
+                            # Upsample positive class
+                            extra_idx = rng.choice(pos_idx, size=(n_neg - n_pos), replace=True)
+                        else:
+                            # Upsample negative class
+                            extra_idx = rng.choice(neg_idx, size=(n_pos - n_neg), replace=True)
+                        
+                        X_train_fold = np.concatenate([X_train_fold, X_train_fold[extra_idx]], axis=0)
+                        y_train_fold = np.concatenate([y_train_fold, y_train_fold[extra_idx]], axis=0)
+                        logger.debug(f"Upsampled training set from {n_pos+n_neg} to {len(y_train_fold)} samples.")
+
                 model = train_big_mlp(
-                    X_train=X_tr[in_train],
-                    y_train=y_tr[in_train],
+                    X_train=X_train_fold,
+                    y_train=y_train_fold,
                     X_val=X_tr[in_val],
                     y_val=y_tr[in_val],
                     hidden_sizes=hidden_sizes,
@@ -521,7 +553,7 @@ def sweep_cache(
                 fold_metrics_te.append(compute_metrics(y_te, te_probs))
 
                 logger.debug(
-                    f"{safe_model_tag(cache_pkl)} | {label_type} | layer={layer} | fold={fold+1}/{cv_folds} "
+                    f"{model} | {label_type} | layer={layer} | fold={fold+1}/{cv_folds} "
                     f"te_acc={fold_metrics_te[-1]['acc']:.3f} te_auc={fold_metrics_te[-1]['auc']:.3f}"
                 )
 
@@ -541,14 +573,14 @@ def sweep_cache(
             }
 
             logger.info(
-                f"{safe_model_tag(cache_pkl)} | {label_type} | layer={layer}: "
+                f"{model} | {label_type} | layer={layer}: "
                 f"test acc={label_out['layers'][str(layer)]['test']['acc']['mean']:.3f}±{label_out['layers'][str(layer)]['test']['acc']['std']:.3f}, "
                 f"auc={label_out['layers'][str(layer)]['test']['auc']['mean']:.3f}±{label_out['layers'][str(layer)]['test']['auc']['std']:.3f}"
             )
 
         results["results"][label_type] = label_out
-    dataset = metadata.get("dataset", "unknown_dataset")
-    out_json = output_dir / f"{safe_model_tag(cache_pkl)}_big_mlp_sweep_{dataset}_{label_type}.json"
+    dataset_name = metadata.get("dataset", "unknown_dataset")
+    out_json = output_dir / f"{model}_big_mlp_sweep_{dataset}.json"
     with open(out_json, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
     logger.info(f"Saved JSON results: {out_json}")
@@ -572,8 +604,8 @@ def plot_results(results: dict, output_dir: Path, logger: logging.Logger) -> Pat
         KeyError: If results are missing expected keys.
     """
 
-    cache_pkl = Path(results["cache_pkl"])
-    tag = safe_model_tag(cache_pkl)
+    cache_pkl = Path(results["cache_pkls"][0])
+    tag = results["model"]
 
     metrics = ["acc", "auc", "f1_macro", "prec", "rec"]
     metric_titles = {
@@ -639,7 +671,7 @@ def plot_results(results: dict, output_dir: Path, logger: logging.Logger) -> Pat
     fig.suptitle(f"Big MLP Probe Sweep ({tag})", fontsize=14)
     fig.tight_layout(rect=[0, 0, 1, 0.95])
 
-    plot_path = output_dir / f"{tag}_big_mlp_sweep_{results['metadata']['dataset']}_{'-'.join(label_types)}.pdf"
+    plot_path = output_dir / f"{tag}_big_mlp_sweep_{results['dataset']}_{'-'.join(label_types)}.pdf"
     fig.savefig(plot_path, dpi=200)
     plt.close(fig)
 
@@ -657,26 +689,35 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description="Run biggest/deepest MLP against ilsp/lsp/self and plot metrics.")
     parser.add_argument(
-        "--cache_pkls",
+        "--model",
         type=str,
         required=True,
-        help="Comma-separated list of activation cache PKLs.",
+        help="Model name.",
+    )
+    parser.add_argument(
+        "--dataset",
+        type=str,
+        default="all",
+        help="Dataset name, or 'all' to use all datasets for the model.",
     )
     parser.add_argument("--layers", type=str, required=False, help="Comma-separated true layer indices.")
     parser.add_argument("--cv_folds", type=int, default=5)
-    parser.add_argument("--output_dir", type=str, default="experiment_plots/big_mlp_label_sweep")
+    parser.add_argument("--output_dir", type=str, default="experiment_plots/big_mlp_label_sweep_2")
 
     # Fixed-big-MLP hyperparameters (strong regularization + dropout)
-    parser.add_argument("--hidden_sizes", type=str, default="512,256", help="Comma-separated hidden sizes.")
-    parser.add_argument("--dropout", type=float, default=0.5)
+    parser.add_argument("--hidden_sizes", type=str, default="512,256,128", help="Comma-separated hidden sizes.")
+    parser.add_argument("--dropout", type=float, default=0.2)
     parser.add_argument("--weight_decay", type=float, default=0.1)
     parser.add_argument("--lr", type=float, default=1e-4)
-    parser.add_argument("--max_epochs", type=int, default=40)
-    parser.add_argument("--patience", type=int, default=8)
+    parser.add_argument("--max_epochs", type=int, default=200)
+    parser.add_argument("--patience", type=int, default=80)
     parser.add_argument("--batch_size", type=int, default=512)
 
     args = parser.parse_args()
-
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # if device.type == "cuda":
+    #     torch.cuda.init() # Explicitly initialize
+    #     torch.empty(1).to(device) # Dummy operation to solidify context
     out_root = Path(args.output_dir)
     out_root.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -685,11 +726,24 @@ def main() -> None:
 
     logger = setup_logging(output_dir)
 
-    cache_pkls = [Path(p.strip()) for p in args.cache_pkls.split(",") if p.strip()]
+    cache_dir = Path("activation_cache") / 'dbg' #TODO: fix hardcoded paper
+    if args.dataset == "all":
+        cache_pkls = list(cache_dir.rglob(f"{args.model}_activations.pkl"))
+    else:
+        cache_pkls = list(cache_dir.glob(f"*/{args.dataset}/{args.model}_activations.pkl"))
+
+    existing_cache_pkls = [p for p in cache_pkls if p.exists()]
+    if not existing_cache_pkls:
+        logger.error(f"No valid cache files found for model '{args.model}' and dataset '{args.dataset}'")
+        return
+    cache_pkls = existing_cache_pkls
+
     layers = [int(x.strip()) for x in args.layers.split(",") if x.strip()] if args.layers else None
     hidden_sizes = tuple(int(x.strip()) for x in args.hidden_sizes.split(",") if x.strip())
 
     logger.info(f"Output directory: {output_dir}")
+    logger.info(f"Model: {args.model}")
+    logger.info(f"Dataset: {args.dataset}")
     logger.info(f"Caches: {cache_pkls}")
     logger.info(f"Layers: {layers}")
     logger.info(f"Hidden sizes: {hidden_sizes}")
@@ -702,23 +756,24 @@ def main() -> None:
 
     label_types = ["ilsp", "lsp", "self"]
 
-    for cache_pkl in cache_pkls:
-        res = sweep_cache(
-            cache_pkl=cache_pkl,
-            layers=layers,
-            label_types=label_types,
-            cv_folds=args.cv_folds,
-            hidden_sizes=hidden_sizes,
-            dropout=args.dropout,
-            weight_decay=args.weight_decay,
-            lr=args.lr,
-            max_epochs=args.max_epochs,
-            patience=args.patience,
-            batch_size=args.batch_size,
-            output_dir=output_dir,
-            logger=logger,
-        )
-        plot_results(res, output_dir=output_dir, logger=logger)
+    res = sweep_cache(
+        cache_pkls=cache_pkls,
+        model=args.model,
+        dataset=args.dataset,
+        layers=layers,
+        label_types=label_types,
+        cv_folds=args.cv_folds,
+        hidden_sizes=hidden_sizes,
+        dropout=args.dropout,
+        weight_decay=args.weight_decay,
+        lr=args.lr,
+        max_epochs=args.max_epochs,
+        patience=args.patience,
+        batch_size=args.batch_size,
+        output_dir=output_dir,
+        logger=logger,
+    )
+    plot_results(res, output_dir=output_dir, logger=logger)
 
     logger.info("=" * 80)
     logger.info("BIG MLP LABEL SWEEP - COMPLETE")
