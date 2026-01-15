@@ -1,0 +1,767 @@
+[
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 558,
+        "forward_comparison": "1",
+        "forward_probability": 0.924397338269751,
+        "backward_comparison": "2",
+        "backward_probability": 0.9990162922580001
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 293,
+        "forward_comparison": "1",
+        "forward_probability": 0.7049634087493785,
+        "backward_comparison": "1",
+        "backward_probability": 0.5310959910353452
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 161,
+        "forward_comparison": "1",
+        "forward_probability": 0.9987267024321328,
+        "backward_comparison": "2",
+        "backward_probability": 0.9935208368843339
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 247,
+        "forward_comparison": "1",
+        "forward_probability": 0.835531274141265,
+        "backward_comparison": "2",
+        "backward_probability": 0.9977442472428083
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 767,
+        "forward_comparison": "2",
+        "forward_probability": 0.6792821161581865,
+        "backward_comparison": "2",
+        "backward_probability": 0.9239460837156731
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 74,
+        "forward_comparison": "1",
+        "forward_probability": 0.9394130628134758,
+        "backward_comparison": "2",
+        "backward_probability": 0.5310959910353452
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 473,
+        "forward_comparison": "1",
+        "forward_probability": 0.49891851158647194,
+        "backward_comparison": "2",
+        "backward_probability": 0.7301880903603154
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 296,
+        "forward_comparison": "1",
+        "forward_probability": 0.5609491608144708,
+        "backward_comparison": "1",
+        "backward_probability": 0.5310959910353452
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 69,
+        "forward_comparison": "2",
+        "forward_probability": 0.9939150730134813,
+        "backward_comparison": "1",
+        "backward_probability": 0.9872644098238935
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 760,
+        "forward_comparison": "2",
+        "forward_probability": 0.9887720057662736,
+        "backward_comparison": "1",
+        "backward_probability": 0.5310959910353452
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 583,
+        "forward_comparison": "1",
+        "forward_probability": 0.909621627403181,
+        "backward_comparison": "1",
+        "backward_probability": 0.9752861011028016
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 142,
+        "forward_comparison": "1",
+        "forward_probability": 0.7049634087493785,
+        "backward_comparison": "1",
+        "backward_probability": 0.9971811045680248
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 722,
+        "forward_comparison": "1",
+        "forward_probability": 0.5609491608144708,
+        "backward_comparison": "1",
+        "backward_probability": 0.977908797877211
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 93,
+        "forward_comparison": "2",
+        "forward_probability": 0.5394595359337269,
+        "backward_comparison": "1",
+        "backward_probability": 0.7727401072945725
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 586,
+        "forward_comparison": "1",
+        "forward_probability": 0.9984752846613156,
+        "backward_comparison": "2",
+        "backward_probability": 0.9993212143792627
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 801,
+        "forward_comparison": "2",
+        "forward_probability": 0.979342331407488,
+        "backward_comparison": "1",
+        "backward_probability": 0.7049634087493785
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 741,
+        "forward_comparison": "1",
+        "forward_probability": 0.8114079097359765,
+        "backward_comparison": "2",
+        "backward_probability": 0.7872119051077721
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 392,
+        "forward_comparison": "2",
+        "forward_probability": 0.9901610275394397,
+        "backward_comparison": "1",
+        "backward_probability": 0.9979726388784042
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 596,
+        "forward_comparison": "1",
+        "forward_probability": 0.9940364079301627,
+        "backward_comparison": "2",
+        "backward_probability": 0.9577074820169619
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 232,
+        "forward_comparison": "2",
+        "forward_probability": 0.6221280246568045,
+        "backward_comparison": "1",
+        "backward_probability": 0.6779566846700011
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 736,
+        "forward_comparison": "2",
+        "forward_probability": 0.9666338050783987,
+        "backward_comparison": "1",
+        "backward_probability": 0.9239460837156731
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 59,
+        "forward_comparison": "1",
+        "forward_probability": 0.7022150239037284,
+        "backward_comparison": "1",
+        "backward_probability": 0.644388728047139
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 63,
+        "forward_comparison": "1",
+        "forward_probability": 0.9619254174117003,
+        "backward_comparison": "2",
+        "backward_probability": 0.5310959910353452
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 757,
+        "forward_comparison": "2",
+        "forward_probability": 0.7772811761563689,
+        "backward_comparison": "2",
+        "backward_probability": 0.8671198122465524
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 410,
+        "forward_comparison": "1",
+        "forward_probability": 0.9997044046569147,
+        "backward_comparison": "2",
+        "backward_probability": 0.6792821161581865
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 130,
+        "forward_comparison": "1",
+        "forward_probability": 0.976596569556505,
+        "backward_comparison": "2",
+        "backward_probability": 0.9979574112294767
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 749,
+        "forward_comparison": "1",
+        "forward_probability": 0.7431368986687583,
+        "backward_comparison": "2",
+        "backward_probability": 0.9892549222398958
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 256,
+        "forward_comparison": "1",
+        "forward_probability": 0.9856387882655958,
+        "backward_comparison": "2",
+        "backward_probability": 0.9939757385706994
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 437,
+        "forward_comparison": "1",
+        "forward_probability": 0.7757645265618263,
+        "backward_comparison": "2",
+        "backward_probability": 0.7504296423535594
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 86,
+        "forward_comparison": "2",
+        "forward_probability": 0.7972695114113244,
+        "backward_comparison": "1",
+        "backward_probability": 0.9239460837156731
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 641,
+        "forward_comparison": "1",
+        "forward_probability": 0.7035878743456275,
+        "backward_comparison": "2",
+        "backward_probability": 0.8662734223982399
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 611,
+        "forward_comparison": "1",
+        "forward_probability": 0.9996510161090494,
+        "backward_comparison": "2",
+        "backward_probability": 0.9997177522393957
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 264,
+        "forward_comparison": "2",
+        "forward_probability": 0.9998102368173108,
+        "backward_comparison": "1",
+        "backward_probability": 0.9992983419771988
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 286,
+        "forward_comparison": "1",
+        "forward_probability": 0.7049634087493785,
+        "backward_comparison": "2",
+        "backward_probability": 0.9396424391174572
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-70B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 413,
+        "forward_comparison": "1",
+        "forward_probability": 0.9794618870228116,
+        "backward_comparison": "2",
+        "backward_probability": 0.9463187894158568
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 389,
+        "forward_comparison": "1",
+        "forward_probability": 0.5631446537543375,
+        "backward_comparison": "1",
+        "backward_probability": 0.9947040148398852
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 736,
+        "forward_comparison": "1",
+        "forward_probability": 0.5310959910353452,
+        "backward_comparison": "1",
+        "backward_probability": 0.7772811761563689
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 631,
+        "forward_comparison": "1",
+        "forward_probability": 0.7316156289466418,
+        "backward_comparison": "1",
+        "backward_probability": 0.5008712234296745
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 778,
+        "forward_comparison": "1",
+        "forward_probability": 0.9859396274705614,
+        "backward_comparison": "1",
+        "backward_probability": 0.9398718714282059
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 252,
+        "forward_comparison": "2",
+        "forward_probability": 0.5924803921133679,
+        "backward_comparison": "1",
+        "backward_probability": 0.5924803921133679
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 256,
+        "forward_comparison": "1",
+        "forward_probability": 0.9239460837156731,
+        "backward_comparison": "1",
+        "backward_probability": 0.979342331407488
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 641,
+        "forward_comparison": "1",
+        "forward_probability": 0.8807749623595528,
+        "backward_comparison": "1",
+        "backward_probability": 0.8177718608461166
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 296,
+        "forward_comparison": "1",
+        "forward_probability": 0.9818560725508124,
+        "backward_comparison": "1",
+        "backward_probability": 0.9626302108213645
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 131,
+        "forward_comparison": "1",
+        "forward_probability": 0.996800782736459,
+        "backward_comparison": "1",
+        "backward_probability": 0.9869631663888323
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 758,
+        "forward_comparison": "1",
+        "forward_probability": 0.9398718714282059,
+        "backward_comparison": "1",
+        "backward_probability": 0.8177718608461166
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 59,
+        "forward_comparison": "1",
+        "forward_probability": 0.7980484732149518,
+        "backward_comparison": "2",
+        "backward_probability": 0.7063416394256196
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 792,
+        "forward_comparison": "1",
+        "forward_probability": 0.7316156289466418,
+        "backward_comparison": "1",
+        "backward_probability": 0.8807749623595528
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 751,
+        "forward_comparison": "1",
+        "forward_probability": 0.6221280246568045,
+        "backward_comparison": "1",
+        "backward_probability": 0.9465498518897533
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 141,
+        "forward_comparison": "1",
+        "forward_probability": 0.9325577304972911,
+        "backward_comparison": "1",
+        "backward_probability": 0.9875657452052504
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 251,
+        "forward_comparison": "1",
+        "forward_probability": 0.8671198122465524,
+        "backward_comparison": "1",
+        "backward_probability": 0.9398718714282059
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 775,
+        "forward_comparison": "2",
+        "forward_probability": 0.5310959910353452,
+        "backward_comparison": "1",
+        "backward_probability": 0.9626302108213645
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 265,
+        "forward_comparison": "1",
+        "forward_probability": 0.9626302108213645,
+        "backward_comparison": "1",
+        "backward_probability": 0.7980484732149518
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 568,
+        "forward_comparison": "1",
+        "forward_probability": 0.7063416394256196,
+        "backward_comparison": "1",
+        "backward_probability": 0.9991954227459966
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 142,
+        "forward_comparison": "1",
+        "forward_probability": 0.7063416394256196,
+        "backward_comparison": "1",
+        "backward_probability": 0.8933355882393534
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 437,
+        "forward_comparison": "1",
+        "forward_probability": 0.7980484732149518,
+        "backward_comparison": "2",
+        "backward_probability": 0.5631446537543375
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 608,
+        "forward_comparison": "1",
+        "forward_probability": 0.9465498518897533,
+        "backward_comparison": "1",
+        "backward_probability": 0.8177718608461166
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 619,
+        "forward_comparison": "1",
+        "forward_probability": 0.9149670822836856,
+        "backward_comparison": "1",
+        "backward_probability": 0.6792821161581865
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 63,
+        "forward_comparison": "1",
+        "forward_probability": 0.9875657452052504,
+        "backward_comparison": "1",
+        "backward_probability": 0.6221280246568045
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 67,
+        "forward_comparison": "1",
+        "forward_probability": 0.9149670822836856,
+        "backward_comparison": "1",
+        "backward_probability": 0.8520106519007895
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 755,
+        "forward_comparison": "1",
+        "forward_probability": 0.7772811761563689,
+        "backward_comparison": "1",
+        "backward_probability": 0.6792821161581865
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 557,
+        "forward_comparison": "1",
+        "forward_probability": 0.8520106519007895,
+        "backward_comparison": "1",
+        "backward_probability": 0.8807749623595528
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 741,
+        "forward_comparison": "1",
+        "forward_probability": 0.9149670822836856,
+        "backward_comparison": "1",
+        "backward_probability": 0.8520106519007895
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 572,
+        "forward_comparison": "1",
+        "forward_probability": 0.6792821161581865,
+        "backward_comparison": "1",
+        "backward_probability": 0.6507124105818659
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 264,
+        "forward_comparison": "2",
+        "forward_probability": 0.7316156289466418,
+        "backward_comparison": "1",
+        "backward_probability": 0.8520106519007895
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 410,
+        "forward_comparison": "1",
+        "forward_probability": 0.7063416394256196,
+        "backward_comparison": "1",
+        "backward_probability": 0.8177718608461166
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 245,
+        "forward_comparison": "2",
+        "forward_probability": 0.8933355882393534,
+        "backward_comparison": "1",
+        "backward_probability": 0.9668698288325697
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 100,
+        "forward_comparison": "1",
+        "forward_probability": 0.835531274141265,
+        "backward_comparison": "1",
+        "backward_probability": 0.9723143008554823
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 722,
+        "forward_comparison": "2",
+        "forward_probability": 0.6792821161581865,
+        "backward_comparison": "1",
+        "backward_probability": 0.9890134350227241
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 280,
+        "forward_comparison": "2",
+        "forward_probability": 0.6221280246568045,
+        "backward_comparison": "1",
+        "backward_probability": 0.9465498518897533
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 91,
+        "forward_comparison": "1",
+        "forward_probability": 0.7548396019890073,
+        "backward_comparison": "1",
+        "backward_probability": 0.994734371282329
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 602,
+        "forward_comparison": "2",
+        "forward_probability": 0.5924803921133679,
+        "backward_comparison": "1",
+        "backward_probability": 0.8807749623595528
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 633,
+        "forward_comparison": "1",
+        "forward_probability": 0.8933355882393534,
+        "backward_comparison": "1",
+        "backward_probability": 0.7548396019890073
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 69,
+        "forward_comparison": "1",
+        "forward_probability": 0.5008712234296745,
+        "backward_comparison": "1",
+        "backward_probability": 0.7772811761563689
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 232,
+        "forward_comparison": "1",
+        "forward_probability": 0.7063416394256196,
+        "backward_comparison": "1",
+        "backward_probability": 0.6792821161581865
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 392,
+        "forward_comparison": "1",
+        "forward_probability": 0.9626302108213645,
+        "backward_comparison": "1",
+        "backward_probability": 0.8807749623595528
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 247,
+        "forward_comparison": "1",
+        "forward_probability": 0.980418860457959,
+        "backward_comparison": "1",
+        "backward_probability": 0.9145204312110151
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 237,
+        "forward_comparison": "1",
+        "forward_probability": 0.7548396019890073,
+        "backward_comparison": "1",
+        "backward_probability": 0.8807749623595528
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 742,
+        "forward_comparison": "1",
+        "forward_probability": 0.7980484732149518,
+        "backward_comparison": "2",
+        "backward_probability": 0.6221280246568045
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 583,
+        "forward_comparison": "1",
+        "forward_probability": 0.8790563732176524,
+        "backward_comparison": "1",
+        "backward_probability": 0.9623952229678291
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 391,
+        "forward_comparison": "1",
+        "forward_probability": 0.6792821161581865,
+        "backward_comparison": "1",
+        "backward_probability": 0.8177718608461166
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 573,
+        "forward_comparison": "1",
+        "forward_probability": 0.8807749623595528,
+        "backward_comparison": "1",
+        "backward_probability": 0.8671198122465524
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 84,
+        "forward_comparison": "1",
+        "forward_probability": 0.9239460837156731,
+        "backward_comparison": "1",
+        "backward_probability": 0.5924803921133679
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 733,
+        "forward_comparison": "1",
+        "forward_probability": 0.8933355882393534,
+        "backward_comparison": "1",
+        "backward_probability": 0.7980484732149518
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 801,
+        "forward_comparison": "1",
+        "forward_probability": 0.9149670822836856,
+        "backward_comparison": "1",
+        "backward_probability": 0.8671198122465524
+    },
+    {
+        "evaluator": "Meta-Llama-3.1-8B-Instruct-Turbo",
+        "evaluatee": "gpt-3.5-turbo",
+        "unique_id": 74,
+        "forward_comparison": "1",
+        "forward_probability": 0.6221280246568045,
+        "backward_comparison": "1",
+        "backward_probability": 0.8520106519007895
+    }
+]

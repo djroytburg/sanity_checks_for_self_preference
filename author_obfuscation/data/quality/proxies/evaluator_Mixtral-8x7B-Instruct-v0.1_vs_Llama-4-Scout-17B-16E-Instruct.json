@@ -1,0 +1,5 @@
+{
+  "reference_evaluator": "Mixtral-8x7B-Instruct-v0.1",
+  "reference_evaluatee": "Llama-4-Scout-17B-16E-Instruct",
+  "proxies": {}
+}
