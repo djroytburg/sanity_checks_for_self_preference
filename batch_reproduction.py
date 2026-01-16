@@ -5,12 +5,22 @@ across multiple judge/evaluatee pairs.
 
 Usage:
     # Run all pairs for a specific judge
+    python batch_reproduction.py --judge llama-3.1-8b --n_samples 200
 
     # Run specific benchmark only
     python batch_reproduction.py --judge llama-3.1-8b --benchmark math500
+    
+    # Run ALL examples for all judges
+    python batch_reproduction.py --all_judges --all_samples
 
     # Run all available judges
     python batch_reproduction.py --all_judges --n_samples 200
+    
+    # Run with chain-of-thought reasoning
+    python batch_reproduction.py --judge llama-3.1-8b --reasoning_mode cot
+    
+    # Run with extended reasoning (<think> tokens)
+    python batch_reproduction.py --judge llama-3.1-8b --reasoning_mode long_cot
 
 """
 
@@ -97,25 +107,38 @@ def discover_jr_pairs(
     benchmark_filter: Optional[str] = None,
     judge_filter: Optional[str] = None,
     evaluatee_filter: Optional[str] = None,
+    reasoning_mode: str = "none",
 ) -> List[Dict[str, str]]:
     """
-    Discover all available J/R pairs from the llm-sp/sp directory.
+    Discover all available J/R pairs from the appropriate directory.
     
     Args:
-        base_path: Path to llm-sp/sp directory
+        base_path: Path to base directory (used for "none" mode, ignored for cot/long_cot)
         benchmark_filter: Only include this benchmark (e.g., "math500")
         judge_filter: Only include this judge (e.g., "llama-3.1-8b")
         evaluatee_filter: Only include this evaluatee (e.g., "mistral-7b-v0.3")
+        reasoning_mode: "none", "cot", or "long_cot" - determines which directory to search
     
     Returns:
         List of dicts with keys: benchmark, judge_family, judge_short, evaluatee_short, data_path
+    
+    Directory structure:
+        - "none": llm-sp/sp/{benchmark}/{family}/{judge}_{evaluatee}_eval.jsonl
+        - "cot": llm-sp/harmful_sp_mitigation/{benchmark}/cot/{family}/{judge}_reasoning_{evaluatee}_eval.jsonl
+        - "long_cot": llm-sp/harmful_sp_mitigation/{benchmark}/long_cot/{family}/...
     """
     pairs = []
     
     benchmarks = [benchmark_filter] if benchmark_filter else BENCHMARKS
     
     for benchmark in benchmarks:
-        benchmark_path = base_path / benchmark
+        # Determine the correct path based on reasoning mode
+        if reasoning_mode == "none":
+            benchmark_path = base_path / benchmark
+        else:
+            # COT and long_cot data is in harmful_sp_mitigation/{benchmark}/{mode}/
+            benchmark_path = Path("llm-sp/harmful_sp_mitigation") / benchmark / reasoning_mode
+        
         if not benchmark_path.exists():
             continue
         
@@ -126,45 +149,56 @@ def discover_jr_pairs(
             judge_family = family_dir.name
             
             for eval_file in family_dir.glob("*_eval.jsonl"):
-                # Parse filename: {judge_short}_{evaluatee_short}_eval.jsonl
+                # Parse filename based on reasoning mode
                 filename = eval_file.stem  # Remove .jsonl
                 filename = filename.replace("_eval", "")  # Remove _eval suffix
                 
-                # Split by underscore, but handle multi-part names
-                # Pattern: judge_evaluatee where both can have underscores
-                # We need to match against known judge names
-                parts = filename.split("_")
-                
-                # Try to find the split point by matching known judge patterns
-                judge_short = None
-                evaluatee_short = None
-                
-                # Build up judge name from left, check if remainder is valid evaluatee
-                for i in range(1, len(parts)):
-                    potential_judge = "_".join(parts[:i])
-                    potential_evaluatee = "_".join(parts[i:])
+                # Different filename patterns:
+                # - "none": {judge}_{evaluatee}
+                # - "cot"/"long_cot": {judge}_reasoning_{evaluatee}
+                if reasoning_mode != "none" and "_reasoning_" in filename:
+                    # Pattern: {judge}_reasoning_{evaluatee}
+                    parts = filename.split("_reasoning_")
+                    if len(parts) == 2:
+                        judge_short = parts[0]
+                        evaluatee_short = parts[1]
+                    else:
+                        continue  # Skip malformed filenames
+                else:
+                    # Pattern: {judge}_{evaluatee} (standard format)
+                    # Split by underscore, but handle multi-part names
+                    parts = filename.split("_")
                     
-                    # Check if this looks like a valid split
-                    # Judge names typically have version numbers
-                    if any(potential_judge.startswith(j.split("-")[0]) for j in JUDGE_TO_MODEL.keys()):
-                        judge_short = potential_judge
-                        evaluatee_short = potential_evaluatee
-                
-                if not judge_short or not evaluatee_short:
-                    # Fallback: assume last part is evaluatee
-                    # This handles cases like "llama-3.1-8b_gemma-2-2b"
-                    # Try common patterns
-                    for known_judge in JUDGE_TO_MODEL.keys():
-                        if filename.startswith(known_judge + "_"):
-                            judge_short = known_judge
-                            evaluatee_short = filename[len(known_judge) + 1:]
-                            break
-                
-                if not judge_short or not evaluatee_short:
-                    # Last resort: split in middle
-                    mid = len(parts) // 2
-                    judge_short = "_".join(parts[:mid])
-                    evaluatee_short = "_".join(parts[mid:])
+                    # Try to find the split point by matching known judge patterns
+                    judge_short = None
+                    evaluatee_short = None
+                    
+                    # Build up judge name from left, check if remainder is valid evaluatee
+                    for i in range(1, len(parts)):
+                        potential_judge = "_".join(parts[:i])
+                        potential_evaluatee = "_".join(parts[i:])
+                        
+                        # Check if this looks like a valid split
+                        # Judge names typically have version numbers
+                        if any(potential_judge.startswith(j.split("-")[0]) for j in JUDGE_TO_MODEL.keys()):
+                            judge_short = potential_judge
+                            evaluatee_short = potential_evaluatee
+                    
+                    if not judge_short or not evaluatee_short:
+                        # Fallback: assume last part is evaluatee
+                        # This handles cases like "llama-3.1-8b_gemma-2-2b"
+                        # Try common patterns
+                        for known_judge in JUDGE_TO_MODEL.keys():
+                            if filename.startswith(known_judge + "_"):
+                                judge_short = known_judge
+                                evaluatee_short = filename[len(known_judge) + 1:]
+                                break
+                    
+                    if not judge_short or not evaluatee_short:
+                        # Last resort: split in middle
+                        mid = len(parts) // 2
+                        judge_short = "_".join(parts[:mid])
+                        evaluatee_short = "_".join(parts[mid:])
                 
                 # Apply filters
                 if judge_filter and judge_short != judge_filter:
@@ -183,14 +217,36 @@ def discover_jr_pairs(
     return pairs
 
 
-def get_output_path(pair: Dict[str, str]) -> Path:
-    """Get the expected output path for a J/R pair."""
-    return Path("llm-sp-reprod") / pair["benchmark"] / pair["judge_family"] / f"{pair['judge_short']}_{pair['evaluatee_short']}_reprod.jsonl"
+def get_output_path(pair: Dict[str, str], reasoning_mode: str = "none") -> Path:
+    """Get the expected output path for a J/R pair.
+    
+    Args:
+        pair: J/R pair dict with benchmark, judge_family, judge_short, evaluatee_short
+        reasoning_mode: Reasoning mode - "none", "cot", or "long_cot"
+    
+    Returns:
+        Path to the expected output file
+    """
+    # Use different base directories for different reasoning modes:
+    # - "none" -> llm-sp-reprod/ (backwards compatible)
+    # - "cot" -> llm-sp-reprod-cot/
+    # - "long_cot" -> llm-sp-reprod-long_cot/
+    if reasoning_mode == "none":
+        base_dir = "llm-sp-reprod"
+    else:
+        base_dir = f"llm-sp-reprod-{reasoning_mode}"
+    
+    return Path(base_dir) / pair["benchmark"] / pair["judge_family"] / f"{pair['judge_short']}_{pair['evaluatee_short']}_reprod.jsonl"
 
 
-def is_completed(pair: Dict[str, str]) -> bool:
-    """Check if a J/R pair has already been processed."""
-    output_path = get_output_path(pair)
+def is_completed(pair: Dict[str, str], reasoning_mode: str = "none") -> bool:
+    """Check if a J/R pair has already been processed.
+    
+    Args:
+        pair: J/R pair dict
+        reasoning_mode: Reasoning mode - "none", "cot", or "long_cot"
+    """
+    output_path = get_output_path(pair, reasoning_mode)
     return output_path.exists()
 
 
@@ -205,6 +261,7 @@ def run_batch(
     resume: bool = True,
     logger: logging.Logger = None,
     tensor_parallel_size: int = None,
+    reasoning_mode: str = "none",
 ) -> List[Dict[str, Any]]:
     """
     Run reproduction experiments for a batch of J/R pairs.
@@ -218,6 +275,7 @@ def run_batch(
         resume: Skip completed pairs if True
         logger: Logger instance
         tensor_parallel_size: Number of GPUs for tensor parallelism
+        reasoning_mode: Reasoning mode - "none", "cot", or "long_cot"
     
     Returns:
         List of result summaries for each pair
@@ -263,13 +321,13 @@ def run_batch(
             pair_id = f"{pair['benchmark']}/{pair['judge_short']}_{pair['evaluatee_short']}"
             
             # Check if already completed
-            if resume and is_completed(pair):
+            if resume and is_completed(pair, reasoning_mode):
                 logger.info(f"[{completed+skipped+1}/{total_pairs}] SKIP (exists): {pair_id}")
                 skipped += 1
                 
                 # Still collect results from existing file
                 try:
-                    output_path = get_output_path(pair)
+                    output_path = get_output_path(pair, reasoning_mode)
                     existing_results = load_jsonl(output_path)
                     summary = summarize_results(existing_results, pair)
                     summary["status"] = "skipped"
@@ -293,7 +351,7 @@ def run_batch(
                     judge_family=pair["judge_family"],
                     judge_short=pair["judge_short"],
                     evaluatee_short=pair["evaluatee_short"],
-                    reasoning_mode="none",
+                    reasoning_mode=reasoning_mode,
                     n_samples=n_samples,
                     seed=seed,
                     config=CONFIG,
@@ -304,7 +362,7 @@ def run_batch(
                 elapsed = time.time() - start_time
                 
                 # Load and summarize results
-                output_path = get_output_path(pair)
+                output_path = get_output_path(pair, reasoning_mode)
                 if output_path.exists():
                     run_results = load_jsonl(output_path)
                     summary = summarize_results(run_results, pair)
@@ -406,6 +464,7 @@ def generate_summary(
     results: List[Dict[str, Any]],
     output_dir: Path,
     logger: logging.Logger = None,
+    reasoning_mode: str = "none",
 ) -> None:
     """
     Generate aggregate summary statistics and visualizations.
@@ -414,6 +473,7 @@ def generate_summary(
         results: List of per-pair summary dicts
         output_dir: Directory for output files
         logger: Logger instance
+        reasoning_mode: Reasoning mode - "none", "cot", or "long_cot"
     """
     if logger is None:
         logger = logging.getLogger("batch_reproduction")
@@ -431,7 +491,17 @@ def generate_summary(
     df = pd.DataFrame(valid_results)
     
     # Base directory for batch reproduction outputs
-    batch_base = output_dir / "batch_reproduction"
+    # Use different base directories for different reasoning modes (consistent with per-pair plots)
+    # - "none" -> reproduction_results/batch_reproduction/
+    # - "cot"  -> reproduction_results-cot/batch_reproduction/
+    # - "long_cot" -> reproduction_results-long_cot/batch_reproduction/
+    if reasoning_mode == "none":
+        batch_base = output_dir / "batch_reproduction"
+    else:
+        # Use separate base directory for non-default reasoning modes
+        base_dir = Path(f"{output_dir}-{reasoning_mode}")
+        base_dir.mkdir(parents=True, exist_ok=True)
+        batch_base = base_dir / "batch_reproduction"
     batch_base.mkdir(parents=True, exist_ok=True)
     
     # Save JSON per judge
@@ -484,9 +554,8 @@ def generate_summary(
     try:
         import matplotlib.pyplot as plt
         
-        # Base plot directory for batch reproduction
-        batch_plot_base = output_dir / "batch_reproduction"
-        batch_plot_base.mkdir(parents=True, exist_ok=True)
+        # Base plot directory for batch reproduction (same as batch_base)
+        batch_plot_base = batch_base  # Already created above with reasoning_mode suffix
         
         # Generate plots per judge, per benchmark
         for judge in df["judge_short"].unique():
@@ -609,6 +678,7 @@ def _generate_plots_for_subset(
 def collect_existing_results(
     pairs: List[Dict[str, str]],
     logger: logging.Logger = None,
+    reasoning_mode: str = "none",
 ) -> List[Dict[str, Any]]:
     """
     Collect results from existing reproduction files (for summary_only mode).
@@ -616,6 +686,7 @@ def collect_existing_results(
     Args:
         pairs: List of J/R pair dicts
         logger: Logger instance
+        reasoning_mode: Reasoning mode - "none", "cot", or "long_cot"
     
     Returns:
         List of summary dicts for pairs that have results
@@ -626,7 +697,7 @@ def collect_existing_results(
     results = []
     
     for pair in pairs:
-        output_path = get_output_path(pair)
+        output_path = get_output_path(pair, reasoning_mode)
         
         if output_path.exists():
             try:
@@ -743,6 +814,18 @@ Examples:
         help=f"Number of samples per pair (default: {DEFAULT_N_SAMPLES})"
     )
     parser.add_argument(
+        "--all_samples",
+        action="store_true",
+        help="Run all examples in each dataset (overrides --n_samples)"
+    )
+    parser.add_argument(
+        "--reasoning_mode",
+        type=str,
+        default="none",
+        choices=["none", "cot", "long_cot"],
+        help="Reasoning mode for verdict generation: 'none' (direct A/B/T), 'cot' (chain-of-thought), 'long_cot' (extended reasoning with <think>)"
+    )
+    parser.add_argument(
         "--seed",
         type=int,
         default=DEFAULT_SEED,
@@ -802,10 +885,14 @@ Examples:
     else:
         judges_to_run = DEFAULT_JUDGES
     
+    # Handle --all_samples flag
+    n_samples = None if args.all_samples else args.n_samples
+    
     logger.info(f"Judges to run: {judges_to_run}")
     logger.info(f"Benchmark filter: {args.benchmark or 'all'}")
     logger.info(f"Evaluatee filter: {args.evaluatee or 'all'}")
-    logger.info(f"N samples: {args.n_samples}")
+    logger.info(f"N samples: {n_samples if n_samples else 'ALL'}")
+    logger.info(f"Reasoning mode: {args.reasoning_mode}")
     logger.info(f"Resume mode: {not args.no_resume}")
     logger.info(f"Tensor parallel: {args.tensor_parallel or 'default (1)'}")
     
@@ -816,6 +903,7 @@ Examples:
             benchmark_filter=args.benchmark,
             judge_filter=judge,
             evaluatee_filter=args.evaluatee,
+            reasoning_mode=args.reasoning_mode,
         )
         all_pairs.extend(pairs)
     
@@ -825,11 +913,11 @@ Examples:
     if args.list_pairs:
         logger.info("\nAvailable J/R pairs:")
         for pair in all_pairs:
-            status = "✓" if is_completed(pair) else "○"
+            status = "✓" if is_completed(pair, args.reasoning_mode) else "○"
             model_available = "✓" if pair["judge_short"] in JUDGE_TO_MODEL else "✗"
             logger.info(f"  {status} [{model_available}] {pair['benchmark']}/{pair['judge_short']}_{pair['evaluatee_short']}")
         
-        completed_count = sum(1 for p in all_pairs if is_completed(p))
+        completed_count = sum(1 for p in all_pairs if is_completed(p, args.reasoning_mode))
         runnable_count = sum(1 for p in all_pairs if p["judge_short"] in JUDGE_TO_MODEL)
         logger.info(f"\nTotal: {len(all_pairs)} pairs")
         logger.info(f"Completed: {completed_count}")
@@ -839,16 +927,16 @@ Examples:
     # Summary only mode
     if args.summary_only:
         logger.info("Summary only mode - collecting existing results")
-        results = collect_existing_results(all_pairs, logger)
-        generate_summary(results, output_dir, logger)
+        results = collect_existing_results(all_pairs, logger, args.reasoning_mode)
+        generate_summary(results, output_dir, logger, args.reasoning_mode)
         return
     
     # Run batch
     resume = not args.no_resume
-    results = run_batch(all_pairs, args.n_samples, args.seed, resume=resume, logger=logger, tensor_parallel_size=args.tensor_parallel)
+    results = run_batch(all_pairs, n_samples, args.seed, resume=resume, logger=logger, tensor_parallel_size=args.tensor_parallel, reasoning_mode=args.reasoning_mode)
     
     # Generate summary
-    generate_summary(results, output_dir, logger)
+    generate_summary(results, output_dir, logger, args.reasoning_mode)
     
     logger.info("\n" + "=" * 80)
     logger.info("BATCH REPRODUCTION COMPLETE")
