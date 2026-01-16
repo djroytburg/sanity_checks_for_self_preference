@@ -1,0 +1,61 @@
+{
+  "judge": "qwen-2.5-7b",
+  "proxy": "llama-3.1-8b",
+  "reference": "llama-3.2-1b",
+  "n_pairs_total": 42,
+  "n_lsp": 41,
+  "n_ilsp": 1,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.8266519652365021,
+      "std_j_vs_r": 0.21695697921909307,
+      "mean_k_vs_r": 0.8140576532570984,
+      "std_k_vs_r": 0.25654586809330737,
+      "mean_diff": 0.012594311979403713,
+      "std_diff": 0.14439608278325264,
+      "ttest_two_sided_t": 0.5652540473406374,
+      "ttest_two_sided_p": 0.5749812869226583,
+      "ttest_one_sided_t": 0.5652540473406374,
+      "ttest_one_sided_p": 0.28749064346132913,
+      "ks_statistic": 0.19047619047619047,
+      "ks_pvalue": 0.43552668269603506,
+      "correlation": 0.8312368711311474,
+      "correlation_pvalue": 9.427560580103409e-12,
+      "cohens_d": 0.05301138914236589
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.5026065634311608,
+      "std_j_vs_r": 0.0,
+      "mean_k_vs_r": 0.504657134650437,
+      "std_k_vs_r": 0.0,
+      "mean_diff": -0.0020505712192762093,
+      "std_diff": NaN,
+      "ttest_two_sided_t": NaN,
+      "ttest_two_sided_p": NaN,
+      "ttest_one_sided_t": NaN,
+      "ttest_one_sided_p": NaN,
+      "ks_statistic": 1.0,
+      "ks_pvalue": 1.0,
+      "correlation": NaN,
+      "correlation_pvalue": NaN,
+      "cohens_d": 0
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.8345555116219983,
+      "std_j_vs_r": 0.21352942132593566,
+      "mean_k_vs_r": 0.8216040073694558,
+      "std_k_vs_r": 0.2550083372865374,
+      "mean_diff": 0.012951504252542247,
+      "std_diff": 0.1461711047031905,
+      "ttest_two_sided_t": 0.567349415324339,
+      "ttest_two_sided_p": 0.5736474060200547,
+      "ttest_one_sided_t": 0.567349415324339,
+      "ttest_one_sided_p": 0.28682370301002735,
+      "ks_statistic": 0.1951219512195122,
+      "ks_pvalue": 0.42017824559389316,
+      "correlation": 0.8243917032442747,
+      "correlation_pvalue": 3.491861236405648e-11,
+      "cohens_d": 0.05506940727711778
+    }
+  }
+}

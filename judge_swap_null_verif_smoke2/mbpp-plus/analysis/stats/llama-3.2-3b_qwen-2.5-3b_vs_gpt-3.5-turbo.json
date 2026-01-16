@@ -1,0 +1,61 @@
+{
+  "judge": "llama-3.2-3b",
+  "proxy": "qwen-2.5-3b",
+  "reference": "gpt-3.5-turbo",
+  "n_pairs_total": 20,
+  "n_lsp": 4,
+  "n_ilsp": 16,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.27401497590269985,
+      "std_j_vs_r": 0.07721727946288824,
+      "mean_k_vs_r": 0.26923259034021696,
+      "std_k_vs_r": 0.06662490395642542,
+      "mean_diff": 0.004782385562482979,
+      "std_diff": 0.06166585669761438,
+      "ttest_two_sided_t": 0.34682852991935187,
+      "ttest_two_sided_p": 0.7325319200273837,
+      "ttest_one_sided_t": 0.34682852991935187,
+      "ttest_one_sided_p": 0.3662659600136918,
+      "ks_statistic": 0.25,
+      "ks_pvalue": 0.571336004933722,
+      "correlation": 0.6598035057478089,
+      "correlation_pvalue": 0.0015489774807517643,
+      "cohens_d": 0.06631533626000817
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.2603551214202432,
+      "std_j_vs_r": 0.07934792595405518,
+      "mean_k_vs_r": 0.26513748489624595,
+      "std_k_vs_r": 0.07096781132498098,
+      "mean_diff": -0.004782363476002752,
+      "std_diff": 0.06403661342834896,
+      "ttest_two_sided_t": -0.2987268201716366,
+      "ttest_two_sided_p": 0.7692471132634622,
+      "ttest_one_sided_t": -0.2987268201716366,
+      "ttest_one_sided_p": 0.6153764433682689,
+      "ks_statistic": 0.1875,
+      "ks_pvalue": 0.9522562797299043,
+      "correlation": 0.6648846630148636,
+      "correlation_pvalue": 0.004951551530067618,
+      "cohens_d": -0.06353225388014645
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.32865439383252687,
+      "std_j_vs_r": 0.02993885996109634,
+      "mean_k_vs_r": 0.28561301211610096,
+      "std_k_vs_r": 0.041391670503101836,
+      "mean_diff": 0.0430413817164259,
+      "std_diff": 0.03377280927338546,
+      "ttest_two_sided_t": 2.5488777891121135,
+      "ttest_two_sided_p": 0.08402516709293516,
+      "ttest_one_sided_t": 2.5488777891121135,
+      "ttest_one_sided_p": 0.04201258354646758,
+      "ks_statistic": 0.5,
+      "ks_pvalue": 0.7714285714285716,
+      "correlation": 0.7077655902910384,
+      "correlation_pvalue": 0.29223440970896153,
+      "cohens_d": 1.1915540699655691
+    }
+  }
+}

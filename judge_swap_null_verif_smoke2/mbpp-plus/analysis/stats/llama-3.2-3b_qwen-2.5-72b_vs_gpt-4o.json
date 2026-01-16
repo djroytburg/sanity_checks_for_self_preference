@@ -1,0 +1,61 @@
+{
+  "judge": "llama-3.2-3b",
+  "proxy": "qwen-2.5-72b",
+  "reference": "gpt-4o",
+  "n_pairs_total": 6,
+  "n_lsp": 2,
+  "n_ilsp": 4,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.3307726666942848,
+      "std_j_vs_r": 0.058261596718213945,
+      "mean_k_vs_r": 0.2825318067471949,
+      "std_k_vs_r": 0.08788354632882572,
+      "mean_diff": 0.04824085994708988,
+      "std_diff": 0.05618822449703885,
+      "ttest_two_sided_t": 2.10302946357851,
+      "ttest_two_sided_p": 0.08940890775997096,
+      "ttest_one_sided_t": 2.10302946357851,
+      "ttest_one_sided_p": 0.04470445387998548,
+      "ks_statistic": 0.5,
+      "ks_pvalue": 0.474025974025974,
+      "correlation": 0.8287705225885864,
+      "correlation_pvalue": 0.04146911666509603,
+      "cohens_d": 0.647020505214378
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.2952497684311611,
+      "std_j_vs_r": 0.03608507034571628,
+      "mean_k_vs_r": 0.23421191469133595,
+      "std_k_vs_r": 0.06421490520284867,
+      "mean_diff": 0.0610378537398251,
+      "std_diff": 0.0622890227845358,
+      "ttest_two_sided_t": 1.9598269811026376,
+      "ttest_two_sided_p": 0.14487666613098146,
+      "ttest_one_sided_t": 1.9598269811026376,
+      "ttest_one_sided_p": 0.07243833306549073,
+      "ks_statistic": 0.75,
+      "ks_pvalue": 0.22857142857142862,
+      "correlation": 0.542841633186919,
+      "correlation_pvalue": 0.457158366813081,
+      "cohens_d": 1.17189016587985
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.4018184632205323,
+      "std_j_vs_r": 0.002778227255530813,
+      "mean_k_vs_r": 0.37917159085891283,
+      "std_k_vs_r": 0.03024191190767747,
+      "mean_diff": 0.02264687236161944,
+      "std_diff": 0.04669752863605614,
+      "ttest_two_sided_t": 0.685850300317724,
+      "ttest_two_sided_p": 0.6172856706681693,
+      "ttest_one_sided_t": 0.685850300317724,
+      "ttest_one_sided_p": 0.30864283533408465,
+      "ks_statistic": 0.5,
+      "ks_pvalue": 1.0,
+      "correlation": -1.0,
+      "correlation_pvalue": 1.0,
+      "cohens_d": 1.0546031414119044
+    }
+  }
+}
