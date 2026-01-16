@@ -137,32 +137,34 @@ def extract_residual_activations_from_examples(
                     max_length=max_length,
                 ).to(device)
 
-                # Generate answer and get activations from the generated token
-                # We want the hidden states at the position where the model generates "1" or "2"
+                # Generate answer to get the model's response
                 with torch.no_grad():
                     outputs = model.generate(
                         **inputs,
                         max_new_tokens=1,
-                        output_hidden_states=True,
-                        return_dict_in_generate=True,
                         do_sample=False,  # Greedy decoding
                         pad_token_id=tokenizer.eos_token_id,
                     )
 
-                # Extract hidden states from the generated token
-                # outputs.hidden_states is a tuple of tuples: (step1, step2, ...)
-                # Each step is a tuple of layer outputs
-                # We want the first (and only) generated token's hidden states
-                if len(outputs.hidden_states) > 0:
-                    # Get hidden states from the first generated token
-                    first_token_hidden_states = outputs.hidden_states[0]  # Tuple of layer outputs
+                # Now run a forward pass on the complete sequence (input + generated token)
+                # to get the hidden states at the generated token position
+                with torch.no_grad():
+                    forward_outputs = model(
+                        input_ids=outputs.sequences,
+                        output_hidden_states=True,
+                    )
 
+                # Extract hidden states from the generated token position
+                # forward_outputs.hidden_states is a tuple of layer outputs
+                # forward_outputs.hidden_states[layer_idx] has shape [batch_size, seq_len, hidden_dim]
+                # The generated token is at position -1 (last position)
+                if forward_outputs.hidden_states is not None:
                     # Extract activations from requested layers
                     sample_acts = []
                     for layer_idx in layer_indices:
-                        # first_token_hidden_states[0] is embeddings, [layer_idx+1] is layer output
-                        # Shape: [batch_size, seq_len, hidden_dim]
-                        layer_output = first_token_hidden_states[layer_idx + 1][0, -1, :]  # Last position
+                        # hidden_states[0] is embeddings, [layer_idx+1] is layer output
+                        # Get the activation at the last position (the generated token)
+                        layer_output = forward_outputs.hidden_states[layer_idx + 1][0, -1, :]
                         sample_acts.append(layer_output.cpu().float().numpy())
 
                     layer_acts = np.stack(sample_acts, axis=0)  # [n_layers, hidden_dim]
