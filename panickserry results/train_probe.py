@@ -342,6 +342,248 @@ def load_activations(path: str) -> dict:
     }
 
 
+def evaluate_on_external_dataset(
+    probes: dict[int, LinearProbe | MLPProbeTrainer],
+    positive_acts: dict[int, np.ndarray],
+    negative_acts: dict[int, np.ndarray],
+    pca_models: dict[int, PCA],
+    layers: list[int],
+    debug: bool = False,
+) -> dict[int, dict]:
+    """Evaluate trained probes on an external dataset.
+
+    Args:
+        probes: Dictionary of trained probes per layer
+        positive_acts: Positive class activations for external dataset
+        negative_acts: Negative class activations for external dataset
+        pca_models: PCA models fitted during training (if PCA was used)
+        layers: List of layer indices to evaluate
+        debug: If True, print detailed diagnostic information
+
+    Returns:
+        Dictionary mapping layer index to evaluation metrics
+    """
+    external_results = {}
+
+    for layer_idx in layers:
+        if layer_idx not in probes:
+            print(f"Warning: No probe for layer {layer_idx}, skipping...")
+            continue
+
+        probe = probes[layer_idx]
+        pos_acts = positive_acts[layer_idx]
+        neg_acts = negative_acts[layer_idx]
+
+        X = np.concatenate([pos_acts, neg_acts], axis=0)
+        y = np.concatenate([np.ones(len(pos_acts)), np.zeros(len(neg_acts))])
+
+        if debug:
+            # Print activation statistics before normalization
+            print(f"\n  Layer {layer_idx} DEBUG:")
+            print(f"    External data shape: {X.shape}")
+            print(f"    External data mean: {X.mean():.4f}, std: {X.std():.4f}")
+            print(f"    External data min: {X.min():.4f}, max: {X.max():.4f}")
+            if probe.mean is not None:
+                print(f"    Training mean (first 5): {probe.mean[:5]}")
+                print(f"    Training std (first 5): {probe.std[:5]}")
+                print(f"    External mean (first 5): {X.mean(axis=0)[:5]}")
+                print(f"    External std (first 5): {X.std(axis=0)[:5]}")
+
+        # Apply PCA if it was used during training
+        if layer_idx in pca_models:
+            pca = pca_models[layer_idx]
+            X = pca.transform(X)
+            if debug:
+                print(f"    After PCA shape: {X.shape}")
+
+        # Evaluate
+        y_pred = probe.predict(X)
+        y_proba = probe.predict_proba(X)
+
+        if debug:
+            # Print prediction distribution
+            print(f"    Predictions: {np.sum(y_pred == 1)} positive, {np.sum(y_pred == 0)} negative")
+            print(f"    Probabilities: min={y_proba.min():.4f}, max={y_proba.max():.4f}, mean={y_proba.mean():.4f}")
+            print(f"    Prob quartiles: 25%={np.percentile(y_proba, 25):.4f}, 50%={np.percentile(y_proba, 50):.4f}, 75%={np.percentile(y_proba, 75):.4f}")
+            # Show probabilities for positive vs negative class
+            pos_proba = y_proba[:len(pos_acts)]
+            neg_proba = y_proba[len(pos_acts):]
+            print(f"    Positive class proba mean: {pos_proba.mean():.4f}")
+            print(f"    Negative class proba mean: {neg_proba.mean():.4f}")
+
+        acc = accuracy_score(y, y_pred)
+        auroc = roc_auc_score(y, y_proba)
+        precision, recall, f1, _ = precision_recall_fscore_support(y, y_pred, average='binary', zero_division=0)
+
+        external_results[layer_idx] = {
+            "accuracy": acc,
+            "auroc": auroc,
+            "precision": precision,
+            "recall": recall,
+            "f1": f1,
+            "n_positive": len(pos_acts),
+            "n_negative": len(neg_acts),
+        }
+
+        print(f"  Layer {layer_idx}: Accuracy={acc:.4f}, AUROC={auroc:.4f}, F1={f1:.4f}")
+
+    return external_results
+
+
+def plot_external_accuracy(
+    external_results: dict[int, dict],
+    layers: list[int],
+    output_path: str,
+    title: str = "External Dataset Accuracy Over Layers",
+):
+    """Plot accuracy on external dataset over all layers."""
+    accs = [external_results[layer]["accuracy"] for layer in layers if layer in external_results]
+    valid_layers = [layer for layer in layers if layer in external_results]
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    ax.plot(valid_layers, accs, 'g-o', label='External Dataset Accuracy', markersize=4)
+
+    ax.set_xlabel('Layer Index', fontsize=12)
+    ax.set_ylabel('Accuracy', fontsize=12)
+    ax.set_title(title, fontsize=14)
+    ax.legend(fontsize=10)
+    ax.grid(True, alpha=0.3)
+    ax.set_ylim([0.4, 1.05])
+    ax.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f"Saved external accuracy plot to {output_path}")
+
+
+def plot_all_accuracies(
+    train_results: dict[int, dict],
+    test_results: dict[int, dict],
+    external_results: dict[int, dict],
+    layers: list[int],
+    output_path: str,
+    title: str = "Probe Accuracy Over Layers (All Datasets)",
+):
+    """Plot training, test, and external dataset accuracy over all layers."""
+    train_accs = [train_results[layer]["accuracy"] for layer in layers]
+    test_accs = [test_results[layer]["accuracy"] for layer in layers]
+    external_accs = [external_results[layer]["accuracy"] for layer in layers if layer in external_results]
+    valid_layers = [layer for layer in layers if layer in external_results]
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    ax.plot(layers, train_accs, 'b-o', label='Train Accuracy', markersize=4)
+    ax.plot(layers, test_accs, 'r-o', label='Test Accuracy', markersize=4)
+    ax.plot(valid_layers, external_accs, 'g-o', label='External Dataset Accuracy', markersize=4)
+
+    ax.set_xlabel('Layer Index', fontsize=12)
+    ax.set_ylabel('Accuracy', fontsize=12)
+    ax.set_title(title, fontsize=14)
+    ax.legend(fontsize=10)
+    ax.grid(True, alpha=0.3)
+    ax.set_ylim([0.4, 1.05])
+    ax.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f"Saved combined accuracy plot to {output_path}")
+
+
+def plot_auroc_over_layers(
+    train_results: dict[int, dict],
+    test_results: dict[int, dict],
+    layers: list[int],
+    output_path: str,
+    title: str = "Probe AUROC Over Layers",
+):
+    """Plot training and test AUROC over all layers."""
+    train_aurocs = [train_results[layer]["auroc"] for layer in layers]
+    test_aurocs = [test_results[layer]["auroc"] for layer in layers]
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    ax.plot(layers, train_aurocs, 'b-o', label='Train AUROC', markersize=4)
+    ax.plot(layers, test_aurocs, 'r-o', label='Test AUROC', markersize=4)
+
+    ax.set_xlabel('Layer Index', fontsize=12)
+    ax.set_ylabel('AUROC', fontsize=12)
+    ax.set_title(title, fontsize=14)
+    ax.legend(fontsize=10)
+    ax.grid(True, alpha=0.3)
+    ax.set_ylim([0.4, 1.05])
+    ax.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5, label='Random (0.5)')
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f"Saved AUROC plot to {output_path}")
+
+
+def plot_external_auroc(
+    external_results: dict[int, dict],
+    layers: list[int],
+    output_path: str,
+    title: str = "External Dataset AUROC Over Layers",
+):
+    """Plot AUROC on external dataset over all layers."""
+    aurocs = [external_results[layer]["auroc"] for layer in layers if layer in external_results]
+    valid_layers = [layer for layer in layers if layer in external_results]
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    ax.plot(valid_layers, aurocs, 'g-o', label='External Dataset AUROC', markersize=4)
+
+    ax.set_xlabel('Layer Index', fontsize=12)
+    ax.set_ylabel('AUROC', fontsize=12)
+    ax.set_title(title, fontsize=14)
+    ax.legend(fontsize=10)
+    ax.grid(True, alpha=0.3)
+    ax.set_ylim([0.4, 1.05])
+    ax.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f"Saved external AUROC plot to {output_path}")
+
+
+def plot_all_aurocs(
+    train_results: dict[int, dict],
+    test_results: dict[int, dict],
+    external_results: dict[int, dict],
+    layers: list[int],
+    output_path: str,
+    title: str = "Probe AUROC Over Layers (All Datasets)",
+):
+    """Plot training, test, and external dataset AUROC over all layers."""
+    train_aurocs = [train_results[layer]["auroc"] for layer in layers]
+    test_aurocs = [test_results[layer]["auroc"] for layer in layers]
+    external_aurocs = [external_results[layer]["auroc"] for layer in layers if layer in external_results]
+    valid_layers = [layer for layer in layers if layer in external_results]
+
+    fig, ax = plt.subplots(figsize=(12, 6))
+
+    ax.plot(layers, train_aurocs, 'b-o', label='Train AUROC', markersize=4)
+    ax.plot(layers, test_aurocs, 'r-o', label='Test AUROC', markersize=4)
+    ax.plot(valid_layers, external_aurocs, 'g-o', label='External Dataset AUROC', markersize=4)
+
+    ax.set_xlabel('Layer Index', fontsize=12)
+    ax.set_ylabel('AUROC', fontsize=12)
+    ax.set_title(title, fontsize=14)
+    ax.legend(fontsize=10)
+    ax.grid(True, alpha=0.3)
+    ax.set_ylim([0.4, 1.05])
+    ax.axhline(y=0.5, color='gray', linestyle='--', alpha=0.5)
+
+    plt.tight_layout()
+    plt.savefig(output_path, dpi=150, bbox_inches='tight')
+    plt.close()
+    print(f"Saved combined AUROC plot to {output_path}")
+
+
 def train_and_evaluate_all_layers(
     positive_acts: dict[int, np.ndarray],
     negative_acts: dict[int, np.ndarray],
@@ -596,7 +838,7 @@ def main():
     parser.add_argument(
         "--reg_coeff",
         type=float,
-        default=1e2,
+        default=1e3,
         help="Regularization coefficient for logistic regression (default: 1e3)",
     )
     parser.add_argument(
@@ -620,7 +862,7 @@ def main():
     parser.add_argument(
         "--test_split",
         type=float,
-        default=0.2,
+        default=0.3,
         help="Fraction of data to use for testing (default: 0.2)",
     )
     parser.add_argument(
@@ -672,6 +914,23 @@ def main():
         "--pca_whiten",
         action="store_true",
         help="Whiten PCA components (default: False)",
+    )
+    parser.add_argument(
+        "--external_positive_acts",
+        type=str,
+        default=None,
+        help="Path to positive class activations for external test dataset",
+    )
+    parser.add_argument(
+        "--external_negative_acts",
+        type=str,
+        default=None,
+        help="Path to negative class activations for external test dataset",
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Print detailed diagnostic information for external dataset evaluation",
     )
 
     args = parser.parse_args()
@@ -782,6 +1041,67 @@ def main():
         output_dir / "test_accuracy_over_layers.png",
         title=f"{args.plot_title} (Test)"
     )
+
+    # AUROC plot (train and test)
+    plot_auroc_over_layers(
+        train_results, test_results, layer_list,
+        output_dir / "auroc_over_layers.png",
+        title=args.plot_title.replace("Accuracy", "AUROC") if "Accuracy" in args.plot_title else f"{args.plot_title} - AUROC"
+    )
+
+    # Evaluate on external dataset if provided
+    external_results = None
+    if args.external_positive_acts and args.external_negative_acts:
+        print("\nLoading external dataset activations...")
+        if args.per_layer:
+            external_positive_acts = load_per_layer_activations(args.external_positive_acts)
+            external_negative_acts = load_per_layer_activations(args.external_negative_acts)
+        else:
+            external_positive_acts = load_activations(args.external_positive_acts)
+            external_negative_acts = load_activations(args.external_negative_acts)
+
+        print(f"Loaded external activations for {len(external_positive_acts)} layers")
+        print("\nEvaluating probes on external dataset...")
+
+        external_results = evaluate_on_external_dataset(
+            probes, external_positive_acts, external_negative_acts, pca_models, layer_list,
+            debug=args.debug
+        )
+
+        # Save external results
+        results["external"] = {str(k): v for k, v in external_results.items()}
+        with open(output_dir / "results.json", "w") as f:
+            json.dump(results, f, indent=2)
+
+        # Plot external dataset accuracy
+        plot_external_accuracy(
+            external_results, layer_list,
+            output_dir / "external_accuracy_over_layers.png",
+            title=f"{args.plot_title} (External Dataset)"
+        )
+
+        # Plot all three together
+        plot_all_accuracies(
+            train_results, test_results, external_results, layer_list,
+            output_dir / "all_accuracies_over_layers.png",
+            title=f"{args.plot_title} (All Datasets)"
+        )
+
+        # Plot external dataset AUROC
+        plot_external_auroc(
+            external_results, layer_list,
+            output_dir / "external_auroc_over_layers.png",
+            title=f"{args.plot_title} (External Dataset) - AUROC"
+        )
+
+        # Plot all three AUROC together
+        plot_all_aurocs(
+            train_results, test_results, external_results, layer_list,
+            output_dir / "all_aurocs_over_layers.png",
+            title=f"{args.plot_title} (All Datasets) - AUROC"
+        )
+    elif args.external_positive_acts or args.external_negative_acts:
+        print("\nWarning: Both --external_positive_acts and --external_negative_acts must be provided to evaluate on external dataset.")
 
     print("\nDone!")
     print(f"Results saved to {output_dir}")

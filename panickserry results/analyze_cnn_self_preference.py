@@ -303,6 +303,87 @@ def extract_self_preference_probs(cnn_results: List[Dict],
     }
 
 
+def extract_self_preference_examples(cnn_results: List[Dict], ground_truth: List[Dict],
+                                     logger: logging.Logger) -> Tuple[List[Dict], List[Dict]]:
+    """
+    Extract examples of legitimate and harmful self-preference.
+
+    Args:
+        cnn_results: List of CNN result dicts.
+        ground_truth: List of ground truth dicts with verdicts.
+        logger: Logger instance.
+
+    Returns:
+        Tuple of (legitimate_examples, harmful_examples) lists
+    """
+    logger.info("Extracting self-preference examples")
+
+    legitimate_examples = []
+    harmful_examples = []
+
+    # Build ground truth mapping by article_index
+    gt_map = {gt["article_index"]: gt for gt in ground_truth}
+
+    for cnn_item in cnn_results:
+        key = cnn_item.get("key")
+
+        # Check if we have ground truth for this key
+        if key not in gt_map:
+            continue
+
+        gt_item = gt_map[key]
+
+        # Determine if human is correct
+        human_correct, is_tie = determine_human_is_correct(gt_item, cnn_item, logger)
+
+        # Skip ties and unclear detections
+        if is_tie or human_correct is None:
+            continue
+
+        # Get self-preference probability
+        if "self_preference" in cnn_item:
+            self_pref = cnn_item["self_preference"]
+        elif ("forward_comparison_probability" in cnn_item and
+              "backward_comparison_probability" in cnn_item):
+            forward_prob = cnn_item["forward_comparison_probability"]
+            backward_prob = cnn_item["backward_comparison_probability"]
+            self_pref = (forward_prob + backward_prob) / 2.0
+        else:
+            continue
+
+        # Determine if the model prefers the human response (self-preference)
+        # We consider it self-preference if the probability is > 0.5
+        prefers_self = self_pref > 0.5
+
+        if prefers_self:
+            example = {
+                "key": key,
+                "article": cnn_item.get("article", ""),
+                "summary1": cnn_item.get("summary1", ""),
+                "summary2": cnn_item.get("summary2", ""),
+                "self_preference": float(self_pref),
+                "forward_comparison_probability": cnn_item.get("forward_comparison_probability"),
+                "backward_comparison_probability": cnn_item.get("backward_comparison_probability"),
+                "forward_detection": cnn_item.get("forward_detection"),
+                "backward_detection": cnn_item.get("backward_detection"),
+                "human_correct": human_correct,
+                "ground_truth_verdict": aggregate_verdict_from_answers(
+                    gt_item["original_order"]["answer"],
+                    gt_item["flipped_order"]["answer"]
+                ),
+            }
+
+            if human_correct:
+                legitimate_examples.append(example)
+            else:
+                harmful_examples.append(example)
+
+    logger.info(f"  Extracted {len(legitimate_examples)} legitimate self-preference examples")
+    logger.info(f"  Extracted {len(harmful_examples)} harmful self-preference examples")
+
+    return legitimate_examples, harmful_examples
+
+
 # ----------------------
 # --- VISUALIZATION  ---
 # ----------------------
@@ -533,6 +614,14 @@ def main():
 
     probs = extract_self_preference_probs(cnn_results, ground_truth, logger)
 
+    # Extract self-preference examples
+    logger.info("")
+    logger.info("=" * 80)
+    logger.info("EXTRACTING SELF-PREFERENCE EXAMPLES")
+    logger.info("=" * 80)
+
+    legitimate_examples, harmful_examples = extract_self_preference_examples(cnn_results, ground_truth, logger)
+
     # Print summary report
     logger.info("")
     print_summary_report(probs, args.model_name, logger)
@@ -569,6 +658,34 @@ def main():
         json.dump(stats_output, f, indent=2, ensure_ascii=False)
 
     logger.info(f"Saved statistics to {stats_path}")
+
+    # Save legitimate self-preference examples
+    legitimate_path = output_dir / "legitimate_self_preference_examples.json"
+    legitimate_output = {
+        "model_name": args.model_name,
+        "timestamp": datetime.now().isoformat(),
+        "description": "Examples where the model prefers its own response AND is correct (legitimate self-preference)",
+        "count": len(legitimate_examples),
+        "examples": legitimate_examples,
+    }
+    with open(legitimate_path, 'w', encoding='utf-8') as f:
+        json.dump(legitimate_output, f, indent=2, ensure_ascii=False)
+
+    logger.info(f"Saved {len(legitimate_examples)} legitimate self-preference examples to {legitimate_path}")
+
+    # Save harmful self-preference examples
+    harmful_path = output_dir / "harmful_self_preference_examples.json"
+    harmful_output = {
+        "model_name": args.model_name,
+        "timestamp": datetime.now().isoformat(),
+        "description": "Examples where the model prefers its own response BUT is incorrect (harmful self-preference)",
+        "count": len(harmful_examples),
+        "examples": harmful_examples,
+    }
+    with open(harmful_path, 'w', encoding='utf-8') as f:
+        json.dump(harmful_output, f, indent=2, ensure_ascii=False)
+
+    logger.info(f"Saved {len(harmful_examples)} harmful self-preference examples to {harmful_path}")
 
     logger.info("=" * 80)
     logger.info("ANALYSIS COMPLETE")
