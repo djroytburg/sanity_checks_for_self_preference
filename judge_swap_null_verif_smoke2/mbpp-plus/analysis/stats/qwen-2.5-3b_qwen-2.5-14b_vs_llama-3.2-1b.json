@@ -1,0 +1,61 @@
+{
+  "judge": "qwen-2.5-3b",
+  "proxy": "qwen-2.5-14b",
+  "reference": "llama-3.2-1b",
+  "n_pairs_total": 46,
+  "n_lsp": 45,
+  "n_ilsp": 1,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.44566558289572955,
+      "std_j_vs_r": 0.18349992462509918,
+      "mean_k_vs_r": 0.42815941377359795,
+      "std_k_vs_r": 0.1729824380685593,
+      "mean_diff": 0.017506169122131536,
+      "std_diff": 0.14562078847055787,
+      "ttest_two_sided_t": 0.8153548471597534,
+      "ttest_two_sided_p": 0.4191639314777811,
+      "ttest_one_sided_t": 0.8153548471597534,
+      "ttest_one_sided_p": 0.20958196573889054,
+      "ks_statistic": 0.15217391304347827,
+      "ks_pvalue": 0.6669293690780796,
+      "correlation": 0.6749789330701287,
+      "correlation_pvalue": 2.679534390130885e-07,
+      "cohens_d": 0.09817346792531938
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.49931409714893676,
+      "std_j_vs_r": 0.0,
+      "mean_k_vs_r": 0.49976316785711217,
+      "std_k_vs_r": 0.0,
+      "mean_diff": -0.00044907070817540307,
+      "std_diff": NaN,
+      "ttest_two_sided_t": NaN,
+      "ttest_two_sided_p": NaN,
+      "ttest_one_sided_t": NaN,
+      "ttest_one_sided_p": NaN,
+      "ks_statistic": 1.0,
+      "ks_pvalue": 1.0,
+      "correlation": NaN,
+      "correlation_pvalue": NaN,
+      "cohens_d": 0
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.44447339369010275,
+      "std_j_vs_r": 0.18535132438216523,
+      "mean_k_vs_r": 0.42656821923840876,
+      "std_k_vs_r": 0.17456062082239684,
+      "mean_diff": 0.017905174451693914,
+      "std_diff": 0.14724084141078514,
+      "ttest_two_sided_t": 0.8157489492595523,
+      "ttest_two_sided_p": 0.41903796773358537,
+      "ttest_one_sided_t": 0.8157489492595523,
+      "ttest_one_sided_p": 0.20951898386679269,
+      "ks_statistic": 0.15555555555555556,
+      "ks_pvalue": 0.6533869609153917,
+      "correlation": 0.6742138189146765,
+      "correlation_pvalue": 3.8277818151064864e-07,
+      "cohens_d": 0.09945283957293904
+    }
+  }
+}

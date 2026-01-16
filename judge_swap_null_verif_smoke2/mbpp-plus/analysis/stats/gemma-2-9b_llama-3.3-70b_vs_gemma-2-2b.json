@@ -1,0 +1,61 @@
+{
+  "judge": "gemma-2-9b",
+  "proxy": "llama-3.3-70b",
+  "reference": "gemma-2-2b",
+  "n_pairs_total": 30,
+  "n_lsp": 27,
+  "n_ilsp": 3,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.38824040538667076,
+      "std_j_vs_r": 0.291072576924247,
+      "mean_k_vs_r": 0.33295212414651876,
+      "std_k_vs_r": 0.2687480033994366,
+      "mean_diff": 0.055288281240152025,
+      "std_diff": 0.22111171711284597,
+      "ttest_two_sided_t": 1.3695628253597252,
+      "ttest_two_sided_p": 0.18133619828158712,
+      "ttest_one_sided_t": 1.3695628253597252,
+      "ttest_one_sided_p": 0.09066809914079356,
+      "ks_statistic": 0.13333333333333333,
+      "ks_pvalue": 0.9578462903438838,
+      "correlation": 0.7011043707564157,
+      "correlation_pvalue": 1.5932382192778235e-05,
+      "cohens_d": 0.19736456330742602
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.09383596464184359,
+      "std_j_vs_r": 0.0826947649811297,
+      "mean_k_vs_r": 0.1378421084767218,
+      "std_k_vs_r": 0.0673708758881434,
+      "mean_diff": -0.0440061438348782,
+      "std_diff": 0.18296832710507047,
+      "ttest_two_sided_t": -0.4165796243161951,
+      "ttest_two_sided_p": 0.7174376153992481,
+      "ttest_one_sided_t": -0.4165796243161951,
+      "ttest_one_sided_p": 0.6412811923003761,
+      "ks_statistic": 0.3333333333333333,
+      "ks_pvalue": 1.0,
+      "correlation": -0.9819227985659261,
+      "correlation_pvalue": 0.12123196215647017,
+      "cohens_d": -0.5834578508505536
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.4209520099138737,
+      "std_j_vs_r": 0.28753542967219436,
+      "mean_k_vs_r": 0.3546310147764962,
+      "std_k_vs_r": 0.27394613653229016,
+      "mean_diff": 0.0663209951373776,
+      "std_diff": 0.22514968738277719,
+      "ttest_two_sided_t": 1.5305995027811024,
+      "ttest_two_sided_p": 0.1379459066507861,
+      "ttest_one_sided_t": 1.5305995027811024,
+      "ttest_one_sided_p": 0.06897295332539305,
+      "ks_statistic": 0.18518518518518517,
+      "ks_pvalue": 0.7536974563793281,
+      "correlation": 0.6913120558085167,
+      "correlation_pvalue": 6.524952899781929e-05,
+      "cohens_d": 0.23616654020151095
+    }
+  }
+}

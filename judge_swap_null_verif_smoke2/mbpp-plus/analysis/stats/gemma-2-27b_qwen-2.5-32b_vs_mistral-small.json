@@ -1,0 +1,61 @@
+{
+  "judge": "gemma-2-27b",
+  "proxy": "qwen-2.5-32b",
+  "reference": "mistral-small",
+  "n_pairs_total": 20,
+  "n_lsp": 18,
+  "n_ilsp": 2,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.3386712261257582,
+      "std_j_vs_r": 0.1765053209092879,
+      "mean_k_vs_r": 0.22435422308239567,
+      "std_k_vs_r": 0.22693174877888933,
+      "mean_diff": 0.11431700304336252,
+      "std_diff": 0.29537249236110197,
+      "ttest_two_sided_t": 1.7308354460882223,
+      "ttest_two_sided_p": 0.09968949278969304,
+      "ttest_one_sided_t": 1.7308354460882223,
+      "ttest_one_sided_p": 0.04984474639484652,
+      "ks_statistic": 0.35,
+      "ks_pvalue": 0.17453300569806826,
+      "correlation": -0.0028775286285871726,
+      "correlation_pvalue": 0.9903936677917711,
+      "cohens_d": 0.5623397179448768
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.3112712532830929,
+      "std_j_vs_r": 0.18872874671690706,
+      "mean_k_vs_r": 0.0,
+      "std_k_vs_r": 0.0,
+      "mean_diff": 0.3112712532830929,
+      "std_diff": 0.2669027532167267,
+      "ttest_two_sided_t": 1.6493049347166995,
+      "ttest_two_sided_p": 0.3469900481164365,
+      "ttest_one_sided_t": 1.6493049347166995,
+      "ttest_one_sided_p": 0.17349502405821826,
+      "ks_statistic": 1.0,
+      "ks_pvalue": 0.3333333333333333,
+      "correlation": NaN,
+      "correlation_pvalue": NaN,
+      "cohens_d": 2.3324694071652288
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.34171566755272104,
+      "std_j_vs_r": 0.17482962091113288,
+      "mean_k_vs_r": 0.24928247009155072,
+      "std_k_vs_r": 0.22584473799813082,
+      "mean_diff": 0.09243319746117025,
+      "std_diff": 0.29706545382311367,
+      "ttest_two_sided_t": 1.3201159520312395,
+      "ttest_two_sided_p": 0.20429641841032348,
+      "ttest_one_sided_t": 1.3201159520312395,
+      "ttest_one_sided_p": 0.10214820920516174,
+      "ks_statistic": 0.3333333333333333,
+      "ks_pvalue": 0.2754184632376776,
+      "correlation": -0.02246436391600929,
+      "correlation_pvalue": 0.9294979895247805,
+      "cohens_d": 0.45769317539828225
+    }
+  }
+}
