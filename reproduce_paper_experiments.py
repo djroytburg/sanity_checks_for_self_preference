@@ -109,7 +109,7 @@ CONFIG = {
     # Verdict generation
     "verdict_temperature": 0.0,  # 0.0 for non-reasoning, 0.6 for reasoning
     "verdict_max_tokens": 1,  # Try 1 for faithful reproduction
-    "cot_max_tokens": 2048,  # Allow longer generation for reasoning chain
+    "cot_max_tokens": 4096,  # Allow longer generation for reasoning chain
     "verdict_top_k": 20,  # For logprobs extraction
     
     # System prompt for verdict generation
@@ -194,19 +194,25 @@ For example, if both answers are relatively the same in quality, output “T”.
 
 
 MATH500_COT_PROMPT = """You will be given answers from two assistants (Assistant A and Assistant B) to a user prompt. Please act as an impartial judge and evaluate the quality of their answers.
+
 You must end your response with: "My final verdict is $$...$$.". where $$...$$ must enclose one of the following:
-- "A" if Assistant A's answer is better.
-- "T" if both answers are relatively the same in quality.
-- "B" if Assistant B's answer is better.
+
+- “A” if Assistant A’s answer is better.
+- “T” if both answers are relatively the same in quality.
+- “B” if Assistant B’s answer is better.
+
 For example, if your final verdict is a tie, end your response with: "My final verdict is $$T$$."
+
 <User Prompt>
 {question}
-<The Start of Assistant A's Answer>
+
+<The Start of Assistant A’s Answer>
 {answer_a}
-<The End of Assistant A's Answer>
-<The Start of Assistant B's Answer>
+<The End of Assistant A’s Answer>
+
+<The Start of Assistant B’s Answer>
 {answer_b}
-<The End of Assistant B's Answer>"""
+<The End of Assistant B’s Answer>"""
 
 # Long CoT adds <think> at the end to trigger reasoning
 MATH500_LONG_COT_PROMPT = MATH500_COT_PROMPT  # Same prompt, but we append <think> token
@@ -840,14 +846,17 @@ def extract_cot_verdict_with_logprobs(
         return {"A": 0.33, "B": 0.33, "T": 0.34}, -1
     
     # Find the verdict pattern in the generated text
+    # offset = how many characters from match.end() back to the verdict letter
+    # For $$X$$: match.end() points after final $, so offset=3 ($$, then X)
+    # For X\b: match.end() points after the letter (word boundary), so offset=1
     patterns = [
-        (r"My final verdict is \$\$([ABT])\$\$", 3),  # $$X$$ format, verdict is 3 chars before end of match
+        (r"My final verdict is \$\$([ABT])\$\$", 3),  # $$X$$ format
         (r"final verdict is \$\$([ABT])\$\$", 3),
         (r"verdict is \$\$([ABT])\$\$", 3),
         (r"\$\$([ABT])\$\$", 3),  # Just the delimited verdict
-        (r"My final verdict is ([ABT])\b", 0),  # Without $$ delimiters
-        (r"final verdict is ([ABT])\b", 0),
-        (r"verdict is ([ABT])\b", 0),
+        (r"My final verdict is ([ABT])\b", 1),  # Without $$ delimiters
+        (r"final verdict is ([ABT])\b", 1),
+        (r"verdict is ([ABT])\b", 1),
     ]
     
     verdict_char = None
@@ -860,7 +869,8 @@ def extract_cot_verdict_with_logprobs(
             # The verdict character position is at match.end() minus the offset
             # For $$X$$, the X is 3 characters before the end (the "$$")
             # For just X, it's 0 characters before the end
-            verdict_char_pos = match.end() - offset_from_end - 1  # -1 because match.end() is exclusive
+            # Note: match.end() is exclusive, so match.end() - 3 gives us the B in "$$B$$"
+            verdict_char_pos = match.end() - offset_from_end
             logger.debug(f"Found CoT verdict '{verdict_char}' at char position {verdict_char_pos} via pattern: {pattern}")
             break
     
@@ -951,7 +961,13 @@ def extract_cot_verdict_with_logprobs(
         logger.warning(f"No A/B/T probabilities found in CoT, using uniform")
         abt_probs = {"A": 0.33, "B": 0.33, "T": 0.34}
     
-    logger.debug(f"CoT final A/B/T probs: {abt_probs}")
+    # For CoT mode: Harden to 0/1 probabilities (set max to 1, rest to 0)
+    # This matches how the original paper appears to record CoT verdicts
+    winner = max(abt_probs.items(), key=lambda x: x[1])[0]
+    abt_probs = {"A": 0.0, "B": 0.0, "T": 0.0}
+    abt_probs[winner] = 1.0
+    
+    logger.debug(f"CoT final A/B/T probs (hardened): {abt_probs}")
     return abt_probs, verdict_token_idx
 
 
@@ -1434,17 +1450,27 @@ def run_reproduction_experiment(
     if benchmark and judge_family and judge_short and evaluatee_short:
         # Create llm-sp-reprod structure matching llm-sp/sp
         # Pattern: {judge_short}_{evaluatee_short}_reprod.jsonl
-        eval_dir = Path("llm-sp-reprod") / benchmark / judge_family
+        # Use different base directories for different reasoning modes:
+        # - "none" -> llm-sp-reprod/ (backwards compatible)
+        # - "cot" -> llm-sp-reprod-cot/
+        # - "long_cot" -> llm-sp-reprod-long_cot/
+        if reasoning_mode == "none":
+            base_reprod_dir = "llm-sp-reprod"
+        else:
+            base_reprod_dir = f"llm-sp-reprod-{reasoning_mode}"
+        
+        eval_dir = Path(base_reprod_dir) / benchmark / judge_family
         eval_dir.mkdir(parents=True, exist_ok=True)
         
         # Filename pattern: {judge_short}_{evaluatee_short}_reprod.jsonl
         output_file = eval_dir / f"{judge_short}_{evaluatee_short}_reprod.jsonl"
         
         # Visualizations go to separate plots directory (per judge/evaluatee pair)
-        plot_dir = Path("reproduction_results") / "plots" / benchmark / judge_family / judge_short / evaluatee_short
+        plot_base = "reproduction_results" if reasoning_mode == "none" else f"reproduction_results-{reasoning_mode}"
+        plot_dir = Path(plot_base) / "plots" / benchmark / judge_family / judge_short / evaluatee_short
         plot_dir.mkdir(parents=True, exist_ok=True)
         
-        logger.info(f"Using llm-sp-reprod structure:")
+        logger.info(f"Using llm-sp-reprod structure (reasoning_mode={reasoning_mode}):")
         logger.info(f"  Eval file: {output_file}")
         logger.info(f"  Plots: {plot_dir}")
     else:
