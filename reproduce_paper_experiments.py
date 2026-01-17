@@ -108,8 +108,8 @@ CONFIG = {
     
     # Verdict generation
     "verdict_temperature": 0.0,  # 0.0 for non-reasoning, 0.6 for reasoning
-    "verdict_max_tokens": 1,  # Try 1 for faithful reproduction
-    "cot_max_tokens": 4096,  # Allow longer generation for reasoning chain
+    "verdict_max_tokens": 1,  # 1 token for non-reasoning (direct A/B/T verdict)
+    # For cot/long_cot modes: max_tokens=None -> generate until EOS or model max context
     "verdict_top_k": 20,  # For logprobs extraction
     
     # System prompt for verdict generation
@@ -225,19 +225,26 @@ MATH500_LONG_COT_PROMPT = MATH500_COT_PROMPT  # Same prompt, but we append <thin
 MMLU_NO_REASONING_PROMPT = MATH500_NO_REASONING_PROMPT
 
 MMLU_COT_PROMPT = """You are given answers provided by two assistants, Assistant A and Assistant B, to the following user prompt.
+
 <User Prompt>
 {question}
-<The Start of Assistant A's Answer>
+
+<The Start of Assistant A’s Answer>
 {answer_a}
-<The End of Assistant A's Answer>
-<The Start of Assistant B's Answer>
+<The End of Assistant A’s Answer>
+
+<The Start of Assistant B’s Answer>
 {answer_b}
-<The End of Assistant B's Answer>
+<The End of Assistant B’s Answer>
+
 Please act as an impartial judge and evaluate the quality of their answers.
+
 You must end your response with: "My final verdict is $$...$$.". where $$...$$ must enclose one of the following:
-- "A" if Assistant A's answer is better.
-- "T" if both answers are relatively the same in quality.
-- "B" if Assistant B's answer is better.
+
+- “A” if Assistant A’s answer is better.
+- “T” if both answers are relatively the same in quality.
+- “B” if Assistant B’s answer is better.
+
 For example, if your final verdict is a tie, end your response with: "My final verdict is $$T$$."""
 
 # Long CoT is same prompt, but we append <think> token
@@ -268,19 +275,24 @@ Base your judgment on your understanding of the task described in the user promp
 
 
 MBPP_PLUS_COT_PROMPT = """Please act as an impartial judge and assess the accuracy of the given Python functions. You must end your response with: "My final verdict is $$...$$.". where $$...$$ must enclose one of the following:
-- "A" if Assistant A's function is more accurate.
-- "T" if both functions are similarly accurate.
-- "B" if Assistant B's function is more accurate.
+
+- “A” if Assistant A’s function is more accurate.
+- “T” if both functions are similarly accurate.
+- “B” if Assistant B’s function is more accurate.
+
 For example, if your final verdict is a tie, end your response with: "My final verdict is $$T$$."
 Base your judgment on your understanding of the task described in the user prompt and whether the functions successfully pass the provided test cases.
+
 <User Prompt>
 {question}
-<The Start of Assistant A's Function>
+
+<The Start of Assistant A’s Function>
 {answer_a}
-<The End of Assistant A's Function>
-<The Start of Assistant B's Function>
+<The End of Assistant A’s Function>
+
+<The Start of Assistant B’s Function>
 {answer_b}
-<The End of Assistant B's Function>"""
+<The End of Assistant B’s Function>"""
 
 # Long CoT is same prompt, but we append <think> token
 MBPP_PLUS_LONG_COT_PROMPT = MBPP_PLUS_COT_PROMPT
@@ -647,7 +659,7 @@ def build_verdict_prompt(
     elif reasoning_mode == "long_cot":
         # Long CoT: Force model into extended reasoning with <think> token
         return [
-            {"role": "user", "content": user_content},
+            {"role": "user", "content": user_content + "\n"},
             {"role": "assistant", "content": "<think>"},
         ]
     else:
@@ -999,7 +1011,7 @@ def generate_verdict_vllm(
     tokenizer,
     prompts: List[list],
     temperature: float,
-    max_tokens: int,
+    max_tokens: Optional[int],
     config: Dict,
     logger: logging.Logger,
 ) -> List:
@@ -1011,7 +1023,7 @@ def generate_verdict_vllm(
         tokenizer: Tokenizer instance.
         prompts (List[list]): List of chat message lists.
         temperature (float): Sampling temperature.
-        max_tokens (int): Maximum tokens to generate.
+        max_tokens (Optional[int]): Maximum tokens to generate. None = unlimited (until EOS).
         config (Dict): Configuration dict.
         logger (logging.Logger): Logger instance.
 
@@ -1301,13 +1313,13 @@ def run_reproduction_experiment(
     logger.info(f"Using temperature: {temperature}")
     
     # Determine max_tokens based on reasoning mode
-    # - "none": Paper uses max_tokens=1 for verdict generation, but we use 10 to catch full verdict
-    # - "cot" / "long_cot": Allow free generation for reasoning chain
+    # - "none": Paper uses max_tokens=1 for verdict generation
+    # - "cot" / "long_cot": None = generate until EOS or model max context length
     if reasoning_mode == "none":
-        # Set 1 
         max_tokens = config.get("verdict_max_tokens", 1)
     else:
-        max_tokens = config.get("cot_max_tokens", 2048)
+        # None means vLLM will generate until EOS token or model's max context length
+        max_tokens = None
     
     # Determine the benchmark for prompt selection
     # Default to math500 if not specified
@@ -1315,7 +1327,7 @@ def run_reproduction_experiment(
     
     logger.info(f"Using benchmark: {effective_benchmark}")
     logger.info(f"Using reasoning mode: {reasoning_mode}")
-    logger.info(f"Max tokens: {max_tokens}")
+    logger.info(f"Max tokens: {max_tokens if max_tokens else 'unlimited (until EOS)'}")
     
     logger.info("=" * 80)
     logger.info("RUNNING GENERATION ON GAME 1 (AB ORDER)")
