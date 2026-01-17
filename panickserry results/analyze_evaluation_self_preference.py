@@ -653,6 +653,171 @@ def print_summary_report(metrics: Dict, model_name: str, logger: logging.Logger)
     logger.info("=" * 80)
 
 
+def create_game_jsonl_files(eval_results: List[Dict], gt_results: List[Dict],
+                            judge_name: str, reference_name: str, comparison_type: str,
+                            dataset_name: str, output_dir: Path, use_proxy: bool,
+                            proxy_name: str, logger: logging.Logger):
+    """
+    Create game1.jsonl and game2.jsonl files.
+
+    Game 1: Judge/Proxy response is first (response1)
+    Game 2: Reference response is first (response1)
+
+    Args:
+        eval_results: List of evaluation result dicts with logprobs.
+        gt_results: List of ground truth judge result dicts.
+        judge_name: Name of the judge model.
+        reference_name: Name of the reference model.
+        comparison_type: Type of comparison (e.g., "J_vs_R", "K_vs_R").
+        dataset_name: Name of the dataset.
+        output_dir: Output directory for the JSONL files.
+        use_proxy: If True, create files in cache/{judge_name}/{reference_name}/ subdirectory.
+        proxy_name: Name of the proxy model (for K_vs_R format). If None, uses J_vs_R format.
+        logger: Logger instance.
+    """
+    logger.info(f"Creating game JSONL files for {comparison_type}...")
+
+    # Determine if we're using K_vs_R format (with proxy) or J_vs_R format
+    is_kvr_format = proxy_name is not None and proxy_name != ""
+
+    # Build ground truth mapping by article_index
+    gt_map = {gt["article_index"]: gt for gt in gt_results}
+
+    game1_records = []
+    game2_records = []
+
+    for eval_item in eval_results:
+        article_idx = eval_item["article_index"]
+
+        # Get corresponding ground truth
+        if article_idx not in gt_map:
+            continue
+
+        gt_item = gt_map[article_idx]
+
+        # Determine if judge (summary1) is correct based on ground truth
+        judge_correct, is_tie = get_judge_correct_from_ground_truth(
+            gt_item["original_order"]["answer"],
+            gt_item["flipped_order"]["answer"]
+        )
+
+        # Skip ties
+        if is_tie:
+            continue
+
+        # Get probabilities from logprobs
+        probs_original = get_probabilities_from_logprobs(
+            eval_item["original_order"]["top_logprobs"]
+        )
+        probs_flipped = get_probabilities_from_logprobs(
+            eval_item["flipped_order"]["top_logprobs"]
+        )
+
+        # Determine category (lsp = legitimate self-preference, ilsp = illegitimate)
+        category = "lsp" if judge_correct else "ilsp"
+
+        # Determine response keys and cache key format based on comparison type
+        if is_kvr_format:
+            # K_vs_R format: uses "proxy" instead of "judge"
+            response1_key_game1 = "proxy"
+            response2_key_game1 = "reference"
+            response1_key_game2 = "reference"
+            response2_key_game2 = "proxy"
+            cache_key_str = f"{article_idx}||{proxy_name}"
+        else:
+            # J_vs_R format: uses "judge"
+            response1_key_game1 = "judge"
+            response2_key_game1 = "reference"
+            response1_key_game2 = "reference"
+            response2_key_game2 = "judge"
+            cache_key_str = article_idx
+
+        # Game 1: Judge/Proxy is response1 (original order)
+        # In original order: summary1 (judge/proxy) is position 1, summary2 (reference) is position 2
+        game1_record = {
+            "cache_key": cache_key_str,
+            "example_id": article_idx,
+            "judge": judge_name,
+            "reference": reference_name,
+            "comparison_type": f"{comparison_type}_game1",
+            "response1_key": response1_key_game1,
+            "response2_key": response2_key_game1,
+            "prob_response1": probs_original["1"],
+            "prob_response2": probs_original["2"],
+            "generated_text": eval_item["original_order"]["answer"],
+            "raw_probs": [probs_original["1"], probs_original["2"]],
+            "normalized_sum": probs_original["1"] + probs_original["2"],
+            "category": category,
+            "dataset": dataset_name
+        }
+
+        # Add proxy field for K_vs_R format
+        if is_kvr_format:
+            game1_record["proxy"] = proxy_name
+
+        game1_records.append(game1_record)
+
+        # Game 2: Reference is response1 (flipped order)
+        # In flipped order: summary2 (reference) is position 1, summary1 (judge/proxy) is position 2
+        # We need to map: response1 = reference, response2 = judge/proxy
+        # In flipped order logprobs: "1" refers to summary2 (reference), "2" refers to summary1 (judge/proxy)
+        game2_record = {
+            "cache_key": cache_key_str,
+            "example_id": article_idx,
+            "judge": judge_name,
+            "reference": reference_name,
+            "comparison_type": f"{comparison_type}_game2",
+            "response1_key": response1_key_game2,
+            "response2_key": response2_key_game2,
+            "prob_response1": probs_flipped["1"],
+            "prob_response2": probs_flipped["2"],
+            "generated_text": eval_item["flipped_order"]["answer"],
+            "raw_probs": [probs_flipped["1"], probs_flipped["2"]],
+            "normalized_sum": probs_flipped["1"] + probs_flipped["2"],
+            "category": category,
+            "dataset": dataset_name
+        }
+
+        # Add proxy field for K_vs_R format
+        if is_kvr_format:
+            game2_record["proxy"] = proxy_name
+
+        game2_records.append(game2_record)
+
+    # Determine final output directory
+    if use_proxy:
+        if is_kvr_format:
+            # K_vs_R format: add proxy_name as an additional subfolder
+            final_output_dir = output_dir / "cache" / judge_name / reference_name / proxy_name
+            logger.info(f"Using K_vs_R proxy directory structure: {final_output_dir}")
+        else:
+            # J_vs_R format: no proxy subfolder
+            final_output_dir = output_dir / "cache" / judge_name / reference_name
+            logger.info(f"Using J_vs_R proxy directory structure: {final_output_dir}")
+    else:
+        final_output_dir = output_dir
+
+    # Create output directory
+    final_output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Write game1 JSONL file
+    game1_path = final_output_dir / f"{comparison_type}_game1.jsonl"
+    with open(game1_path, 'w', encoding='utf-8') as f:
+        for record in game1_records:
+            f.write(json.dumps(record, ensure_ascii=False) + '\n')
+    logger.info(f"Saved {len(game1_records)} records to {game1_path}")
+
+    # Write game2 JSONL file
+    game2_path = final_output_dir / f"{comparison_type}_game2.jsonl"
+    with open(game2_path, 'w', encoding='utf-8') as f:
+        for record in game2_records:
+            f.write(json.dumps(record, ensure_ascii=False) + '\n')
+    logger.info(f"Saved {len(game2_records)} records to {game2_path}")
+
+    # Return the final output directory so we can use it for other files
+    return final_output_dir
+
+
 def main():
     """Main entry point for evaluation self-preference analysis."""
     parser = argparse.ArgumentParser(
@@ -666,6 +831,18 @@ def main():
                        help="Model name for display in report and plots")
     parser.add_argument("--output_dir", type=str, default=None,
                        help="Output directory for plots and statistics (default: same as eval results file)")
+    parser.add_argument("--judge_name", type=str, default=None,
+                       help="Name of the judge model for JSONL output (default: same as model_name)")
+    parser.add_argument("--reference_name", type=str, default="reference",
+                       help="Name of the reference model for JSONL output (default: 'reference')")
+    parser.add_argument("--comparison_type", type=str, default="J_vs_R",
+                       help="Type of comparison for JSONL output (e.g., 'J_vs_R', 'K_vs_R') (default: 'J_vs_R')")
+    parser.add_argument("--dataset", type=str, default="unknown",
+                       help="Name of the dataset for JSONL output (default: 'unknown')")
+    parser.add_argument("--proxy", action="store_true",
+                       help="If set, creates JSONL files in cache/{judge_name}/{reference_name}/ subdirectory")
+    parser.add_argument("--proxy_name", type=str, default=None,
+                       help="Name of the proxy model (for K_vs_R format). If provided, uses K_vs_R format with 'proxy' field")
 
     args = parser.parse_args()
 
@@ -682,9 +859,20 @@ def main():
         sys.exit(1)
 
     if args.output_dir:
-        output_dir = Path(args.output_dir)
+        base_output_dir = Path(args.output_dir)
     else:
-        output_dir = eval_path.parent / "plots"
+        base_output_dir = eval_path.parent / "plots"
+
+    # For logging, use base_output_dir
+    output_dir = base_output_dir
+
+    # Set judge_name to model_name if not specified
+    judge_name = args.judge_name if args.judge_name else args.model_name
+    reference_name = args.reference_name
+    comparison_type = args.comparison_type
+    dataset_name = args.dataset
+    use_proxy = args.proxy
+    proxy_name = args.proxy_name
 
     # Set up logging
     logger = setup_logging(output_dir)
@@ -692,6 +880,12 @@ def main():
     logger.info(f"Evaluation results file: {eval_path}")
     logger.info(f"Ground truth file: {gt_path}")
     logger.info(f"Model name: {args.model_name}")
+    logger.info(f"Judge name: {judge_name}")
+    logger.info(f"Reference name: {reference_name}")
+    logger.info(f"Comparison type: {comparison_type}")
+    logger.info(f"Dataset: {dataset_name}")
+    logger.info(f"Use proxy directory: {use_proxy}")
+    logger.info(f"Proxy name: {proxy_name}")
     logger.info(f"Output directory: {output_dir}")
 
     # Load data
@@ -732,6 +926,17 @@ def main():
     # Print summary report
     logger.info("")
     print_summary_report(metrics, args.model_name, logger)
+
+    # Create game JSONL files and get the final output directory
+    # This must be done BEFORE saving statistics so everything goes in the same folder
+    logger.info("")
+    logger.info("=" * 80)
+    logger.info("CREATING GAME JSONL FILES")
+    logger.info("=" * 80)
+
+    output_dir = create_game_jsonl_files(eval_results, gt_results, judge_name, reference_name,
+                                         comparison_type, dataset_name, base_output_dir, use_proxy,
+                                         proxy_name, logger)
 
     # Create visualizations
     logger.info("=" * 80)
