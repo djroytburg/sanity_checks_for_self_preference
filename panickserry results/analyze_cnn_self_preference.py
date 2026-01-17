@@ -533,6 +533,153 @@ def create_visualization(probs: Dict, model_name: str, output_dir: Path, logger:
 # --- MAIN ENTRY     ---
 # ----------------------
 
+def get_probabilities_from_cnn_data(cnn_item: Dict) -> Dict[str, float]:
+    """
+    Extract probabilities for positions "1" and "2" from CNN data.
+
+    Returns:
+        Dict with keys "1" and "2" mapping to their probabilities.
+    """
+    # Try pre-computed field first
+    if "forward_comparison_probability" in cnn_item and "backward_comparison_probability" in cnn_item:
+        # In CNN data:
+        # forward_comparison_probability = P(choosing position 1 | forward order)
+        # backward_comparison_probability = P(choosing position 2 | backward order)
+        return {
+            "1": cnn_item["forward_comparison_probability"],
+            "2": 1.0 - cnn_item["forward_comparison_probability"]
+        }
+    else:
+        # If no probabilities, return equal probability
+        return {"1": 0.5, "2": 0.5}
+
+
+def create_game_jsonl_files(cnn_results: List[Dict], ground_truth: List[Dict],
+                            judge_name: str, reference_name: str, comparison_type: str,
+                            dataset_name: str, output_dir: Path, logger: logging.Logger):
+    """
+    Create J_vs_R game1.jsonl and game2.jsonl files for CNN dataset.
+
+    Game 1: Judge response is first (response1)
+    Game 2: Reference response is first (response1)
+
+    Args:
+        cnn_results: List of CNN result dicts.
+        ground_truth: List of ground truth dicts with verdicts.
+        judge_name: Name of the judge model.
+        reference_name: Name of the reference model.
+        comparison_type: Type of comparison (should be "J_vs_R").
+        dataset_name: Name of the dataset.
+        output_dir: Output directory for the JSONL files.
+        logger: Logger instance.
+    """
+    logger.info(f"Creating game JSONL files for {comparison_type}...")
+
+    # Build ground truth mapping by key
+    gt_map = {gt["article_index"]: gt for gt in ground_truth}
+
+    game1_records = []
+    game2_records = []
+
+    for cnn_item in cnn_results:
+        key = cnn_item.get("key")
+
+        # Get corresponding ground truth
+        if key not in gt_map:
+            continue
+
+        gt_item = gt_map[key]
+
+        # Determine if human (judge) is correct based on ground truth
+        human_correct, is_tie = determine_human_is_correct(gt_item, cnn_item, logger)
+
+        # Skip ties and unclear detections
+        if is_tie or human_correct is None:
+            continue
+
+        # Determine category (lsp = legitimate self-preference, ilsp = illegitimate)
+        category = "lsp" if human_correct else "ilsp"
+
+        # Get probabilities
+        # For game1 (original order): judge is position 1
+        if "forward_comparison_probability" in cnn_item:
+            prob_judge_original = cnn_item["forward_comparison_probability"]
+            prob_ref_original = 1.0 - prob_judge_original
+        else:
+            prob_judge_original = 0.5
+            prob_ref_original = 0.5
+
+        # For game2 (flipped order): reference is position 1, judge is position 2
+        if "backward_comparison_probability" in cnn_item:
+            prob_ref_flipped = cnn_item.get("backward_comparison_probability", 0.5)
+            prob_judge_flipped = 1.0 - prob_ref_flipped
+        else:
+            prob_ref_flipped = 0.5
+            prob_judge_flipped = 0.5
+
+        # Get the judge's answer from CNN data
+        forward_answer = cnn_item.get("forward_comparison", "T")
+        backward_answer = cnn_item.get("backward_comparison", "T")
+
+        # Game 1: Judge is response1 (original order)
+        game1_record = {
+            "cache_key": key,
+            "example_id": key,
+            "judge": judge_name,
+            "reference": reference_name,
+            "comparison_type": f"{comparison_type}_game1",
+            "response1_key": "judge",
+            "response2_key": "reference",
+            "prob_response1": prob_judge_original,
+            "prob_response2": prob_ref_original,
+            "generated_text": forward_answer if forward_answer in ["1", "2"] else "T",
+            "raw_probs": [prob_judge_original, prob_ref_original],
+            "normalized_sum": prob_judge_original + prob_ref_original,
+            "category": category,
+            "dataset": dataset_name
+        }
+        game1_records.append(game1_record)
+
+        # Game 2: Reference is response1 (flipped order)
+        game2_record = {
+            "cache_key": key,
+            "example_id": key,
+            "judge": judge_name,
+            "reference": reference_name,
+            "comparison_type": f"{comparison_type}_game2",
+            "response1_key": "reference",
+            "response2_key": "judge",
+            "prob_response1": prob_ref_flipped,
+            "prob_response2": prob_judge_flipped,
+            "generated_text": backward_answer if backward_answer in ["1", "2"] else "T",
+            "raw_probs": [prob_ref_flipped, prob_judge_flipped],
+            "normalized_sum": prob_ref_flipped + prob_judge_flipped,
+            "category": category,
+            "dataset": dataset_name
+        }
+        game2_records.append(game2_record)
+
+    # Create output directory
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Write game1 JSONL file
+    game1_path = output_dir / f"{comparison_type}_game1.jsonl"
+    with open(game1_path, 'w', encoding='utf-8') as f:
+        for record in game1_records:
+            f.write(json.dumps(record, ensure_ascii=False) + '\n')
+    logger.info(f"Saved {len(game1_records)} records to {game1_path}")
+
+    # Write game2 JSONL file
+    game2_path = output_dir / f"{comparison_type}_game2.jsonl"
+    with open(game2_path, 'w', encoding='utf-8') as f:
+        for record in game2_records:
+            f.write(json.dumps(record, ensure_ascii=False) + '\n')
+    logger.info(f"Saved {len(game2_records)} records to {game2_path}")
+
+    # Return the output directory
+    return output_dir
+
+
 def print_summary_report(probs: Dict, model_name: str, logger: logging.Logger):
     """Print comprehensive summary report."""
     logger.info("=" * 80)
@@ -567,6 +714,14 @@ def main():
                        help="Model name for display in report and plots")
     parser.add_argument("--output_dir", type=str, default=None,
                        help="Output directory for plots and statistics (default: same as results file)")
+    parser.add_argument("--judge_name", type=str, default=None,
+                       help="Name of the judge model for JSONL output (default: same as model_name)")
+    parser.add_argument("--reference_name", type=str, default="reference",
+                       help="Name of the reference model for JSONL output (default: 'reference')")
+    parser.add_argument("--comparison_type", type=str, default="J_vs_R",
+                       help="Type of comparison for JSONL output (default: 'J_vs_R')")
+    parser.add_argument("--dataset", type=str, default="cnn_dailymail",
+                       help="Name of the dataset for JSONL output (default: 'cnn_dailymail')")
 
     args = parser.parse_args()
 
@@ -583,9 +738,18 @@ def main():
         sys.exit(1)
 
     if args.output_dir:
-        output_dir = Path(args.output_dir)
+        base_output_dir = Path(args.output_dir)
     else:
-        output_dir = cnn_path.parent / "plots"
+        base_output_dir = cnn_path.parent / "plots"
+
+    # For logging, use base_output_dir
+    output_dir = base_output_dir
+
+    # Set judge_name to model_name if not specified
+    judge_name = args.judge_name if args.judge_name else args.model_name
+    reference_name = args.reference_name
+    comparison_type = args.comparison_type
+    dataset_name = args.dataset
 
     # Set up logging
     logger = setup_logging(output_dir)
@@ -593,6 +757,10 @@ def main():
     logger.info(f"CNN results file: {cnn_path}")
     logger.info(f"Ground truth file: {gt_path}")
     logger.info(f"Model name: {args.model_name}")
+    logger.info(f"Judge name: {judge_name}")
+    logger.info(f"Reference name: {reference_name}")
+    logger.info(f"Comparison type: {comparison_type}")
+    logger.info(f"Dataset: {dataset_name}")
     logger.info(f"Output directory: {output_dir}")
 
     # Load data
@@ -625,6 +793,16 @@ def main():
     # Print summary report
     logger.info("")
     print_summary_report(probs, args.model_name, logger)
+
+    # Create game JSONL files and get the final output directory
+    # This must be done BEFORE saving statistics so everything goes in the same folder
+    logger.info("")
+    logger.info("=" * 80)
+    logger.info("CREATING GAME JSONL FILES")
+    logger.info("=" * 80)
+
+    output_dir = create_game_jsonl_files(cnn_results, ground_truth, judge_name, reference_name,
+                                         comparison_type, dataset_name, base_output_dir, logger)
 
     # Create visualizations
     logger.info("=" * 80)
