@@ -2,7 +2,7 @@
 # Plots P(J chooses J over R) vs P(J chooses K over R) split by LSP/ILSP
 # Written by: Dani
 # Created: Dec 24, 2025, 02:45 EST
-# Last Modified: Jan 13, 2026, 02:45 EST
+# Last Modified: Jan 15, 2026, 19:48 EST
 
 import argparse
 import json
@@ -19,6 +19,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
 from scipy.stats import bootstrap
+
+
+# -------------------------
+# --- CONSTANTS ---
+# -------------------------
+
+VERIFIABILITY_DATASETS = {"math500", "mbpp-plus", "mmlu"}
 
 
 # -------------------------
@@ -327,6 +334,201 @@ def compute_averaged_probabilities(
     return averaged_probs, ids, labels
 
 
+def build_aligned_pairs_for_triplet(
+    games: Dict,
+    logger: logging.Logger,
+) -> List[Tuple[int, float, float, str]]:
+    """Build aligned (J_prob, K_prob) pairs for a single (judge, proxy, reference) triplet.
+
+    Uses position-averaged probabilities for both J vs R and K vs R, then aligns examples
+    by example_id. Pairs are constructed only for IDs present in both J and K.
+
+    This is the core primitive used for verifiability-dataset aggregations:
+    concatenating these pairs across proxies/references naturally upsamples J(JvR)
+    whenever an example_id appears multiple times under different proxy tests.
+
+    Args:
+        games (Dict): Dict containing J_vs_R_game1/2 and K_vs_R_game1/2.
+        logger (logging.Logger): Logger.
+
+    Returns:
+        List[Tuple[int, float, float, str]]: (example_id, j_prob, k_prob, label)
+
+    Raises:
+        KeyError: If required games are missing.
+    """
+    required_games = ["J_vs_R_game1", "J_vs_R_game2", "K_vs_R_game1", "K_vs_R_game2"]
+    for g in required_games:
+        if g not in games:
+            raise KeyError(f"Missing required game '{g}'")
+
+    j_probs, j_ids, j_labels = compute_averaged_probabilities(
+        games["J_vs_R_game1"], games["J_vs_R_game2"], logger
+    )
+    k_probs, k_ids, k_labels = compute_averaged_probabilities(
+        games["K_vs_R_game1"], games["K_vs_R_game2"], logger
+    )
+
+    j_by_id = {ex_id: (prob, label) for ex_id, prob, label in zip(j_ids, j_probs, j_labels)}
+    pairs: List[Tuple[int, float, float, str]] = []
+    for ex_id, prob_k, label_k in zip(k_ids, k_probs, k_labels):
+        if ex_id not in j_by_id:
+            continue
+        prob_j, label_j = j_by_id[ex_id]
+        if label_j != label_k:
+            logger.warning(f"  Label mismatch for {ex_id}: J={label_j}, K={label_k}")
+        pairs.append((ex_id, prob_j, prob_k, label_j))
+
+    return pairs
+
+
+def split_pairs_by_label(
+    pairs: List[Tuple[int, float, float, str]],
+    logger: logging.Logger,
+) -> Tuple[Dict[str, List[float]], Dict[str, List[float]]]:
+    """Split aligned pairs into J and K probability lists for all/lsp/ilsp.
+
+    Args:
+        pairs (List[Tuple[int, float, float, str]]): (example_id, j_prob, k_prob, label)
+        logger (logging.Logger): Logger.
+
+    Returns:
+        (j_probs_split, k_probs_split) dicts with keys {'lsp','ilsp','all'}.
+    """
+    j_probs_split = {"lsp": [], "ilsp": [], "all": []}
+    k_probs_split = {"lsp": [], "ilsp": [], "all": []}
+
+    for ex_id, prob_j, prob_k, label in pairs:
+        j_probs_split["all"].append(prob_j)
+        k_probs_split["all"].append(prob_k)
+
+        if label == "lsp":
+            j_probs_split["lsp"].append(prob_j)
+            k_probs_split["lsp"].append(prob_k)
+        elif label == "ilsp":
+            j_probs_split["ilsp"].append(prob_j)
+            k_probs_split["ilsp"].append(prob_k)
+        else:
+            logger.warning(f"  Unknown label for {ex_id}: {label}. Skipping from LSP/ILSP splits.")
+
+    return j_probs_split, k_probs_split
+
+
+def normalize_dataset_name(dataset: str) -> str:
+    """Normalize dataset names so CLI aliases resolve to on-disk folder names.
+
+    Args:
+        dataset (str): Dataset name passed by the user.
+
+    Returns:
+        str: Normalized dataset name.
+
+    Raises:
+        ValueError: If dataset is empty.
+    """
+    if not dataset or not dataset.strip():
+        raise ValueError("dataset must be a non-empty string")
+
+    dataset_norm = dataset.strip()
+    if dataset_norm == "mbpp":
+        return "mbpp-plus"
+    return dataset_norm
+
+
+def compute_aggregated_probs_mean_by_example(
+    proxy_stats_list: List[Dict],
+    all_preferences: Dict,
+    logger: logging.Logger,
+) -> Tuple[Dict[str, List[float]], Dict[str, List[float]], Dict[str, int]]:
+    """Aggregate (J vs R) and (K vs R) per judge/reference by averaging K across proxies per example.
+
+    This matches the intended interpretation of "aggregated proxies" for verifiability datasets:
+    for each example_id, compute mean P(K) across all proxies that contain that example.
+    Then pair that with that example's P(J) (from J vs R) and run stats/plots on the aligned set.
+
+    Args:
+        proxy_stats_list (List[Dict]): Per-proxy summary stats dicts for a fixed (judge, reference).
+        all_preferences (Dict): Loaded cache mapping (judge, proxy, reference) -> games.
+        logger (logging.Logger): Logger.
+
+    Returns:
+        Tuple of (j_probs_split, k_probs_split, meta_counts)
+            j_probs_split/k_probs_split are dicts with keys {'lsp','ilsp','all'}.
+            meta_counts includes n_proxies, n_examples_total_unique, n_lsp, n_ilsp.
+
+    Raises:
+        ValueError: If proxy_stats_list is empty.
+    """
+    if not proxy_stats_list:
+        raise ValueError("proxy_stats_list must be non-empty")
+
+    # Use any triplet to obtain J vs R maps (same judge/reference; J files are shared).
+    anchor = proxy_stats_list[0]
+    anchor_key = (anchor["judge"], anchor["proxy"], anchor["reference"])
+    if anchor_key not in all_preferences:
+        raise ValueError(f"Missing cache for anchor triplet: {anchor_key}")
+
+    anchor_games = all_preferences[anchor_key]
+    j_probs, j_ids, j_labels = compute_averaged_probabilities(
+        anchor_games["J_vs_R_game1"], anchor_games["J_vs_R_game2"], logger
+    )
+    j_by_id = {ex_id: (prob, label) for ex_id, prob, label in zip(j_ids, j_probs, j_labels)}
+
+    # Accumulate K probabilities per example across proxies.
+    k_probs_by_id: Dict[int, List[float]] = defaultdict(list)
+
+    for pstats in proxy_stats_list:
+        triplet_key = (pstats["judge"], pstats["proxy"], pstats["reference"])
+        games = all_preferences.get(triplet_key)
+        if not games:
+            logger.warning(f"Missing cached games for triplet={triplet_key}; skipping from aggregation")
+            continue
+
+        k_probs, k_ids, k_labels = compute_averaged_probabilities(
+            games["K_vs_R_game1"], games["K_vs_R_game2"], logger
+        )
+        for ex_id, prob_k, label_k in zip(k_ids, k_probs, k_labels):
+            if ex_id not in j_by_id:
+                continue
+            # Prefer the J label as canonical; warn if mismatch.
+            _, label_j = j_by_id[ex_id]
+            if label_j != label_k:
+                logger.warning(f"Label mismatch in aggregation for {ex_id}: J={label_j}, K={label_k}")
+            k_probs_by_id[ex_id].append(prob_k)
+
+    # Build aligned splits using mean K per example.
+    j_probs_split = {"lsp": [], "ilsp": [], "all": []}
+    k_probs_split = {"lsp": [], "ilsp": [], "all": []}
+
+    n_lsp = 0
+    n_ilsp = 0
+    for ex_id in sorted(k_probs_by_id.keys()):
+        prob_j, label = j_by_id[ex_id]
+        prob_k_mean = float(np.mean(k_probs_by_id[ex_id]))
+
+        j_probs_split["all"].append(prob_j)
+        k_probs_split["all"].append(prob_k_mean)
+
+        if label == "lsp":
+            n_lsp += 1
+            j_probs_split["lsp"].append(prob_j)
+            k_probs_split["lsp"].append(prob_k_mean)
+        elif label == "ilsp":
+            n_ilsp += 1
+            j_probs_split["ilsp"].append(prob_j)
+            k_probs_split["ilsp"].append(prob_k_mean)
+        else:
+            logger.warning(f"Unknown label in aggregation for {ex_id}: {label}. Skipping from LSP/ILSP splits.")
+
+    meta_counts = {
+        "n_proxies": len(proxy_stats_list),
+        "n_examples_total_unique": len(k_probs_by_id),
+        "n_lsp": n_lsp,
+        "n_ilsp": n_ilsp,
+    }
+    return j_probs_split, k_probs_split, meta_counts
+
+
 # -------------------------
 # --- VISUALIZATION ---
 # -------------------------
@@ -339,13 +541,19 @@ def plot_histogram_with_stats(ax, data, objective, title=None, xlabel=None,
         return
     
     mean = np.mean(data)
-    res = bootstrap((np.array(data),), np.mean, random_state=42)
-    CI = res.confidence_interval
+    CI = None
+    if len(data) >= 2:
+        try:
+            res = bootstrap((np.array(data),), np.mean, random_state=42)
+            CI = res.confidence_interval
+        except Exception:
+            CI = None
     
     ax.hist(data, color=color, edgecolor='white', linewidth=0.5, **hist_kwargs)
     ax.axvline(mean, color='black', linestyle='--', linewidth=2, label='μ')
     ax.axvline(objective, color='red', linestyle='--', linewidth=2, label='Objective')
-    ax.axvspan(CI.low, CI.high, alpha=0.2, color='orange', label='95% CI')
+    if CI is not None:
+        ax.axvspan(CI.low, CI.high, alpha=0.2, color='orange', label='95% CI')
     
     ax.set_xlim(0, 1)
 
@@ -518,6 +726,7 @@ def compute_hypothesis_tests(
             "mean_k_vs_r": float("nan"),
             "std_k_vs_r": float("nan"),
             "mean_diff": float("nan"),
+            "std_diff": float("nan"),
             "ttest_two_sided_t": float("nan"),
             "ttest_two_sided_p": float("nan"),
             "ttest_one_sided_t": float("nan"),
@@ -536,29 +745,49 @@ def compute_hypothesis_tests(
     stats_dict["mean_k_vs_r"] = np.mean(k_vs_r_probs)
     stats_dict["std_k_vs_r"] = np.std(k_vs_r_probs)
     
-    # Mean difference
-    stats_dict["mean_diff"] = stats_dict["mean_j_vs_r"] - stats_dict["mean_k_vs_r"]
+    # Paired differences (deterministic; no resampling)
+    diffs = np.asarray(j_vs_r_probs, dtype=float) - np.asarray(k_vs_r_probs, dtype=float)
+    stats_dict["mean_diff"] = float(np.mean(diffs))
+    stats_dict["std_diff"] = float(np.std(diffs, ddof=1)) if len(diffs) >= 2 else float("nan")
     
-    # Paired t-test (two-sided): H0: mean(J) = mean(K)
-    t_stat_two, p_two = stats.ttest_rel(j_vs_r_probs, k_vs_r_probs)
-    stats_dict["ttest_two_sided_t"] = t_stat_two
-    stats_dict["ttest_two_sided_p"] = p_two
-    
-    # One-sided t-test: H0: mean(J) <= mean(K), H1: mean(J) > mean(K)
-    # (Self-preference hypothesis: J prefers its own more than K)
-    t_stat_one, p_one = stats.ttest_rel(j_vs_r_probs, k_vs_r_probs, alternative='greater')
-    stats_dict["ttest_one_sided_t"] = t_stat_one
-    stats_dict["ttest_one_sided_p"] = p_one
+    # Paired t-tests require at least 2 paired observations to be meaningful.
+    if len(j_vs_r_probs) >= 2 and len(k_vs_r_probs) >= 2:
+        t_stat_two, p_two = stats.ttest_rel(j_vs_r_probs, k_vs_r_probs)
+        stats_dict["ttest_two_sided_t"] = t_stat_two
+        stats_dict["ttest_two_sided_p"] = p_two
+
+        # One-sided t-test: H0: mean(J) <= mean(K), H1: mean(J) > mean(K)
+        # (Self-preference hypothesis: J prefers its own more than K)
+        t_stat_one, p_one = stats.ttest_rel(j_vs_r_probs, k_vs_r_probs, alternative='greater')
+        stats_dict["ttest_one_sided_t"] = t_stat_one
+        stats_dict["ttest_one_sided_p"] = p_one
+    else:
+        stats_dict["ttest_two_sided_t"] = float("nan")
+        stats_dict["ttest_two_sided_p"] = float("nan")
+        stats_dict["ttest_one_sided_t"] = float("nan")
+        stats_dict["ttest_one_sided_p"] = float("nan")
     
     # KS test for distribution similarity
-    ks_stat, ks_p = stats.ks_2samp(j_vs_r_probs, k_vs_r_probs)
-    stats_dict["ks_statistic"] = ks_stat
-    stats_dict["ks_pvalue"] = ks_p
+    try:
+        ks_stat, ks_p = stats.ks_2samp(j_vs_r_probs, k_vs_r_probs)
+        stats_dict["ks_statistic"] = ks_stat
+        stats_dict["ks_pvalue"] = ks_p
+    except Exception:
+        stats_dict["ks_statistic"] = float("nan")
+        stats_dict["ks_pvalue"] = float("nan")
     
     # Pearson correlation
-    corr, corr_p = stats.pearsonr(j_vs_r_probs, k_vs_r_probs)
-    stats_dict["correlation"] = corr
-    stats_dict["correlation_pvalue"] = corr_p
+    if len(j_vs_r_probs) >= 2 and len(k_vs_r_probs) >= 2:
+        try:
+            corr, corr_p = stats.pearsonr(j_vs_r_probs, k_vs_r_probs)
+            stats_dict["correlation"] = corr
+            stats_dict["correlation_pvalue"] = corr_p
+        except Exception:
+            stats_dict["correlation"] = float("nan")
+            stats_dict["correlation_pvalue"] = float("nan")
+    else:
+        stats_dict["correlation"] = float("nan")
+        stats_dict["correlation_pvalue"] = float("nan")
     
     # Effect size (Cohen's d)
     pooled_std = np.sqrt((stats_dict["std_j_vs_r"]**2 + stats_dict["std_k_vs_r"]**2) / 2)
@@ -567,11 +796,11 @@ def compute_hypothesis_tests(
     logger.info("Hypothesis Test Results:")
     logger.info(f"  Mean(J vs R): {stats_dict['mean_j_vs_r']:.4f} ± {stats_dict['std_j_vs_r']:.4f}")
     logger.info(f"  Mean(K vs R): {stats_dict['mean_k_vs_r']:.4f} ± {stats_dict['std_k_vs_r']:.4f}")
-    logger.info(f"  Mean difference: {stats_dict['mean_diff']:.4f}")
-    logger.info(f"  Two-sided t-test: t={t_stat_two:.3f}, p={p_two:.6f}")
-    logger.info(f"  One-sided t-test: t={t_stat_one:.3f}, p={p_one:.6f}")
-    logger.info(f"  KS test: D={ks_stat:.3f}, p={ks_p:.6f}")
-    logger.info(f"  Correlation: r={corr:.3f}, p={corr_p:.6f}")
+    logger.info(f"  Mean difference: {stats_dict['mean_diff']:.4f} ± {stats_dict['std_diff']:.4f}")
+    logger.info(f"  Two-sided t-test: t={stats_dict['ttest_two_sided_t']:.3f}, p={stats_dict['ttest_two_sided_p']:.6f}")
+    logger.info(f"  One-sided t-test: t={stats_dict['ttest_one_sided_t']:.3f}, p={stats_dict['ttest_one_sided_p']:.6f}")
+    logger.info(f"  KS test: D={stats_dict['ks_statistic']:.3f}, p={stats_dict['ks_pvalue']:.6f}")
+    logger.info(f"  Correlation: r={stats_dict['correlation']:.3f}, p={stats_dict['correlation_pvalue']:.6f}")
     logger.info(f"  Cohen's d: {stats_dict['cohens_d']:.3f}")
     
     return stats_dict
@@ -592,7 +821,8 @@ def main():
     args = parser.parse_args()
     
     # Setup
-    results_dir = Path(args.results_dir) / args.dataset
+    dataset = normalize_dataset_name(args.dataset)
+    results_dir = Path(args.results_dir) / dataset
     if not results_dir.exists():
         print(f"ERROR: Results directory not found: {results_dir}")
         return
@@ -603,6 +833,11 @@ def main():
     logger = setup_logging(output_dir)
     logger.info(f"Results directory: {results_dir}")
     logger.info(f"Output directory: {output_dir}")
+    logger.info(f"Dataset: {dataset}")
+
+    is_verifiability_dataset = dataset in VERIFIABILITY_DATASETS
+    if is_verifiability_dataset:
+        logger.info("Verifiability dataset mode enabled: will compute per-proxy + aggregated stats, but plot aggregated only.")
     
     # Load cached preferences
     cache_dir = results_dir / "cache"
@@ -630,88 +865,48 @@ def main():
             logger.warning(f"Missing games for {judge}/{proxy}/{reference}. Skipping.")
             continue
         
-        # Compute averaged probabilities
-        j_vs_r_probs, j_ids, j_labels = compute_averaged_probabilities(
-            games["J_vs_R_game1"], games["J_vs_R_game2"], logger
-        )
-        k_vs_r_probs, k_ids, k_labels = compute_averaged_probabilities(
-            games["K_vs_R_game1"], games["K_vs_R_game2"], logger
-        )
+        # Build aligned pairs (one per K example that can be matched to J)
+        pairs = build_aligned_pairs_for_triplet(games, logger)
+        j_probs_split, k_probs_split = split_pairs_by_label(pairs, logger)
+
+        logger.info(f"  Aligned pairs (K matched to J): {len(pairs)}")
+        logger.info(f"  Pairs - LSP: {len(j_probs_split['lsp'])}, ILSP: {len(j_probs_split['ilsp'])}")
         
-        logger.info(f"  J(J vs R): {len(j_vs_r_probs)} examples")
-        logger.info(f"  J(K vs R): {len(k_vs_r_probs)} examples")
-        
-        # Filter to common example IDs (since proxies may have different example sets)
-        j_ids_set = set(j_ids)
-        k_ids_set = set(k_ids)
-        common_ids = j_ids_set & k_ids_set
-        
-        if len(common_ids) < len(j_ids) or len(common_ids) < len(k_ids):
-            logger.warning(f"  Example ID mismatch: J has {len(j_ids)}, K has {len(k_ids)}, Common: {len(common_ids)}")
-        
-        # Build dictionaries for fast lookup
-        j_by_id = {ex_id: (prob, label) for ex_id, prob, label in zip(j_ids, j_vs_r_probs, j_labels)}
-        k_by_id = {ex_id: (prob, label) for ex_id, prob, label in zip(k_ids, k_vs_r_probs, k_labels)}
-        
-        # Filter to common IDs and split by LSP/ILSP
-        j_probs_split = {'lsp': [], 'ilsp': [], 'all': []}
-        k_probs_split = {'lsp': [], 'ilsp': [], 'all': []}
-        
-        for ex_id in sorted(common_ids):
-            j_prob, j_label = j_by_id[ex_id]
-            k_prob, k_label = k_by_id[ex_id]
-            
-            # Sanity check: labels should match
-            if j_label != k_label:
-                logger.warning(f"  Label mismatch for {ex_id}: J={j_label}, K={k_label}")
-            
-            j_probs_split['all'].append(j_prob)
-            k_probs_split['all'].append(k_prob)
-            
-            if j_label == "lsp":
-                j_probs_split['lsp'].append(j_prob)
-                k_probs_split['lsp'].append(k_prob)
-            elif j_label == "ilsp":
-                j_probs_split['ilsp'].append(j_prob)
-                k_probs_split['ilsp'].append(k_prob)
+        # Plots
+        # - Default datasets: plot each (judge, proxy, reference)
+        # - Verifiability datasets: skip per-proxy plots; plot aggregated-only later
+        if not is_verifiability_dataset:
+            if len(pairs) > 0:
+                plot_file = output_dir / "plots" / f"{judge}_{proxy}_vs_{reference}.png"
+                create_comparison_plot(
+                    j_probs_split, k_probs_split, judge, proxy, reference, plot_file, logger
+                )
             else:
-                logger.warning(f"  Unknown label for {ex_id}: {j_label}. Skipping from LSP/ILSP splits.")
+                logger.warning(f"  Skipping plot - no aligned data for {judge} vs {proxy} vs {reference}")
         
-        logger.info(f"  J(J vs R) - LSP: {len(j_probs_split['lsp'])}, ILSP: {len(j_probs_split['ilsp'])}")
-        logger.info(f"  J(K vs R) - LSP: {len(k_probs_split['lsp'])}, ILSP: {len(k_probs_split['ilsp'])}")
-        
-        # Create plot only if we have data
-        total_examples = len(j_probs_split['lsp']) + len(j_probs_split['ilsp'])
-        if total_examples > 0:
-            plot_file = output_dir / "plots" / f"{judge}_{proxy}_vs_{reference}.png"
-            create_comparison_plot(
-                j_probs_split, k_probs_split, judge, proxy, reference, plot_file, logger
-            )
-        else:
-            logger.warning(f"  Skipping plot - no data for {judge} vs {proxy} vs {reference}")
-        
-        # Compute statistics on ILSP examples only (to avoid over-coding from legitimate eval)
-        logger.info("  Computing hypothesis tests on ILSP examples only...")
-        stats_dict = compute_hypothesis_tests(
-            j_probs_split['ilsp'], 
-            k_probs_split['ilsp'], 
-            logger
-        )
-        stats_dict["judge"] = judge
-        stats_dict["proxy"] = proxy
-        stats_dict["reference"] = reference
-        stats_dict["n_examples_total"] = len(j_vs_r_probs)
-        stats_dict["n_lsp"] = len(j_probs_split['lsp'])
-        stats_dict["n_ilsp"] = len(j_probs_split['ilsp'])
-        stats_dict["n_examples_tested"] = len(j_probs_split['ilsp'])  # Only ILSP tested
-        
-        summary_stats.append(stats_dict)
-        
+        # Baseline statistics: full distribution + LSP/ILSP splits
+        baseline_tests = {
+            "all": compute_hypothesis_tests(j_probs_split["all"], k_probs_split["all"], logger),
+            "ilsp": compute_hypothesis_tests(j_probs_split["ilsp"], k_probs_split["ilsp"], logger),
+            "lsp": compute_hypothesis_tests(j_probs_split["lsp"], k_probs_split["lsp"], logger),
+        }
+
+        baseline_record = {
+            "judge": judge,
+            "proxy": proxy,
+            "reference": reference,
+            "n_pairs_total": len(j_probs_split["all"]),
+            "n_lsp": len(j_probs_split["lsp"]),
+            "n_ilsp": len(j_probs_split["ilsp"]),
+            "tests": baseline_tests,
+        }
+        summary_stats.append(baseline_record)
+
         # Save individual stats
         stats_file = output_dir / "stats" / f"{judge}_{proxy}_vs_{reference}.json"
         stats_file.parent.mkdir(parents=True, exist_ok=True)
         with open(stats_file, 'w') as f:
-            json.dump(stats_dict, f, indent=2)
+            json.dump(baseline_record, f, indent=2)
         logger.info(f"  Saved statistics to {stats_file}")
     
     # Save summary
@@ -739,96 +934,229 @@ def main():
         
         # Log per-proxy statistics
         logger.info("  Per-proxy statistics:")
-        for pstats in sorted(proxy_stats_list, key=lambda x: x['ttest_one_sided_p']):
-            proxy = pstats['proxy']
-            n = pstats['n_ilsp']
-            p_one = pstats['ttest_one_sided_p']
-            p_two = pstats['ttest_two_sided_p']
-            logger.info(f"    {proxy}: n={n}, p_one={p_one:.4f}, p_two={p_two:.4f}")
+        def _safe_p(rec: Dict, subset: str) -> float:
+            try:
+                p = (rec.get("tests") or {}).get(subset, {}).get("ttest_one_sided_p")
+                return float(p) if p is not None else float("nan")
+            except Exception:
+                return float("nan")
+
+        for rec in sorted(proxy_stats_list, key=lambda x: _safe_p(x, "ilsp")):
+            proxy = rec["proxy"]
+            n_ilsp = rec.get("n_ilsp", 0)
+            n_all = rec.get("n_pairs_total", 0)
+            p_one_ilsp = _safe_p(rec, "ilsp")
+            p_one_all = _safe_p(rec, "all")
+            logger.info(f"    {proxy}: n_all={n_all}, n_ilsp={n_ilsp}, p_one_all={p_one_all:.4f}, p_one_ilsp={p_one_ilsp:.4f}")
+
+        # Find most robust proxy (highest ILSP one-sided p-value, ignoring NaNs)
+        finite = [rec for rec in proxy_stats_list if not np.isnan(_safe_p(rec, "ilsp"))]
+        if finite:
+            most_robust = max(finite, key=lambda x: _safe_p(x, "ilsp"))
+            most_robust_p = _safe_p(most_robust, "ilsp")
+        else:
+            most_robust = proxy_stats_list[0]
+            most_robust_p = float("nan")
+        logger.info(f"  Most robust proxy (highest ILSP p-value): {most_robust['proxy']} (p={most_robust_p:.4f})")
         
-        # Find most robust proxy (least likely to reject null - highest p-value)
-        most_robust = max(proxy_stats_list, key=lambda x: x['ttest_one_sided_p'])
-        logger.info(f"  Most robust proxy (highest p-value): {most_robust['proxy']} (p={most_robust['ttest_one_sided_p']:.4f})")
-        
-        # Aggregate all ILSP examples across proxies
-        # Need to reload data to combine across proxies
-        all_j_ilsp = []
-        all_k_ilsp = []
-        
-        for pstats in proxy_stats_list:
-            # Get the cached data for this triplet
-            triplet_key = (pstats['judge'], pstats['proxy'], pstats['reference'])
-            if triplet_key in all_preferences:
-                games = all_preferences[triplet_key]
-                j_probs, j_ids, j_labels = compute_averaged_probabilities(
-                    games["J_vs_R_game1"], games["J_vs_R_game2"], logger
+        # Aggregation methods
+        # - Default: concatenate ILSP examples across proxies
+        # - Verifiability datasets: concatenate aligned (J,K) pairs across proxies (upsamples J per proxy multiplicity)
+        if is_verifiability_dataset:
+            all_pairs: List[Tuple[int, float, float, str]] = []
+            for rec in proxy_stats_list:
+                triplet_key = (rec["judge"], rec["proxy"], rec["reference"])
+                games = all_preferences.get(triplet_key)
+                if not games:
+                    continue
+                all_pairs.extend(build_aligned_pairs_for_triplet(games, logger))
+
+            j_agg, k_agg = split_pairs_by_label(all_pairs, logger)
+            logger.info(f"  Aggregated pairs across proxies: {len(all_pairs)} (ILSP={len(j_agg['ilsp'])}, LSP={len(j_agg['lsp'])})")
+
+            agg_tests = {
+                "all": compute_hypothesis_tests(j_agg["all"], k_agg["all"], logger),
+                "ilsp": compute_hypothesis_tests(j_agg["ilsp"], k_agg["ilsp"], logger),
+                "lsp": compute_hypothesis_tests(j_agg["lsp"], k_agg["lsp"], logger),
+            }
+
+            # Plot aggregated only
+            if len(all_pairs) > 0:
+                plot_file = output_dir / "plots_aggregated" / f"{judge}_AGG_ALL_PROXIES_UPSAMPLEJ_vs_{reference}.png"
+                create_comparison_plot(
+                    j_agg,
+                    k_agg,
+                    judge,
+                    f"AGG_ALL_PROXIES_UPSAMPLEJ(n={len(proxy_stats_list)})",
+                    reference,
+                    plot_file,
+                    logger,
                 )
-                k_probs, k_ids, k_labels = compute_averaged_probabilities(
-                    games["K_vs_R_game1"], games["K_vs_R_game2"], logger
-                )
-                
-                # Filter to common IDs (same as in main analysis)
-                j_ids_set = set(j_ids)
-                k_ids_set = set(k_ids)
-                common_ids = j_ids_set & k_ids_set
-                
-                # Build dictionaries for fast lookup
-                j_by_id = {ex_id: (prob, label) for ex_id, prob, label in zip(j_ids, j_probs, j_labels)}
-                k_by_id = {ex_id: (prob, label) for ex_id, prob, label in zip(k_ids, k_probs, k_labels)}
-                
-                # Extract ILSP only from common IDs
-                for ex_id in common_ids:
-                    j_prob, j_label = j_by_id[ex_id]
-                    k_prob, k_label = k_by_id[ex_id]
-                    
-                    if j_label == "ilsp":
-                        all_j_ilsp.append(j_prob)
-                        all_k_ilsp.append(k_prob)
-        
-        logger.info(f"  Aggregated ILSP examples across all proxies: {len(all_j_ilsp)}")
-        
-        # Run hypothesis tests on aggregated data
-        if len(all_j_ilsp) > 0 and len(all_k_ilsp) > 0:
-            agg_stats = compute_hypothesis_tests(all_j_ilsp, all_k_ilsp, logger)
-            logger.info(f"  Aggregated statistics:")
-            logger.info(f"    J(J vs R) mean: {agg_stats['mean_j_vs_r']:.4f}")
-            logger.info(f"    J(K vs R) mean: {agg_stats['mean_k_vs_r']:.4f}")
-            logger.info(f"    Difference: {agg_stats['mean_diff']:.4f}")
-            logger.info(f"    T-test one-sided p: {agg_stats['ttest_one_sided_p']:.4f}")
-            logger.info(f"    T-test two-sided p: {agg_stats['ttest_two_sided_p']:.4f}")
-            
+            else:
+                logger.warning(f"  Skipping aggregated plot - no aligned data for Judge={judge}, Reference={reference}")
+
             aggregated_stats.append({
-                'judge': judge,
-                'reference': reference,
-                'n_proxies': len(proxy_stats_list),
-                'n_ilsp_total': len(all_j_ilsp),
-                'most_robust_proxy': most_robust['proxy'],
-                'most_robust_p': most_robust['ttest_one_sided_p'],
-                **agg_stats
+                "judge": judge,
+                "reference": reference,
+                "aggregation_method": "concat_pairs_over_proxies_upsample_j",
+                "n_proxies": len(proxy_stats_list),
+                "n_pairs_total": len(j_agg["all"]),
+                "n_lsp": len(j_agg["lsp"]),
+                "n_ilsp": len(j_agg["ilsp"]),
+                "most_robust_proxy": most_robust["proxy"],
+                "most_robust_p_ilsp": most_robust_p,
+                "tests": agg_tests,
             })
+        else:
+            # Backward-compatible behavior: concatenate ILSP examples across proxies.
+            all_j_ilsp = []
+            all_k_ilsp = []
+
+            for pstats in proxy_stats_list:
+                triplet_key = (pstats['judge'], pstats['proxy'], pstats['reference'])
+                if triplet_key in all_preferences:
+                    games = all_preferences[triplet_key]
+                    j_probs, j_ids, j_labels = compute_averaged_probabilities(
+                        games["J_vs_R_game1"], games["J_vs_R_game2"], logger
+                    )
+                    k_probs, k_ids, k_labels = compute_averaged_probabilities(
+                        games["K_vs_R_game1"], games["K_vs_R_game2"], logger
+                    )
+
+                    j_ids_set = set(j_ids)
+                    k_ids_set = set(k_ids)
+                    common_ids = j_ids_set & k_ids_set
+
+                    j_by_id = {ex_id: (prob, label) for ex_id, prob, label in zip(j_ids, j_probs, j_labels)}
+                    k_by_id = {ex_id: (prob, label) for ex_id, prob, label in zip(k_ids, k_probs, k_labels)}
+
+                    for ex_id in common_ids:
+                        j_prob, j_label = j_by_id[ex_id]
+                        k_prob, _ = k_by_id[ex_id]
+                        if j_label == "ilsp":
+                            all_j_ilsp.append(j_prob)
+                            all_k_ilsp.append(k_prob)
+
+            logger.info(f"  Aggregated ILSP examples across all proxies: {len(all_j_ilsp)}")
+
+            if len(all_j_ilsp) > 0 and len(all_k_ilsp) > 0:
+                agg_stats = compute_hypothesis_tests(all_j_ilsp, all_k_ilsp, logger)
+                aggregated_stats.append({
+                    'judge': judge,
+                    'reference': reference,
+                    'aggregation_method': 'concat_ilsp',
+                    'n_proxies': len(proxy_stats_list),
+                    'n_ilsp_total': len(all_j_ilsp),
+                    'most_robust_proxy': most_robust['proxy'],
+                    'most_robust_p_ilsp': most_robust_p,
+                    **agg_stats
+                })
     
     # Save aggregated statistics
     agg_file = output_dir / "aggregated_by_judge_reference.json"
     with open(agg_file, 'w') as f:
         json.dump(aggregated_stats, f, indent=2)
     logger.info(f"\nSaved aggregated statistics to {agg_file}")
+
+    # -----------------------------
+    # Aggregation over references
+    # -----------------------------
+    logger.info("\n" + "=" * 80)
+    logger.info("PER-JUDGE AGGREGATION (ALL REFERENCES + ALL PROXIES)")
+    logger.info("=" * 80)
+
+    by_judge = defaultdict(list)
+    for rec in summary_stats:
+        by_judge[rec["judge"]].append(rec)
+
+    aggregated_by_judge = []
+
+    for judge, triplet_records in by_judge.items():
+        logger.info(f"\nJudge={judge}")
+        logger.info(f"  Triplets: {len(triplet_records)}")
+
+        all_pairs: List[Tuple[int, float, float, str]] = []
+        for rec in triplet_records:
+            triplet_key = (rec["judge"], rec["proxy"], rec["reference"])
+            games = all_preferences.get(triplet_key)
+            if not games:
+                continue
+            all_pairs.extend(build_aligned_pairs_for_triplet(games, logger))
+
+        j_split, k_split = split_pairs_by_label(all_pairs, logger)
+        logger.info(f"  Aggregated pairs: {len(all_pairs)} (ILSP={len(j_split['ilsp'])}, LSP={len(j_split['lsp'])})")
+
+        judge_tests = {
+            "all": compute_hypothesis_tests(j_split["all"], k_split["all"], logger),
+            "ilsp": compute_hypothesis_tests(j_split["ilsp"], k_split["ilsp"], logger),
+            "lsp": compute_hypothesis_tests(j_split["lsp"], k_split["lsp"], logger),
+        }
+
+        aggregated_by_judge.append({
+            "judge": judge,
+            "aggregation_method": "concat_pairs_over_refs_and_proxies_upsample_j",
+            "n_triplets": len(triplet_records),
+            "n_pairs_total": len(j_split["all"]),
+            "n_lsp": len(j_split["lsp"]),
+            "n_ilsp": len(j_split["ilsp"]),
+            "tests": judge_tests,
+        })
+
+        # Plot aggregated over references (verifiability datasets only)
+        if is_verifiability_dataset and len(all_pairs) > 0:
+            plot_file = output_dir / "plots_aggregated_all_refs" / f"{judge}_AGG_ALL_REFS_ALL_PROXIES.png"
+            create_comparison_plot(
+                j_split,
+                k_split,
+                judge,
+                "AGG_ALL_REFS_ALL_PROXIES",
+                "ALL_REFERENCES",
+                plot_file,
+                logger,
+            )
+
+    agg_judge_file = output_dir / "aggregated_by_judge_all_references.json"
+    with open(agg_judge_file, "w") as f:
+        json.dump(aggregated_by_judge, f, indent=2)
+    logger.info(f"\nSaved aggregated judge-level statistics to {agg_judge_file}")
     
-    # Count rejections
+    # Count rejections (track both all and ilsp for verifiability datasets)
     alpha_two = 0.05
     alpha_one = 0.05
-    rejections_two = sum(1 for s in summary_stats if s["ttest_two_sided_p"] < alpha_two)
-    rejections_one = sum(1 for s in summary_stats if s["ttest_one_sided_p"] < alpha_one)
-    
-    # Count aggregated rejections
-    agg_rejections_two = sum(1 for s in aggregated_stats if s["ttest_two_sided_p"] < alpha_two)
-    agg_rejections_one = sum(1 for s in aggregated_stats if s["ttest_one_sided_p"] < alpha_one)
+
+    def _count_rejections(records: List[Dict], subset: str, p_key: str, alpha: float) -> int:
+        count = 0
+        for rec in records:
+            tests = rec.get("tests") or {}
+            sub = tests.get(subset) or {}
+            p_val = sub.get(p_key)
+            if p_val is None:
+                continue
+            try:
+                if not np.isnan(p_val) and p_val < alpha:
+                    count += 1
+            except Exception:
+                continue
+        return count
+
+    rejections_two_all = _count_rejections(summary_stats, "all", "ttest_two_sided_p", alpha_two)
+    rejections_one_all = _count_rejections(summary_stats, "all", "ttest_one_sided_p", alpha_one)
+    rejections_two_ilsp = _count_rejections(summary_stats, "ilsp", "ttest_two_sided_p", alpha_two)
+    rejections_one_ilsp = _count_rejections(summary_stats, "ilsp", "ttest_one_sided_p", alpha_one)
+
+    agg_rejections_two_all = _count_rejections(aggregated_stats, "all", "ttest_two_sided_p", alpha_two)
+    agg_rejections_one_all = _count_rejections(aggregated_stats, "all", "ttest_one_sided_p", alpha_one)
+    agg_rejections_two_ilsp = _count_rejections(aggregated_stats, "ilsp", "ttest_two_sided_p", alpha_two)
+    agg_rejections_one_ilsp = _count_rejections(aggregated_stats, "ilsp", "ttest_one_sided_p", alpha_one)
     
     logger.info("=" * 80)
     logger.info("SUMMARY - PER-PROXY STATISTICS")
     logger.info("=" * 80)
     logger.info(f"Total comparisons (individual proxies): {len(summary_stats)}")
-    logger.info(f"Rejections (two-sided, α={alpha_two}): {rejections_two}/{len(summary_stats)} ({100*rejections_two/len(summary_stats):.1f}%)")
-    logger.info(f"Rejections (one-sided, α={alpha_one}): {rejections_one}/{len(summary_stats)} ({100*rejections_one/len(summary_stats):.1f}%)")
+    logger.info(f"Rejections [ALL] (two-sided, α={alpha_two}): {rejections_two_all}/{len(summary_stats)} ({100*rejections_two_all/len(summary_stats):.1f}%)")
+    logger.info(f"Rejections [ALL] (one-sided, α={alpha_one}): {rejections_one_all}/{len(summary_stats)} ({100*rejections_one_all/len(summary_stats):.1f}%)")
+    logger.info(f"Rejections [ILSP] (two-sided, α={alpha_two}): {rejections_two_ilsp}/{len(summary_stats)} ({100*rejections_two_ilsp/len(summary_stats):.1f}%)")
+    logger.info(f"Rejections [ILSP] (one-sided, α={alpha_one}): {rejections_one_ilsp}/{len(summary_stats)} ({100*rejections_one_ilsp/len(summary_stats):.1f}%)")
     
     logger.info("\n" + "=" * 80)
     logger.info("SUMMARY - AGGREGATED STATISTICS (ALL PROXIES COMBINED)")
@@ -837,8 +1165,10 @@ def main():
     if len(aggregated_stats) == 0:
         logger.info("No aggregated stats computed (likely no common ILSP examples across proxies).")
     else:
-        logger.info(f"Rejections (two-sided, α={alpha_two}): {agg_rejections_two}/{len(aggregated_stats)} ({100*agg_rejections_two/len(aggregated_stats):.1f}%)")
-        logger.info(f"Rejections (one-sided, α={alpha_one}): {agg_rejections_one}/{len(aggregated_stats)} ({100*agg_rejections_one/len(aggregated_stats):.1f}%)")
+        logger.info(f"Rejections [ALL] (two-sided, α={alpha_two}): {agg_rejections_two_all}/{len(aggregated_stats)} ({100*agg_rejections_two_all/len(aggregated_stats):.1f}%)")
+        logger.info(f"Rejections [ALL] (one-sided, α={alpha_one}): {agg_rejections_one_all}/{len(aggregated_stats)} ({100*agg_rejections_one_all/len(aggregated_stats):.1f}%)")
+        logger.info(f"Rejections [ILSP] (two-sided, α={alpha_two}): {agg_rejections_two_ilsp}/{len(aggregated_stats)} ({100*agg_rejections_two_ilsp/len(aggregated_stats):.1f}%)")
+        logger.info(f"Rejections [ILSP] (one-sided, α={alpha_one}): {agg_rejections_one_ilsp}/{len(aggregated_stats)} ({100*agg_rejections_one_ilsp/len(aggregated_stats):.1f}%)")
     
     logger.info("\n" + "=" * 80)
     logger.info("ANALYSIS COMPLETE")
