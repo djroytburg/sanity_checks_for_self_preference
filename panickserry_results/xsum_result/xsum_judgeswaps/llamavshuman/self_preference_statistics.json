@@ -1,0 +1,27 @@
+{
+  "model_name": "Llama vs Human (XSum)",
+  "timestamp": "2025-12-27T00:48:17.039973",
+  "eval_results_file": "xsum/eval_llamavshumanxsum.json",
+  "ground_truth_file": "xsum/gpt5_llamavshuman_xsum.json",
+  "total_examples": 1000,
+  "metrics": {
+    "SPR": 0.477,
+    "LSPR": 0.7169811320754716,
+    "HSPP": 0.4671280276816609,
+    "total_examples": 1000,
+    "self_pref_count": 477,
+    "legitimate_self_pref_count": 342,
+    "judge_correct_count": 711,
+    "judge_incorrect_count": 289,
+    "harmful_sp_count": 135
+  },
+  "probability_stats": {
+    "lsp_mean": 0.7520522057790644,
+    "ilsp_mean": 0.7289751212559646,
+    "all_mean": 0.7405136635175145,
+    "lsp_count_balanced": 289,
+    "ilsp_count_balanced": 289,
+    "lsp_count_original": 711,
+    "ilsp_count_original": 289
+  }
+}

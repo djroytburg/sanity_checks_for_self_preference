@@ -1,0 +1,27 @@
+{
+  "model_name": "Unknown",
+  "timestamp": "2025-12-27T19:57:21.882831",
+  "eval_results_file": "llama3bvshuman.json",
+  "ground_truth_file": "gpt5llama3.2vshuman.json",
+  "total_examples": 350,
+  "metrics": {
+    "SPR": 0.47714285714285715,
+    "LSPR": 0.6467065868263473,
+    "HSPP": 0.34705882352941175,
+    "total_examples": 350,
+    "self_pref_count": 167,
+    "legitimate_self_pref_count": 108,
+    "judge_correct_count": 180,
+    "judge_incorrect_count": 170,
+    "harmful_sp_count": 59
+  },
+  "probability_stats": {
+    "lsp_mean": 0.7224901027129005,
+    "ilsp_mean": 0.5813524708293708,
+    "all_mean": 0.6519212867711357,
+    "lsp_count_balanced": 170,
+    "ilsp_count_balanced": 170,
+    "lsp_count_original": 180,
+    "ilsp_count_original": 170
+  }
+}

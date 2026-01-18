@@ -1,0 +1,16 @@
+{
+  "model_name": "Human (CNN Dataset)",
+  "timestamp": "2025-12-27T01:00:16.578042",
+  "cnn_results_file": "xsum/gpt35_results.json",
+  "ground_truth_file": "xsum/gpt5_llamavshuman_xsum.json",
+  "total_human_examples": 1000,
+  "probability_stats": {
+    "lsp_mean": 0.903234689705431,
+    "ilsp_mean": 0.8072645839779383,
+    "all_mean": 0.8552496368416844,
+    "lsp_count_balanced": 157,
+    "ilsp_count_balanced": 157,
+    "lsp_count_original": 378,
+    "ilsp_count_original": 157
+  }
+}

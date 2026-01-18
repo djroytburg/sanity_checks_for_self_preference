@@ -1,0 +1,27 @@
+{
+  "model_name": "Unknown",
+  "timestamp": "2025-12-27T18:00:54.779330",
+  "eval_results_file": "hermesvshuman.json",
+  "ground_truth_file": "gpt5hermesvshuman.json",
+  "total_examples": 350,
+  "metrics": {
+    "SPR": 0.8,
+    "LSPR": 0.7142857142857143,
+    "HSPP": 0.7272727272727273,
+    "total_examples": 350,
+    "self_pref_count": 280,
+    "legitimate_self_pref_count": 200,
+    "judge_correct_count": 240,
+    "judge_incorrect_count": 110,
+    "harmful_sp_count": 80
+  },
+  "probability_stats": {
+    "lsp_mean": 0.8150526297092523,
+    "ilsp_mean": 0.7631506133020627,
+    "all_mean": 0.7891016215056574,
+    "lsp_count_balanced": 110,
+    "ilsp_count_balanced": 110,
+    "lsp_count_original": 240,
+    "ilsp_count_original": 110
+  }
+}
