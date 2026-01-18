@@ -1,0 +1,38 @@
+{
+  "model_name": "Human (CNN Dataset)",
+  "timestamp": "2026-01-18T05:37:12.646485",
+  "cnn_results_file": "panickserry_results/xsum_result/xsum_eval/GPT-4/eval/gpt4_results_xsum.json",
+  "ground_truth_file": "panickserry_results/xsum_result/xsum_eval/GPT-4/judge/gpt5_gpt4_vshuman_xsum.json",
+  "total_human_examples": 1000,
+  "probability_stats": {
+    "lsp_mean": 0.9194171170632508,
+    "ilsp_mean": 0.9616904501449413,
+    "all_mean": 0.9405537836040961,
+    "lsp_count_balanced": 9,
+    "ilsp_count_balanced": 9,
+    "lsp_count_original": 285,
+    "ilsp_count_original": 9,
+    "lsp_probs": [
+      0.27731948440968174,
+      0.9998433969700937,
+      0.9999565372697146,
+      0.9999381204121252,
+      0.9977556381263251,
+      0.9999932502184563,
+      0.9999800189473202,
+      0.9999762642172437,
+      0.9999913429982978
+    ],
+    "ilsp_probs": [
+      0.9995421781225243,
+      0.9884147965298502,
+      0.9997080313968756,
+      0.9981130477065767,
+      0.9976436827412284,
+      0.733876588335507,
+      0.9458858802831446,
+      0.9999884225354383,
+      0.9920414236533266
+    ]
+  }
+}
