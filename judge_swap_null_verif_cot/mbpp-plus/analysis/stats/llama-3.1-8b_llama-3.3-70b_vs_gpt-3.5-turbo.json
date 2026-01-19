@@ -1,0 +1,61 @@
+{
+  "judge": "llama-3.1-8b",
+  "proxy": "llama-3.3-70b",
+  "reference": "gpt-3.5-turbo",
+  "n_pairs_total": 28,
+  "n_lsp": 13,
+  "n_ilsp": 15,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.32142857142857145,
+      "std_j_vs_r": 0.35892412932574613,
+      "mean_k_vs_r": 0.21428571428571427,
+      "std_k_vs_r": 0.33881546358946923,
+      "mean_diff": 0.10714285714285714,
+      "std_diff": 0.4586038162918624,
+      "ttest_two_sided_t": 1.2362450755382013,
+      "ttest_two_sided_p": 0.22701449631596,
+      "ttest_one_sided_t": 1.2362450755382013,
+      "ttest_one_sided_p": 0.11350724815798,
+      "ks_statistic": 0.17857142857142858,
+      "ks_pvalue": 0.7731666610790539,
+      "correlation": 0.16781780680734731,
+      "correlation_pvalue": 0.39332688442658653,
+      "cohens_d": 0.3069867060579905
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.36666666666666664,
+      "std_j_vs_r": 0.339934634239519,
+      "mean_k_vs_r": 0.16666666666666666,
+      "std_k_vs_r": 0.2981423969999719,
+      "mean_diff": 0.2,
+      "std_diff": 0.49280538030458115,
+      "ttest_two_sided_t": 1.5718104959867516,
+      "ttest_two_sided_p": 0.13831528091734532,
+      "ttest_one_sided_t": 1.5718104959867516,
+      "ttest_one_sided_p": 0.06915764045867266,
+      "ks_statistic": 0.3333333333333333,
+      "ks_pvalue": 0.3855465198257425,
+      "correlation": -0.10963225241337861,
+      "correlation_pvalue": 0.6973178548326183,
+      "cohens_d": 0.6255432421712244
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.2692307692307692,
+      "std_j_vs_r": 0.3728984505704869,
+      "mean_k_vs_r": 0.2692307692307692,
+      "std_k_vs_r": 0.3728984505704869,
+      "mean_diff": 0.0,
+      "std_diff": 0.408248290463863,
+      "ttest_two_sided_t": 0.0,
+      "ttest_two_sided_p": 1.0,
+      "ttest_one_sided_t": 0.0,
+      "ttest_one_sided_p": 0.5,
+      "ks_statistic": 0.0,
+      "ks_pvalue": 1.0,
+      "correlation": 0.4468085106382978,
+      "correlation_pvalue": 0.12585119865805053,
+      "cohens_d": 0.0
+    }
+  }
+}

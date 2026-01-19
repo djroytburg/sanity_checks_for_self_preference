@@ -1,0 +1,61 @@
+{
+  "judge": "llama-3.3-70b",
+  "proxy": "qwen-2.5-32b",
+  "reference": "gpt-3.5-turbo",
+  "n_pairs_total": 301,
+  "n_lsp": 282,
+  "n_ilsp": 19,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.8073089700996677,
+      "std_j_vs_r": 0.3568220764449338,
+      "mean_k_vs_r": 0.8073089700996677,
+      "std_k_vs_r": 0.36373806914150886,
+      "mean_diff": 0.0,
+      "std_diff": 0.2581988897471611,
+      "ttest_two_sided_t": 0.0,
+      "ttest_two_sided_p": 1.0,
+      "ttest_one_sided_t": 0.0,
+      "ttest_one_sided_p": 0.5,
+      "ks_statistic": 0.009966777408637873,
+      "ks_pvalue": 0.9999999999999998,
+      "correlation": 0.744211927578487,
+      "correlation_pvalue": 2.443889024700788e-54,
+      "cohens_d": 0.0
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.868421052631579,
+      "std_j_vs_r": 0.2734817064582438,
+      "mean_k_vs_r": 0.8947368421052632,
+      "std_k_vs_r": 0.2605130246476754,
+      "mean_diff": -0.02631578947368421,
+      "std_diff": 0.11470786693528089,
+      "ttest_two_sided_t": -1.0,
+      "ttest_two_sided_p": 0.3305649312781842,
+      "ttest_one_sided_t": -1.0,
+      "ttest_one_sided_p": 0.8347175343609079,
+      "ks_statistic": 0.05263157894736842,
+      "ks_pvalue": 1.0,
+      "correlation": 0.9136985548476934,
+      "correlation_pvalue": 4.647148158443335e-08,
+      "cohens_d": -0.09853292781642929
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.8031914893617021,
+      "std_j_vs_r": 0.3613760524371901,
+      "mean_k_vs_r": 0.8014184397163121,
+      "std_k_vs_r": 0.3689136468184838,
+      "mean_diff": 0.0017730496453900709,
+      "std_diff": 0.26510666271576305,
+      "ttest_two_sided_t": 0.11231164997423623,
+      "ttest_two_sided_p": 0.9106564925772672,
+      "ttest_one_sided_t": 0.11231164997423623,
+      "ttest_one_sided_p": 0.4553282462886336,
+      "ks_statistic": 0.010638297872340425,
+      "ks_pvalue": 1.0,
+      "correlation": 0.7375588473955351,
+      "correlation_pvalue": 1.1611791390264485e-49,
+      "cohens_d": 0.004855484645466614
+    }
+  }
+}
