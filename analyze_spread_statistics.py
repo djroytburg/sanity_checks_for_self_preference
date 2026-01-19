@@ -15,15 +15,15 @@ import seaborn as sns
 # --- LOGGING SETUP ---
 # ----------------------
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('file_logs/analyze_spread_statistics.log'),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger(__name__)
+# logging.basicConfig(
+#     level=logging.INFO,
+#     format='%(asctime)s - %(levelname)s - %(message)s',
+#     handlers=[
+#         logging.FileHandler('file_logs/analyze_spread_statistics.log'),
+#         logging.StreamHandler()
+#     ]
+# )
+# logger = logging.getLogger(__name__)
 
 
 # ----------------------
@@ -93,54 +93,132 @@ def load_author_obf_jvsr(judge, reference=None):
     """Load J_vs_R data from author_obfuscation JSON files."""
     judge_dir = Path(f'judge_swap_null_author_obfuscation/quality/{judge}')
     data = defaultdict(lambda: {'game1': [], 'game2': []})
-    
+
     if not judge_dir.exists():
         return {}
-    
+
     for file_path in judge_dir.glob('judge_swap_*.json'):
         with open(file_path, 'r') as f:
             cache_file = json.load(f)
-        
+
         metadata = cache_file.get('metadata', {})
         file_judge = metadata.get('judge')
         file_reference = metadata.get('reference')
-        
+
         if file_judge != judge:
             continue
         if reference is not None and file_reference != reference:
             continue
-        
+
         for game_key in ['J_vs_R_game1', 'J_vs_R_game2']:
             game_data = cache_file.get(game_key, [])
-            
+
             for entry in game_data:
                 example_id = entry.get('example_id')
                 category = entry.get('category', 'unknown')
                 prob = entry.get('prob_A') if game_key == 'J_vs_R_game1' else entry.get('prob_B')
-                
+
                 if prob is not None:
                     if game_key == 'J_vs_R_game1':
                         data[example_id]['game1'].append({'prob': prob, 'category': category})
                     else:
                         data[example_id]['game2'].append({'prob': prob, 'category': category})
-    
+
     # Calculate p_self
     result = {}
     for example_id, games in data.items():
         if not (games['game1'] and games['game2']):
             continue
-        
+
         p_game1 = np.mean([e['prob'] for e in games['game1']])
         p_game2 = np.mean([e['prob'] for e in games['game2']])
         p_self = (p_game1 + p_game2) / 2
-        
+
         category = games['game1'][0]['category']
-        
+
         result[example_id] = {
             'p_self': p_self,
             'category': category
         }
-    
+
+    return result
+
+
+def load_panickserry_results_jvsr(dataset, judge, reference=None):
+    """
+    Load J_vs_R data from Panickserry results cache files.
+
+    Args:
+        dataset (str): Either 'cnn' or 'xsum'
+        judge (str): Judge name
+        reference (str, optional): Reference name. If None, aggregate across all references.
+
+    Returns:
+        dict: {example_id: {'p_self': float, 'category': str}}
+    """
+    if dataset == 'cnn':
+        cache_base = Path('panickserry_results/cnn_results/cnn/cache')
+    elif dataset == 'xsum':
+        cache_base = Path('panickserry_results/xsum_result/xsum/cache')
+    else:
+        logger.warning(f"Unknown dataset: {dataset}")
+        return {}
+
+    data = defaultdict(lambda: {'game1': [], 'game2': []})
+
+    judge_dir = cache_base / judge
+    if not judge_dir.exists():
+        return {}
+
+    # Get all reference directories
+    if reference is not None:
+        reference_dirs = [judge_dir / reference] if (judge_dir / reference).exists() else []
+    else:
+        reference_dirs = [d for d in judge_dir.iterdir() if d.is_dir()]
+
+    for ref_dir in reference_dirs:
+        # Load game1 and game2
+        for game in ['J_vs_R_game1', 'J_vs_R_game2']:
+            cache_file = ref_dir / f'{game}.jsonl'
+
+            if not cache_file.exists():
+                continue
+
+            with open(cache_file, 'r') as f:
+                for line in f:
+                    entry = json.loads(line)
+                    example_id = entry.get('example_id')
+                    category = entry.get('category', 'unknown')
+
+                    # prob_response1 for game1, prob_response2 for game2
+                    if game == 'J_vs_R_game1':
+                        prob = entry.get('prob_response1')
+                    else:
+                        prob = entry.get('prob_response2')
+
+                    if prob is not None:
+                        if game == 'J_vs_R_game1':
+                            data[example_id]['game1'].append({'prob': prob, 'category': category})
+                        else:
+                            data[example_id]['game2'].append({'prob': prob, 'category': category})
+
+    # Calculate p_self for each example
+    result = {}
+    for example_id, games in data.items():
+        if not (games['game1'] and games['game2']):
+            continue
+
+        p_game1 = np.mean([e['prob'] for e in games['game1']])
+        p_game2 = np.mean([e['prob'] for e in games['game2']])
+        p_self = (p_game1 + p_game2) / 2
+
+        category = games['game1'][0]['category']
+
+        result[example_id] = {
+            'p_self': p_self,
+            'category': category
+        }
+
     return result
 
 
@@ -339,7 +417,7 @@ def create_spread_visualization(all_stats, output_dir):
             plt.savefig(output_file, dpi=300, bbox_inches='tight')
     plt.close()
     plt.close()
-    logger.info(f"Saved entropy gap scatter plot")
+    # logger.info(f"Saved entropy gap scatter plot")
     
     # 2. Heatmap of gap means by dataset and judge
     fig, ax = plt.subplots(figsize=(14, 10))
@@ -369,7 +447,7 @@ def create_spread_visualization(all_stats, output_dir):
         else:
             plt.savefig(output_file, dpi=300, bbox_inches='tight')
     plt.close()
-    logger.info(f"Saved gap mean heatmap")
+    # logger.info(f"Saved gap mean heatmap")
     
     # 3. Bar chart of mean gap by dataset
     fig, ax = plt.subplots(figsize=(12, 6))
@@ -414,7 +492,7 @@ def create_spread_visualization(all_stats, output_dir):
         else:
             plt.savefig(output_file, dpi=300, bbox_inches='tight')
     plt.close()
-    logger.info(f"Saved gap mean by dataset bar chart")
+    # logger.info(f"Saved gap mean by dataset bar chart")
 
 
 # ----------------------
@@ -423,7 +501,7 @@ def create_spread_visualization(all_stats, output_dir):
 
 def main():
     """Main execution function."""
-    logger.info("Starting spread statistics analysis")
+    # logger.info("Starting spread statistics analysis")
     
     # Create output directories
     output_dir = Path('spread_statistics_analysis')
@@ -433,90 +511,128 @@ def main():
     all_stats = []
     
     # Process verif_smoke2
-    logger.info("\n=== Processing verif_smoke2 ===")
-    verif_dir = Path('judge_swap_null_verif_smoke2')
-    for dataset_dir in verif_dir.iterdir():
-        if not dataset_dir.is_dir():
-            continue
+    # logger.info("\n=== Processing verif_smoke2 ===")
+    # verif_dir = Path('judge_swap_null_verif_smoke2')
+    # for dataset_dir in verif_dir.iterdir():
+    #     if not dataset_dir.is_dir():
+    #         continue
         
-        dataset = dataset_dir.name
-        logger.info(f"Processing dataset: {dataset}")
+    #     dataset = dataset_dir.name
+    #     logger.info(f"Processing dataset: {dataset}")
         
-        cache_base = dataset_dir / 'cache'
-        if not cache_base.exists():
-            continue
+    #     cache_base = dataset_dir / 'cache'
+    #     if not cache_base.exists():
+    #         continue
         
-        for judge_dir in cache_base.iterdir():
-            if not judge_dir.is_dir():
-                continue
+    #     for judge_dir in cache_base.iterdir():
+    #         if not judge_dir.is_dir():
+    #             continue
             
-            judge = judge_dir.name
+    #         judge = judge_dir.name
             
-            # Aggregate across all references
-            all_examples = {}
-            references = [d.name for d in judge_dir.iterdir() if d.is_dir()]
+    #         # Aggregate across all references
+    #         all_examples = {}
+    #         references = [d.name for d in judge_dir.iterdir() if d.is_dir()]
             
-            for reference in references:
-                data = load_jvsr_from_cache(cache_base, judge, reference)
-                all_examples.update(data)
+    #         for reference in references:
+    #             data = load_jvsr_from_cache(cache_base, judge, reference)
+    #             all_examples.update(data)
             
-            if all_examples:
-                stats = calculate_spread_stats(dataset, judge, all_examples)
-                all_stats.append(stats)
-                logger.info(f"  {judge}: n_lsp={stats['n_lsp']}, n_ilsp={stats['n_ilsp']}, gap_mean={stats['gap_mean']:.4f}")
+    #         if all_examples:
+    #             stats = calculate_spread_stats(dataset, judge, all_examples)
+    #             all_stats.append(stats)
+    #             logger.info(f"  {judge}: n_lsp={stats['n_lsp']}, n_ilsp={stats['n_ilsp']}, gap_mean={stats['gap_mean']:.4f}")
     
     # Process dbg_results
-    logger.info("\n=== Processing dbg_results ===")
-    dbg_dir = Path('judge_swap_null_dbg_results')
-    for dataset_dir in dbg_dir.iterdir():
-        if not dataset_dir.is_dir():
-            continue
+    # logger.info("\n=== Processing dbg_results ===")
+    # dbg_dir = Path('judge_swap_null_dbg_results')
+    # for dataset_dir in dbg_dir.iterdir():
+    #     if not dataset_dir.is_dir():
+    #         continue
         
-        dataset = dataset_dir.name
-        logger.info(f"Processing dataset: {dataset}")
+    #     dataset = dataset_dir.name
+    #     logger.info(f"Processing dataset: {dataset}")
         
-        cache_base = dataset_dir / 'cache'
-        if not cache_base.exists():
-            continue
+    #     cache_base = dataset_dir / 'cache'
+    #     if not cache_base.exists():
+    #         continue
         
-        for judge_dir in cache_base.iterdir():
+    #     for judge_dir in cache_base.iterdir():
+    #         if not judge_dir.is_dir():
+    #             continue
+            
+    #         judge = judge_dir.name
+            
+    #         all_examples = {}
+    #         references = [d.name for d in judge_dir.iterdir() if d.is_dir()]
+            
+    #         for reference in references:
+    #             data = load_jvsr_from_cache(cache_base, judge, reference)
+    #             all_examples.update(data)
+            
+    #         if all_examples:
+    #             stats = calculate_spread_stats(dataset, judge, all_examples)
+    #             all_stats.append(stats)
+    #             logger.info(f"  {judge}: n_lsp={stats['n_lsp']}, n_ilsp={stats['n_ilsp']}, gap_mean={stats['gap_mean']:.4f}")
+    
+    # Process author_obfuscation
+    # logger.info("\n=== Processing author_obfuscation ===")
+    # author_obf_dir = Path('judge_swap_null_author_obfuscation/quality')
+    # dataset = 'quality'
+
+    # for judge_dir in author_obf_dir.iterdir():
+    #     if not judge_dir.is_dir() or judge_dir.name == 'analysis':
+    #         continue
+
+    #     judge = judge_dir.name
+
+    #     all_examples = load_author_obf_jvsr(judge, reference=None)
+
+    #     if all_examples:
+    #         stats = calculate_spread_stats(dataset, judge, all_examples)
+    #         all_stats.append(stats)
+    #         logger.info(f"  {judge}: n_lsp={stats['n_lsp']}, n_ilsp={stats['n_ilsp']}, gap_mean={stats['gap_mean']:.4f}")
+
+    # Process Panickserry CNN results
+    # logger.info("\n=== Processing Panickserry CNN results ===")
+    cnn_cache_dir = Path('panickserry_results/cnn_results/cnn/cache')
+    dataset = 'cnn'
+
+    if cnn_cache_dir.exists():
+        for judge_dir in cnn_cache_dir.iterdir():
             if not judge_dir.is_dir():
                 continue
-            
+
             judge = judge_dir.name
-            
-            all_examples = {}
-            references = [d.name for d in judge_dir.iterdir() if d.is_dir()]
-            
-            for reference in references:
-                data = load_jvsr_from_cache(cache_base, judge, reference)
-                all_examples.update(data)
-            
+
+            all_examples = load_panickserry_results_jvsr(dataset, judge, reference=None)
+
             if all_examples:
                 stats = calculate_spread_stats(dataset, judge, all_examples)
                 all_stats.append(stats)
-                logger.info(f"  {judge}: n_lsp={stats['n_lsp']}, n_ilsp={stats['n_ilsp']}, gap_mean={stats['gap_mean']:.4f}")
-    
-    # Process author_obfuscation
-    logger.info("\n=== Processing author_obfuscation ===")
-    author_obf_dir = Path('judge_swap_null_author_obfuscation/quality')
-    dataset = 'quality'
-    
-    for judge_dir in author_obf_dir.iterdir():
-        if not judge_dir.is_dir() or judge_dir.name == 'analysis':
-            continue
-        
-        judge = judge_dir.name
-        
-        all_examples = load_author_obf_jvsr(judge, reference=None)
-        
-        if all_examples:
-            stats = calculate_spread_stats(dataset, judge, all_examples)
-            all_stats.append(stats)
-            logger.info(f"  {judge}: n_lsp={stats['n_lsp']}, n_ilsp={stats['n_ilsp']}, gap_mean={stats['gap_mean']:.4f}")
-    
+                # logger.info(f"  {judge}: n_lsp={stats['n_lsp']}, n_ilsp={stats['n_ilsp']}, gap_mean={stats['gap_mean']:.4f}")
+
+    # Process Panickserry XSUM results
+    # logger.info("\n=== Processing Panickserry XSUM results ===")
+    xsum_cache_dir = Path('panickserry_results/xsum_result/xsum/cache')
+    dataset = 'xsum'
+
+    if xsum_cache_dir.exists():
+        for judge_dir in xsum_cache_dir.iterdir():
+            if not judge_dir.is_dir():
+                continue
+
+            judge = judge_dir.name
+
+            all_examples = load_panickserry_results_jvsr(dataset, judge, reference=None)
+
+            if all_examples:
+                stats = calculate_spread_stats(dataset, judge, all_examples)
+                all_stats.append(stats)
+                # logger.info(f"  {judge}: n_lsp={stats['n_lsp']}, n_ilsp={stats['n_ilsp']}, gap_mean={stats['gap_mean']:.4f}")
+
     # Generate LaTeX tables by dataset
-    logger.info("\n=== Generating LaTeX tables ===")
+    # logger.info("\n=== Generating LaTeX tables ===")
     datasets = sorted(set(s['dataset'] for s in all_stats))
     
     for dataset in datasets:
@@ -526,21 +642,21 @@ def main():
         output_file = output_dir / 'latex' / f'spread_stats_{dataset}.tex'
         with open(output_file, 'w') as f:
             f.write(latex_table)
-        logger.info(f"Saved LaTeX table for {dataset}")
+        # logger.info(f"Saved LaTeX table for {dataset}")
     
     # Save all stats to JSON
     output_file = output_dir / 'all_spread_statistics.json'
     with open(output_file, 'w') as f:
         json.dump(all_stats, f, indent=2)
-    logger.info(f"Saved all statistics to JSON")
+    # logger.info(f"Saved all statistics to JSON")
     
-    # Create visualizations
-    logger.info("\n=== Creating visualizations ===")
+    # # Create visualizations
+    # logger.info("\n=== Creating visualizations ===")
     create_spread_visualization(all_stats, output_dir)
     
-    logger.info("\n=== Spread statistics analysis complete ===")
-    logger.info(f"Output directory: {output_dir}")
-    logger.info(f"Total dataset-judge combinations: {len(all_stats)}")
+    # logger.info("\n=== Spread statistics analysis complete ===")
+    # logger.info(f"Output directory: {output_dir}")
+    # logger.info(f"Total dataset-judge combinations: {len(all_stats)}")
 
 
 if __name__ == "__main__":
