@@ -1,0 +1,61 @@
+{
+  "judge": "qwen-2.5-14b",
+  "proxy": "qwen-2.5-32b",
+  "reference": "phi-3.5-mini",
+  "n_pairs_total": 53,
+  "n_lsp": 45,
+  "n_ilsp": 8,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.660377358490566,
+      "std_j_vs_r": 0.40948178140020197,
+      "mean_k_vs_r": 0.6698113207547169,
+      "std_k_vs_r": 0.41143325447842505,
+      "mean_diff": -0.009433962264150943,
+      "std_diff": 0.33239466286525454,
+      "ttest_two_sided_t": -0.20662269779640227,
+      "ttest_two_sided_p": 0.8371114671429544,
+      "ttest_one_sided_t": -0.20662269779640227,
+      "ttest_one_sided_p": 0.5814442664285229,
+      "ks_statistic": 0.018867924528301886,
+      "ks_pvalue": 1.0,
+      "correlation": 0.6782960971810048,
+      "correlation_pvalue": 2.3973980717504583e-08,
+      "cohens_d": -0.022983951313055563
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.4375,
+      "std_j_vs_r": 0.3903123748998999,
+      "mean_k_vs_r": 0.5625,
+      "std_k_vs_r": 0.3903123748998999,
+      "mean_diff": -0.125,
+      "std_diff": 0.3535533905932738,
+      "ttest_two_sided_t": -1.0,
+      "ttest_two_sided_p": 0.3506166628202074,
+      "ttest_one_sided_t": -1.0,
+      "ttest_one_sided_p": 0.8246916685898963,
+      "ks_statistic": 0.125,
+      "ks_pvalue": 1.0,
+      "correlation": 0.641025641025641,
+      "correlation_pvalue": 0.08674584076939273,
+      "cohens_d": -0.32025630761017426
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.7,
+      "std_j_vs_r": 0.39999999999999997,
+      "mean_k_vs_r": 0.6888888888888889,
+      "std_k_vs_r": 0.41216082202203125,
+      "mean_diff": 0.011111111111111112,
+      "std_diff": 0.3283721712147404,
+      "ttest_two_sided_t": 0.2269851278025936,
+      "ttest_two_sided_p": 0.8214866359100442,
+      "ttest_one_sided_t": 0.2269851278025936,
+      "ttest_one_sided_p": 0.4107433179550221,
+      "ks_statistic": 0.022222222222222223,
+      "ks_pvalue": 1.0,
+      "correlation": 0.6806943808467054,
+      "correlation_pvalue": 2.676790731423599e-07,
+      "cohens_d": 0.027358782758229144
+    }
+  }
+}

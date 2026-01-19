@@ -1,0 +1,61 @@
+{
+  "judge": "qwen-2.5-7b",
+  "proxy": "llama-3.3-70b",
+  "reference": "mistral-small",
+  "n_pairs_total": 37,
+  "n_lsp": 30,
+  "n_ilsp": 7,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.43243243243243246,
+      "std_j_vs_r": 0.4526522763363304,
+      "mean_k_vs_r": 0.35135135135135137,
+      "std_k_vs_r": 0.4004197943251096,
+      "mean_diff": 0.08108108108108109,
+      "std_diff": 0.3634998378708471,
+      "ttest_two_sided_t": 1.3568010505999366,
+      "ttest_two_sided_p": 0.1832918753839279,
+      "ttest_one_sided_t": 1.3568010505999366,
+      "ttest_one_sided_p": 0.09164593769196396,
+      "ks_statistic": 0.13513513513513514,
+      "ks_pvalue": 0.8944468869217319,
+      "correlation": 0.6528769251478013,
+      "correlation_pvalue": 1.1885404698500269e-05,
+      "cohens_d": 0.18973665961010278
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.21428571428571427,
+      "std_j_vs_r": 0.36421567954234174,
+      "mean_k_vs_r": 0.21428571428571427,
+      "std_k_vs_r": 0.36421567954234174,
+      "mean_diff": 0.0,
+      "std_diff": 0.28867513459481287,
+      "ttest_two_sided_t": 0.0,
+      "ttest_two_sided_p": 1.0,
+      "ttest_one_sided_t": 0.0,
+      "ttest_one_sided_p": 0.5,
+      "ks_statistic": 0.0,
+      "ks_pvalue": 1.0,
+      "correlation": 0.7307692307692308,
+      "correlation_pvalue": 0.062096988678618216,
+      "cohens_d": 0.0
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.48333333333333334,
+      "std_j_vs_r": 0.4561310727801336,
+      "mean_k_vs_r": 0.38333333333333336,
+      "std_k_vs_r": 0.40173235977313165,
+      "mean_diff": 0.1,
+      "std_diff": 0.38056219755369364,
+      "ttest_two_sided_t": 1.4392458342578491,
+      "ttest_two_sided_p": 0.1607882084258766,
+      "ttest_one_sided_t": 1.4392458342578491,
+      "ttest_one_sided_p": 0.0803941042129383,
+      "ks_statistic": 0.16666666666666666,
+      "ks_pvalue": 0.8079631540901643,
+      "correlation": 0.6260673804182593,
+      "correlation_pvalue": 0.0002151174189557511,
+      "cohens_d": 0.2326700202988444
+    }
+  }
+}

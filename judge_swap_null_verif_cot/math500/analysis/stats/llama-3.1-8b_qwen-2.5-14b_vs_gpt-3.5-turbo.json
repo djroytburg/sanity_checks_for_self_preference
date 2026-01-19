@@ -1,0 +1,61 @@
+{
+  "judge": "llama-3.1-8b",
+  "proxy": "qwen-2.5-14b",
+  "reference": "gpt-3.5-turbo",
+  "n_pairs_total": 73,
+  "n_lsp": 68,
+  "n_ilsp": 5,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.44972602739726025,
+      "std_j_vs_r": 0.40042690439196355,
+      "mean_k_vs_r": 0.5912328767123287,
+      "std_k_vs_r": 0.3732729920451715,
+      "mean_diff": -0.1415068493150685,
+      "std_diff": 0.4363132196563379,
+      "ttest_two_sided_t": -2.7710254836842334,
+      "ttest_two_sided_p": 0.007105770422492374,
+      "ttest_one_sided_t": -2.7710254836842334,
+      "ttest_one_sided_p": 0.9964471147887538,
+      "ks_statistic": 0.1780821917808219,
+      "ks_pvalue": 0.1980744205392542,
+      "correlation": 0.37436974296945663,
+      "correlation_pvalue": 0.0011026447272722989,
+      "cohens_d": -0.3655675292952819
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.3,
+      "std_j_vs_r": 0.39999999999999997,
+      "mean_k_vs_r": 0.7,
+      "std_k_vs_r": 0.4,
+      "mean_diff": -0.4,
+      "std_diff": 0.6519202405202649,
+      "ttest_two_sided_t": -1.3719886811400706,
+      "ttest_two_sided_p": 0.24198153056802096,
+      "ttest_one_sided_t": -1.3719886811400706,
+      "ttest_one_sided_p": 0.8790092347159895,
+      "ks_statistic": 0.4,
+      "ks_pvalue": 0.873015873015873,
+      "correlation": -0.06250000000000003,
+      "correlation_pvalue": 0.9204743671025836,
+      "cohens_d": -1.0
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.460735294117647,
+      "std_j_vs_r": 0.39824270672569456,
+      "mean_k_vs_r": 0.583235294117647,
+      "std_k_vs_r": 0.3699719431988394,
+      "mean_diff": -0.12249999999999997,
+      "std_diff": 0.41695278733409574,
+      "ttest_two_sided_t": -2.4227224495489588,
+      "ttest_two_sided_p": 0.018114566446462928,
+      "ttest_one_sided_t": -2.4227224495489588,
+      "ttest_one_sided_p": 0.9909427167767685,
+      "ks_statistic": 0.16176470588235295,
+      "ks_pvalue": 0.3377803162489643,
+      "correlation": 0.4214219961648689,
+      "correlation_pvalue": 0.0003449936328034488,
+      "cohens_d": -0.3187055447202212
+    }
+  }
+}

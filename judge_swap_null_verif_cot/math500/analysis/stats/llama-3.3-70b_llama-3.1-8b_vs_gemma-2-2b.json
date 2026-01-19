@@ -1,0 +1,61 @@
+{
+  "judge": "llama-3.3-70b",
+  "proxy": "llama-3.1-8b",
+  "reference": "gemma-2-2b",
+  "n_pairs_total": 151,
+  "n_lsp": 146,
+  "n_ilsp": 5,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.6688741721854304,
+      "std_j_vs_r": 0.4415783596866133,
+      "mean_k_vs_r": 0.6920529801324503,
+      "std_k_vs_r": 0.43008133818849453,
+      "mean_diff": -0.023178807947019868,
+      "std_diff": 0.24040069567544142,
+      "ttest_two_sided_t": -1.1847967401660175,
+      "ttest_two_sided_p": 0.23797161630932717,
+      "ttest_one_sided_t": -1.1847967401660175,
+      "ttest_one_sided_p": 0.8810141918453365,
+      "ks_statistic": 0.026490066225165563,
+      "ks_pvalue": 0.999999999549985,
+      "correlation": 0.8492017526490065,
+      "correlation_pvalue": 3.675835927218279e-43,
+      "cohens_d": -0.053178532968418464
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.0,
+      "std_j_vs_r": 0.0,
+      "mean_k_vs_r": 0.1,
+      "std_k_vs_r": 0.20000000000000004,
+      "mean_diff": -0.1,
+      "std_diff": 0.22360679774997902,
+      "ttest_two_sided_t": -0.9999999999999999,
+      "ttest_two_sided_p": 0.37390096630005887,
+      "ttest_one_sided_t": -0.9999999999999999,
+      "ttest_one_sided_p": 0.8130495168499705,
+      "ks_statistic": 0.2,
+      "ks_pvalue": 1.0,
+      "correlation": NaN,
+      "correlation_pvalue": NaN,
+      "cohens_d": -0.7071067811865475
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.6917808219178082,
+      "std_j_vs_r": 0.43107175280985105,
+      "mean_k_vs_r": 0.7123287671232876,
+      "std_k_vs_r": 0.421330315047389,
+      "mean_diff": -0.02054794520547945,
+      "std_diff": 0.24123755875561625,
+      "ttest_two_sided_t": -1.0292002947693157,
+      "ttest_two_sided_p": 0.30509929892887583,
+      "ttest_one_sided_t": -1.0292002947693157,
+      "ttest_one_sided_p": 0.8474503505355621,
+      "ks_statistic": 0.02054794520547945,
+      "ks_pvalue": 0.9999999999999769,
+      "correlation": 0.8411493185901967,
+      "correlation_pvalue": 2.8414062692255673e-40,
+      "cohens_d": -0.048208713441101315
+    }
+  }
+}
