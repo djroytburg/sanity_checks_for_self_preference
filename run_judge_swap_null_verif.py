@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 import torch
+from tqdm import tqdm
 
 from reproduce_paper_experiments import (
     CONFIG,
@@ -665,6 +666,24 @@ def run(verif_dir: Path, out_dir: Path, datasets: Optional[List[str]], judges: O
     logger.info(f"Found {len(judge_list)} judges with proxy sets")
     logger.info(f"Output dir: {out_dir}")
 
+    # Calculate total number of tasks for progress bar
+    total_tasks = 0
+    for judge_short in judge_list:
+        judge_jobs = jobs_by_judge[judge_short]
+        for dataset, family, proxy_json_path in judge_jobs:
+            proxy_blob = load_json(proxy_json_path)
+            for reference_name in proxy_blob.keys():
+                if references and reference_name not in set(references):
+                    continue
+                ref_block = proxy_blob[reference_name]
+                proxies = sorted(list(ref_block.keys()))
+                if max_proxies_per_ref is not None:
+                    proxies = proxies[: max_proxies_per_ref]
+                total_tasks += len(proxies)
+
+    # Create progress bar
+    pbar = tqdm(total=total_tasks, desc="Total progress", unit="proxy")
+
     for judge_short in judge_list:
         judge_key = judge_short.lower()
         if judge_key not in short_to_hf:
@@ -775,6 +794,7 @@ def run(verif_dir: Path, out_dir: Path, datasets: Optional[List[str]], judges: O
                 for proxy_name in proxies:
                     examples = kvs_by_proxy.get(proxy_name, [])
                     if not examples:
+                        pbar.update(1)
                         continue
 
                     infer_k_vs_r_cache(
@@ -794,6 +814,7 @@ def run(verif_dir: Path, out_dir: Path, datasets: Optional[List[str]], judges: O
                         overwrite=overwrite,
                         logger=logger,
                     )
+                    pbar.update(1)
 
         # IMPORTANT: vLLM/torch can hold onto significant GPU memory.
         # When we move to the next judge model, explicitly free resources.
@@ -810,6 +831,9 @@ def run(verif_dir: Path, out_dir: Path, datasets: Optional[List[str]], judges: O
                     torch.cuda.synchronize()
             except Exception as e:
                 logger.warning(f"Failed to fully clear CUDA cache between judges: {e}")
+
+    # Close progress bar
+    pbar.close()
 
 
 # --------------------
