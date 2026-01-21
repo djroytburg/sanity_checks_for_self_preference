@@ -1,0 +1,61 @@
+{
+  "judge": "qwen-2.5-14b",
+  "proxy": "qwen-2.5-7b",
+  "reference": "gpt-4o",
+  "n_pairs_total": 38,
+  "n_lsp": 22,
+  "n_ilsp": 16,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.5394736842105263,
+      "std_j_vs_r": 0.351342892705755,
+      "mean_k_vs_r": 0.5526315789473685,
+      "std_k_vs_r": 0.32014539633148525,
+      "mean_diff": -0.013157894736842105,
+      "std_diff": 0.3386547732965374,
+      "ttest_two_sided_t": -0.23950854073554728,
+      "ttest_two_sided_p": 0.8120331393180817,
+      "ttest_one_sided_t": -0.23950854073554728,
+      "ttest_one_sided_p": 0.5939834303409591,
+      "ks_statistic": 0.05263157894736842,
+      "ks_pvalue": 0.9999999999601199,
+      "correlation": 0.507935212904854,
+      "correlation_pvalue": 0.0011320504510811448,
+      "cohens_d": -0.03914801463431356
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.34375,
+      "std_j_vs_r": 0.34089725358236606,
+      "mean_k_vs_r": 0.34375,
+      "std_k_vs_r": 0.23175620272173947,
+      "mean_diff": 0.0,
+      "std_diff": 0.408248290463863,
+      "ttest_two_sided_t": 0.0,
+      "ttest_two_sided_p": 1.0,
+      "ttest_one_sided_t": 0.0,
+      "ttest_one_sided_p": 0.5,
+      "ks_statistic": 0.125,
+      "ks_pvalue": 0.9998909696588173,
+      "correlation": 0.0865253200863353,
+      "correlation_pvalue": 0.7500113949682797,
+      "cohens_d": 0.0
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.6818181818181818,
+      "std_j_vs_r": 0.28386354538174535,
+      "mean_k_vs_r": 0.7045454545454546,
+      "std_k_vs_r": 0.2883767622829436,
+      "mean_diff": -0.022727272727272728,
+      "std_diff": 0.2877363511831757,
+      "ttest_two_sided_t": -0.37047928681747416,
+      "ttest_two_sided_p": 0.7147360135583096,
+      "ttest_one_sided_t": -0.37047928681747416,
+      "ttest_one_sided_p": 0.6426319932208452,
+      "ks_statistic": 0.045454545454545456,
+      "ks_pvalue": 1.0,
+      "correlation": 0.5174145238171418,
+      "correlation_pvalue": 0.013656455816676703,
+      "cohens_d": -0.07943014707895378
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "judge": "qwen-2.5-32b",
+  "proxy": "llama-3.3-70b",
+  "reference": "gemma-2-2b",
+  "n_pairs_total": 96,
+  "n_lsp": 89,
+  "n_ilsp": 7,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.828125,
+      "std_j_vs_r": 0.3371767356174899,
+      "mean_k_vs_r": 0.8610937499999999,
+      "std_k_vs_r": 0.3105759125575219,
+      "mean_diff": -0.03296875,
+      "std_diff": 0.21576983122250776,
+      "ttest_two_sided_t": -1.4970881610247815,
+      "ttest_two_sided_p": 0.13768550248343328,
+      "ttest_one_sided_t": -1.4970881610247815,
+      "ttest_one_sided_p": 0.9311572487582833,
+      "ks_statistic": 0.052083333333333336,
+      "ks_pvalue": 0.9995450637600084,
+      "correlation": 0.7834009899797721,
+      "correlation_pvalue": 3.999363633660848e-21,
+      "cohens_d": -0.10170853099972835
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.42857142857142855,
+      "std_j_vs_r": 0.41649656391752143,
+      "mean_k_vs_r": 0.42857142857142855,
+      "std_k_vs_r": 0.41649656391752143,
+      "mean_diff": 0.0,
+      "std_diff": 0.28867513459481287,
+      "ttest_two_sided_t": 0.0,
+      "ttest_two_sided_p": 1.0,
+      "ttest_one_sided_t": 0.0,
+      "ttest_one_sided_p": 0.5,
+      "ks_statistic": 0.0,
+      "ks_pvalue": 1.0,
+      "correlation": 0.7941176470588236,
+      "correlation_pvalue": 0.0329488319486873,
+      "cohens_d": 0.0
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.8595505617977528,
+      "std_j_vs_r": 0.3089376873003937,
+      "mean_k_vs_r": 0.8951123595505617,
+      "std_k_vs_r": 0.2730003678724215,
+      "mean_diff": -0.03556179775280899,
+      "std_diff": 0.2109144567578492,
+      "ttest_two_sided_t": -1.5906416951171256,
+      "ttest_two_sided_p": 0.11527647760573648,
+      "ttest_one_sided_t": -1.5906416951171256,
+      "ttest_one_sided_p": 0.9423617611971318,
+      "ks_statistic": 0.056179775280898875,
+      "ks_pvalue": 0.9991155651664736,
+      "correlation": 0.746896283271285,
+      "correlation_pvalue": 4.325044926136024e-17,
+      "cohens_d": -0.12198611558459745
+    }
+  }
+}
