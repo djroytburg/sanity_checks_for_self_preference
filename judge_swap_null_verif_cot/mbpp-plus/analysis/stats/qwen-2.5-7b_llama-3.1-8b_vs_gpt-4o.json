@@ -1,0 +1,61 @@
+{
+  "judge": "qwen-2.5-7b",
+  "proxy": "llama-3.1-8b",
+  "reference": "gpt-4o",
+  "n_pairs_total": 32,
+  "n_lsp": 6,
+  "n_ilsp": 26,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.171875,
+      "std_j_vs_r": 0.34481369516740484,
+      "mean_k_vs_r": 0.15625,
+      "std_k_vs_r": 0.31715286140913185,
+      "mean_diff": 0.015625,
+      "std_diff": 0.23706454136836563,
+      "ttest_two_sided_t": 0.37284507897355734,
+      "ttest_two_sided_p": 0.7118009997584506,
+      "ttest_one_sided_t": 0.37284507897355734,
+      "ttest_one_sided_p": 0.3559004998792253,
+      "ks_statistic": 0.03125,
+      "ks_pvalue": 1.0,
+      "correlation": 0.7545770836884503,
+      "correlation_pvalue": 6.076028615291654e-07,
+      "cohens_d": 0.04716666306365783
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.21153846153846154,
+      "std_j_vs_r": 0.3714078445351532,
+      "mean_k_vs_r": 0.15384615384615385,
+      "std_k_vs_r": 0.3330866937632457,
+      "mean_diff": 0.057692307692307696,
+      "std_diff": 0.2157277486520024,
+      "ttest_two_sided_t": 1.3636363636363638,
+      "ttest_two_sided_p": 0.18483599634213946,
+      "ttest_one_sided_t": 1.3636363636363638,
+      "ttest_one_sided_p": 0.09241799817106973,
+      "ks_statistic": 0.07692307692307693,
+      "ks_pvalue": 0.9999998646776446,
+      "correlation": 0.8250761602672126,
+      "correlation_pvalue": 2.1520134971051574e-07,
+      "cohens_d": 0.16354178004021525
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.0,
+      "std_j_vs_r": 0.0,
+      "mean_k_vs_r": 0.16666666666666666,
+      "std_k_vs_r": 0.23570226039551584,
+      "mean_diff": -0.16666666666666666,
+      "std_diff": 0.25819888974716115,
+      "ttest_two_sided_t": -1.5811388300841895,
+      "ttest_two_sided_p": 0.17468781426411942,
+      "ttest_one_sided_t": -1.5811388300841895,
+      "ttest_one_sided_p": 0.9126560928679402,
+      "ks_statistic": 0.3333333333333333,
+      "ks_pvalue": 0.9307359307359307,
+      "correlation": NaN,
+      "correlation_pvalue": NaN,
+      "cohens_d": -1.0
+    }
+  }
+}

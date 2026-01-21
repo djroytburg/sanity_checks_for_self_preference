@@ -1,0 +1,61 @@
+{
+  "judge": "llama-3.3-70b",
+  "proxy": "qwen-2.5-7b",
+  "reference": "llama-3.2-1b",
+  "n_pairs_total": 213,
+  "n_lsp": 208,
+  "n_ilsp": 5,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.8740140845070422,
+      "std_j_vs_r": 0.2864825778424588,
+      "mean_k_vs_r": 0.892018779342723,
+      "std_k_vs_r": 0.2699020159963344,
+      "mean_diff": -0.018004694835680752,
+      "std_diff": 0.21122036462113386,
+      "ttest_two_sided_t": -1.2440555658077237,
+      "ttest_two_sided_p": 0.21485285492550074,
+      "ttest_one_sided_t": -1.2440555658077237,
+      "ttest_one_sided_p": 0.8925735725372497,
+      "ks_statistic": 0.028169014084507043,
+      "ks_pvalue": 0.9999966738041104,
+      "correlation": 0.7146378571892879,
+      "correlation_pvalue": 1.3575969367230386e-34,
+      "cohens_d": -0.0646916022518937
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.4,
+      "std_j_vs_r": 0.48989794855663565,
+      "mean_k_vs_r": 0.4,
+      "std_k_vs_r": 0.37416573867739417,
+      "mean_diff": 0.0,
+      "std_diff": 0.6123724356957945,
+      "ttest_two_sided_t": 0.0,
+      "ttest_two_sided_p": 1.0,
+      "ttest_one_sided_t": 0.0,
+      "ttest_one_sided_p": 0.5,
+      "ks_statistic": 0.2,
+      "ks_pvalue": 1.0,
+      "correlation": 0.2182178902359924,
+      "correlation_pvalue": 0.72437748611315,
+      "cohens_d": 0.0
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.8854086538461539,
+      "std_j_vs_r": 0.2697126343303529,
+      "mean_k_vs_r": 0.9038461538461539,
+      "std_k_vs_r": 0.25548712029973886,
+      "mean_diff": -0.0184375,
+      "std_diff": 0.19605428100154768,
+      "ttest_two_sided_t": -1.356305025358615,
+      "ttest_two_sided_p": 0.17647965162621868,
+      "ttest_one_sided_t": -1.356305025358615,
+      "ttest_one_sided_p": 0.9117601741868907,
+      "ks_statistic": 0.03365384615384615,
+      "ks_pvalue": 0.9998110436935458,
+      "correlation": 0.7239067767055325,
+      "correlation_pvalue": 4.7052356975227107e-35,
+      "cohens_d": -0.07018563985257281
+    }
+  }
+}

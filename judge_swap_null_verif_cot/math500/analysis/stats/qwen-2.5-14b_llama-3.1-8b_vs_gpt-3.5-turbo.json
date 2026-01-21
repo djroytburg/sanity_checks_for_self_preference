@@ -1,0 +1,61 @@
+{
+  "judge": "qwen-2.5-14b",
+  "proxy": "llama-3.1-8b",
+  "reference": "gpt-3.5-turbo",
+  "n_pairs_total": 73,
+  "n_lsp": 68,
+  "n_ilsp": 5,
+  "tests": {
+    "all": {
+      "mean_j_vs_r": 0.8287671232876712,
+      "std_j_vs_r": 0.2892974257800394,
+      "mean_k_vs_r": 0.684931506849315,
+      "std_k_vs_r": 0.36552504285277626,
+      "mean_diff": 0.14383561643835616,
+      "std_diff": 0.32786612332621673,
+      "ttest_two_sided_t": 3.748273939044996,
+      "ttest_two_sided_p": 0.00035657508804936113,
+      "ttest_one_sided_t": 3.748273939044996,
+      "ttest_one_sided_p": 0.00017828754402468057,
+      "ks_statistic": 0.1917808219178082,
+      "ks_pvalue": 0.13668179523411697,
+      "correlation": 0.5261593247849886,
+      "correlation_pvalue": 1.7459449352698708e-06,
+      "cohens_d": 0.4363651083347759
+    },
+    "ilsp": {
+      "mean_j_vs_r": 0.6,
+      "std_j_vs_r": 0.48989794855663565,
+      "mean_k_vs_r": 0.6,
+      "std_k_vs_r": 0.37416573867739417,
+      "mean_diff": 0.0,
+      "std_diff": 0.6123724356957945,
+      "ttest_two_sided_t": 0.0,
+      "ttest_two_sided_p": 1.0,
+      "ttest_one_sided_t": 0.0,
+      "ttest_one_sided_p": 0.5,
+      "ks_statistic": 0.2,
+      "ks_pvalue": 1.0,
+      "correlation": 0.21821789023599242,
+      "correlation_pvalue": 0.72437748611315,
+      "cohens_d": 0.0
+    },
+    "lsp": {
+      "mean_j_vs_r": 0.8455882352941176,
+      "std_j_vs_r": 0.26089992645897314,
+      "mean_k_vs_r": 0.6911764705882353,
+      "std_k_vs_r": 0.36410054126882196,
+      "mean_diff": 0.15441176470588236,
+      "std_diff": 0.3024446778224209,
+      "ttest_two_sided_t": 4.210065922166327,
+      "ttest_two_sided_p": 7.779172186273437e-05,
+      "ttest_one_sided_t": 4.210065922166327,
+      "ttest_one_sided_p": 3.8895860931367185e-05,
+      "ks_statistic": 0.19117647058823528,
+      "ks_pvalue": 0.1670486895246451,
+      "correlation": 0.5816715167556762,
+      "correlation_pvalue": 1.9725953998153977e-07,
+      "cohens_d": 0.4875159346938688
+    }
+  }
+}
