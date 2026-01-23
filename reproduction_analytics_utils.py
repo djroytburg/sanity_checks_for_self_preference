@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # reproduction_analytics_utils.py: Utility functions for analyzing reproduction quality
-# Written by: Dani
 # Created: 2025-12-22 01:00 EST
 # Last Modified: 2025-12-22 01:00 EST
 """

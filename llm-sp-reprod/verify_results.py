@@ -10,7 +10,6 @@ This script performs two main tasks:
 """
 
 # verify_results.py: Verify llm-sp reproduction mapping and generate proxy datasets
-# Written by: Dani
 # Created: Jan 15, 2026, 03:05 EST
 # Last Modified: Jan 15, 2026, 03:05 EST
 

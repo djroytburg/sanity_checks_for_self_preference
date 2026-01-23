@@ -1,5 +1,4 @@
 # calculate_per_reference_entropy.py: Calculate entropy for each (judge, reference) pair
-# Written by: Dani
 # Created: January 18, 2026, 03:30 AM EST
 # Last Modified: January 18, 2026, 03:30 AM EST
 

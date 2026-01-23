@@ -1,7 +1,6 @@
 # find_proxy_evaluators.py: Find proxy evaluators that co-occur in oracle-determined files
 # For evaluator J vs evaluatee R, find evaluators K that appear in same ben/harmful files
 # Supports auto-detection of preference files (excluding _2w_ files) and batch processing of all J/R pairs
-# Written by: Dani
 # Created: Jan 4, 2026, 16:45 EST
 # Last Modified: Jan 4, 2026, 17:00 EST
 

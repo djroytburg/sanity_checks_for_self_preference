@@ -1,7 +1,7 @@
 2025-12-24 18:49:28 | INFO     | setup_logging:58 | ================================================================================
 2025-12-24 18:49:28 | INFO     | setup_logging:59 | JUDGE SWAP ANALYSIS - RUN STARTED
 2025-12-24 18:49:28 | INFO     | setup_logging:60 | ================================================================================
-2025-12-24 18:49:28 | INFO     | setup_logging:61 | User: droytbur
+2025-12-24 18:49:28 | INFO     | setup_logging:61 | User: anonymous
 2025-12-24 18:49:28 | INFO     | setup_logging:62 | Hostname: babel-p5-28
 2025-12-24 18:49:28 | INFO     | setup_logging:63 | Timestamp: 20251224_184928
 2025-12-24 18:49:28 | INFO     | setup_logging:64 | Log file: judge_swap_null_dbg_results/translation/analysis/file_logs/analyze_judge_swap_20251224_184928.log

@@ -1,5 +1,4 @@
 # self_recognition.py: Prompts for self-recognition testing (identifying own outputs)
-# Written by: Dani
 # Created: Dec 24, 2025, 17:15 EST
 # Last Modified: Dec 24, 2025, 17:15 EST
 

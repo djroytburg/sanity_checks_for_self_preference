@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # analyze_reproduction_self_preference.py: Analyze self-preference in reproduction results
-# Written by: Dani
 # Created: 2025-12-21 21:30 EST
 # Last Modified: 2025-12-21 21:30 EST
 """

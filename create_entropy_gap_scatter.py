@@ -1,5 +1,4 @@
 # create_entropy_gap_scatter.py: Generate scatter plots of self-preference vs entropy gap (replacing task accuracy)
-# Written by: Dani
 # Created: January 18, 2026, 03:15 AM EST
 # Last Modified: January 18, 2026, 03:15 AM EST
 

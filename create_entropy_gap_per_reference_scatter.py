@@ -1,5 +1,4 @@
 # create_entropy_gap_per_reference_scatter.py: Per-reference drill-down scatter plots
-# Written by: Dani
 # Created: January 18, 2026, 03:25 AM EST
 # Last Modified: January 18, 2026, 03:25 AM EST
 
