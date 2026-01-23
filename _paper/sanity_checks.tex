@@ -83,20 +83,20 @@
 
 
   \begin{icmlauthorlist}
-    \icmlauthor{Dani Roytburg}{equal,cmu}
-    \icmlauthor{Matthew Bozoukov}{equal,ucsd}
-    \icmlauthor{Matthew Nguyen}{equal,uva}
-    \icmlauthor{Jou Barzdukas}{equal,uva}
-    \icmlauthor{Narmeen Oozeer}{martian}
+    \icmlauthor{Author One}{equal,inst1}
+    \icmlauthor{Author Two}{equal,inst2}
+    \icmlauthor{Author Three}{equal,inst3}
+    \icmlauthor{Author Four}{equal,inst3}
+    \icmlauthor{Author Five}{inst4}
   \end{icmlauthorlist}
 
-  \icmlaffiliation{cmu}{Department of Machine Learning, Carnegie Mellon University, Pittsburgh, PA, USA}
-  \icmlaffiliation{ucsd}{Department of Computer Science and Engineering, University of California San Diego, La Jolla, CA, USA}
-  \icmlaffiliation{uva}{Department of Computer Science, University of Virginia, Charlottesville, VA, USA}
-  \icmlaffiliation{martian}{Martian Research, San Francisco, California, USA}
+  \icmlaffiliation{inst1}{Department of Machine Learning, University A, City, Country}
+  \icmlaffiliation{inst2}{Department of Computer Science and Engineering, University B, City, Country}
+  \icmlaffiliation{inst3}{Department of Computer Science, University C, City, Country}
+  \icmlaffiliation{inst4}{Research Institute, City, Country}
 
-  \icmlcorrespondingauthor{Dani Roytburg}{dani.roytburg@andrew.cmu.edu}
-  \icmlcorrespondingauthor{Matthew Bozoukov}{mbozoukov@ucsd.edu}
+  \icmlcorrespondingauthor{Author One}{anonymous@email.com}
+  \icmlcorrespondingauthor{Author Two}{anonymous@email.com}
 
   % You may provide any keywords that you find helpful for describing your
   % paper; these are used to populate the "keywords" metadata in the PDF but
@@ -198,8 +198,8 @@ We refer to these intrinsic distributional tendencies as \textbf{evaluator quali
 
 % We pose a null hypothesis. Given $J$ and $R$, consider a ``proxy model'' $K$ which is of a similar relative capability to $J$ on tasks in $\mathcal{X}$. Concretely,  
 % % Intuitively, a student's performance on a multiple choice test can be approximately lower-bounded by their performance on a free response test containing the same material.  
-%  ability evaluation of Furthermore, would proposed remedies like style perturbation or activation steering align $S_J$ to $G$? in Appendix \ref{proof} \todo[]{dani: find cite for this}. Thus, 
-% Then [a little bit more theory... idk...], yada yada yada. \todo[]{dani: yada yada bruh}
+%  ability evaluation of Furthermore, would proposed remedies like style perturbation or activation steering align $S_J$ to $G$? in Appendix \ref{proof}. Thus,
+% Then [a little bit more theory... idk...], yada yada yada.
 To isolate true self-bias, we introduce the \textit{Evaluator Quality Baseline}. We define a proxy model $K$ and a capability-matched subset $\mathcal{X}_K$ where $K$ and $J$ share identical performance against reference $R$:
 \[ \mathcal{X}_K : \{x \in \mathcal{X} | G(x, o_J, o_R) = G(x, o_K, o_R)\} \]
 We then compute a proxy preference (\textbf{PP}) score, where $J$ evaluates the proxy $K$ against $R$ instead of itself:

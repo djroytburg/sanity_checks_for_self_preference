@@ -1,5 +1,4 @@
 # extract_responses_from_preferences.py: Extract model responses from preference files
-# Written by: Dani
 # Created: 2025-12-23, 14:45 EST
 # Last Modified: 2025-12-23, 14:45 EST
 

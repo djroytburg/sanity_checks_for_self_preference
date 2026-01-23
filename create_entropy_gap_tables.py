@@ -1,5 +1,4 @@
 # create_entropy_gap_tables.py: Generate tables of entropy gap vs self-preference metrics
-# Written by: Dani
 # Created: January 18, 2026, 03:20 AM EST
 # Last Modified: January 18, 2026, 03:20 AM EST
 

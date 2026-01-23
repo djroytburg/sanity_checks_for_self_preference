@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # reproduce_paper_experiments.py: Faithful Reproduction of Paper Experiments
-# Written by: Dani
 # Created: 2025-12-21 10:30 EST
 # Last Modified: 2026-01-12
 """

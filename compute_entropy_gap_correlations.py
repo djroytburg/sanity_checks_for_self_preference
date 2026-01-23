@@ -1,5 +1,4 @@
 # compute_entropy_gap_correlations.py: Compute R² correlations for entropy gap vs original HSPP
-# Written by: Dani
 # Created: January 18, 2026, 03:58 AM EST
 # Last Modified: January 18, 2026, 03:58 AM EST
 

@@ -1,5 +1,4 @@
 # aggregate_gold_labels.py: converts all gold judges (*_golden dirs) into aggregate pref. labels.
-# Written by: Dani
 # Created: 2026-1-9, 5:34 EST
 # Last Modified: 2026-1-9, 5:34 EST
 

@@ -74,8 +74,8 @@ Panickssery, A., Bowman, S.~R., and Feng, S.
 \newblock In \emph{The {{Thirty-eighth Annual Conference}} on {{Neural Information Processing Systems}}}, November 2024.
 \newblock URL \url{https://openreview.net/forum?id=4NJBV6Wp0h}.
 
-\bibitem[Roytburg et~al.(2025)Roytburg, Nguyen, Bozoukov, Barzdukas, Fu, and Oozeer]{roytburgBreakingMirrorActivationBased2025}
-Roytburg, D., Nguyen, M., Bozoukov, M., Barzdukas, J., Fu, H., and Oozeer, N.~F.
+\bibitem[Author1 et~al.(2025)Author1, Author2, Author3, Author4, Author5, and Author6]{authorBreakingMirrorActivationBased2025}
+Author1, A., Author2, A., Author3, A., Author4, A., Author5, A., and Author6, A.
 \newblock Breaking the {{Mirror}}: {{Activation-Based Mitigation}} of {{Self-Preference}} in {{LLM Evaluators}}.
 \newblock In \emph{Mechanistic {{Interpretability Workshop}} at {{NeurIPS}} 2025}, September 2025.
 \newblock URL \url{https://openreview.net/forum?id=HDxJwnzVom}.

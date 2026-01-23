@@ -1,6 +1,5 @@
 # activations_train_probe.py: Train and evaluate linear/MLP probes on cached residual activations
 # Supports cache-pickle input with leakage-safe splits, regularization sweeps, optional PCA, and plots.
-# Written by: Dani
 # Created: Jan 12, 2026, 00:00 EST
 # Last Modified: Jan 12, 2026, 00:00 EST
 

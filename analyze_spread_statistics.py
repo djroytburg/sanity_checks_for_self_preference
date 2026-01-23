@@ -1,5 +1,4 @@
 # analyze_spread_statistics.py: ANALYZE LSP VS ILSP SPREAD STATISTICS
-# Written by: Dani
 # Created: 2026-01-18, 01:20 EST
 # Last Modified: 2026-01-18, 01:20 EST
 

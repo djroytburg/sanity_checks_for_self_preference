@@ -1,7 +1,7 @@
 2025-12-24 16:05:09 | INFO     | setup_logging:273 | ================================================================================
 2025-12-24 16:05:09 | INFO     | setup_logging:274 | JUDGE SWAP NULL HYPOTHESIS TEST - RUN STARTED
 2025-12-24 16:05:09 | INFO     | setup_logging:275 | ================================================================================
-2025-12-24 16:05:09 | INFO     | setup_logging:276 | User: droytbur
+2025-12-24 16:05:09 | INFO     | setup_logging:276 | User: anonymous
 2025-12-24 16:05:09 | INFO     | setup_logging:277 | Hostname: babel-x9-16
 2025-12-24 16:05:09 | INFO     | setup_logging:278 | Timestamp: 20251224_160509
 2025-12-24 16:05:10 | INFO     | setup_logging:279 | CUDA available: True

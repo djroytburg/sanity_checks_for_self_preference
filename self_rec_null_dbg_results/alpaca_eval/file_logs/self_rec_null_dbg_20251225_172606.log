@@ -1,7 +1,7 @@
 2025-12-25 17:26:06 | INFO     | setup_logging:278 | ================================================================================
 2025-12-25 17:26:06 | INFO     | setup_logging:279 | SELF-RECOGNITION NULL HYPOTHESIS TEST - RUN STARTED
 2025-12-25 17:26:06 | INFO     | setup_logging:280 | ================================================================================
-2025-12-25 17:26:06 | INFO     | setup_logging:281 | User: droytbur
+2025-12-25 17:26:06 | INFO     | setup_logging:281 | User: anonymous
 2025-12-25 17:26:06 | INFO     | setup_logging:282 | Hostname: babel-p5-28
 2025-12-25 17:26:06 | INFO     | setup_logging:283 | Timestamp: 20251225_172606
 2025-12-25 17:26:06 | INFO     | setup_logging:284 | CUDA available: True

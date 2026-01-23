@@ -1,5 +1,5 @@
 # analyze_judge_self_preference_scatter_v2.py: Generate scatter plots with correct task accuracy from winrates
-# Written by: Dani
+# Analysis script
 # Created: January 17, 2026, 23:30 AM EST
 # Last Modified: January 17, 2026, 23:30 AM EST
 
@@ -641,7 +641,7 @@ def main():
     # Load author obfuscation (quality)
     logger.info("\n=== AUTHOR OBFUSCATION (QUALITY) ===")
     try:
-        quality_dir = Path('~/dani/author_obfuscation/data/quality/proxies').expanduser()
+        quality_dir = Path('~/project/author_obfuscation/data/quality/proxies').expanduser()
         judge_ref_accuracy = load_author_obf_data(str(quality_dir))
         self_pref = load_self_pref_data('quality')
         scatter_data = prepare_scatter_data(judge_ref_accuracy, self_pref)
@@ -655,7 +655,7 @@ def main():
     for dataset in dbg_datasets:
         logger.info(f"\n=== DBG ({dataset.upper()}) ===")
         try:
-            dbg_dir = Path(f'~/dani/dbg-score-paper/proxy_preference_data/{dataset}').expanduser()
+            dbg_dir = Path(f'~/project/dbg-score-paper/proxy_preference_data/{dataset}').expanduser()
             judge_ref_accuracy = load_dbg_data(str(dbg_dir), dataset)
             self_pref = load_self_pref_data(dataset)
             scatter_data = prepare_scatter_data(judge_ref_accuracy, self_pref)
@@ -670,7 +670,7 @@ def main():
         logger.info(f"\n=== VERIF ({dataset.upper()}) ===")
         try:
             # Need to glob family directories
-            verif_base = Path(f'~/dani/llm-sp-verif/{dataset}').expanduser()
+            verif_base = Path(f'~/project/llm-sp-verif/{dataset}').expanduser()
             family_dirs = glob(f"{verif_base}/*/proxies")
             
             all_judge_ref_accuracy = {}

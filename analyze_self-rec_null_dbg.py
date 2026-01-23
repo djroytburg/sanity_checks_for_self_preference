@@ -1,6 +1,5 @@
 # analyze_self-rec_null_dbg.py: Analyze correlation between self-preference and self-recognition
 # Tests H0: Corr(J_pref, J_rec) = 0
-# Written by: Dani
 # Created: Dec 24, 2025, 17:30 EST
 # Last Modified: Dec 24, 2025, 17:30 EST
 
