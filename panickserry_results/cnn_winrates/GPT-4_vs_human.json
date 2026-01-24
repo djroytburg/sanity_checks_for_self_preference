@@ -1,0 +1,5 @@
+{
+  "reference_evaluator": "GPT-4",
+  "reference_evaluatee": "human",
+  "ref_winrate": 0.8942857142857142
+}
