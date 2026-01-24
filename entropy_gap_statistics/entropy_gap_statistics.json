@@ -1,0 +1,1081 @@
+{
+  "summary": {
+    "per_reference_level": {
+      "total": 111,
+      "entropy_gap_positive": 61,
+      "entropy_gap_negative": 50,
+      "pct_positive": 54.95495495495496
+    },
+    "per_judge_level": {
+      "total": 28,
+      "entropy_gap_positive": 21,
+      "entropy_gap_negative": 7,
+      "pct_positive": 75.0
+    },
+    "by_dataset_reference": {
+      "mbpp-plus": {
+        "total": 70,
+        "entropy_gap_positive": 30,
+        "entropy_gap_negative": 40,
+        "pct_positive": 42.857142857142854
+      },
+      "translation": {
+        "total": 9,
+        "entropy_gap_positive": 8,
+        "entropy_gap_negative": 1,
+        "pct_positive": 88.88888888888889
+      },
+      "truthfulness": {
+        "total": 9,
+        "entropy_gap_positive": 8,
+        "entropy_gap_negative": 1,
+        "pct_positive": 88.88888888888889
+      },
+      "quality": {
+        "total": 0,
+        "entropy_gap_positive": 0,
+        "entropy_gap_negative": 0,
+        "pct_positive": 0
+      },
+      "alpaca_eval": {
+        "total": 16,
+        "entropy_gap_positive": 13,
+        "entropy_gap_negative": 3,
+        "pct_positive": 81.25
+      },
+      "cnn": {
+        "total": 4,
+        "entropy_gap_positive": 2,
+        "entropy_gap_negative": 2,
+        "pct_positive": 50.0
+      },
+      "xsum": {
+        "total": 3,
+        "entropy_gap_positive": 0,
+        "entropy_gap_negative": 3,
+        "pct_positive": 0.0
+      }
+    },
+    "by_dataset_judge": {
+      "mbpp-plus": {
+        "total": 10,
+        "entropy_gap_positive": 6,
+        "entropy_gap_negative": 4,
+        "pct_positive": 60.0
+      },
+      "translation": {
+        "total": 3,
+        "entropy_gap_positive": 3,
+        "entropy_gap_negative": 0,
+        "pct_positive": 100.0
+      },
+      "truthfulness": {
+        "total": 3,
+        "entropy_gap_positive": 3,
+        "entropy_gap_negative": 0,
+        "pct_positive": 100.0
+      },
+      "quality": {
+        "total": 0,
+        "entropy_gap_positive": 0,
+        "entropy_gap_negative": 0,
+        "pct_positive": 0
+      },
+      "alpaca_eval": {
+        "total": 8,
+        "entropy_gap_positive": 7,
+        "entropy_gap_negative": 1,
+        "pct_positive": 87.5
+      },
+      "cnn": {
+        "total": 2,
+        "entropy_gap_positive": 2,
+        "entropy_gap_negative": 0,
+        "pct_positive": 100.0
+      },
+      "xsum": {
+        "total": 2,
+        "entropy_gap_positive": 0,
+        "entropy_gap_negative": 2,
+        "pct_positive": 0.0
+      }
+    }
+  },
+  "per_reference_details": [
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-3b",
+      "reference": "gemma-2-2b",
+      "entropy_gap": 0.021625352969204537,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-3b",
+      "reference": "gpt-3.5-turbo",
+      "entropy_gap": -0.10699331921367028,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-3b",
+      "reference": "gpt-4o",
+      "entropy_gap": 0.09759078218119954,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-3b",
+      "reference": "llama-3.2-1b",
+      "entropy_gap": 0.047994196437878944,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-3b",
+      "reference": "mistral-7b-v0.3",
+      "entropy_gap": -0.04738836273528724,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-3b",
+      "reference": "mistral-small",
+      "entropy_gap": 0.1593822957229576,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-3b",
+      "reference": "phi-3.5-mini",
+      "entropy_gap": 0.06577242135053163,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.2-3b",
+      "reference": "gemma-2-2b",
+      "entropy_gap": -0.029296578830145248,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.2-3b",
+      "reference": "gpt-3.5-turbo",
+      "entropy_gap": -0.04020264461755052,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.2-3b",
+      "reference": "gpt-4o",
+      "entropy_gap": -0.0457229030503592,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.2-3b",
+      "reference": "llama-3.2-1b",
+      "entropy_gap": 0.005208676943373236,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.2-3b",
+      "reference": "mistral-7b-v0.3",
+      "entropy_gap": -0.09164612454013787,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.2-3b",
+      "reference": "mistral-small",
+      "entropy_gap": -0.018851659301633905,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.2-3b",
+      "reference": "phi-3.5-mini",
+      "entropy_gap": -0.04547823211451041,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-7b",
+      "reference": "gemma-2-2b",
+      "entropy_gap": 0.35974810600709045,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-7b",
+      "reference": "gpt-3.5-turbo",
+      "entropy_gap": 0.0733402395737014,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-7b",
+      "reference": "gpt-4o",
+      "entropy_gap": -0.1657517549253268,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-7b",
+      "reference": "llama-3.2-1b",
+      "entropy_gap": 0.5957386968832086,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-7b",
+      "reference": "mistral-7b-v0.3",
+      "entropy_gap": -0.013340550383274419,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-7b",
+      "reference": "mistral-small",
+      "entropy_gap": -0.05683411788237425,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-7b",
+      "reference": "phi-3.5-mini",
+      "entropy_gap": -0.10693093435082279,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-8b",
+      "reference": "gemma-2-2b",
+      "entropy_gap": 0.06140532659346987,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-8b",
+      "reference": "gpt-3.5-turbo",
+      "entropy_gap": 0.0532770633060029,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-8b",
+      "reference": "gpt-4o",
+      "entropy_gap": -0.050080493339559995,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-8b",
+      "reference": "llama-3.2-1b",
+      "entropy_gap": 0.026764625825469013,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-8b",
+      "reference": "mistral-7b-v0.3",
+      "entropy_gap": -0.051844006289630484,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-8b",
+      "reference": "mistral-small",
+      "entropy_gap": 0.017697989250450852,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-8b",
+      "reference": "phi-3.5-mini",
+      "entropy_gap": -0.03383848625329644,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-9b",
+      "reference": "gemma-2-2b",
+      "entropy_gap": -0.11670338902812216,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-9b",
+      "reference": "gpt-3.5-turbo",
+      "entropy_gap": -0.05431510693448893,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-9b",
+      "reference": "gpt-4o",
+      "entropy_gap": -0.08843742417878042,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-9b",
+      "reference": "llama-3.2-1b",
+      "entropy_gap": -0.08470390227061486,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-9b",
+      "reference": "mistral-7b-v0.3",
+      "entropy_gap": 0.03790173348027287,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-9b",
+      "reference": "mistral-small",
+      "entropy_gap": 0.10269421881861596,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-9b",
+      "reference": "phi-3.5-mini",
+      "entropy_gap": 0.26681013888571936,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-14b",
+      "reference": "gemma-2-2b",
+      "entropy_gap": 0.1599716565234579,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-14b",
+      "reference": "gpt-3.5-turbo",
+      "entropy_gap": -0.02708395194868113,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-14b",
+      "reference": "gpt-4o",
+      "entropy_gap": 0.18141655827923164,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-14b",
+      "reference": "llama-3.2-1b",
+      "entropy_gap": 0.18339823334321714,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-14b",
+      "reference": "mistral-7b-v0.3",
+      "entropy_gap": 0.03816095734482594,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-14b",
+      "reference": "mistral-small",
+      "entropy_gap": 0.09648221595589379,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-14b",
+      "reference": "phi-3.5-mini",
+      "entropy_gap": -0.1396214952458671,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-27b",
+      "reference": "gemma-2-2b",
+      "entropy_gap": -0.2943816137557146,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-27b",
+      "reference": "gpt-3.5-turbo",
+      "entropy_gap": -0.07908925104442466,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-27b",
+      "reference": "gpt-4o",
+      "entropy_gap": -0.07133030495079495,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-27b",
+      "reference": "llama-3.2-1b",
+      "entropy_gap": -0.007604539234165153,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-27b",
+      "reference": "mistral-7b-v0.3",
+      "entropy_gap": 0.0677950770722483,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-27b",
+      "reference": "mistral-small",
+      "entropy_gap": -0.07333501611102333,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-27b",
+      "reference": "phi-3.5-mini",
+      "entropy_gap": 0.10335073921709603,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-32b",
+      "reference": "gemma-2-2b",
+      "entropy_gap": 0.09504203308074172,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-32b",
+      "reference": "gpt-3.5-turbo",
+      "entropy_gap": -0.0901492766818161,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-32b",
+      "reference": "gpt-4o",
+      "entropy_gap": -0.09877513137790203,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-32b",
+      "reference": "llama-3.2-1b",
+      "entropy_gap": -0.2164494849226211,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-32b",
+      "reference": "mistral-7b-v0.3",
+      "entropy_gap": 0.16446043220924594,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-32b",
+      "reference": "mistral-small",
+      "entropy_gap": -0.35839634842847945,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-32b",
+      "reference": "phi-3.5-mini",
+      "entropy_gap": -0.22172689761804912,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-70b",
+      "reference": "gemma-2-2b",
+      "entropy_gap": -0.029601855436298452,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-70b",
+      "reference": "gpt-3.5-turbo",
+      "entropy_gap": 0.04570707664239504,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-70b",
+      "reference": "gpt-4o",
+      "entropy_gap": -0.041794154139992656,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-70b",
+      "reference": "llama-3.2-1b",
+      "entropy_gap": 0.1138700128676341,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-70b",
+      "reference": "mistral-7b-v0.3",
+      "entropy_gap": 0.08922458101344921,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-70b",
+      "reference": "mistral-small",
+      "entropy_gap": -0.015700666089327298,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-70b",
+      "reference": "phi-3.5-mini",
+      "entropy_gap": 0.11452020982542832,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.3-70b",
+      "reference": "gemma-2-2b",
+      "entropy_gap": -0.040123077799665396,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.3-70b",
+      "reference": "gpt-3.5-turbo",
+      "entropy_gap": -0.12118945007598536,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.3-70b",
+      "reference": "gpt-4o",
+      "entropy_gap": -0.09242712048024426,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.3-70b",
+      "reference": "llama-3.2-1b",
+      "entropy_gap": -0.31961400205851964,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.3-70b",
+      "reference": "mistral-7b-v0.3",
+      "entropy_gap": -0.022038081282829747,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.3-70b",
+      "reference": "mistral-small",
+      "entropy_gap": -0.03954695039211098,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.3-70b",
+      "reference": "phi-3.5-mini",
+      "entropy_gap": 0.20638719007120587,
+      "is_positive": true
+    },
+    {
+      "dataset": "translation",
+      "judge": "Qwen2.5-7B-Instruct",
+      "reference": "Qwen2.5-72B-Instruct",
+      "entropy_gap": 0.05818417165960732,
+      "is_positive": true
+    },
+    {
+      "dataset": "translation",
+      "judge": "Qwen2.5-7B-Instruct",
+      "reference": "Qwen2.5-7B",
+      "entropy_gap": 0.055851271634276056,
+      "is_positive": true
+    },
+    {
+      "dataset": "translation",
+      "judge": "Qwen2.5-7B-Instruct",
+      "reference": "Llama-3.1-8B-Instruct",
+      "entropy_gap": 0.08802994524611985,
+      "is_positive": true
+    },
+    {
+      "dataset": "translation",
+      "judge": "Llama-3.1-8B-Instruct",
+      "reference": "Qwen2.5-7B-Instruct",
+      "entropy_gap": 0.019992427239886368,
+      "is_positive": true
+    },
+    {
+      "dataset": "translation",
+      "judge": "Llama-3.1-8B-Instruct",
+      "reference": "Llama-3.1-70B-Instruct",
+      "entropy_gap": 0.00430965918849191,
+      "is_positive": true
+    },
+    {
+      "dataset": "translation",
+      "judge": "Llama-3.1-8B-Instruct",
+      "reference": "Llama-3.1-8B",
+      "entropy_gap": 0.06524745774407215,
+      "is_positive": true
+    },
+    {
+      "dataset": "translation",
+      "judge": "Llama-3.1-8B-Instruct",
+      "reference": "gemma-2-9b-it",
+      "entropy_gap": -0.0007183281320852775,
+      "is_positive": false
+    },
+    {
+      "dataset": "translation",
+      "judge": "gemma-2-9b-it",
+      "reference": "Llama-3.1-8B-Instruct",
+      "entropy_gap": 0.09194341776473969,
+      "is_positive": true
+    },
+    {
+      "dataset": "translation",
+      "judge": "gemma-2-9b-it",
+      "reference": "gemma-2-9b",
+      "entropy_gap": 0.2705538198627609,
+      "is_positive": true
+    },
+    {
+      "dataset": "truthfulness",
+      "judge": "gemma-2-9b-it",
+      "reference": "Llama-3.1-8B-Instruct",
+      "entropy_gap": 0.2657604540037153,
+      "is_positive": true
+    },
+    {
+      "dataset": "truthfulness",
+      "judge": "gemma-2-9b-it",
+      "reference": "gemma-2-9b",
+      "entropy_gap": 0.43886686225999977,
+      "is_positive": true
+    },
+    {
+      "dataset": "truthfulness",
+      "judge": "Qwen2.5-7B-Instruct",
+      "reference": "Qwen2.5-7B",
+      "entropy_gap": 0.2651735678677064,
+      "is_positive": true
+    },
+    {
+      "dataset": "truthfulness",
+      "judge": "Qwen2.5-7B-Instruct",
+      "reference": "Qwen2.5-72B-Instruct",
+      "entropy_gap": -0.004923950389405074,
+      "is_positive": false
+    },
+    {
+      "dataset": "truthfulness",
+      "judge": "Qwen2.5-7B-Instruct",
+      "reference": "Llama-3.1-8B-Instruct",
+      "entropy_gap": 0.1833233957795004,
+      "is_positive": true
+    },
+    {
+      "dataset": "truthfulness",
+      "judge": "Llama-3.1-8B-Instruct",
+      "reference": "Llama-3.1-70B-Instruct",
+      "entropy_gap": 0.1725110026144978,
+      "is_positive": true
+    },
+    {
+      "dataset": "truthfulness",
+      "judge": "Llama-3.1-8B-Instruct",
+      "reference": "Llama-3.1-8B",
+      "entropy_gap": 0.1217515893322535,
+      "is_positive": true
+    },
+    {
+      "dataset": "truthfulness",
+      "judge": "Llama-3.1-8B-Instruct",
+      "reference": "gemma-2-9b-it",
+      "entropy_gap": 0.39609709397082465,
+      "is_positive": true
+    },
+    {
+      "dataset": "truthfulness",
+      "judge": "Llama-3.1-8B-Instruct",
+      "reference": "Qwen2.5-7B-Instruct",
+      "entropy_gap": 0.1511967783705377,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-3B-Instruct",
+      "reference": "Llama-3.1-70B-Instruct",
+      "entropy_gap": -0.05903739107596151,
+      "is_positive": false
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-1.5B-Instruct",
+      "reference": "Llama-3.1-70B-Instruct",
+      "entropy_gap": 0.012220450297927399,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-7B-Instruct",
+      "reference": "Qwen2.5-7B",
+      "entropy_gap": 0.14212657646438331,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-7B-Instruct",
+      "reference": "DeepSeek-R1-Distill-Qwen-7B",
+      "entropy_gap": 0.49086649411008026,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-7B-Instruct",
+      "reference": "Llama-3.1-8B-Instruct",
+      "entropy_gap": -0.030204588670096233,
+      "is_positive": false
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-7B-Instruct",
+      "reference": "Qwen2.5-72B-Instruct",
+      "entropy_gap": 0.19418025927668447,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-7B-Instruct",
+      "reference": "Llama-3.1-70B-Instruct",
+      "entropy_gap": -0.1395746458574454,
+      "is_positive": false
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Llama-3.1-8B-Instruct",
+      "reference": "Llama-3.1-70B-Instruct",
+      "entropy_gap": 0.08388242914967647,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Llama-3.1-8B-Instruct",
+      "reference": "Llama-3.1-8B",
+      "entropy_gap": 0.20193342833268568,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Llama-3.1-8B-Instruct",
+      "reference": "Qwen2.5-7B-Instruct",
+      "entropy_gap": 0.1828503516669705,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Llama-3.1-8B-Instruct",
+      "reference": "gemma-2-9b-it",
+      "entropy_gap": 0.22971169977314565,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "gemma-2-9b-it",
+      "reference": "Llama-3.1-8B-Instruct",
+      "entropy_gap": 0.462764869338799,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "gemma-2-9b-it",
+      "reference": "gemma-2-9b",
+      "entropy_gap": 0.7547856240301539,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-14B-Instruct",
+      "reference": "Llama-3.1-70B-Instruct",
+      "entropy_gap": 0.12945324482875387,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-32B-Instruct",
+      "reference": "Llama-3.1-70B-Instruct",
+      "entropy_gap": 0.13521134766490056,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-0.5B-Instruct",
+      "reference": "Llama-3.1-70B-Instruct",
+      "entropy_gap": 0.00039694021132119506,
+      "is_positive": true
+    },
+    {
+      "dataset": "cnn",
+      "judge": "gpt-3.5-turbo",
+      "reference": "human",
+      "entropy_gap": -0.005325978397973108,
+      "is_positive": false
+    },
+    {
+      "dataset": "cnn",
+      "judge": "gpt-3.5-turbo",
+      "reference": "llama2",
+      "entropy_gap": 0.009647311670434977,
+      "is_positive": true
+    },
+    {
+      "dataset": "cnn",
+      "judge": "gpt-4",
+      "reference": "human",
+      "entropy_gap": -3.1985620663310677e-05,
+      "is_positive": false
+    },
+    {
+      "dataset": "cnn",
+      "judge": "gpt-4",
+      "reference": "llama2",
+      "entropy_gap": 0.003490775775327082,
+      "is_positive": true
+    },
+    {
+      "dataset": "xsum",
+      "judge": "gpt-3.5-turbo",
+      "reference": "human",
+      "entropy_gap": 0.0,
+      "is_positive": false
+    },
+    {
+      "dataset": "xsum",
+      "judge": "gpt-3.5-turbo",
+      "reference": "llama2",
+      "entropy_gap": 0.0,
+      "is_positive": false
+    },
+    {
+      "dataset": "xsum",
+      "judge": "gpt-4",
+      "reference": "human",
+      "entropy_gap": -0.03490386014137148,
+      "is_positive": false
+    }
+  ],
+  "per_judge_details": [
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-3b",
+      "avg_entropy_gap": 0.03399762381611639,
+      "n_references": 7,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.2-3b",
+      "avg_entropy_gap": -0.037998495072994846,
+      "n_references": 7,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-7b",
+      "avg_entropy_gap": 0.09799566927460031,
+      "n_references": 7,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-8b",
+      "avg_entropy_gap": 0.0033402884418436735,
+      "n_references": 7,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-9b",
+      "avg_entropy_gap": 0.00903518125322883,
+      "n_references": 7,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-14b",
+      "avg_entropy_gap": 0.07038916775029688,
+      "n_references": 7,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "gemma-2-27b",
+      "avg_entropy_gap": -0.05065641554382548,
+      "n_references": 7,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "qwen-2.5-32b",
+      "avg_entropy_gap": -0.10371352481984,
+      "n_references": 7,
+      "is_positive": false
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.1-70b",
+      "avg_entropy_gap": 0.03946074352618404,
+      "n_references": 7,
+      "is_positive": true
+    },
+    {
+      "dataset": "mbpp-plus",
+      "judge": "llama-3.3-70b",
+      "avg_entropy_gap": -0.061221641716878494,
+      "n_references": 7,
+      "is_positive": false
+    },
+    {
+      "dataset": "translation",
+      "judge": "Qwen2.5-7B-Instruct",
+      "avg_entropy_gap": 0.0673551295133344,
+      "n_references": 3,
+      "is_positive": true
+    },
+    {
+      "dataset": "translation",
+      "judge": "Llama-3.1-8B-Instruct",
+      "avg_entropy_gap": 0.022207804010091287,
+      "n_references": 4,
+      "is_positive": true
+    },
+    {
+      "dataset": "translation",
+      "judge": "gemma-2-9b-it",
+      "avg_entropy_gap": 0.1812486188137503,
+      "n_references": 2,
+      "is_positive": true
+    },
+    {
+      "dataset": "truthfulness",
+      "judge": "gemma-2-9b-it",
+      "avg_entropy_gap": 0.35231365813185755,
+      "n_references": 2,
+      "is_positive": true
+    },
+    {
+      "dataset": "truthfulness",
+      "judge": "Qwen2.5-7B-Instruct",
+      "avg_entropy_gap": 0.14785767108593392,
+      "n_references": 3,
+      "is_positive": true
+    },
+    {
+      "dataset": "truthfulness",
+      "judge": "Llama-3.1-8B-Instruct",
+      "avg_entropy_gap": 0.21038911607202843,
+      "n_references": 4,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-3B-Instruct",
+      "avg_entropy_gap": -0.05903739107596151,
+      "n_references": 1,
+      "is_positive": false
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-1.5B-Instruct",
+      "avg_entropy_gap": 0.012220450297927399,
+      "n_references": 1,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-7B-Instruct",
+      "avg_entropy_gap": 0.13147881906472128,
+      "n_references": 5,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Llama-3.1-8B-Instruct",
+      "avg_entropy_gap": 0.17459447723061958,
+      "n_references": 4,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "gemma-2-9b-it",
+      "avg_entropy_gap": 0.6087752466844765,
+      "n_references": 2,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-14B-Instruct",
+      "avg_entropy_gap": 0.12945324482875387,
+      "n_references": 1,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-32B-Instruct",
+      "avg_entropy_gap": 0.13521134766490056,
+      "n_references": 1,
+      "is_positive": true
+    },
+    {
+      "dataset": "alpaca_eval",
+      "judge": "Qwen2.5-0.5B-Instruct",
+      "avg_entropy_gap": 0.00039694021132119506,
+      "n_references": 1,
+      "is_positive": true
+    },
+    {
+      "dataset": "cnn",
+      "judge": "gpt-3.5-turbo",
+      "avg_entropy_gap": 0.0021606666362309346,
+      "n_references": 2,
+      "is_positive": true
+    },
+    {
+      "dataset": "cnn",
+      "judge": "gpt-4",
+      "avg_entropy_gap": 0.0017293950773318856,
+      "n_references": 2,
+      "is_positive": true
+    },
+    {
+      "dataset": "xsum",
+      "judge": "gpt-3.5-turbo",
+      "avg_entropy_gap": 0.0,
+      "n_references": 2,
+      "is_positive": false
+    },
+    {
+      "dataset": "xsum",
+      "judge": "gpt-4",
+      "avg_entropy_gap": -0.03490386014137148,
+      "n_references": 1,
+      "is_positive": false
+    }
+  ]
+}

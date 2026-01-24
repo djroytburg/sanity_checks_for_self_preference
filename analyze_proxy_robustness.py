@@ -33,13 +33,15 @@ from scipy.stats import linregress, pearsonr
 VERIF_DATASETS = ["math500", "mmlu", "mbpp-plus"]
 DBG_DATASETS = ["alpaca_eval", "translation", "truthfulness"]
 AUTHOR_OBF_DATASETS = ["quality"]
+PANICKSERRY_DATASETS = ["cnn", "xsum"]
 
-ALL_DATASETS = VERIF_DATASETS + DBG_DATASETS + AUTHOR_OBF_DATASETS
+ALL_DATASETS = VERIF_DATASETS + DBG_DATASETS + AUTHOR_OBF_DATASETS + PANICKSERRY_DATASETS
 
 PAPER_GROUPS = {
     "llm-sp-verif": VERIF_DATASETS,
     "dbg-score-paper": DBG_DATASETS,
     "author_obfuscation": AUTHOR_OBF_DATASETS,
+    "panickserry": PANICKSERRY_DATASETS,
 }
 
 DATASET_TO_PAPER = {}
@@ -127,7 +129,13 @@ def setup_logging(output_dir: Path) -> logging.Logger:
 def extract_model_family(model_name: str) -> str:
     """Extract model family from model name."""
     model_lower = model_name.lower()
-    families = ['llama', 'gemma', 'qwen', 'gpt', 'mistral', 'phi', 'deepseek']
+    # Check GPT variants first (more specific before general)
+    if 'gpt-4' in model_lower or 'gpt4' in model_lower:
+        return 'gpt'
+    if 'gpt-3.5' in model_lower or 'gpt3.5' in model_lower:
+        return 'gpt'
+
+    families = ['llama', 'gemma', 'qwen', 'mistral', 'phi', 'deepseek', 'gpt', 'hermes']
     for family in families:
         if family in model_lower:
             return family
@@ -399,6 +407,307 @@ def load_author_obf_cache(
     return results
 
 
+def load_cnn_cache(
+    cache_dir: Path,
+    proxy_dir: Path,
+    logger: logging.Logger
+) -> Dict[Tuple[str, str, str, str], Dict]:
+    """
+    Load J vs R and K vs R data from CNN cache structure.
+
+    Args:
+        cache_dir: panickserry_results/cnn_results/cnn/cache
+        proxy_dir: panickserry_results/cnn_winrates
+    """
+    results = {}
+    dataset = "cnn"
+
+    # Load LSP/ILSP labels from proxy directory
+    label_cache = {}
+
+    def get_labels(judge: str, reference: str) -> Tuple[set, set]:
+        cache_key = (judge, reference)
+        if cache_key in label_cache:
+            return label_cache[cache_key]
+
+        # Normalize judge name for file matching
+        judge_norm = judge.replace("gpt-3.5-turbo", "GPT-3.5").replace("gpt-4", "GPT-4")
+        ref_norm = reference.replace("llama2", "llama2").replace("human", "human")
+
+        proxy_file = proxy_dir / f"{judge_norm}_vs_{ref_norm}.json"
+        if not proxy_file.exists():
+            label_cache[cache_key] = (set(), set())
+            return label_cache[cache_key]
+
+        try:
+            with open(proxy_file) as f:
+                data = json.load(f)
+
+            lsp_ids = set()
+            ilsp_ids = set()
+            for proxy_name, proxy_info in data.get("proxies", {}).items():
+                lsp_ids.update(proxy_info.get("lsp_ids", []))
+                ilsp_ids.update(proxy_info.get("ilsp_ids", []))
+
+            label_cache[cache_key] = (lsp_ids, ilsp_ids)
+        except Exception as e:
+            logger.warning(f"Failed to load labels from {proxy_file}: {e}")
+            label_cache[cache_key] = (set(), set())
+
+        return label_cache[cache_key]
+
+    for judge_dir in cache_dir.iterdir():
+        if not judge_dir.is_dir():
+            continue
+        judge = judge_dir.name
+
+        for ref_dir in judge_dir.iterdir():
+            if not ref_dir.is_dir():
+                continue
+            reference = ref_dir.name
+
+            # Load J vs R games
+            j_game1_file = ref_dir / "J_vs_R_game1.jsonl"
+            j_game2_file = ref_dir / "J_vs_R_game2.jsonl"
+
+            if not j_game1_file.exists() or not j_game2_file.exists():
+                logger.debug(f"Missing J_vs_R files for {judge}/{reference}")
+                continue
+
+            # Load J game1
+            j_game1_by_id = {}
+            with open(j_game1_file) as f:
+                for line in f:
+                    entry = json.loads(line)
+                    j_game1_by_id[entry['example_id']] = entry
+
+            # Load J game2
+            j_game2_by_id = {}
+            with open(j_game2_file) as f:
+                for line in f:
+                    entry = json.loads(line)
+                    j_game2_by_id[entry['example_id']] = entry
+
+            # Load K vs R games
+            k_game1_file = ref_dir / "K_vs_R_game1.jsonl"
+            k_game2_file = ref_dir / "K_vs_R_game2.jsonl"
+
+            if not k_game1_file.exists() or not k_game2_file.exists():
+                logger.debug(f"Missing K_vs_R files for {judge}/{reference}")
+                continue
+
+            # Group K by (example_id, proxy)
+            k_game1_by_id_proxy = defaultdict(dict)
+            with open(k_game1_file) as f:
+                for line in f:
+                    entry = json.loads(line)
+                    ex_id = entry['example_id']
+                    proxy = entry.get('proxy', 'unknown')
+                    k_game1_by_id_proxy[ex_id][proxy] = entry
+
+            k_game2_by_id_proxy = defaultdict(dict)
+            with open(k_game2_file) as f:
+                for line in f:
+                    entry = json.loads(line)
+                    ex_id = entry['example_id']
+                    proxy = entry.get('proxy', 'unknown')
+                    k_game2_by_id_proxy[ex_id][proxy] = entry
+
+            # Get LSP/ILSP labels
+            lsp_ids, ilsp_ids = get_labels(judge, reference)
+
+            # Compute averaged probabilities
+            common_j_ids = set(j_game1_by_id.keys()) & set(j_game2_by_id.keys())
+
+            for ex_id in common_j_ids:
+                j_g1 = j_game1_by_id[ex_id]
+                j_g2 = j_game2_by_id[ex_id]
+
+                j_prob = (j_g1['prob_response1'] + j_g2['prob_response2']) / 2.0
+
+                # Determine category from labels
+                if ex_id in lsp_ids:
+                    category = 'lsp'
+                elif ex_id in ilsp_ids:
+                    category = 'ilsp'
+                else:
+                    category = j_g1.get('category', 'unknown')
+
+                # K probabilities per proxy
+                k_probs = {}
+                proxies_g1 = k_game1_by_id_proxy.get(ex_id, {})
+                proxies_g2 = k_game2_by_id_proxy.get(ex_id, {})
+
+                common_proxies = set(proxies_g1.keys()) & set(proxies_g2.keys())
+                for proxy in common_proxies:
+                    k_g1 = proxies_g1[proxy]
+                    k_g2 = proxies_g2[proxy]
+                    k_prob = (k_g1['prob_response1'] + k_g2['prob_response2']) / 2.0
+                    k_probs[proxy] = k_prob
+
+                if k_probs:
+                    key = (dataset, judge, reference, ex_id)
+                    results[key] = {
+                        'j_prob': j_prob,
+                        'k_probs': k_probs,
+                        'category': category
+                    }
+
+    logger.info(f"Loaded {len(results)} examples from CNN cache")
+    return results
+
+
+def load_xsum_cache(
+    cache_dir: Path,
+    proxy_dir: Path,
+    logger: logging.Logger
+) -> Dict[Tuple[str, str, str, str], Dict]:
+    """
+    Load J vs R and K vs R data from XSUM cache structure.
+
+    Args:
+        cache_dir: panickserry_results/xsum_result/xsum/cache
+        proxy_dir: panickserry_results/xsum_winrates
+    """
+    # XSUM has the same structure as CNN
+    results = {}
+    dataset = "xsum"
+
+    # Load LSP/ILSP labels from proxy directory
+    label_cache = {}
+
+    def get_labels(judge: str, reference: str) -> Tuple[set, set]:
+        cache_key = (judge, reference)
+        if cache_key in label_cache:
+            return label_cache[cache_key]
+
+        # Normalize judge name for file matching
+        judge_norm = judge.replace("gpt-3.5-turbo", "GPT-3.5").replace("gpt-4", "GPT-4")
+        ref_norm = reference
+
+        proxy_file = proxy_dir / f"{judge_norm}_vs_{ref_norm}.json"
+        if not proxy_file.exists():
+            label_cache[cache_key] = (set(), set())
+            return label_cache[cache_key]
+
+        try:
+            with open(proxy_file) as f:
+                data = json.load(f)
+
+            lsp_ids = set()
+            ilsp_ids = set()
+            for proxy_name, proxy_info in data.get("proxies", {}).items():
+                lsp_ids.update(proxy_info.get("lsp_ids", []))
+                ilsp_ids.update(proxy_info.get("ilsp_ids", []))
+
+            label_cache[cache_key] = (lsp_ids, ilsp_ids)
+        except Exception as e:
+            logger.warning(f"Failed to load labels from {proxy_file}: {e}")
+            label_cache[cache_key] = (set(), set())
+
+        return label_cache[cache_key]
+
+    for judge_dir in cache_dir.iterdir():
+        if not judge_dir.is_dir():
+            continue
+        judge = judge_dir.name
+
+        for ref_dir in judge_dir.iterdir():
+            if not ref_dir.is_dir():
+                continue
+            reference = ref_dir.name
+
+            # Load J vs R games
+            j_game1_file = ref_dir / "J_vs_R_game1.jsonl"
+            j_game2_file = ref_dir / "J_vs_R_game2.jsonl"
+
+            if not j_game1_file.exists() or not j_game2_file.exists():
+                logger.debug(f"Missing J_vs_R files for {judge}/{reference}")
+                continue
+
+            # Load J game1
+            j_game1_by_id = {}
+            with open(j_game1_file) as f:
+                for line in f:
+                    entry = json.loads(line)
+                    j_game1_by_id[entry['example_id']] = entry
+
+            # Load J game2
+            j_game2_by_id = {}
+            with open(j_game2_file) as f:
+                for line in f:
+                    entry = json.loads(line)
+                    j_game2_by_id[entry['example_id']] = entry
+
+            # Load K vs R games
+            k_game1_file = ref_dir / "K_vs_R_game1.jsonl"
+            k_game2_file = ref_dir / "K_vs_R_game2.jsonl"
+
+            if not k_game1_file.exists() or not k_game2_file.exists():
+                logger.debug(f"Missing K_vs_R files for {judge}/{reference}")
+                continue
+
+            # Group K by (example_id, proxy)
+            k_game1_by_id_proxy = defaultdict(dict)
+            with open(k_game1_file) as f:
+                for line in f:
+                    entry = json.loads(line)
+                    ex_id = entry['example_id']
+                    proxy = entry.get('proxy', 'unknown')
+                    k_game1_by_id_proxy[ex_id][proxy] = entry
+
+            k_game2_by_id_proxy = defaultdict(dict)
+            with open(k_game2_file) as f:
+                for line in f:
+                    entry = json.loads(line)
+                    ex_id = entry['example_id']
+                    proxy = entry.get('proxy', 'unknown')
+                    k_game2_by_id_proxy[ex_id][proxy] = entry
+
+            # Get LSP/ILSP labels
+            lsp_ids, ilsp_ids = get_labels(judge, reference)
+
+            # Compute averaged probabilities
+            common_j_ids = set(j_game1_by_id.keys()) & set(j_game2_by_id.keys())
+
+            for ex_id in common_j_ids:
+                j_g1 = j_game1_by_id[ex_id]
+                j_g2 = j_game2_by_id[ex_id]
+
+                j_prob = (j_g1['prob_response1'] + j_g2['prob_response2']) / 2.0
+
+                # Determine category from labels
+                if ex_id in lsp_ids:
+                    category = 'lsp'
+                elif ex_id in ilsp_ids:
+                    category = 'ilsp'
+                else:
+                    category = j_g1.get('category', 'unknown')
+
+                # K probabilities per proxy
+                k_probs = {}
+                proxies_g1 = k_game1_by_id_proxy.get(ex_id, {})
+                proxies_g2 = k_game2_by_id_proxy.get(ex_id, {})
+
+                common_proxies = set(proxies_g1.keys()) & set(proxies_g2.keys())
+                for proxy in common_proxies:
+                    k_g1 = proxies_g1[proxy]
+                    k_g2 = proxies_g2[proxy]
+                    k_prob = (k_g1['prob_response1'] + k_g2['prob_response2']) / 2.0
+                    k_probs[proxy] = k_prob
+
+                if k_probs:
+                    key = (dataset, judge, reference, ex_id)
+                    results[key] = {
+                        'j_prob': j_prob,
+                        'k_probs': k_probs,
+                        'category': category
+                    }
+
+    logger.info(f"Loaded {len(results)} examples from XSUM cache")
+    return results
+
+
 def load_all_cache_data(logger: logging.Logger) -> Dict[Tuple[str, str, str, str], Dict]:
     """Load all cache data from all sources."""
     all_data = {}
@@ -430,6 +739,24 @@ def load_all_cache_data(logger: logging.Logger) -> Dict[Tuple[str, str, str, str
         all_data.update(data)
     else:
         logger.warning(f"Author obfuscation dir not found: {author_obf_dir}")
+
+    # CNN
+    cnn_cache_dir = Path("panickserry_results/cnn_results/cnn/cache")
+    cnn_proxy_dir = Path("panickserry_results/cnn_winrates")
+    if cnn_cache_dir.exists() and cnn_proxy_dir.exists():
+        data = load_cnn_cache(cnn_cache_dir, cnn_proxy_dir, logger)
+        all_data.update(data)
+    else:
+        logger.warning(f"CNN cache or proxy dir not found: {cnn_cache_dir}, {cnn_proxy_dir}")
+
+    # XSUM
+    xsum_cache_dir = Path("panickserry_results/xsum_result/xsum/cache")
+    xsum_proxy_dir = Path("panickserry_results/xsum_winrates")
+    if xsum_cache_dir.exists() and xsum_proxy_dir.exists():
+        data = load_xsum_cache(xsum_cache_dir, xsum_proxy_dir, logger)
+        all_data.update(data)
+    else:
+        logger.warning(f"XSUM cache or proxy dir not found: {xsum_cache_dir}, {xsum_proxy_dir}")
 
     logger.info(f"Total cache examples loaded: {len(all_data)}")
     return all_data
@@ -601,6 +928,96 @@ def load_proxy_definitions(logger: logging.Logger) -> Dict:
 
                 except Exception as e:
                     logger.warning(f"Failed to load {json_file}: {e}")
+
+    # CNN dataset
+    logger.info("Loading CNN proxy definitions...")
+    cnn_proxy_dir = Path("panickserry_results/cnn_winrates")
+    if cnn_proxy_dir.exists():
+        for json_file in cnn_proxy_dir.glob("*.json"):
+            try:
+                with open(json_file) as f:
+                    data = json.load(f)
+
+                judge = data['reference_evaluator']
+                reference = data['reference_evaluatee']
+
+                # Normalize judge names to match cache
+                judge_norm = judge.replace("GPT-3.5", "gpt-3.5-turbo").replace("GPT-4", "gpt-4")
+
+                dataset = 'cnn'
+                key = (dataset, judge_norm, reference)
+
+                # Get judge winrate (should be same across proxies)
+                judge_winrate = None
+                proxies_info = {}
+
+                for proxy_name, proxy_data in data.get('proxies', {}).items():
+                    if judge_winrate is None:
+                        judge_winrate = proxy_data.get('reference_winrate')
+                    else:
+                        curr = proxy_data.get('reference_winrate', 0)
+                        if curr is not None and judge_winrate is not None:
+                            if abs(judge_winrate - curr) >= 1e-6:
+                                logger.warning(f"Judge winrate mismatch for {key}")
+
+                    proxies_info[proxy_name] = {
+                        'proxy_winrate': proxy_data.get('proxy_winrate'),
+                        'n_lsp': proxy_data.get('n_lsp', 0),
+                        'n_ilsp': proxy_data.get('n_ilsp', 0)
+                    }
+
+                proxy_defs[key] = {
+                    'judge_winrate': judge_winrate,
+                    'proxies': proxies_info
+                }
+
+            except Exception as e:
+                logger.warning(f"Failed to load {json_file}: {e}")
+
+    # XSUM dataset
+    logger.info("Loading XSUM proxy definitions...")
+    xsum_proxy_dir = Path("panickserry_results/xsum_winrates")
+    if xsum_proxy_dir.exists():
+        for json_file in xsum_proxy_dir.glob("*.json"):
+            try:
+                with open(json_file) as f:
+                    data = json.load(f)
+
+                judge = data['reference_evaluator']
+                reference = data['reference_evaluatee']
+
+                # Normalize judge names to match cache
+                judge_norm = judge.replace("GPT-3.5", "gpt-3.5-turbo").replace("GPT-4", "gpt-4")
+
+                dataset = 'xsum'
+                key = (dataset, judge_norm, reference)
+
+                # Get judge winrate (should be same across proxies)
+                judge_winrate = None
+                proxies_info = {}
+
+                for proxy_name, proxy_data in data.get('proxies', {}).items():
+                    if judge_winrate is None:
+                        judge_winrate = proxy_data.get('reference_winrate')
+                    else:
+                        curr = proxy_data.get('reference_winrate', 0)
+                        if curr is not None and judge_winrate is not None:
+                            if abs(judge_winrate - curr) >= 1e-6:
+                                logger.warning(f"Judge winrate mismatch for {key}")
+
+                    proxies_info[proxy_name] = {
+                        'proxy_winrate': proxy_data.get('proxy_winrate'),
+                        'n_lsp': proxy_data.get('n_lsp', 0),
+                        'n_ilsp': proxy_data.get('n_ilsp', 0)
+                    }
+
+                proxy_defs[key] = {
+                    'judge_winrate': judge_winrate,
+                    'proxies': proxies_info
+                }
+
+            except Exception as e:
+                logger.warning(f"Failed to load {json_file}: {e}")
 
     logger.info(f"Loaded proxy definitions for {len(proxy_defs)} (dataset, judge, reference) triplets")
     return proxy_defs
@@ -1924,7 +2341,7 @@ def run_part4_analysis(
 
 def main():
     parser = argparse.ArgumentParser(description="Proxy robustness analysis")
-    parser.add_argument("--output_dir", type=str, default="proxy_robustness_analysis",
+    parser.add_argument("--output_dir", type=str, default="proxy_robustness_analysis_2",
                        help="Output directory")
     parser.add_argument("--skip_part1", action="store_true",
                        help="Skip Part 1 (mean diff by n_proxies)")

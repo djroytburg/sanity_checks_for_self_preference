@@ -129,10 +129,10 @@ def get_family_color(family):
 def get_dataset_marker(dataset):
     """
     Get marker shape for dataset.
-    
+
     Args:
         dataset (str): Dataset name
-        
+
     Returns:
         str: Matplotlib marker code
     """
@@ -144,6 +144,8 @@ def get_dataset_marker(dataset):
         'truthfulness': 'v', # Triangle down
         'quality': 'P',      # Plus (filled)
         'alpaca_eval': '*',  # Star
+        'cnn': 'X',          # X (filled)
+        'xsum': 'h',         # Hexagon
     }
     return markers.get(dataset, 'o')
 
@@ -196,21 +198,78 @@ def load_self_preference_per_reference(results_dir, dataset):
 def load_per_reference_entropy():
     """
     Load per-reference entropy data.
-    
+
     Returns:
         dict: Per-reference entropy indexed by "{dataset}||{judge}||{reference}"
     """
     entropy_file = Path('per_reference_entropy.json')
-    
+
     if not entropy_file.exists():
         logger.error(f"Per-reference entropy file not found: {entropy_file}")
         return {}
-    
+
     with open(entropy_file, 'r') as f:
         entropy_data = json.load(f)
-    
+
     logger.info(f"Loaded {len(entropy_data)} per-reference entropy entries")
     return entropy_data
+
+
+def load_panickserry_per_reference(winrate_dir, dataset):
+    """
+    Load self-preference data per (judge, reference) pair for panickserry datasets (CNN/XSUM).
+
+    This loads from the analyze_proxy_robustness.py output which has J vs R statistics.
+
+    Args:
+        winrate_dir (str): Winrate directory path
+        dataset (str): Dataset name (cnn or xsum)
+
+    Returns:
+        dict: {(judge, reference): {original_sp}}
+    """
+    # For panickserry, we need to load from the analyze_proxy_robustness output
+    # which has the ILSP statistics we need
+
+    # Try loading from the test output directory first
+    potential_dirs = [
+        Path('test_jvr_kvr_cnn_xsum/csv'),
+        Path('test_cnn_xsum_output/csv'),
+        Path('proxy_robustness_output/csv'),
+        Path('jvr_kvr_analysis/csv'),
+    ]
+
+    ref_stats_file = None
+    for dir_path in potential_dirs:
+        potential_file = dir_path / 'statistics_by_dataset_judge_reference.csv'
+        if potential_file.exists():
+            ref_stats_file = potential_file
+            break
+
+    if not ref_stats_file:
+        logger.warning(f'No reference-level statistics file found for panickserry datasets')
+        return {}
+
+    import pandas as pd
+    df = pd.read_csv(ref_stats_file)
+
+    # Filter for this dataset
+    df = df[df['dataset'] == dataset]
+
+    result = {}
+    for _, row in df.iterrows():
+        judge = row['judge']
+        reference = row['reference']
+
+        # Get mean_diff which represents J - K (original self-preference)
+        mean_diff = row['mean_diff']
+
+        result[(judge, reference)] = {
+            'original_sp': mean_diff * 100,  # Convert to percentage
+        }
+
+    logger.info(f'Loaded {len(result)} (judge, reference) pairs for {dataset} from {ref_stats_file}')
+    return result
 
 
 # ----------------------
@@ -220,13 +279,13 @@ def load_per_reference_entropy():
 def prepare_unified_scatter_data():
     """
     Prepare scatter plot data aggregated across all datasets.
-    
+
     Returns:
         dict: {dataset: [(entropy_gap, hspp, family, size, judge, reference), ...]}
     """
     # Load per-reference entropy
     per_ref_entropy = load_per_reference_entropy()
-    
+
     # Define datasets
     experiments = [
         ('judge_swap_null_verif_smoke2', 'math500'),
@@ -237,34 +296,41 @@ def prepare_unified_scatter_data():
         ('judge_swap_null_author_obfuscation', 'quality'),
         ('judge_swap_null_dbg_results', 'alpaca_eval'),
     ]
-    
+
+    # Panickserry datasets
+    panickserry_experiments = [
+        ('panickserry_results/cnn_winrates', 'cnn'),
+        ('panickserry_results/xsum_winrates', 'xsum'),
+    ]
+
     all_data = defaultdict(list)
-    
+
+    # Process standard datasets
     for results_dir, dataset in experiments:
         logger.info(f"\nProcessing {dataset}...")
-        
+
         # Load self-preference data
         sp_data = load_self_preference_per_reference(results_dir, dataset)
-        
+
         if not sp_data:
             logger.warning(f"No self-preference data for {dataset}")
             continue
-        
+
         # Create points for each (judge, reference)
         for (judge, reference), sp in sp_data.items():
             # Get per-reference entropy
             key = f"{dataset}||{judge}||{reference}"
-            
+
             if key not in per_ref_entropy:
                 logger.debug(f'No per-reference entropy for ({dataset}, {judge}, {reference})')
                 continue
-            
+
             entropy_gap = per_ref_entropy[key]['entropy_gap']
             hspp = sp['original_sp']  # Original SP (not updated)
-            
+
             family = extract_model_family(judge)
             size = extract_model_size(judge)
-            
+
             all_data[dataset].append({
                 'entropy_gap': entropy_gap,
                 'hspp': hspp,
@@ -273,9 +339,46 @@ def prepare_unified_scatter_data():
                 'judge': judge,
                 'reference': reference
             })
-        
+
         logger.info(f"  {len(all_data[dataset])} points for {dataset}")
-    
+
+    # Process panickserry datasets
+    for winrate_dir, dataset in panickserry_experiments:
+        logger.info(f"\nProcessing {dataset}...")
+
+        # Load self-preference data for panickserry
+        sp_data = load_panickserry_per_reference(winrate_dir, dataset)
+
+        if not sp_data:
+            logger.warning(f"No self-preference data for {dataset}")
+            continue
+
+        # Create points for each (judge, reference)
+        for (judge, reference), sp in sp_data.items():
+            # Get per-reference entropy
+            key = f"{dataset}||{judge}||{reference}"
+
+            if key not in per_ref_entropy:
+                logger.debug(f'No per-reference entropy for ({dataset}, {judge}, {reference})')
+                continue
+
+            entropy_gap = per_ref_entropy[key]['entropy_gap']
+            hspp = sp['original_sp']  # Original SP (not updated)
+
+            family = extract_model_family(judge)
+            size = extract_model_size(judge)
+
+            all_data[dataset].append({
+                'entropy_gap': entropy_gap,
+                'hspp': hspp,
+                'family': family,
+                'size': size,
+                'judge': judge,
+                'reference': reference
+            })
+
+        logger.info(f"  {len(all_data[dataset])} points for {dataset}")
+
     return all_data
 
 
@@ -395,6 +498,8 @@ def create_unified_scatter_plot(all_data):
         'truthfulness': 'Truthfulness',
         'quality': 'Quality',
         'alpaca_eval': 'Alpaca Eval',
+        'cnn': 'CNN',
+        'xsum': 'XSUM',
     }
     for dataset in sorted(datasets_present):
         dataset_handles.append(

@@ -1,0 +1,800 @@
+{
+  "mbpp-plus||qwen-2.5-3b||gemma-2-2b": {
+    "entropy_lsp": 0.8932242328910613,
+    "entropy_ilsp": 0.9148495858602659,
+    "entropy_gap": 0.021625352969204537,
+    "n_lsp": 43,
+    "n_ilsp": 18
+  },
+  "mbpp-plus||qwen-2.5-3b||gpt-3.5-turbo": {
+    "entropy_lsp": 0.9526187434454423,
+    "entropy_ilsp": 0.845625424231772,
+    "entropy_gap": -0.10699331921367028,
+    "n_lsp": 10,
+    "n_ilsp": 24
+  },
+  "mbpp-plus||qwen-2.5-3b||gpt-4o": {
+    "entropy_lsp": 0.8176375941904579,
+    "entropy_ilsp": 0.9152283763716574,
+    "entropy_gap": 0.09759078218119954,
+    "n_lsp": 4,
+    "n_ilsp": 26
+  },
+  "mbpp-plus||qwen-2.5-3b||llama-3.2-1b": {
+    "entropy_lsp": 0.8884993265557712,
+    "entropy_ilsp": 0.9364935229936502,
+    "entropy_gap": 0.047994196437878944,
+    "n_lsp": 53,
+    "n_ilsp": 6
+  },
+  "mbpp-plus||qwen-2.5-3b||mistral-7b-v0.3": {
+    "entropy_lsp": 0.8526577467182266,
+    "entropy_ilsp": 0.8052693839829393,
+    "entropy_gap": -0.04738836273528724,
+    "n_lsp": 80,
+    "n_ilsp": 6
+  },
+  "mbpp-plus||qwen-2.5-3b||mistral-small": {
+    "entropy_lsp": 0.7975676636387489,
+    "entropy_ilsp": 0.9569499593617065,
+    "entropy_gap": 0.1593822957229576,
+    "n_lsp": 15,
+    "n_ilsp": 14
+  },
+  "mbpp-plus||qwen-2.5-3b||phi-3.5-mini": {
+    "entropy_lsp": 0.8368042922793418,
+    "entropy_ilsp": 0.9025767136298735,
+    "entropy_gap": 0.06577242135053163,
+    "n_lsp": 14,
+    "n_ilsp": 13
+  },
+  "mbpp-plus||llama-3.2-3b||gemma-2-2b": {
+    "entropy_lsp": 0.8599112832960015,
+    "entropy_ilsp": 0.8306147044658563,
+    "entropy_gap": -0.029296578830145248,
+    "n_lsp": 34,
+    "n_ilsp": 18
+  },
+  "mbpp-plus||llama-3.2-3b||gpt-3.5-turbo": {
+    "entropy_lsp": 0.874575598963349,
+    "entropy_ilsp": 0.8343729543457985,
+    "entropy_gap": -0.04020264461755052,
+    "n_lsp": 10,
+    "n_ilsp": 32
+  },
+  "mbpp-plus||llama-3.2-3b||gpt-4o": {
+    "entropy_lsp": 0.8936519226269493,
+    "entropy_ilsp": 0.8479290195765901,
+    "entropy_gap": -0.0457229030503592,
+    "n_lsp": 4,
+    "n_ilsp": 33
+  },
+  "mbpp-plus||llama-3.2-3b||llama-3.2-1b": {
+    "entropy_lsp": 0.8456124110987333,
+    "entropy_ilsp": 0.8508210880421065,
+    "entropy_gap": 0.005208676943373236,
+    "n_lsp": 43,
+    "n_ilsp": 9
+  },
+  "mbpp-plus||llama-3.2-3b||mistral-7b-v0.3": {
+    "entropy_lsp": 0.8493540154497324,
+    "entropy_ilsp": 0.7577078909095946,
+    "entropy_gap": -0.09164612454013787,
+    "n_lsp": 69,
+    "n_ilsp": 6
+  },
+  "mbpp-plus||llama-3.2-3b||mistral-small": {
+    "entropy_lsp": 0.8644658402462809,
+    "entropy_ilsp": 0.845614180944647,
+    "entropy_gap": -0.018851659301633905,
+    "n_lsp": 17,
+    "n_ilsp": 24
+  },
+  "mbpp-plus||llama-3.2-3b||phi-3.5-mini": {
+    "entropy_lsp": 0.8924792330896016,
+    "entropy_ilsp": 0.8470010009750912,
+    "entropy_gap": -0.04547823211451041,
+    "n_lsp": 17,
+    "n_ilsp": 25
+  },
+  "mbpp-plus||qwen-2.5-7b||gemma-2-2b": {
+    "entropy_lsp": 0.4246612734742587,
+    "entropy_ilsp": 0.7844093794813491,
+    "entropy_gap": 0.35974810600709045,
+    "n_lsp": 46,
+    "n_ilsp": 9
+  },
+  "mbpp-plus||qwen-2.5-7b||gpt-3.5-turbo": {
+    "entropy_lsp": 0.649325900434493,
+    "entropy_ilsp": 0.7226661400081944,
+    "entropy_gap": 0.0733402395737014,
+    "n_lsp": 15,
+    "n_ilsp": 18
+  },
+  "mbpp-plus||qwen-2.5-7b||gpt-4o": {
+    "entropy_lsp": 0.9037443067090206,
+    "entropy_ilsp": 0.7379925517836938,
+    "entropy_gap": -0.1657517549253268,
+    "n_lsp": 7,
+    "n_ilsp": 18
+  },
+  "mbpp-plus||qwen-2.5-7b||llama-3.2-1b": {
+    "entropy_lsp": 0.4008628652484146,
+    "entropy_ilsp": 0.9966015621316232,
+    "entropy_gap": 0.5957386968832086,
+    "n_lsp": 61,
+    "n_ilsp": 3
+  },
+  "mbpp-plus||qwen-2.5-7b||mistral-7b-v0.3": {
+    "entropy_lsp": 0.6396216325281816,
+    "entropy_ilsp": 0.6262810821449072,
+    "entropy_gap": -0.013340550383274419,
+    "n_lsp": 91,
+    "n_ilsp": 5
+  },
+  "mbpp-plus||qwen-2.5-7b||mistral-small": {
+    "entropy_lsp": 0.6019261323116151,
+    "entropy_ilsp": 0.5450920144292408,
+    "entropy_gap": -0.05683411788237425,
+    "n_lsp": 24,
+    "n_ilsp": 11
+  },
+  "mbpp-plus||qwen-2.5-7b||phi-3.5-mini": {
+    "entropy_lsp": 0.7322033350684335,
+    "entropy_ilsp": 0.6252724007176107,
+    "entropy_gap": -0.10693093435082279,
+    "n_lsp": 22,
+    "n_ilsp": 9
+  },
+  "mbpp-plus||llama-3.1-8b||gemma-2-2b": {
+    "entropy_lsp": 0.7740303788027783,
+    "entropy_ilsp": 0.8354357053962481,
+    "entropy_gap": 0.06140532659346987,
+    "n_lsp": 37,
+    "n_ilsp": 12
+  },
+  "mbpp-plus||llama-3.1-8b||gpt-3.5-turbo": {
+    "entropy_lsp": 0.8012612412037744,
+    "entropy_ilsp": 0.8545383045097773,
+    "entropy_gap": 0.0532770633060029,
+    "n_lsp": 9,
+    "n_ilsp": 25
+  },
+  "mbpp-plus||llama-3.1-8b||gpt-4o": {
+    "entropy_lsp": 0.8978264762840821,
+    "entropy_ilsp": 0.8477459829445221,
+    "entropy_gap": -0.050080493339559995,
+    "n_lsp": 6,
+    "n_ilsp": 29
+  },
+  "mbpp-plus||llama-3.1-8b||llama-3.2-1b": {
+    "entropy_lsp": 0.7982361954093264,
+    "entropy_ilsp": 0.8250008212347955,
+    "entropy_gap": 0.026764625825469013,
+    "n_lsp": 51,
+    "n_ilsp": 3
+  },
+  "mbpp-plus||llama-3.1-8b||mistral-7b-v0.3": {
+    "entropy_lsp": 0.8731536649797454,
+    "entropy_ilsp": 0.821309658690115,
+    "entropy_gap": -0.051844006289630484,
+    "n_lsp": 76,
+    "n_ilsp": 2
+  },
+  "mbpp-plus||llama-3.1-8b||mistral-small": {
+    "entropy_lsp": 0.8679323125082022,
+    "entropy_ilsp": 0.8856303017586531,
+    "entropy_gap": 0.017697989250450852,
+    "n_lsp": 18,
+    "n_ilsp": 17
+  },
+  "mbpp-plus||llama-3.1-8b||phi-3.5-mini": {
+    "entropy_lsp": 0.9163263018181503,
+    "entropy_ilsp": 0.8824878155648539,
+    "entropy_gap": -0.03383848625329644,
+    "n_lsp": 19,
+    "n_ilsp": 19
+  },
+  "mbpp-plus||gemma-2-9b||gemma-2-2b": {
+    "entropy_lsp": 0.6921757298619297,
+    "entropy_ilsp": 0.5754723408338075,
+    "entropy_gap": -0.11670338902812216,
+    "n_lsp": 30,
+    "n_ilsp": 7
+  },
+  "mbpp-plus||gemma-2-9b||gpt-3.5-turbo": {
+    "entropy_lsp": 0.6530423581897807,
+    "entropy_ilsp": 0.5987272512552918,
+    "entropy_gap": -0.05431510693448893,
+    "n_lsp": 9,
+    "n_ilsp": 26
+  },
+  "mbpp-plus||gemma-2-9b||gpt-4o": {
+    "entropy_lsp": 0.6044297932934521,
+    "entropy_ilsp": 0.5159923691146717,
+    "entropy_gap": -0.08843742417878042,
+    "n_lsp": 5,
+    "n_ilsp": 29
+  },
+  "mbpp-plus||gemma-2-9b||llama-3.2-1b": {
+    "entropy_lsp": 0.6720620744142805,
+    "entropy_ilsp": 0.5873581721436656,
+    "entropy_gap": -0.08470390227061486,
+    "n_lsp": 51,
+    "n_ilsp": 6
+  },
+  "mbpp-plus||gemma-2-9b||mistral-7b-v0.3": {
+    "entropy_lsp": 0.4133677615141595,
+    "entropy_ilsp": 0.45126949499443236,
+    "entropy_gap": 0.03790173348027287,
+    "n_lsp": 78,
+    "n_ilsp": 5
+  },
+  "mbpp-plus||gemma-2-9b||mistral-small": {
+    "entropy_lsp": 0.49588311905430416,
+    "entropy_ilsp": 0.5985773378729201,
+    "entropy_gap": 0.10269421881861596,
+    "n_lsp": 15,
+    "n_ilsp": 15
+  },
+  "mbpp-plus||gemma-2-9b||phi-3.5-mini": {
+    "entropy_lsp": 0.489904036740637,
+    "entropy_ilsp": 0.7567141756263563,
+    "entropy_gap": 0.26681013888571936,
+    "n_lsp": 15,
+    "n_ilsp": 16
+  },
+  "mbpp-plus||qwen-2.5-14b||gemma-2-2b": {
+    "entropy_lsp": 0.3996724060798592,
+    "entropy_ilsp": 0.5596440626033171,
+    "entropy_gap": 0.1599716565234579,
+    "n_lsp": 52,
+    "n_ilsp": 12
+  },
+  "mbpp-plus||qwen-2.5-14b||gpt-3.5-turbo": {
+    "entropy_lsp": 0.5255483382678718,
+    "entropy_ilsp": 0.4984643863191907,
+    "entropy_gap": -0.02708395194868113,
+    "n_lsp": 17,
+    "n_ilsp": 18
+  },
+  "mbpp-plus||qwen-2.5-14b||gpt-4o": {
+    "entropy_lsp": 0.33689434783243966,
+    "entropy_ilsp": 0.5183109061116713,
+    "entropy_gap": 0.18141655827923164,
+    "n_lsp": 5,
+    "n_ilsp": 14
+  },
+  "mbpp-plus||qwen-2.5-14b||llama-3.2-1b": {
+    "entropy_lsp": 0.25174334426772815,
+    "entropy_ilsp": 0.4351415776109453,
+    "entropy_gap": 0.18339823334321714,
+    "n_lsp": 66,
+    "n_ilsp": 4
+  },
+  "mbpp-plus||qwen-2.5-14b||mistral-7b-v0.3": {
+    "entropy_lsp": 0.30190950366449576,
+    "entropy_ilsp": 0.3400704610093217,
+    "entropy_gap": 0.03816095734482594,
+    "n_lsp": 95,
+    "n_ilsp": 6
+  },
+  "mbpp-plus||qwen-2.5-14b||mistral-small": {
+    "entropy_lsp": 0.46516477928915556,
+    "entropy_ilsp": 0.5616469952450494,
+    "entropy_gap": 0.09648221595589379,
+    "n_lsp": 26,
+    "n_ilsp": 11
+  },
+  "mbpp-plus||qwen-2.5-14b||phi-3.5-mini": {
+    "entropy_lsp": 0.5032029039936146,
+    "entropy_ilsp": 0.36358140874774747,
+    "entropy_gap": -0.1396214952458671,
+    "n_lsp": 22,
+    "n_ilsp": 7
+  },
+  "mbpp-plus||gemma-2-27b||gemma-2-2b": {
+    "entropy_lsp": 0.9143042627238634,
+    "entropy_ilsp": 0.6199226489681489,
+    "entropy_gap": -0.2943816137557146,
+    "n_lsp": 46,
+    "n_ilsp": 9
+  },
+  "mbpp-plus||gemma-2-27b||gpt-3.5-turbo": {
+    "entropy_lsp": 0.8516185115915581,
+    "entropy_ilsp": 0.7725292605471334,
+    "entropy_gap": -0.07908925104442466,
+    "n_lsp": 12,
+    "n_ilsp": 16
+  },
+  "mbpp-plus||gemma-2-27b||gpt-4o": {
+    "entropy_lsp": 0.891850525655141,
+    "entropy_ilsp": 0.820520220704346,
+    "entropy_gap": -0.07133030495079495,
+    "n_lsp": 4,
+    "n_ilsp": 15
+  },
+  "mbpp-plus||gemma-2-27b||llama-3.2-1b": {
+    "entropy_lsp": 0.8296683034690421,
+    "entropy_ilsp": 0.8220637642348769,
+    "entropy_gap": -0.007604539234165153,
+    "n_lsp": 61,
+    "n_ilsp": 2
+  },
+  "mbpp-plus||gemma-2-27b||mistral-7b-v0.3": {
+    "entropy_lsp": 0.8266135426052093,
+    "entropy_ilsp": 0.8944086196774576,
+    "entropy_gap": 0.0677950770722483,
+    "n_lsp": 92,
+    "n_ilsp": 6
+  },
+  "mbpp-plus||gemma-2-27b||mistral-small": {
+    "entropy_lsp": 0.820123476298004,
+    "entropy_ilsp": 0.7467884601869806,
+    "entropy_gap": -0.07333501611102333,
+    "n_lsp": 21,
+    "n_ilsp": 9
+  },
+  "mbpp-plus||gemma-2-27b||phi-3.5-mini": {
+    "entropy_lsp": 0.7469701850315735,
+    "entropy_ilsp": 0.8503209242486696,
+    "entropy_gap": 0.10335073921709603,
+    "n_lsp": 20,
+    "n_ilsp": 8
+  },
+  "mbpp-plus||qwen-2.5-32b||gemma-2-2b": {
+    "entropy_lsp": 0.27093186260414526,
+    "entropy_ilsp": 0.365973895684887,
+    "entropy_gap": 0.09504203308074172,
+    "n_lsp": 58,
+    "n_ilsp": 10
+  },
+  "mbpp-plus||qwen-2.5-32b||gpt-3.5-turbo": {
+    "entropy_lsp": 0.43778152462666486,
+    "entropy_ilsp": 0.34763224794484876,
+    "entropy_gap": -0.0901492766818161,
+    "n_lsp": 21,
+    "n_ilsp": 14
+  },
+  "mbpp-plus||qwen-2.5-32b||gpt-4o": {
+    "entropy_lsp": 0.31921187577224414,
+    "entropy_ilsp": 0.2204367443943421,
+    "entropy_gap": -0.09877513137790203,
+    "n_lsp": 11,
+    "n_ilsp": 12
+  },
+  "mbpp-plus||qwen-2.5-32b||llama-3.2-1b": {
+    "entropy_lsp": 0.2165320890894015,
+    "entropy_ilsp": 8.260416678040945e-05,
+    "entropy_gap": -0.2164494849226211,
+    "n_lsp": 72,
+    "n_ilsp": 2
+  },
+  "mbpp-plus||qwen-2.5-32b||mistral-7b-v0.3": {
+    "entropy_lsp": 0.24753516132652037,
+    "entropy_ilsp": 0.4119955935357663,
+    "entropy_gap": 0.16446043220924594,
+    "n_lsp": 102,
+    "n_ilsp": 5
+  },
+  "mbpp-plus||qwen-2.5-32b||mistral-small": {
+    "entropy_lsp": 0.529032572320383,
+    "entropy_ilsp": 0.17063622389190355,
+    "entropy_gap": -0.35839634842847945,
+    "n_lsp": 31,
+    "n_ilsp": 8
+  },
+  "mbpp-plus||qwen-2.5-32b||phi-3.5-mini": {
+    "entropy_lsp": 0.4614274592315963,
+    "entropy_ilsp": 0.23970056161354716,
+    "entropy_gap": -0.22172689761804912,
+    "n_lsp": 28,
+    "n_ilsp": 5
+  },
+  "mbpp-plus||llama-3.1-70b||gemma-2-2b": {
+    "entropy_lsp": 0.7163603717424202,
+    "entropy_ilsp": 0.6867585163061217,
+    "entropy_gap": -0.029601855436298452,
+    "n_lsp": 48,
+    "n_ilsp": 14
+  },
+  "mbpp-plus||llama-3.1-70b||gpt-3.5-turbo": {
+    "entropy_lsp": 0.7435050572276561,
+    "entropy_ilsp": 0.7892121338700512,
+    "entropy_gap": 0.04570707664239504,
+    "n_lsp": 11,
+    "n_ilsp": 17
+  },
+  "mbpp-plus||llama-3.1-70b||gpt-4o": {
+    "entropy_lsp": 0.8433928993217966,
+    "entropy_ilsp": 0.801598745181804,
+    "entropy_gap": -0.041794154139992656,
+    "n_lsp": 5,
+    "n_ilsp": 19
+  },
+  "mbpp-plus||llama-3.1-70b||llama-3.2-1b": {
+    "entropy_lsp": 0.6535491640890431,
+    "entropy_ilsp": 0.7674191769566772,
+    "entropy_gap": 0.1138700128676341,
+    "n_lsp": 61,
+    "n_ilsp": 6
+  },
+  "mbpp-plus||llama-3.1-70b||mistral-7b-v0.3": {
+    "entropy_lsp": 0.6711945136897972,
+    "entropy_ilsp": 0.7604190947032464,
+    "entropy_gap": 0.08922458101344921,
+    "n_lsp": 88,
+    "n_ilsp": 6
+  },
+  "mbpp-plus||llama-3.1-70b||mistral-small": {
+    "entropy_lsp": 0.8192232489979345,
+    "entropy_ilsp": 0.8035225829086072,
+    "entropy_gap": -0.015700666089327298,
+    "n_lsp": 19,
+    "n_ilsp": 9
+  },
+  "mbpp-plus||llama-3.1-70b||phi-3.5-mini": {
+    "entropy_lsp": 0.7153495259373627,
+    "entropy_ilsp": 0.829869735762791,
+    "entropy_gap": 0.11452020982542832,
+    "n_lsp": 22,
+    "n_ilsp": 12
+  },
+  "mbpp-plus||llama-3.3-70b||gemma-2-2b": {
+    "entropy_lsp": 0.4959464228675938,
+    "entropy_ilsp": 0.4558233450679284,
+    "entropy_gap": -0.040123077799665396,
+    "n_lsp": 52,
+    "n_ilsp": 10
+  },
+  "mbpp-plus||llama-3.3-70b||gpt-3.5-turbo": {
+    "entropy_lsp": 0.6403771872537967,
+    "entropy_ilsp": 0.5191877371778113,
+    "entropy_gap": -0.12118945007598536,
+    "n_lsp": 14,
+    "n_ilsp": 13
+  },
+  "mbpp-plus||llama-3.3-70b||gpt-4o": {
+    "entropy_lsp": 0.6627320613205306,
+    "entropy_ilsp": 0.5703049408402864,
+    "entropy_gap": -0.09242712048024426,
+    "n_lsp": 7,
+    "n_ilsp": 14
+  },
+  "mbpp-plus||llama-3.3-70b||llama-3.2-1b": {
+    "entropy_lsp": 0.39550245549822666,
+    "entropy_ilsp": 0.07588845343970704,
+    "entropy_gap": -0.31961400205851964,
+    "n_lsp": 66,
+    "n_ilsp": 2
+  },
+  "mbpp-plus||llama-3.3-70b||mistral-7b-v0.3": {
+    "entropy_lsp": 0.4199387854050265,
+    "entropy_ilsp": 0.39790070412219675,
+    "entropy_gap": -0.022038081282829747,
+    "n_lsp": 96,
+    "n_ilsp": 5
+  },
+  "mbpp-plus||llama-3.3-70b||mistral-small": {
+    "entropy_lsp": 0.6563696409420676,
+    "entropy_ilsp": 0.6168226905499566,
+    "entropy_gap": -0.03954695039211098,
+    "n_lsp": 27,
+    "n_ilsp": 10
+  },
+  "mbpp-plus||llama-3.3-70b||phi-3.5-mini": {
+    "entropy_lsp": 0.5085526860603683,
+    "entropy_ilsp": 0.7149398761315742,
+    "entropy_gap": 0.20638719007120587,
+    "n_lsp": 26,
+    "n_ilsp": 9
+  },
+  "translation||Qwen2.5-7B-Instruct||Qwen2.5-72B-Instruct": {
+    "entropy_lsp": 0.5846556411313574,
+    "entropy_ilsp": 0.6428398127909647,
+    "entropy_gap": 0.05818417165960732,
+    "n_lsp": 28,
+    "n_ilsp": 212
+  },
+  "translation||Qwen2.5-7B-Instruct||Qwen2.5-7B": {
+    "entropy_lsp": 0.5024155419820443,
+    "entropy_ilsp": 0.5582668136163204,
+    "entropy_gap": 0.055851271634276056,
+    "n_lsp": 209,
+    "n_ilsp": 59
+  },
+  "translation||Qwen2.5-7B-Instruct||Llama-3.1-8B-Instruct": {
+    "entropy_lsp": 0.5298056653815004,
+    "entropy_ilsp": 0.6178356106276203,
+    "entropy_gap": 0.08802994524611985,
+    "n_lsp": 187,
+    "n_ilsp": 93
+  },
+  "translation||Llama-3.1-8B-Instruct||Qwen2.5-7B-Instruct": {
+    "entropy_lsp": 0.938436794773396,
+    "entropy_ilsp": 0.9584292220132824,
+    "entropy_gap": 0.019992427239886368,
+    "n_lsp": 103,
+    "n_ilsp": 169
+  },
+  "translation||Llama-3.1-8B-Instruct||Llama-3.1-70B-Instruct": {
+    "entropy_lsp": 0.9401407366911195,
+    "entropy_ilsp": 0.9444503958796114,
+    "entropy_gap": 0.00430965918849191,
+    "n_lsp": 47,
+    "n_ilsp": 180
+  },
+  "translation||Llama-3.1-8B-Instruct||Llama-3.1-8B": {
+    "entropy_lsp": 0.9023107192255406,
+    "entropy_ilsp": 0.9675581769696128,
+    "entropy_gap": 0.06524745774407215,
+    "n_lsp": 202,
+    "n_ilsp": 46
+  },
+  "translation||Llama-3.1-8B-Instruct||gemma-2-9b-it": {
+    "entropy_lsp": 0.9564284546530701,
+    "entropy_ilsp": 0.9557101265209849,
+    "entropy_gap": -0.0007183281320852775,
+    "n_lsp": 13,
+    "n_ilsp": 175
+  },
+  "translation||gemma-2-9b-it||Llama-3.1-8B-Instruct": {
+    "entropy_lsp": 0.4190178295825958,
+    "entropy_ilsp": 0.5109612473473355,
+    "entropy_gap": 0.09194341776473969,
+    "n_lsp": 236,
+    "n_ilsp": 55
+  },
+  "translation||gemma-2-9b-it||gemma-2-9b": {
+    "entropy_lsp": 0.3272973335932083,
+    "entropy_ilsp": 0.5978511534559692,
+    "entropy_gap": 0.2705538198627609,
+    "n_lsp": 61,
+    "n_ilsp": 42
+  },
+  "truthfulness||gemma-2-9b-it||Llama-3.1-8B-Instruct": {
+    "entropy_lsp": 0.2154912545990084,
+    "entropy_ilsp": 0.48125170860272365,
+    "entropy_gap": 0.2657604540037153,
+    "n_lsp": 135,
+    "n_ilsp": 135
+  },
+  "truthfulness||gemma-2-9b-it||gemma-2-9b": {
+    "entropy_lsp": 0.10068670516253526,
+    "entropy_ilsp": 0.539553567422535,
+    "entropy_gap": 0.43886686225999977,
+    "n_lsp": 92,
+    "n_ilsp": 46
+  },
+  "truthfulness||Qwen2.5-7B-Instruct||Qwen2.5-7B": {
+    "entropy_lsp": 0.5584851519622918,
+    "entropy_ilsp": 0.8236587198299982,
+    "entropy_gap": 0.2651735678677064,
+    "n_lsp": 181,
+    "n_ilsp": 44
+  },
+  "truthfulness||Qwen2.5-7B-Instruct||Qwen2.5-72B-Instruct": {
+    "entropy_lsp": 0.7106800994479521,
+    "entropy_ilsp": 0.705756149058547,
+    "entropy_gap": -0.004923950389405074,
+    "n_lsp": 65,
+    "n_ilsp": 114
+  },
+  "truthfulness||Qwen2.5-7B-Instruct||Llama-3.1-8B-Instruct": {
+    "entropy_lsp": 0.5520324570164917,
+    "entropy_ilsp": 0.7353558527959921,
+    "entropy_gap": 0.1833233957795004,
+    "n_lsp": 141,
+    "n_ilsp": 135
+  },
+  "truthfulness||Llama-3.1-8B-Instruct||Llama-3.1-70B-Instruct": {
+    "entropy_lsp": 0.6458664902312679,
+    "entropy_ilsp": 0.8183774928457657,
+    "entropy_gap": 0.1725110026144978,
+    "n_lsp": 41,
+    "n_ilsp": 145
+  },
+  "truthfulness||Llama-3.1-8B-Instruct||Llama-3.1-8B": {
+    "entropy_lsp": 0.6626224635441461,
+    "entropy_ilsp": 0.7843740528763996,
+    "entropy_gap": 0.1217515893322535,
+    "n_lsp": 243,
+    "n_ilsp": 39
+  },
+  "truthfulness||Llama-3.1-8B-Instruct||gemma-2-9b-it": {
+    "entropy_lsp": 0.42986122740247595,
+    "entropy_ilsp": 0.8259583213733006,
+    "entropy_gap": 0.39609709397082465,
+    "n_lsp": 48,
+    "n_ilsp": 128
+  },
+  "truthfulness||Llama-3.1-8B-Instruct||Qwen2.5-7B-Instruct": {
+    "entropy_lsp": 0.6573237552099075,
+    "entropy_ilsp": 0.8085205335804452,
+    "entropy_gap": 0.1511967783705377,
+    "n_lsp": 92,
+    "n_ilsp": 116
+  },
+  "alpaca_eval||Qwen2.5-3B-Instruct||Llama-3.1-70B-Instruct": {
+    "entropy_lsp": 0.7955607126295964,
+    "entropy_ilsp": 0.7365233215536349,
+    "entropy_gap": -0.05903739107596151,
+    "n_lsp": 99,
+    "n_ilsp": 281
+  },
+  "alpaca_eval||Qwen2.5-1.5B-Instruct||Llama-3.1-70B-Instruct": {
+    "entropy_lsp": 0.9810419493190696,
+    "entropy_ilsp": 0.993262399616997,
+    "entropy_gap": 0.012220450297927399,
+    "n_lsp": 49,
+    "n_ilsp": 304
+  },
+  "alpaca_eval||Qwen2.5-7B-Instruct||Qwen2.5-7B": {
+    "entropy_lsp": 0.6247247684033262,
+    "entropy_ilsp": 0.7668513448677096,
+    "entropy_gap": 0.14212657646438331,
+    "n_lsp": 214,
+    "n_ilsp": 79
+  },
+  "alpaca_eval||Qwen2.5-7B-Instruct||DeepSeek-R1-Distill-Qwen-7B": {
+    "entropy_lsp": 0.3826770212365251,
+    "entropy_ilsp": 0.8735435153466053,
+    "entropy_gap": 0.49086649411008026,
+    "n_lsp": 211,
+    "n_ilsp": 47
+  },
+  "alpaca_eval||Qwen2.5-7B-Instruct||Llama-3.1-8B-Instruct": {
+    "entropy_lsp": 0.8161203309278229,
+    "entropy_ilsp": 0.7859157422577266,
+    "entropy_gap": -0.030204588670096233,
+    "n_lsp": 191,
+    "n_ilsp": 152
+  },
+  "alpaca_eval||Qwen2.5-7B-Instruct||Qwen2.5-72B-Instruct": {
+    "entropy_lsp": 0.6466853168257735,
+    "entropy_ilsp": 0.8408655761024579,
+    "entropy_gap": 0.19418025927668447,
+    "n_lsp": 40,
+    "n_ilsp": 213
+  },
+  "alpaca_eval||Qwen2.5-7B-Instruct||Llama-3.1-70B-Instruct": {
+    "entropy_lsp": 0.8873455726439566,
+    "entropy_ilsp": 0.7477709267865112,
+    "entropy_gap": -0.1395746458574454,
+    "n_lsp": 133,
+    "n_ilsp": 236
+  },
+  "alpaca_eval||Llama-3.1-8B-Instruct||Llama-3.1-70B-Instruct": {
+    "entropy_lsp": 0.8255341927321183,
+    "entropy_ilsp": 0.9094166218817947,
+    "entropy_gap": 0.08388242914967647,
+    "n_lsp": 70,
+    "n_ilsp": 249
+  },
+  "alpaca_eval||Llama-3.1-8B-Instruct||Llama-3.1-8B": {
+    "entropy_lsp": 0.6907769527189844,
+    "entropy_ilsp": 0.8927103810516701,
+    "entropy_gap": 0.20193342833268568,
+    "n_lsp": 297,
+    "n_ilsp": 37
+  },
+  "alpaca_eval||Llama-3.1-8B-Instruct||Qwen2.5-7B-Instruct": {
+    "entropy_lsp": 0.7143747332498551,
+    "entropy_ilsp": 0.8972250849168256,
+    "entropy_gap": 0.1828503516669705,
+    "n_lsp": 157,
+    "n_ilsp": 198
+  },
+  "alpaca_eval||Llama-3.1-8B-Instruct||gemma-2-9b-it": {
+    "entropy_lsp": 0.6527735350419027,
+    "entropy_ilsp": 0.8824852348150484,
+    "entropy_gap": 0.22971169977314565,
+    "n_lsp": 31,
+    "n_ilsp": 153
+  },
+  "alpaca_eval||gemma-2-9b-it||Llama-3.1-8B-Instruct": {
+    "entropy_lsp": 0.2754330212484557,
+    "entropy_ilsp": 0.7381978905872547,
+    "entropy_gap": 0.462764869338799,
+    "n_lsp": 162,
+    "n_ilsp": 146
+  },
+  "alpaca_eval||gemma-2-9b-it||gemma-2-9b": {
+    "entropy_lsp": 0.15656433978127307,
+    "entropy_ilsp": 0.911349963811427,
+    "entropy_gap": 0.7547856240301539,
+    "n_lsp": 125,
+    "n_ilsp": 29
+  },
+  "alpaca_eval||Qwen2.5-14B-Instruct||Llama-3.1-70B-Instruct": {
+    "entropy_lsp": 0.2868328903299377,
+    "entropy_ilsp": 0.41628613515869156,
+    "entropy_gap": 0.12945324482875387,
+    "n_lsp": 239,
+    "n_ilsp": 119
+  },
+  "alpaca_eval||Qwen2.5-32B-Instruct||Llama-3.1-70B-Instruct": {
+    "entropy_lsp": 0.2839423913134668,
+    "entropy_ilsp": 0.4191537389783674,
+    "entropy_gap": 0.13521134766490056,
+    "n_lsp": 202,
+    "n_ilsp": 123
+  },
+  "alpaca_eval||Qwen2.5-0.5B-Instruct||Llama-3.1-70B-Instruct": {
+    "entropy_lsp": 0.9976279311025873,
+    "entropy_ilsp": 0.9980248713139085,
+    "entropy_gap": 0.00039694021132119506,
+    "n_lsp": 8,
+    "n_ilsp": 422
+  },
+  "cnn||gpt-3.5-turbo||human": {
+    "entropy_lsp": 0.9711305538933285,
+    "entropy_ilsp": 0.9658045754953554,
+    "entropy_gap": -0.005325978397973108,
+    "n_lsp": 249,
+    "n_ilsp": 71
+  },
+  "cnn||gpt-4||human": {
+    "entropy_lsp": 0.9999598487364963,
+    "entropy_ilsp": 0.999927863115833,
+    "entropy_gap": -3.1985620663310677e-05,
+    "n_lsp": 86,
+    "n_ilsp": 12
+  },
+  "cnn||gpt-4||GPT-3.5": {
+    "entropy_lsp": 0.9977987382859668,
+    "entropy_ilsp": 0.9999749348092638,
+    "entropy_gap": 0.002176196523297036,
+    "n_lsp": 75,
+    "n_ilsp": 4
+  },
+  "cnn||gpt-3.5-turbo||llama2": {
+    "entropy_lsp": 0.965282259155105,
+    "entropy_ilsp": 0.97492957082554,
+    "entropy_gap": 0.009647311670434977,
+    "n_lsp": 81,
+    "n_ilsp": 25
+  },
+  "cnn||gpt-4||llama2": {
+    "entropy_lsp": 0.9957413408992565,
+    "entropy_ilsp": 0.9992321166745836,
+    "entropy_gap": 0.003490775775327082,
+    "n_lsp": 48,
+    "n_ilsp": 5
+  },
+  "xsum||gpt-3.5-turbo||human": {
+    "entropy_lsp": 1.0,
+    "entropy_ilsp": 1.0,
+    "entropy_gap": 0.0,
+    "n_lsp": 156,
+    "n_ilsp": 20
+  },
+  "xsum||gpt-4||human": {
+    "entropy_lsp": 0.9973763657078547,
+    "entropy_ilsp": 0.9624725055664832,
+    "entropy_gap": -0.03490386014137148,
+    "n_lsp": 95,
+    "n_ilsp": 6
+  },
+  "xsum||gpt-4||GPT-3.5": {
+    "entropy_lsp": 0.9838067104888378,
+    "entropy_ilsp": 0.9628804392750644,
+    "entropy_gap": -0.02092627121377344,
+    "n_lsp": 58,
+    "n_ilsp": 8
+  },
+  "xsum||gpt-3.5-turbo||llama2": {
+    "entropy_lsp": 1.0,
+    "entropy_ilsp": 1.0,
+    "entropy_gap": 0.0,
+    "n_lsp": 82,
+    "n_ilsp": 51
+  },
+  "xsum||gpt-4||llama2": {
+    "entropy_lsp": 0.9903757238322979,
+    "entropy_ilsp": 0.9677680245454501,
+    "entropy_gap": -0.022607699286847804,
+    "n_lsp": 79,
+    "n_ilsp": 9
+  }
+}

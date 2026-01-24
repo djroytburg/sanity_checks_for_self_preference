@@ -29,11 +29,13 @@ from glob import glob
 VERIF_DATASETS = ["math500", "mmlu", "mbpp-plus"]
 DBG_DATASETS = ["alpaca_eval", "translation", "truthfulness"]
 AUTHOR_OBF_DATASETS = ["quality"]
+PANICKSERRY_DATASETS = ["cnn", "xsum"]
 
 PAPER_GROUPS = {
     "llm-sp-verif": VERIF_DATASETS,
     "dbg-score-paper": DBG_DATASETS,
     "author_obfuscation": AUTHOR_OBF_DATASETS,
+    "panickserry": PANICKSERRY_DATASETS,
 }
 
 FAMILY_COLORS = {
@@ -101,7 +103,13 @@ def setup_logging(output_dir: Path) -> logging.Logger:
 def extract_model_family(model_name: str) -> str:
     """Extract model family from model name."""
     model_lower = model_name.lower()
-    families = ['llama', 'gemma', 'qwen', 'gpt', 'mistral', 'phi', 'deepseek']
+    # Check GPT variants first (more specific before general)
+    if 'gpt-4' in model_lower or 'gpt4' in model_lower:
+        return 'gpt'
+    if 'gpt-3.5' in model_lower or 'gpt3.5' in model_lower:
+        return 'gpt'
+
+    families = ['llama', 'gemma', 'qwen', 'mistral', 'phi', 'deepseek', 'gpt', 'hermes']
     for family in families:
         if family in model_lower:
             return family
@@ -382,6 +390,190 @@ def load_author_obf_cache(
     return results
 
 
+def load_panickserry_cache(
+    cache_dir: Path,
+    winrate_dir: Path,
+    dataset: str,
+    logger: logging.Logger
+) -> Dict[Tuple[str, str, str, str], Dict]:
+    """
+    Load J vs R and K vs R data from panickserry (CNN/XSUM) cache structure.
+
+    Returns:
+        Dict mapping (dataset, judge, reference, example_id) -> {
+            'j_prob': float,
+            'k_probs': List[float],
+            'category': str
+        }
+    """
+    results = {}
+
+    # Load LSP/ILSP labels from winrate directory
+    label_cache = {}
+
+    def get_labels(judge: str, reference: str) -> Tuple[set, set]:
+        """Get (lsp_ids, ilsp_ids) for a judge/reference pair."""
+        cache_key = (judge, reference)
+        if cache_key in label_cache:
+            return label_cache[cache_key]
+
+        # Normalize judge name for winrate file
+        judge_norm = judge.replace("gpt-3.5-turbo", "GPT-3.5").replace("gpt-4", "GPT-4")
+
+        winrate_file = winrate_dir / f"{judge_norm}_vs_{reference}.json"
+        if not winrate_file.exists():
+            label_cache[cache_key] = (set(), set())
+            return label_cache[cache_key]
+
+        try:
+            with open(winrate_file) as f:
+                data = json.load(f)
+
+            # Aggregate LSP/ILSP IDs across all proxies
+            lsp_ids = set()
+            ilsp_ids = set()
+            for proxy_name, proxy_info in data.get("proxies", {}).items():
+                if proxy_name == 'oracle_gpt5':
+                    continue
+                lsp_ids.update(proxy_info.get("lsp_ids", []))
+                ilsp_ids.update(proxy_info.get("ilsp_ids", []))
+
+            label_cache[cache_key] = (lsp_ids, ilsp_ids)
+        except Exception as e:
+            logger.warning(f"Failed to load labels from {winrate_file}: {e}")
+            label_cache[cache_key] = (set(), set())
+
+        return label_cache[cache_key]
+
+    # Walk cache_dir / dataset / cache / judge / reference
+    cache_path = cache_dir / dataset / 'cache'
+    if not cache_path.exists():
+        logger.warning(f"Cache path not found: {cache_path}")
+        return results
+
+    for judge_dir in cache_path.iterdir():
+        if not judge_dir.is_dir():
+            continue
+        judge = judge_dir.name
+
+        for ref_dir in judge_dir.iterdir():
+            if not ref_dir.is_dir():
+                continue
+            reference = ref_dir.name
+
+            # Load J vs R games
+            j_game1_file = ref_dir / "J_vs_R_game1.jsonl"
+            j_game2_file = ref_dir / "J_vs_R_game2.jsonl"
+
+            if not j_game1_file.exists() or not j_game2_file.exists():
+                logger.debug(f"Missing J_vs_R files for {judge}/{reference}")
+                continue
+
+            # Load K vs R games
+            k_game1_file = ref_dir / "K_vs_R_game1.jsonl"
+            k_game2_file = ref_dir / "K_vs_R_game2.jsonl"
+
+            if not k_game1_file.exists() or not k_game2_file.exists():
+                logger.debug(f"Missing K_vs_R files for {judge}/{reference}")
+                continue
+
+            # Get LSP/ILSP labels - try different reference name variations
+            # CNN uses: gpt3.5, human, llama2
+            # XSUM uses: gpt-3.5/llama2 for gpt-3.5-turbo, gpt-3.5/llama for gpt-4
+            ref_variations = [reference]
+            if reference == 'gpt3.5':
+                ref_variations = ['GPT-3.5', 'gpt-3.5']
+            elif reference == 'gpt-3.5':
+                ref_variations = ['GPT-3.5', 'gpt3.5']
+            elif reference in ['llama', 'llama2']:
+                ref_variations = ['llama2', 'llama']
+
+            lsp_ids = set()
+            ilsp_ids = set()
+            for ref_var in ref_variations:
+                lsp, ilsp = get_labels(judge, ref_var)
+                if lsp or ilsp:
+                    lsp_ids = lsp
+                    ilsp_ids = ilsp
+                    break
+
+            if not lsp_ids and not ilsp_ids:
+                logger.debug(f"No LSP/ILSP labels for {judge}/{reference}")
+                continue
+
+            # Load J game1
+            j_game1_by_id = {}
+            with open(j_game1_file) as f:
+                for line in f:
+                    entry = json.loads(line)
+                    j_game1_by_id[entry['example_id']] = entry
+
+            # Load J game2
+            j_game2_by_id = {}
+            with open(j_game2_file) as f:
+                for line in f:
+                    entry = json.loads(line)
+                    j_game2_by_id[entry['example_id']] = entry
+
+            # Load K games - group by (example_id, proxy)
+            k_game1_by_id_proxy = defaultdict(dict)
+            with open(k_game1_file) as f:
+                for line in f:
+                    entry = json.loads(line)
+                    ex_id = entry['example_id']
+                    proxy = entry.get('proxy', 'unknown')
+                    k_game1_by_id_proxy[ex_id][proxy] = entry
+
+            k_game2_by_id_proxy = defaultdict(dict)
+            with open(k_game2_file) as f:
+                for line in f:
+                    entry = json.loads(line)
+                    ex_id = entry['example_id']
+                    proxy = entry.get('proxy', 'unknown')
+                    k_game2_by_id_proxy[ex_id][proxy] = entry
+
+            # Compute averaged probabilities for each example
+            common_j_ids = set(j_game1_by_id.keys()) & set(j_game2_by_id.keys())
+
+            for ex_id in common_j_ids:
+                j_g1 = j_game1_by_id[ex_id]
+                j_g2 = j_game2_by_id[ex_id]
+
+                # J probability: avg of game1 prob_response1 and game2 prob_response2
+                j_prob = (j_g1['prob_response1'] + j_g2['prob_response2']) / 2.0
+
+                # Determine category based on LSP/ILSP labels
+                if ex_id in lsp_ids:
+                    category = 'lsp'
+                elif ex_id in ilsp_ids:
+                    category = 'ilsp'
+                else:
+                    category = j_g1.get('category', 'unknown')
+
+                # K probabilities: avg across games for each proxy
+                k_probs = []
+                proxies_g1 = k_game1_by_id_proxy.get(ex_id, {})
+                proxies_g2 = k_game2_by_id_proxy.get(ex_id, {})
+
+                common_proxies = set(proxies_g1.keys()) & set(proxies_g2.keys())
+                for proxy in common_proxies:
+                    k_g1 = proxies_g1[proxy]
+                    k_g2 = proxies_g2[proxy]
+                    k_prob = (k_g1['prob_response1'] + k_g2['prob_response2']) / 2.0
+                    k_probs.append(k_prob)
+
+                if k_probs:
+                    key = (dataset, judge, reference, ex_id)
+                    results[key] = {
+                        'j_prob': j_prob,
+                        'k_probs': k_probs,
+                        'category': category
+                    }
+
+    logger.info(f"Loaded {len(results)} examples from panickserry/{dataset}")
+    return results
+
+
 def load_all_data(logger: logging.Logger) -> Dict[Tuple[str, str, str, str], Dict]:
     """Load all data from all cache sources."""
     all_data = {}
@@ -413,6 +605,22 @@ def load_all_data(logger: logging.Logger) -> Dict[Tuple[str, str, str, str], Dic
         all_data.update(data)
     else:
         logger.warning(f"Author obfuscation dir not found: {author_obf_dir}")
+
+    # Load panickserry datasets (CNN and XSUM)
+    panickserry_configs = [
+        ("cnn", Path("panickserry_results/cnn_results"), Path("panickserry_results/cnn_winrates")),
+        ("xsum", Path("panickserry_results/xsum_result"), Path("panickserry_results/xsum_winrates")),
+    ]
+
+    for dataset, cache_base, winrate_dir in panickserry_configs:
+        if cache_base.exists() and winrate_dir.exists():
+            data = load_panickserry_cache(cache_base, winrate_dir, dataset, logger)
+            all_data.update(data)
+        else:
+            if not cache_base.exists():
+                logger.warning(f"Panickserry cache not found: {cache_base}")
+            if not winrate_dir.exists():
+                logger.warning(f"Panickserry winrate dir not found: {winrate_dir}")
 
     logger.info(f"Total examples loaded: {len(all_data)}")
     return all_data

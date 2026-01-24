@@ -215,6 +215,8 @@ def main():
         ('judge_swap_null_dbg_results', 'Truthfulness', 'truthfulness'),
         ('judge_swap_null_author_obfuscation', 'Quality', 'quality'),
         ('judge_swap_null_dbg_results', 'Alpaca Eval', 'alpaca_eval'),
+        ('panickserry_results/cnn_results','Cnn','cnn'),
+        ('panickserry_results/xsum_result','Xsum','xsum'),
     ]
     
     # Create output directory
