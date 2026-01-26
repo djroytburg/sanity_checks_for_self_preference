@@ -1521,18 +1521,14 @@ def plot_winrate_balance_scatter_with_residuals(
     logger: logging.Logger
 ):
     """
-    Create scatter plot of J winrate vs weighted K winrate with binned residuals subplot.
+    Create scatter plot of J winrate vs weighted K winrate.
     Uses full legend with shapes based on paper (family for color, paper for marker shape).
     """
     if len(df) == 0:
         logger.warning(f"No data to plot for {title}")
         return
 
-    fig, (ax_main, ax_residual) = plt.subplots(
-        2, 1, figsize=(10, 12),
-        gridspec_kw={'height_ratios': [3, 1]},
-        sharex=True
-    )
+    fig, ax_main = plt.subplots(figsize=(10, 10))
 
     # --- Main scatter plot ---
     # Sort by size for layering
@@ -1563,27 +1559,21 @@ def plot_winrate_balance_scatter_with_residuals(
     lims = [0, 1]
     ax_main.plot(lims, lims, 'k--', linewidth=1.5, alpha=0.5)
 
-    # Compute R² and Pearson rho and LOBF
+    # Compute LOBF (without adding correlation stats to title)
     if len(df) >= 2:
         result = linregress(df['j_winrate'], df['weighted_k_winrate'])
-        r_squared = result.rvalue ** 2
-        rho, p_val = pearsonr(df['j_winrate'], df['weighted_k_winrate'])
 
         # Plot LOBF
         x_line = np.linspace(df['j_winrate'].min(), df['j_winrate'].max(), 100)
         y_line = result.slope * x_line + result.intercept
         ax_main.plot(x_line, y_line, 'r-', linewidth=2, alpha=0.7)
 
-        subtitle = f"n={len(df)}, ρ={rho:.3f}, R²={r_squared:.3f}"
-
-    ax_main.set_ylabel("Weighted Avg K's Gold Winrate", fontsize=LABEL_FONTSIZE)
+    ax_main.set_xlabel("J's Gold Winrate against R", fontsize=LABEL_FONTSIZE)
+    ax_main.set_ylabel("Weighted Avg K's Gold Winrate against R", fontsize=LABEL_FONTSIZE)
     ax_main.set_xlim(0, 1)
     ax_main.set_ylim(0, 1)
     ax_main.set_aspect('equal')
-    ax_main.grid(True, alpha=0.3)
-    ax_main.set_title(title, fontsize=TITLE_FONTSIZE)
-    ax_main.text(0.5, 1.02, subtitle, transform=ax_main.transAxes,
-                 fontsize=LABEL_FONTSIZE - 2, ha='center', style='italic')
+    ax_main.set_title(f"{title}\n({subtitle})", fontsize=TITLE_FONTSIZE)
     ax_main.tick_params(axis='both', labelsize=TICK_FONTSIZE)
 
     # --- Legend ---
@@ -1600,7 +1590,8 @@ def plot_winrate_balance_scatter_with_residuals(
     paper_labels = {
         'llm-sp-verif': 'Verifiable',
         'dbg-score-paper': 'DBG Score',
-        'author_obfuscation': 'Author Obf.'
+        'author_obfuscation': 'Author Obf.',
+        'panickserry': 'panickserry'
     }
     for paper in sorted(papers_present):
         marker = get_paper_marker(paper)
@@ -1635,26 +1626,6 @@ def plot_winrate_balance_scatter_with_residuals(
     # Combine legend handles
     all_handles = family_handles + paper_handles + size_handles
     ax_main.legend(handles=all_handles, loc='upper left', fontsize=LEGEND_FONTSIZE - 1, ncol=2)
-
-    # --- Binned residuals plot ---
-    binned = compute_binned_residuals(df)
-
-    if len(binned) > 0:
-        ax_residual.errorbar(
-            binned['bin_center'], binned['mean_residual'],
-            yerr=[binned['mean_residual'] - binned['ci_low'],
-                  binned['ci_high'] - binned['mean_residual']],
-            fmt='o-', color='steelblue', capsize=4, capthick=2,
-            markersize=10, linewidth=2
-        )
-
-        # Dashed line at y=0
-        ax_residual.axhline(y=0, color='red', linestyle='--', linewidth=2, alpha=0.7)
-
-        ax_residual.set_xlabel("J's Gold Winrate (bin center)", fontsize=LABEL_FONTSIZE)
-        ax_residual.set_ylabel("Mean Residual (K - J)", fontsize=LABEL_FONTSIZE)
-        ax_residual.tick_params(axis='both', labelsize=TICK_FONTSIZE)
-        ax_residual.grid(True, alpha=0.3)
 
     plt.tight_layout()
 

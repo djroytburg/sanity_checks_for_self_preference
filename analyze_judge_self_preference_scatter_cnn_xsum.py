@@ -121,11 +121,16 @@ def load_author_obf_data(dataset_dir):
                 logger.warning(f"Missing judge/reference in {json_file}")
                 continue
             
-            # Get winrate directly from top-level field
-            task_accuracy = data.get('ref_winrate')
-            
+            # Get winrate from proxies (all proxies should have the same reference_winrate)
+            task_accuracy = None
+            proxies = data.get('proxies', {})
+            if proxies:
+                # Get reference_winrate from the first proxy
+                first_proxy = next(iter(proxies.values()))
+                task_accuracy = first_proxy.get('reference_winrate')
+
             if task_accuracy is None:
-                logger.warning(f"No ref_winrate found in {json_file}")
+                logger.warning(f"No reference_winrate found in {json_file}")
                 continue
             
             # Assert consistency if we've seen this (judge, ref) before
@@ -541,14 +546,20 @@ def create_scatter_plot_for_paper(paper_dir, all_scatter_data):
     # Add legend with only present families and sizes
     import matplotlib.patches as mpatches
     from matplotlib.lines import Line2D
-    
+
+    # Check if there's any data to show in legend
+    if not families_present and not sizes_present:
+        logger.warning("No data points to plot - skipping legend creation")
+        plt.tight_layout()
+        return fig
+
     # Row 1: Family legend (only those present)
     family_handles = []
     for family in sorted(families_present):
         family_handles.append(
             mpatches.Patch(color=get_family_color(family), label=family.capitalize())
         )
-    
+
     # Row 2: Size legend with ranges (only those present)
     size_ranges = [
         (3, '≤3B', 80),
@@ -568,46 +579,46 @@ def create_scatter_plot_for_paper(paper_dir, all_scatter_data):
             has_size_in_range = True
         elif ref_size == 70 and any(s >= 70 for s in sizes_present):
             has_size_in_range = True
-        
+
         if has_size_in_range:
             size_handles.append(
                 Line2D([0], [0], marker='o', color='w', markerfacecolor='gray',
                        markersize=np.sqrt(marker_size / np.pi),
                        label=label, markeredgecolor='black', markeredgewidth=0.5)
             )
-    
+
     # Row 3: Alpha legend
     alpha_handles = [
         Line2D([0], [0], marker='o', color='w', markerfacecolor='gray',
-               markersize=9, alpha=0.3, markeredgecolor='gray', 
+               markersize=9, alpha=0.3, markeredgecolor='gray',
                markeredgewidth=1.5, label='Original finding'),
         Line2D([0], [0], marker='o', color='w', markerfacecolor='gray',
-               markersize=9, alpha=1.0, markeredgecolor='black', 
+               markersize=9, alpha=1.0, markeredgecolor='black',
                markeredgewidth=1, label='With judge swap baseline')
     ]
-    
+
     # Create three-row legend layout
     n_families = len(family_handles)
     n_sizes = len(size_handles)
-    
-    # Row 1: Families
-    legend1 = fig.legend(family_handles, [h.get_label() for h in family_handles],
-                        loc='lower center', bbox_to_anchor=(0.5, -0.02), 
-                        ncol=n_families, fontsize=10, frameon=False)
-    
-    # Row 2: Sizes  
-    legend2 = fig.legend(size_handles, [h.get_label() for h in size_handles],
-                        loc='lower center', bbox_to_anchor=(0.5, -0.08),
-                        ncol=n_sizes, fontsize=10, frameon=False)
-    
+
+    # Row 1: Families (only if we have any)
+    if n_families > 0:
+        legend1 = fig.legend(family_handles, [h.get_label() for h in family_handles],
+                            loc='lower center', bbox_to_anchor=(0.5, -0.02),
+                            ncol=n_families, fontsize=10, frameon=False)
+        fig.add_artist(legend1)
+
+    # Row 2: Sizes (only if we have any)
+    if n_sizes > 0:
+        legend2 = fig.legend(size_handles, [h.get_label() for h in size_handles],
+                            loc='lower center', bbox_to_anchor=(0.5, -0.08),
+                            ncol=n_sizes, fontsize=10, frameon=False)
+        fig.add_artist(legend2)
+
     # Row 3: Alpha
     legend3 = fig.legend(alpha_handles, [h.get_label() for h in alpha_handles],
                         loc='lower center', bbox_to_anchor=(0.5, -0.14),
                         ncol=2, fontsize=10, frameon=False)
-    
-    # Add all legends to figure
-    fig.add_artist(legend1)
-    fig.add_artist(legend2)
     
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.20)
@@ -626,21 +637,22 @@ def main():
     all_scatter_data_by_dir = {
         'author_obfuscation': {},
         'dbg-score-paper': {},
-        'llm-sp-verif': {}
+        'llm-sp-verif': {},
+        'panickserry_results': {}
     }
     
     # Load author obfuscation (quality)
     logger.info("\n=== AUTHOR OBFUSCATION (QUALITY) ===")
     try:
-        quality_dir = Path('panickserry_results/cnn_winrates').expanduser()
+        quality_dir = Path('panickserry_results/xsum_winrates').expanduser()
         judge_ref_accuracy = load_author_obf_data(str(quality_dir))
-        self_pref = load_self_pref_data('cnn_results')
+        self_pref = load_self_pref_data('xsum_result')
         print(self_pref)
         print(judge_ref_accuracy)
         scatter_data = prepare_scatter_data(judge_ref_accuracy, self_pref)
         print(all_scatter_data_by_dir)
         print(scatter_data)
-        all_scatter_data_by_dir['author_obfuscation']['cnn'] = scatter_data
+        all_scatter_data_by_dir['panickserry_results']['xsum'] = scatter_data
         print(all_scatter_data_by_dir)
         logger.info(f"Loaded {len(scatter_data)} judges for Quality")
     except Exception as e:
@@ -702,7 +714,7 @@ def main():
     
     # Generate scatter plots for each paper_dir
     logger.info("\n=== GENERATING PLOTS ===")
-    output_dir = Path('scatter_plots_cnn')
+    output_dir = Path('scatter_plots_xsum')
     output_dir.mkdir(exist_ok=True)
     
     # Create subdirectories for different formats
