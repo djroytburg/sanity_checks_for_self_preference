@@ -411,7 +411,8 @@ def load_self_pref_data(dataset_name):
         f"judge_swap_null_verif_smoke2/{dataset_name}/analysis/aggregated_by_judge_reference.json",
         f"judge_swap_null_author_obfuscation/{dataset_name}/analysis/aggregated_by_judge_reference.json",
         f"judge_swap_null_dbg_results/{dataset_name}/analysis/aggregated_by_judge_reference.json",
-        f"panickserry_results/{dataset_name}/cnn/analysis/aggregated_by_judge_reference.json"
+        f"panickserry_results/{dataset_name}/cnn/analysis/aggregated_by_judge_reference.json",
+        f"panickserry_results/{dataset_name}/xsum/analysis/aggregated_by_judge_reference.json"
     ]
     
     for candidate in candidates:
