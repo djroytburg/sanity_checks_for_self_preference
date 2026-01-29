@@ -10,7 +10,6 @@
 #SBATCH --error=logs/reproduction/debug_repro_%j.log
 
 # run_debug_reproduction.sh: SLURM script for automated reproduction quality debugging
-# Written by: Dani
 # Created: 2025-12-22 01:15 EST
 # Last Modified: 2025-12-22 01:15 EST
 
