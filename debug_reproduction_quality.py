@@ -1,7 +1,4 @@
-#!/usr/bin/env python3
-# debug_reproduction_quality.py: Automated debugging script for reproduction quality
-# Created: 2025-12-22 01:05 EST
-# Last Modified: 2025-12-22 01:05 EST
+
 """
 This script runs reproduction experiments on small baseline models and generates
 comprehensive analytics to debug reproduction quality issues.

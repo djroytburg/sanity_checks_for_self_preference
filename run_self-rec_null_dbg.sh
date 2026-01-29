@@ -1,18 +1,3 @@
-#!/bin/bash
-#SBATCH --partition=general
-#SBATCH --nodes=1
-#SBATCH --mem=200G
-#SBATCH --gres=gpu:8
-#SBATCH --time=48:00:00
-#SBATCH --output=logs/self_rec_null_dbg/self_rec_null_dbg_%j.log
-#SBATCH --error=logs/self_rec_null_dbg/self_rec_null_dbg_%j.log
-#SBATCH --job-name=self_rec_null_dbg
-
-# run_self-rec_null_dbg.sh: SLURM script for self-recognition null hypothesis test
-# Written by: Dani
-# Created: Dec 24, 2025, 17:15 EST
-# Last Modified: Dec 24, 2025, 17:15 EST
-
 echo "=========================================="
 echo "SELF-RECOGNITION NULL HYPOTHESIS TEST"
 echo "Job ID: $SLURM_JOB_ID"

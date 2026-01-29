@@ -1,8 +1,3 @@
-# run_judge_swap_null_author_obfuscation.py: Judge swap null hypothesis test using author_obfuscation harness
-# Tests H0: P(J chooses J over R) = P(J chooses K over R) where K is a proxy with similar capability
-# Adapted from run_judge_swap_null_dbg.py to work with author_obfuscation infrastructure
-# Created: Jan 4, 2026, 19:00 EST
-# Last Modified: Jan 14 2026, 09:30 EST
 
 import sys
 import os

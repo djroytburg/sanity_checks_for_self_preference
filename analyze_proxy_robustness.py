@@ -1,10 +1,3 @@
-# analyze_proxy_robustness.py: Comprehensive proxy robustness analysis
-# Part 1: Mean difference stability across varying proxy counts
-# Part 2: Gold winrate balance verification via scatter plots
-# Part 3: Judge-proxy composition tables
-# Part 4: Sensitivity analysis (out-of-family proxies)
-# Created: January 23, 2026, 11:00 AM EST
-# Last Modified: January 23, 2026, 02:00 PM EST
 
 import argparse
 import json

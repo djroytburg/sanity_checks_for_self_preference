@@ -3,7 +3,7 @@ DATA_DIR="data to the alpacaeval dataset"
 DATA_TYPE="alpaca_eval"
 
 # Model_type is the judge model
-MODEL_TYPE="/data/hf_models/Llama/Llama-3.1-70B-Instruct"
+MODEL_TYPE="./models/Llama/Llama-3.1-70B-Instruct"
 MODEL_NAME_1="Llama-3.1-70B-Instruct"
 MODEL_NAME_2="Qwen2.5-0.5B-Instruct"
 python ${WORK_DIR}/gen_preference.py \

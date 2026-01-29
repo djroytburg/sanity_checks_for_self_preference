@@ -1,7 +1,4 @@
-# analyze_judge_swap_results_diffmean.py: MEAN-OF-DIFFERENCES (distribution-of-differences) version
-# Computes per-example diffs (J - K) and tests mean(diffs) > 0 using a paired/one-sample t-test.
-# Created: January 18, 2026, 01:45 EST
-# Last Modified: January 18, 2026, 06:15 EST
+
 
 import argparse
 import json

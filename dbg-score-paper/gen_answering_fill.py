@@ -3,9 +3,6 @@
 # # # ####################################################### # # #
 
 # --- metadata --- #
-# author: dani r.
-# created: 2025-12-23, 16:20 EST
-# last modified: 2025-12-23, 16:20 EST
 
 # --- description --- #
 # we need to enrich the generations that the authors already did with the metadata from the datasets.

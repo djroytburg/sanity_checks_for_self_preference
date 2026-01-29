@@ -1,7 +1,4 @@
-# run_judge_swap_null_dbg.py: Generate preference probabilities for judge swap null hypothesis test
-# Tests on DBG - H0: P(J chooses J over R) = P(J chooses K over R) where K is a proxy with similar capability
-# Created: Dec 24, 2025, 03:30 EST
-# Last Modified: Dec 24, 2025, 03:30 EST
+
 
 import argparse
 import json

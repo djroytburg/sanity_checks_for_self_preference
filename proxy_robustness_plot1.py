@@ -1,23 +1,3 @@
-#!/usr/bin/env python3
-"""
-proxy_robustness_plot1.py: Analyze proxy coverage across (example, judge, reference) triplets.
-
-Creates a plot showing the percentage of triplets that have at least N valid proxies,
-to visualize how proxy coverage decreases as we require more proxies per example.
-
-Supports three data sources:
-- author_obfuscation: quality dataset from author obfuscation experiments
-- dbg: DBG score datasets (alpaca_eval, translation, truthfulness)
-- verifiable: Verifiable datasets (math500, mbpp-plus, mmlu)
-
-Usage:
-    python proxy_robustness_plot1.py --source author_obfuscation
-    python proxy_robustness_plot1.py --source dbg --dataset alpaca_eval
-    python proxy_robustness_plot1.py --source dbg --dataset all
-    python proxy_robustness_plot1.py --source verifiable --dataset math500
-    python proxy_robustness_plot1.py --source verifiable --dataset all
-"""
-
 import json
 import argparse
 from pathlib import Path

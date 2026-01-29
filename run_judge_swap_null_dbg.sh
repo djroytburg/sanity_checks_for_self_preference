@@ -1,20 +1,7 @@
-#!/bin/bash
-#SBATCH --job-name=judge_swap_null_dbg
-#SBATCH --partition=general
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=400G
-#SBATCH --gres=gpu:8
-#SBATCH --time=48:00:00
-#SBATCH --output=logs/judge_swap_null_dbg/%x_%j.log
-#SBATCH --error=logs/judge_swap_null_dbg/%x_%j.log
+
 
 echo "=========================================="
 echo "JUDGE SWAP NULL HYPOTHESIS TEST: DBG"
-echo "Job ID: $SLURM_JOB_ID"
-echo "Node: $SLURM_NODELIST"
-echo "GPUs: $SLURM_GPUS_ON_NODE"
 echo "Start time: $(date)"
 echo "=========================================="
 

@@ -1,7 +1,3 @@
-# analyze_judge_self_preference_scatter_v2.py: Generate scatter plots with correct task accuracy from winrates
-# Analysis script
-# Created: January 17, 2026, 23:30 AM EST
-# Last Modified: January 17, 2026, 23:30 AM EST
 
 import json
 import os

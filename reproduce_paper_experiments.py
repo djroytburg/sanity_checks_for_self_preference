@@ -1,31 +1,3 @@
-#!/usr/bin/env python3
-# reproduce_paper_experiments.py: Faithful Reproduction of Paper Experiments
-# Created: 2025-12-21 10:30 EST
-# Last Modified: 2026-01-12
-"""
-This module reproduces the self-preference experiments from the paper:
-- Verdict generation using vLLM for efficient inference
-- Temperature control (0 for non-reasoning, 0.6 for reasoning models)
-- Token-level probability extraction for A/B/T labels
-- Support for CoT reasoning with verdict parsing
-
-Key paper details:
-- All non-reasoning models: temperature=0 (greedy decoding)
-- All reasoning models (DeepSeek-R1-Distill): temperature=0.6
-- Verdict extraction: Extract A/B/T token logprobs (not string matching)
-- For reasoning models: Remove <think>...</think> tokens from responses
-- vLLM used for all inference except OpenAI API models
-
-Robust verdict parsing:
-- Uses token-level logprob extraction (like run_arena_self_preference.py)
-- NOT brittle string matching - properly handles cases like "The answer is B"
-- Extracts first A/B/T token from model output via logprobs
-- Normalizes token probabilities to get A/B/T probabilities
-
-UNKNOWN HYPERPARAMETERS (to be filled in):
-- [ ] Verdict parsing format for CoT (what text before final verdict?)
-"""
-
 import argparse
 import json
 import logging

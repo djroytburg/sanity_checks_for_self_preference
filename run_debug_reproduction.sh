@@ -1,22 +1,6 @@
-#!/bin/bash
-#SBATCH --partition=general
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --mem=200G
-#SBATCH --gres=gpu:2
-#SBATCH --time=4:00:00
-#SBATCH --job-name=debug_repro
-#SBATCH --output=logs/reproduction/debug_repro_%j.log
-#SBATCH --error=logs/reproduction/debug_repro_%j.log
-
-# run_debug_reproduction.sh: SLURM script for automated reproduction quality debugging
-# Created: 2025-12-22 01:15 EST
-# Last Modified: 2025-12-22 01:15 EST
 
 echo "=========================================="
 echo "REPRODUCTION QUALITY DEBUG"
-echo "Job ID: $SLURM_JOB_ID"
-echo "Node: $SLURM_NODELIST"
 echo "Started: $(date)"
 echo "=========================================="
 

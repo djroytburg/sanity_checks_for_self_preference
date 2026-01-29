@@ -1,7 +1,3 @@
-# run_self-rec_null_dbg.py: Generate self-recognition probabilities for correlation with self-preference
-# Tests H0: Corr(J_pref, J_rec) = 0 - no correlation between preference and recognition
-# Created: Dec 24, 2025, 17:15 EST
-# Last Modified: Dec 24, 2025, 17:15 EST
 
 import argparse
 import json

@@ -1,17 +1,3 @@
-#!/bin/bash
-#SBATCH --job-name=repro_exp
-#SBATCH --partition=general
-#SBATCH --nodes=1
-#SBATCH --gres=gpu:2
-#SBATCH --mem=200G
-#SBATCH --time=04:00:00
-#SBATCH --output=logs/reproduction/repro_exp_%j.log
-#SBATCH --error=logs/reproduction/repro_exp_%j.log
-
-# run_reproduction_experiment.sh: SLURM runner for full reproduction experiments
-# Written by: Dani
-# Created: 2025-12-21 20:50 EST
-# Last Modified: 2025-12-21 23:30 EST
 
 set -euo pipefail
 
@@ -22,12 +8,9 @@ source .venv/bin/activate
 echo "[repro] starting: $(date)"
 echo "[repro] python: $(which python)"
 
-# Function to map full model name to short name
-# Maps HuggingFace model IDs to the short names used in llm-sp/sp filenames
 get_model_short_name() {
     local model="$1"
     case "$model" in
-        # Qwen models (qwen-2.5-{3b,7b,14b,32b,72b} available)
         "Qwen/Qwen2.5-3B-Instruct") echo "qwen-2.5-3b" ;;
         "Qwen/Qwen2.5-7B-Instruct") echo "qwen-2.5-7b" ;;
         "Qwen/Qwen2.5-14B-Instruct") echo "qwen-2.5-14b" ;;

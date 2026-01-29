@@ -1,6 +1,3 @@
-# calculate_per_reference_entropy.py: Calculate entropy for each (judge, reference) pair
-# Created: January 18, 2026, 03:30 AM EST
-# Last Modified: January 18, 2026, 03:30 AM EST
 
 import json
 import numpy as np

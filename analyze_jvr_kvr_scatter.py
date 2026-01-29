@@ -1,7 +1,3 @@
-# analyze_jvr_kvr_scatter.py: J vs R / K vs R scatter analysis with LOBF
-# Generates scatter plots comparing P(J|JvR) vs P(K|KvR) at multiple aggregation levels
-# Created: January 23, 2026, 10:00 AM EST
-# Last Modified: January 23, 2026, 10:00 AM EST
 
 import argparse
 import json

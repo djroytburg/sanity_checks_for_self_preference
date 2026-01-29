@@ -1,8 +1,4 @@
-#!/usr/bin/env python3
-# run_judge_swap_null_verif.py: Run judge-swap null experiment using verified proxy sets.
-# Writes analyzer-compatible cache JSONLs and only performs vLLM inference for J(K vs R).
-# Created: 2026-01-15 07:11 EST
-# Last Modified: 2026-01-15 07:25 EST
+
 
 import argparse
 import gc

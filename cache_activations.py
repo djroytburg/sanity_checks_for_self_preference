@@ -1,6 +1,3 @@
-"""
-Cache residual stream activations from a model and dataset.
-"""
 
 import argparse
 import pickle

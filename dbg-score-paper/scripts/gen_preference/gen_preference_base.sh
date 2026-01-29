@@ -3,7 +3,7 @@ DATA_DIR="data to the alpacaeval dataset"
 DATA_TYPE="alpaca_eval"
 
 
-MODEL_TYPE="/data/hf_models/Qwen/Qwen2.5-7B"
+MODEL_TYPE="./models/Qwen/Qwen2.5-7B"
 MODEL_NAME_1="Qwen2.5-7B"
 MODEL_NAME_2="Llama3.1-8B"
 

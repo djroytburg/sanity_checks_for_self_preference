@@ -1,6 +1,3 @@
-# generate_judge_swap_tables.py: Generate TeX tables for judge swap experiments
-# Created: January 17, 2026, 10:30 AM EST
-# Last Modified: January 17, 2026, 10:30 AM EST
 
 import json
 import os

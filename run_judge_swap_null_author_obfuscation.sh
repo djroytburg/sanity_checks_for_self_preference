@@ -1,20 +1,6 @@
-#!/bin/bash
-#SBATCH --job-name=judge_swap_null_author_obfuscation
-#SBATCH --partition=general
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=100G
-#SBATCH --gres=gpu:8
-#SBATCH --time=24:00:00
-#SBATCH --output=logs/judge_swap_null_author_obfuscation/%x_%j.log
-#SBATCH --error=logs/judge_swap_null_author_obfuscation/%x_%j.log
 
 echo "=========================================="
 echo "JUDGE SWAP NULL HYPOTHESIS TEST - AUTHOR_OBFUSCATION"
-echo "Job ID: $SLURM_JOB_ID"
-echo "Node: $SLURM_NODELIST"
-echo "GPUs: $SLURM_GPUS_ON_NODE"
 echo "Start time: $(date)"
 echo "=========================================="
 

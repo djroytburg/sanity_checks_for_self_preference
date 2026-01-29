@@ -1,7 +1,3 @@
-# DBG: analyze_judge_swap_results.py: Analyze and visualize judge swap null hypothesis test results
-# Plots P(J chooses J over R) vs P(J chooses K over R) split by LSP/ILSP
-# Created: Dec 24, 2025, 02:45 EST
-# Last Modified: Jan 15, 2026, 19:48 EST
 
 import argparse
 import json

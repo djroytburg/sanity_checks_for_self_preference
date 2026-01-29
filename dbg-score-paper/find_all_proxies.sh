@@ -1,7 +1,4 @@
 # find_all_proxies.sh: Find best proxy models for all judges
-# Written by: Dani
-# Created: Dec 23, 2024, 11:10 EST
-# Last Modified: Dec 23, 2024, 11:10 EST
 
 echo "=========================================="
 echo "Finding proxy models for all judges"

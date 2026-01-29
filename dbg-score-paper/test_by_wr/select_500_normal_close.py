@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/data/zhiyuan_data/SelfEvaluation')
+sys.path.append('./data/SelfEvaluation')
 
 import os
 from utils import load_jsonl_data, add_jsonl_data

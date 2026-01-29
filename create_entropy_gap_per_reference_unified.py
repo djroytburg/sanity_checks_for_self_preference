@@ -1,6 +1,3 @@
-# create_entropy_gap_per_reference_unified.py: Single unified per-reference plot across all datasets
-# Created: January 18, 2026, 03:45 AM EST
-# Last Modified: January 18, 2026, 03:45 AM EST
 
 import json
 import os

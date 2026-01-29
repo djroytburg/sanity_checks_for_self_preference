@@ -13,8 +13,8 @@
         "proxy_name": "gemma-2-9b",
         "reference_name": "gemma-2-2b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_gemma-2-2b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_gemma-2-2b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -3666,8 +3666,8 @@
         "proxy_name": "llama-3.1-70b",
         "reference_name": "gemma-2-2b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_gemma-2-2b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_gemma-2-2b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -8639,8 +8639,8 @@
         "proxy_name": "llama-3.1-8b",
         "reference_name": "gemma-2-2b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-8b_gemma-2-2b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-8b_gemma-2-2b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -12622,8 +12622,8 @@
         "proxy_name": "llama-3.2-3b",
         "reference_name": "gemma-2-2b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.2-3b_gemma-2-2b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.2-3b_gemma-2-2b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -16165,8 +16165,8 @@
         "proxy_name": "llama-3.3-70b",
         "reference_name": "gemma-2-2b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_gemma-2-2b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_gemma-2-2b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -21358,8 +21358,8 @@
         "proxy_name": "qwen-2.5-14b",
         "reference_name": "gemma-2-2b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-14b_gemma-2-2b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-14b_gemma-2-2b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -26441,8 +26441,8 @@
         "proxy_name": "qwen-2.5-32b",
         "reference_name": "gemma-2-2b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_gemma-2-2b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_gemma-2-2b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -31634,8 +31634,8 @@
         "proxy_name": "qwen-2.5-3b",
         "reference_name": "gemma-2-2b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_gemma-2-2b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_gemma-2-2b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -36387,8 +36387,8 @@
         "proxy_name": "qwen-2.5-72b",
         "reference_name": "gemma-2-2b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_gemma-2-2b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_gemma-2-2b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -41800,8 +41800,8 @@
         "proxy_name": "qwen-2.5-7b",
         "reference_name": "gemma-2-2b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_gemma-2-2b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gemma-2-2b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_gemma-2-2b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -46445,8 +46445,8 @@
         "proxy_name": "gemma-2-9b",
         "reference_name": "gpt-3.5-turbo",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_gpt-3.5-turbo_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_gpt-3.5-turbo_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -48668,8 +48668,8 @@
         "proxy_name": "llama-3.1-70b",
         "reference_name": "gpt-3.5-turbo",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_gpt-3.5-turbo_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_gpt-3.5-turbo_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -50341,8 +50341,8 @@
         "proxy_name": "llama-3.1-8b",
         "reference_name": "gpt-3.5-turbo",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-8b_gpt-3.5-turbo_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-8b_gpt-3.5-turbo_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -52014,8 +52014,8 @@
         "proxy_name": "llama-3.2-3b",
         "reference_name": "gpt-3.5-turbo",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.2-3b_gpt-3.5-turbo_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.2-3b_gpt-3.5-turbo_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -53687,8 +53687,8 @@
         "proxy_name": "llama-3.3-70b",
         "reference_name": "gpt-3.5-turbo",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_gpt-3.5-turbo_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_gpt-3.5-turbo_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -55470,8 +55470,8 @@
         "proxy_name": "qwen-2.5-14b",
         "reference_name": "gpt-3.5-turbo",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-14b_gpt-3.5-turbo_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-14b_gpt-3.5-turbo_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -57473,8 +57473,8 @@
         "proxy_name": "qwen-2.5-32b",
         "reference_name": "gpt-3.5-turbo",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_gpt-3.5-turbo_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_gpt-3.5-turbo_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -59366,8 +59366,8 @@
         "proxy_name": "qwen-2.5-3b",
         "reference_name": "gpt-3.5-turbo",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_gpt-3.5-turbo_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_gpt-3.5-turbo_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -61259,8 +61259,8 @@
         "proxy_name": "qwen-2.5-72b",
         "reference_name": "gpt-3.5-turbo",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_gpt-3.5-turbo_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_gpt-3.5-turbo_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -62932,8 +62932,8 @@
         "proxy_name": "qwen-2.5-7b",
         "reference_name": "gpt-3.5-turbo",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_gpt-3.5-turbo_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-3.5-turbo_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_gpt-3.5-turbo_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -64937,8 +64937,8 @@
         "proxy_name": "gemma-2-9b",
         "reference_name": "gpt-4o",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_gpt-4o_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_gpt-4o_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -66720,8 +66720,8 @@
         "proxy_name": "llama-3.1-70b",
         "reference_name": "gpt-4o",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_gpt-4o_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_gpt-4o_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -67733,8 +67733,8 @@
         "proxy_name": "llama-3.1-8b",
         "reference_name": "gpt-4o",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-8b_gpt-4o_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-8b_gpt-4o_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -69076,8 +69076,8 @@
         "proxy_name": "llama-3.3-70b",
         "reference_name": "gpt-4o",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_gpt-4o_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_gpt-4o_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -70089,8 +70089,8 @@
         "proxy_name": "qwen-2.5-32b",
         "reference_name": "gpt-4o",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_gpt-4o_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_gpt-4o_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -70882,8 +70882,8 @@
         "proxy_name": "qwen-2.5-3b",
         "reference_name": "gpt-4o",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_gpt-4o_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_gpt-4o_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -72115,8 +72115,8 @@
         "proxy_name": "qwen-2.5-72b",
         "reference_name": "gpt-4o",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_gpt-4o_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_gpt-4o_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -72688,8 +72688,8 @@
         "proxy_name": "qwen-2.5-7b",
         "reference_name": "gpt-4o",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_gpt-4o_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_gpt-4o_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_gpt-4o_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -73813,8 +73813,8 @@
         "proxy_name": "gemma-2-9b",
         "reference_name": "llama-3.2-1b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_llama-3.2-1b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_llama-3.2-1b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -79116,8 +79116,8 @@
         "proxy_name": "llama-3.1-70b",
         "reference_name": "llama-3.2-1b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_llama-3.2-1b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_llama-3.2-1b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -84749,8 +84749,8 @@
         "proxy_name": "llama-3.2-3b",
         "reference_name": "llama-3.2-1b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.2-3b_llama-3.2-1b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.2-3b_llama-3.2-1b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -88512,8 +88512,8 @@
         "proxy_name": "llama-3.3-70b",
         "reference_name": "llama-3.2-1b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_llama-3.2-1b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_llama-3.2-1b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -94475,8 +94475,8 @@
         "proxy_name": "qwen-2.5-32b",
         "reference_name": "llama-3.2-1b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_llama-3.2-1b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_llama-3.2-1b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -100438,8 +100438,8 @@
         "proxy_name": "qwen-2.5-3b",
         "reference_name": "llama-3.2-1b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_llama-3.2-1b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_llama-3.2-1b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -105521,8 +105521,8 @@
         "proxy_name": "qwen-2.5-72b",
         "reference_name": "llama-3.2-1b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_llama-3.2-1b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_llama-3.2-1b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -112034,8 +112034,8 @@
         "proxy_name": "qwen-2.5-7b",
         "reference_name": "llama-3.2-1b",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_llama-3.2-1b_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_llama-3.2-1b_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_llama-3.2-1b_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -117559,8 +117559,8 @@
         "proxy_name": "gemma-2-9b",
         "reference_name": "mistral-7b-v0.3",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_mistral-7b-v0.3_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_mistral-7b-v0.3_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -126162,8 +126162,8 @@
         "proxy_name": "llama-3.1-70b",
         "reference_name": "mistral-7b-v0.3",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_mistral-7b-v0.3_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_mistral-7b-v0.3_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -135205,8 +135205,8 @@
         "proxy_name": "llama-3.1-8b",
         "reference_name": "mistral-7b-v0.3",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-8b_mistral-7b-v0.3_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-8b_mistral-7b-v0.3_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -143148,8 +143148,8 @@
         "proxy_name": "llama-3.2-3b",
         "reference_name": "mistral-7b-v0.3",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.2-3b_mistral-7b-v0.3_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.2-3b_mistral-7b-v0.3_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -150211,8 +150211,8 @@
         "proxy_name": "llama-3.3-70b",
         "reference_name": "mistral-7b-v0.3",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_mistral-7b-v0.3_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_mistral-7b-v0.3_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -159914,8 +159914,8 @@
         "proxy_name": "qwen-2.5-14b",
         "reference_name": "mistral-7b-v0.3",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-14b_mistral-7b-v0.3_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-14b_mistral-7b-v0.3_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -169397,8 +169397,8 @@
         "proxy_name": "qwen-2.5-32b",
         "reference_name": "mistral-7b-v0.3",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_mistral-7b-v0.3_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_mistral-7b-v0.3_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -179100,8 +179100,8 @@
         "proxy_name": "qwen-2.5-3b",
         "reference_name": "mistral-7b-v0.3",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_mistral-7b-v0.3_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_mistral-7b-v0.3_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -187593,8 +187593,8 @@
         "proxy_name": "qwen-2.5-72b",
         "reference_name": "mistral-7b-v0.3",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_mistral-7b-v0.3_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_mistral-7b-v0.3_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -197736,8 +197736,8 @@
         "proxy_name": "qwen-2.5-7b",
         "reference_name": "mistral-7b-v0.3",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_mistral-7b-v0.3_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-7b-v0.3_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_mistral-7b-v0.3_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -207001,8 +207001,8 @@
         "proxy_name": "gemma-2-9b",
         "reference_name": "mistral-small",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_mistral-small_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_mistral-small_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -209114,8 +209114,8 @@
         "proxy_name": "llama-3.1-70b",
         "reference_name": "mistral-small",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_mistral-small_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_mistral-small_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -210897,8 +210897,8 @@
         "proxy_name": "llama-3.1-8b",
         "reference_name": "mistral-small",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-8b_mistral-small_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-8b_mistral-small_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -212790,8 +212790,8 @@
         "proxy_name": "llama-3.2-3b",
         "reference_name": "mistral-small",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.2-3b_mistral-small_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.2-3b_mistral-small_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -214463,8 +214463,8 @@
         "proxy_name": "llama-3.3-70b",
         "reference_name": "mistral-small",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_mistral-small_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_mistral-small_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -216906,8 +216906,8 @@
         "proxy_name": "qwen-2.5-14b",
         "reference_name": "mistral-small",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-14b_mistral-small_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-14b_mistral-small_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -219129,8 +219129,8 @@
         "proxy_name": "qwen-2.5-32b",
         "reference_name": "mistral-small",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_mistral-small_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_mistral-small_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -221352,8 +221352,8 @@
         "proxy_name": "qwen-2.5-3b",
         "reference_name": "mistral-small",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_mistral-small_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_mistral-small_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -223025,8 +223025,8 @@
         "proxy_name": "qwen-2.5-72b",
         "reference_name": "mistral-small",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_mistral-small_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_mistral-small_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -225358,8 +225358,8 @@
         "proxy_name": "qwen-2.5-7b",
         "reference_name": "mistral-small",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_mistral-small_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_mistral-small_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_mistral-small_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -227583,8 +227583,8 @@
         "proxy_name": "gemma-2-9b",
         "reference_name": "phi-3.5-mini",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_phi-3.5-mini_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-9b_phi-3.5-mini_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -229586,8 +229586,8 @@
         "proxy_name": "llama-3.1-70b",
         "reference_name": "phi-3.5-mini",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_phi-3.5-mini_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-70b_phi-3.5-mini_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -231589,8 +231589,8 @@
         "proxy_name": "llama-3.1-8b",
         "reference_name": "phi-3.5-mini",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.1-8b_phi-3.5-mini_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.1-8b_phi-3.5-mini_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -233482,8 +233482,8 @@
         "proxy_name": "llama-3.2-3b",
         "reference_name": "phi-3.5-mini",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.2-3b_phi-3.5-mini_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.2-3b_phi-3.5-mini_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -235045,8 +235045,8 @@
         "proxy_name": "llama-3.3-70b",
         "reference_name": "phi-3.5-mini",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_phi-3.5-mini_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/llama/llama-3.3-70b_phi-3.5-mini_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -237268,8 +237268,8 @@
         "proxy_name": "qwen-2.5-14b",
         "reference_name": "phi-3.5-mini",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-14b_phi-3.5-mini_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-14b_phi-3.5-mini_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -238941,8 +238941,8 @@
         "proxy_name": "qwen-2.5-32b",
         "reference_name": "phi-3.5-mini",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_phi-3.5-mini_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-32b_phi-3.5-mini_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -240724,8 +240724,8 @@
         "proxy_name": "qwen-2.5-3b",
         "reference_name": "phi-3.5-mini",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_phi-3.5-mini_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-3b_phi-3.5-mini_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -242177,8 +242177,8 @@
         "proxy_name": "qwen-2.5-72b",
         "reference_name": "phi-3.5-mini",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_phi-3.5-mini_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-72b_phi-3.5-mini_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [
@@ -244180,8 +244180,8 @@
         "proxy_name": "qwen-2.5-7b",
         "reference_name": "phi-3.5-mini",
         "dataset": "mbpp-plus",
-        "judge_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
-        "proxy_file": "/home/ubuntu/dani/llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_phi-3.5-mini_reprod_verified.jsonl"
+        "judge_file": "./llm-sp-verif/mbpp-plus/gemma/gemma-2-27b_phi-3.5-mini_reprod_verified.jsonl",
+        "proxy_file": "./llm-sp-verif/mbpp-plus/qwen/qwen-2.5-7b_phi-3.5-mini_reprod_verified.jsonl"
       },
       "data": {
         "lsp": [

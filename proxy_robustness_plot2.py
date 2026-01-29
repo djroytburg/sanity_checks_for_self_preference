@@ -1,26 +1,4 @@
 #!/usr/bin/env python3
-"""
-proxy_robustness_plot2.py: Analyze average mean difference across (example, judge, reference) triplets.
-
-Creates a plot showing the average mean difference (self-preference minus proxy-preference)
-for examples with at least N valid proxies, to visualize how mean difference changes as we
-require more proxies per example.
-
-Supports four data sources:
-- author_obfuscation: quality dataset from author obfuscation experiments
-- dbg: DBG score datasets (alpaca_eval, translation, truthfulness)
-- verifiable: Verifiable datasets (math500, mbpp-plus, mmlu)
-- panickserry: Summarization datasets (cnn, xsum)
-
-Usage:
-    python proxy_robustness_plot2.py --source author_obfuscation
-    python proxy_robustness_plot2.py --source dbg --dataset alpaca_eval
-    python proxy_robustness_plot2.py --source dbg --dataset all
-    python proxy_robustness_plot2.py --source verifiable --dataset math500
-    python proxy_robustness_plot2.py --source verifiable --dataset all
-    python proxy_robustness_plot2.py --source panickserry --dataset cnn
-    python proxy_robustness_plot2.py --source panickserry --dataset all
-"""
 
 import json
 import argparse

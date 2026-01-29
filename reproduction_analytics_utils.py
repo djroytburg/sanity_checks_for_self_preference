@@ -1,18 +1,3 @@
-#!/usr/bin/env python3
-# reproduction_analytics_utils.py: Utility functions for analyzing reproduction quality
-# Created: 2025-12-22 01:00 EST
-# Last Modified: 2025-12-22 01:00 EST
-"""
-This module provides comprehensive analytics utilities for evaluating reproduction quality.
-
-Key Metrics:
-1. Per-game accuracy (Game 1 and Game 2 separately)
-2. Transition matrix analysis (3x3 A/B/T mappings)
-3. Probability distribution comparisons (KL divergence, JS divergence)
-4. Per-verdict-type error rates
-5. Correlation analysis
-"""
-
 import json
 import logging
 import math

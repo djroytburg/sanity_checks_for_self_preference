@@ -1,13 +1,4 @@
-#!/usr/bin/env python3
-"""
-Analyze Individual Self-Recognition Results.
 
-Metrics:
-- True Positive Rate (TPR): Accuracy on Own Responses (Target: 1)
-- True Negative Rate (TNR): Accuracy on Other Responses (Target: 0)
-- Balanced Accuracy: (TPR + TNR) / 2
-- Correlation with Self-Preference Category (LSP vs ILSP)
-"""
 
 import argparse
 import json
