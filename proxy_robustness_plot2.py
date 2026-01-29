@@ -36,19 +36,19 @@ DEFAULT_PATHS = {
     "author_obfuscation": "author_obfuscation/data/quality/proxies",
     "dbg": "dbg-score-paper/proxy_preference_data",
     "verifiable": "llm-sp-verif",
-    "panickserry": "panickserry_results",  # For panickserry, proxy info is in cache files
+    "panickserry": "CNN_and_XSUM results",  # For panickserry, proxy info is in cache files
 }
 
 # Default cache paths for preference scores
 # For dbg: cache is at judge_swap_null_dbg_results/{dataset}/cache
 # For verifiable: cache is at judge_swap_null_verif_smoke2/{dataset}/cache
 # For author_obfuscation: preference results in author_obfuscation/data/quality/preference_results/
-# For panickserry: cache is at panickserry_results/{dataset}_result/{dataset}/cache
+# For panickserry: cache is at CNN_and_XSUM results/{dataset}_result/{dataset}/cache
 DEFAULT_CACHE_PATHS = {
     "author_obfuscation": "author_obfuscation/data/quality/preference_results",
     "dbg": "judge_swap_null_dbg_results",
     "verifiable": "judge_swap_null_verif_smoke2",
-    "panickserry": "panickserry_results",
+    "panickserry": "CNN_and_XSUM results",
 }
 
 DBG_DATASETS = ["alpaca_eval", "translation", "truthfulness"]
@@ -527,7 +527,7 @@ def compute_mean_differences_per_example(proxy_data: list, cache_dir: Path, ilsp
             actual_cache_dir = cache_dir / dataset / "cache"
             prefs = load_preference_scores(actual_cache_dir, judge, reference)
         elif source == "panickserry" and dataset:
-            # For panickserry: cache is at panickserry_results/{dataset}_result/{dataset}/cache
+            # For panickserry: cache is at CNN_and_XSUM results/{dataset}_result/{dataset}/cache
             actual_cache_dir = cache_dir / f"{dataset}_result" / dataset / "cache"
             if not actual_cache_dir.exists():
                 actual_cache_dir = cache_dir / f"{dataset}_results" / dataset / "cache"

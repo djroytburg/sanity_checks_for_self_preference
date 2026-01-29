@@ -411,8 +411,8 @@ def load_self_pref_data(dataset_name):
         f"judge_swap_null_verif_smoke2/{dataset_name}/analysis/aggregated_by_judge_reference.json",
         f"judge_swap_null_author_obfuscation/{dataset_name}/analysis/aggregated_by_judge_reference.json",
         f"judge_swap_null_dbg_results/{dataset_name}/analysis/aggregated_by_judge_reference.json",
-        f"panickserry_results/{dataset_name}/cnn/analysis/aggregated_by_judge_reference.json",
-        f"panickserry_results/{dataset_name}/xsum/analysis/aggregated_by_judge_reference.json"
+        f"CNN_and_XSUM results/{dataset_name}/cnn/analysis/aggregated_by_judge_reference.json",
+        f"CNN_and_XSUM results/{dataset_name}/xsum/analysis/aggregated_by_judge_reference.json"
     ]
     
     for candidate in candidates:
@@ -639,13 +639,13 @@ def main():
         'author_obfuscation': {},
         'dbg-score-paper': {},
         'llm-sp-verif': {},
-        'panickserry_results': {}
+        'CNN_and_XSUM results': {}
     }
-    
+
     # Load author obfuscation (quality)
     logger.info("\n=== AUTHOR OBFUSCATION (QUALITY) ===")
     try:
-        quality_dir = Path('panickserry_results/xsum_winrates').expanduser()
+        quality_dir = Path('CNN_and_XSUM results/xsum_winrates').expanduser()
         judge_ref_accuracy = load_author_obf_data(str(quality_dir))
         self_pref = load_self_pref_data('xsum_result')
         print(self_pref)
@@ -653,7 +653,7 @@ def main():
         scatter_data = prepare_scatter_data(judge_ref_accuracy, self_pref)
         print(all_scatter_data_by_dir)
         print(scatter_data)
-        all_scatter_data_by_dir['panickserry_results']['xsum'] = scatter_data
+        all_scatter_data_by_dir['CNN_and_XSUM results']['xsum'] = scatter_data
         print(all_scatter_data_by_dir)
         logger.info(f"Loaded {len(scatter_data)} judges for Quality")
     except Exception as e:

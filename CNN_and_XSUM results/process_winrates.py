@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Process panickserry_results to calculate reference winrates.
+Process CNN_and_XSUM results to calculate reference winrates.
 Creates {dataset}_winrates folders with JSON files for each judge-reference pair.
 
 Reference winrate is the rate at which the evaluator (first model) wins according to GPT-5 oracle.
@@ -16,7 +16,7 @@ import os
 from pathlib import Path
 from collections import defaultdict
 
-BASE_DIR = Path("/home/ubuntu/sanity_checks_for_self_preference/panickserry_results")
+BASE_DIR = Path("/home/ubuntu/sanity_checks_for_self_preference/CNN_and_XSUM results")
 
 
 def calculate_reference_winrate(data):

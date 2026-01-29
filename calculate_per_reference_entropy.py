@@ -275,34 +275,95 @@ def calculate_per_reference_entropy_all():
     Returns:
         dict: {(dataset, judge, reference): {entropy_lsp, entropy_ilsp, entropy_gap}}
     """
+    # Standard experiments: (exp_dir, datasets, load_func, exp_type)
+    # Panickserry experiments: (cache_dir, winrate_dir, dataset, exp_type)
     experiments = [
-        ('judge_swap_null_verif_smoke2', ['math500', 'mmlu', 'mbpp-plus', 'alpaca_eval'], load_jvsr_cache_verif),
-        ('judge_swap_null_dbg_results', ['translation', 'truthfulness', 'alpaca_eval'], load_jvsr_cache_dbg),
-        ('judge_swap_null_author_obfuscation', ['quality'], load_jvsr_cache_author_obf),
+        # Standard experiments
+        ('judge_swap_null_verif_smoke2', ['math500', 'mmlu', 'mbpp-plus', 'alpaca_eval'], load_jvsr_cache_verif, 'standard'),
+        ('judge_swap_null_dbg_results', ['translation', 'truthfulness', 'alpaca_eval'], load_jvsr_cache_dbg, 'standard'),
+        ('judge_swap_null_author_obfuscation', ['quality'], load_jvsr_cache_author_obf, 'standard'),
+        # Panickserry experiments
+        ('CNN_and_XSUM results/cnn_results', 'CNN_and_XSUM results/cnn_winrates', 'cnn', 'panickserry'),
+        ('CNN_and_XSUM results/xsum_result', 'CNN_and_XSUM results/xsum_winrates', 'xsum', 'panickserry'),
     ]
 
     results = {}
 
-    for exp_dir, datasets, load_func in experiments:
-        for dataset in datasets:
-            logger.info(f"Processing {exp_dir}/{dataset}...")
+    for exp in experiments:
+        exp_type = exp[-1]
 
-            # Get list of (judge, reference) pairs from aggregated file
-            agg_file = Path(exp_dir) / dataset / 'analysis' / 'aggregated_by_judge_reference.json'
+        if exp_type == 'standard':
+            exp_dir, datasets, load_func, _ = exp
+            for dataset in datasets:
+                logger.info(f"Processing {exp_dir}/{dataset}...")
 
-            if not agg_file.exists():
-                logger.warning(f"Aggregated file not found: {agg_file}")
+                # Get list of (judge, reference) pairs from aggregated file
+                agg_file = Path(exp_dir) / dataset / 'analysis' / 'aggregated_by_judge_reference.json'
+
+                if not agg_file.exists():
+                    logger.warning(f"Aggregated file not found: {agg_file}")
+                    continue
+
+                with open(agg_file, 'r') as f:
+                    agg_data = json.load(f)
+
+                for entry in agg_data:
+                    judge = entry['judge']
+                    reference = entry['reference']
+
+                    # Load J_vs_R cache
+                    lsp_probs, ilsp_probs = load_func(exp_dir, dataset, judge, reference)
+
+                    if lsp_probs is None or ilsp_probs is None:
+                        logger.warning(f"No cache data for ({dataset}, {judge}, {reference})")
+                        continue
+
+                    if len(lsp_probs) == 0 or len(ilsp_probs) == 0:
+                        logger.warning(f"Empty distributions for ({dataset}, {judge}, {reference})")
+                        continue
+
+                    # Calculate entropies
+                    entropy_lsp = calculate_entropy(lsp_probs)
+                    entropy_ilsp = calculate_entropy(ilsp_probs)
+                    entropy_gap = entropy_ilsp - entropy_lsp
+
+                    key = (dataset, judge, reference)
+                    results[key] = {
+                        'entropy_lsp': entropy_lsp,
+                        'entropy_ilsp': entropy_ilsp,
+                        'entropy_gap': entropy_gap,
+                        'n_lsp': len(lsp_probs),
+                        'n_ilsp': len(ilsp_probs)
+                    }
+
+                    logger.debug(f"  ({judge}, {reference}): H_LSP={entropy_lsp:.3f}, H_ILSP={entropy_ilsp:.3f}, gap={entropy_gap:.3f}")
+
+        elif exp_type == 'panickserry':
+            cache_base, winrate_dir, dataset, _ = exp
+            logger.info(f"Processing panickserry/{dataset}...")
+
+            winrate_path = Path(winrate_dir)
+            if not winrate_path.exists():
+                logger.warning(f"Winrate directory not found: {winrate_path}")
                 continue
 
-            with open(agg_file, 'r') as f:
-                agg_data = json.load(f)
+            # Get list of (judge, reference) pairs from winrate files
+            for winrate_file in winrate_path.glob("*.json"):
+                # Parse filename: GPT-4_vs_human.json -> judge=GPT-4, reference=human
+                filename = winrate_file.stem
+                parts = filename.split('_vs_')
 
-            for entry in agg_data:
-                judge = entry['judge']
-                reference = entry['reference']
+                if len(parts) != 2:
+                    continue
+
+                judge_norm = parts[0]
+                reference = parts[1]
+
+                # Denormalize judge name (GPT-3.5 -> gpt-3.5-turbo, GPT-4 -> gpt-4)
+                judge = judge_norm.replace("GPT-3.5", "gpt-3.5-turbo").replace("GPT-4", "gpt-4")
 
                 # Load J_vs_R cache
-                lsp_probs, ilsp_probs = load_func(exp_dir, dataset, judge, reference)
+                lsp_probs, ilsp_probs = load_jvsr_cache_panickserry(cache_base, winrate_dir, dataset, judge, reference)
 
                 if lsp_probs is None or ilsp_probs is None:
                     logger.warning(f"No cache data for ({dataset}, {judge}, {reference})")
@@ -326,63 +387,7 @@ def calculate_per_reference_entropy_all():
                     'n_ilsp': len(ilsp_probs)
                 }
 
-                logger.debug(f"  ({judge}, {reference}): H_LSP={entropy_lsp:.3f}, H_ILSP={entropy_ilsp:.3f}, gap={entropy_gap:.3f}")
-
-    # Process panickserry datasets (CNN and XSUM)
-    panickserry_experiments = [
-        ('panickserry_results/cnn_results', 'panickserry_results/cnn_winrates', 'cnn'),
-        ('panickserry_results/xsum_result', 'panickserry_results/xsum_winrates', 'xsum'),
-    ]
-
-    for cache_base, winrate_dir, dataset in panickserry_experiments:
-        logger.info(f"Processing panickserry/{dataset}...")
-
-        winrate_path = Path(winrate_dir)
-        if not winrate_path.exists():
-            logger.warning(f"Winrate directory not found: {winrate_path}")
-            continue
-
-        # Get list of (judge, reference) pairs from winrate files
-        for winrate_file in winrate_path.glob("*.json"):
-            # Parse filename: GPT-4_vs_human.json -> judge=GPT-4, reference=human
-            filename = winrate_file.stem
-            parts = filename.split('_vs_')
-
-            if len(parts) != 2:
-                continue
-
-            judge_norm = parts[0]
-            reference = parts[1]
-
-            # Denormalize judge name (GPT-3.5 -> gpt-3.5-turbo, GPT-4 -> gpt-4)
-            judge = judge_norm.replace("GPT-3.5", "gpt-3.5-turbo").replace("GPT-4", "gpt-4")
-
-            # Load J_vs_R cache
-            lsp_probs, ilsp_probs = load_jvsr_cache_panickserry(cache_base, winrate_dir, dataset, judge, reference)
-
-            if lsp_probs is None or ilsp_probs is None:
-                logger.warning(f"No cache data for ({dataset}, {judge}, {reference})")
-                continue
-
-            if len(lsp_probs) == 0 or len(ilsp_probs) == 0:
-                logger.warning(f"Empty distributions for ({dataset}, {judge}, {reference})")
-                continue
-
-            # Calculate entropies
-            entropy_lsp = calculate_entropy(lsp_probs)
-            entropy_ilsp = calculate_entropy(ilsp_probs)
-            entropy_gap = entropy_ilsp - entropy_lsp
-
-            key = (dataset, judge, reference)
-            results[key] = {
-                'entropy_lsp': entropy_lsp,
-                'entropy_ilsp': entropy_ilsp,
-                'entropy_gap': entropy_gap,
-                'n_lsp': len(lsp_probs),
-                'n_ilsp': len(ilsp_probs)
-            }
-
-            logger.info(f"  ({judge}, {reference}): H_LSP={entropy_lsp:.3f}, H_ILSP={entropy_ilsp:.3f}, gap={entropy_gap:.3f}")
+                logger.info(f"  ({judge}, {reference}): H_LSP={entropy_lsp:.3f}, H_ILSP={entropy_ilsp:.3f}, gap={entropy_gap:.3f}")
 
     logger.info(f"Calculated per-reference entropy for {len(results)} combinations")
     return results

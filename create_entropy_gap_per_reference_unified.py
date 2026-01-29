@@ -299,8 +299,8 @@ def prepare_unified_scatter_data():
 
     # Panickserry datasets
     panickserry_experiments = [
-        ('panickserry_results/cnn_winrates', 'cnn'),
-        ('panickserry_results/xsum_winrates', 'xsum'),
+        ('CNN_and_XSUM results/cnn_winrates', 'cnn'),
+        ('CNN_and_XSUM results/xsum_winrates', 'xsum'),
     ]
 
     all_data = defaultdict(list)

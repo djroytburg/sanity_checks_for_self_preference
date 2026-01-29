@@ -164,8 +164,8 @@ def compute_correlations():
         ('judge_swap_null_dbg_results', 'truthfulness'),
         ('judge_swap_null_author_obfuscation', 'quality'),
         ('judge_swap_null_dbg_results', 'alpaca_eval'),
-        ('panickserry_results/cnn_results','cnn')
-        ('panickserry_results/xsum_result','xsum')
+        ('CNN_and_XSUM results/cnn_results','cnn'),
+        ('CNN_and_XSUM results/xsum_result','xsum'),
         
     ]
     

@@ -156,9 +156,9 @@ def load_panickserry_results_jvsr(dataset, judge, reference=None):
         dict: {example_id: {'p_self': float, 'category': str}}
     """
     if dataset == 'cnn':
-        cache_base = Path('panickserry_results/cnn_results/cnn/cache')
+        cache_base = Path('CNN_and_XSUM results/cnn_results/cnn/cache')
     elif dataset == 'xsum':
-        cache_base = Path('panickserry_results/xsum_result/xsum/cache')
+        cache_base = Path('CNN_and_XSUM results/xsum_result/xsum/cache')
     else:
         logger.warning(f"Unknown dataset: {dataset}")
         return {}
@@ -594,7 +594,7 @@ def main():
 
     # Process Panickserry CNN results
     # logger.info("\n=== Processing Panickserry CNN results ===")
-    # cnn_cache_dir = Path('panickserry_results/cnn_results/cnn/cache')
+    # cnn_cache_dir = Path('CNN_and_XSUM results/cnn_results/cnn/cache')
     # dataset = 'cnn'
 
     # if cnn_cache_dir.exists():
@@ -613,7 +613,7 @@ def main():
 
     # # Process Panickserry XSUM results
     # # logger.info("\n=== Processing Panickserry XSUM results ===")
-    # xsum_cache_dir = Path('panickserry_results/xsum_result/xsum/cache')
+    # xsum_cache_dir = Path('CNN_and_XSUM results/xsum_result/xsum/cache')
     # dataset = 'xsum'
 
     # if xsum_cache_dir.exists():

@@ -444,12 +444,24 @@ def main():
     
     # Define datasets grouped by paper
     paper_groups = [
-        ('panickserry', [
-            ('panickserry_results/cnn_results', 'CNN', 'cnn'),
-            ('panickserry_results/xsum_result', 'XSUM', 'xsum')
-            
+        ('verif', [
+            ('judge_swap_null_verif_smoke2', 'Math500', 'math500'),
+            ('judge_swap_null_verif_smoke2', 'MMLU', 'mmlu'),
+            ('judge_swap_null_verif_smoke2', 'MBPP-Plus', 'mbpp-plus'),
+            ('judge_swap_null_verif_smoke2', 'Alpaca Eval (Verif)', 'alpaca_eval'),
         ]),
-        
+        ('dbg', [
+            ('judge_swap_null_dbg_results', 'Translation', 'translation'),
+            ('judge_swap_null_dbg_results', 'Truthfulness', 'truthfulness'),
+            ('judge_swap_null_dbg_results', 'Alpaca Eval (DBG)', 'alpaca_eval'),
+        ]),
+        ('author_obfuscation', [
+            ('judge_swap_null_author_obfuscation', 'Quality', 'quality'),
+        ]),
+        ('panickserry', [
+            ('CNN_and_XSUM results/cnn_results', 'CNN', 'cnn'),
+            ('CNN_and_XSUM results/xsum_result', 'XSUM', 'xsum'),
+        ]),
     ]
     
     # Create output directory

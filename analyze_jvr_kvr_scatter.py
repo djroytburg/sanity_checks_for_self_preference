@@ -608,8 +608,8 @@ def load_all_data(logger: logging.Logger) -> Dict[Tuple[str, str, str, str], Dic
 
     # Load panickserry datasets (CNN and XSUM)
     panickserry_configs = [
-        ("cnn", Path("panickserry_results/cnn_results"), Path("panickserry_results/cnn_winrates")),
-        ("xsum", Path("panickserry_results/xsum_result"), Path("panickserry_results/xsum_winrates")),
+        ("cnn", Path("CNN_and_XSUM results/cnn_results"), Path("CNN_and_XSUM results/cnn_winrates")),
+        ("xsum", Path("CNN_and_XSUM results/xsum_result"), Path("CNN_and_XSUM results/xsum_winrates")),
     ]
 
     for dataset, cache_base, winrate_dir in panickserry_configs:

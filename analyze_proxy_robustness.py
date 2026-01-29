@@ -416,8 +416,8 @@ def load_cnn_cache(
     Load J vs R and K vs R data from CNN cache structure.
 
     Args:
-        cache_dir: panickserry_results/cnn_results/cnn/cache
-        proxy_dir: panickserry_results/cnn_winrates
+        cache_dir: CNN_and_XSUM results/cnn_results/cnn/cache
+        proxy_dir: CNN_and_XSUM results/cnn_winrates
     """
     results = {}
     dataset = "cnn"
@@ -566,8 +566,8 @@ def load_xsum_cache(
     Load J vs R and K vs R data from XSUM cache structure.
 
     Args:
-        cache_dir: panickserry_results/xsum_result/xsum/cache
-        proxy_dir: panickserry_results/xsum_winrates
+        cache_dir: CNN_and_XSUM results/xsum_result/xsum/cache
+        proxy_dir: CNN_and_XSUM results/xsum_winrates
     """
     # XSUM has the same structure as CNN
     results = {}
@@ -741,8 +741,8 @@ def load_all_cache_data(logger: logging.Logger) -> Dict[Tuple[str, str, str, str
         logger.warning(f"Author obfuscation dir not found: {author_obf_dir}")
 
     # CNN
-    cnn_cache_dir = Path("panickserry_results/cnn_results/cnn/cache")
-    cnn_proxy_dir = Path("panickserry_results/cnn_winrates")
+    cnn_cache_dir = Path("CNN_and_XSUM results/cnn_results/cnn/cache")
+    cnn_proxy_dir = Path("CNN_and_XSUM results/cnn_winrates")
     if cnn_cache_dir.exists() and cnn_proxy_dir.exists():
         data = load_cnn_cache(cnn_cache_dir, cnn_proxy_dir, logger)
         all_data.update(data)
@@ -750,8 +750,8 @@ def load_all_cache_data(logger: logging.Logger) -> Dict[Tuple[str, str, str, str
         logger.warning(f"CNN cache or proxy dir not found: {cnn_cache_dir}, {cnn_proxy_dir}")
 
     # XSUM
-    xsum_cache_dir = Path("panickserry_results/xsum_result/xsum/cache")
-    xsum_proxy_dir = Path("panickserry_results/xsum_winrates")
+    xsum_cache_dir = Path("CNN_and_XSUM results/xsum_result/xsum/cache")
+    xsum_proxy_dir = Path("CNN_and_XSUM results/xsum_winrates")
     if xsum_cache_dir.exists() and xsum_proxy_dir.exists():
         data = load_xsum_cache(xsum_cache_dir, xsum_proxy_dir, logger)
         all_data.update(data)
@@ -931,7 +931,7 @@ def load_proxy_definitions(logger: logging.Logger) -> Dict:
 
     # CNN dataset
     logger.info("Loading CNN proxy definitions...")
-    cnn_proxy_dir = Path("panickserry_results/cnn_winrates")
+    cnn_proxy_dir = Path("CNN_and_XSUM results/cnn_winrates")
     if cnn_proxy_dir.exists():
         for json_file in cnn_proxy_dir.glob("*.json"):
             try:
@@ -976,7 +976,7 @@ def load_proxy_definitions(logger: logging.Logger) -> Dict:
 
     # XSUM dataset
     logger.info("Loading XSUM proxy definitions...")
-    xsum_proxy_dir = Path("panickserry_results/xsum_winrates")
+    xsum_proxy_dir = Path("CNN_and_XSUM results/xsum_winrates")
     if xsum_proxy_dir.exists():
         for json_file in xsum_proxy_dir.glob("*.json"):
             try:
