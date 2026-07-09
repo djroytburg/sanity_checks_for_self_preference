@@ -1,5 +1,0 @@
-{
-  "reference_evaluator": "Mixtral-8x7B-Instruct-v0.1",
-  "reference_evaluatee": "Meta-Llama-3.1-8B-Instruct-Turbo",
-  "proxies": {}
-}

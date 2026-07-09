@@ -1,5 +1,0 @@
-{
-  "reference_evaluator": "Mixtral-8x7B-Instruct-v0.1",
-  "reference_evaluatee": "Qwen2.5-7B-Instruct-Turbo",
-  "proxies": {}
-}

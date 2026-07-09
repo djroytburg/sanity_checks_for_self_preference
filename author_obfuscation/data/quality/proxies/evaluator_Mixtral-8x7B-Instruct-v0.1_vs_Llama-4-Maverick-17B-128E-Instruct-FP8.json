@@ -1,5 +1,0 @@
-{
-  "reference_evaluator": "Mixtral-8x7B-Instruct-v0.1",
-  "reference_evaluatee": "Llama-4-Maverick-17B-128E-Instruct-FP8",
-  "proxies": {}
-}

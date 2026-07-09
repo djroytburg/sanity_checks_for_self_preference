@@ -1,5 +1,0 @@
-{
-  "reference_evaluator": "Qwen2.5-72B-Instruct-Turbo",
-  "reference_evaluatee": "Llama-4-Scout-17B-16E-Instruct",
-  "proxies": {}
-}
